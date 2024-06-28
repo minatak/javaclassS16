@@ -15,14 +15,14 @@ public class Level2Interceptor extends HandlerInterceptorAdapter {
 		HttpSession session = request.getSession();
 		int level = session.getAttribute("sLevel")==null ? 99 : (int) session.getAttribute("sLevel");
 		
-		// ê´?ë¦¬ì(0), ?š°?ˆ˜?šŒ?›(1), ? •?šŒ?›(2), ì¤??šŒ?›(3), ë¹„íšŒ?›(99), ?ƒˆ?‡´?šŒ?›(999)
-		// ? •?šŒ?›?´?ƒ ?‚¬?š©ì²˜ë¦¬
+		// ê´€ë¦¬ì(0), ìš°ìˆ˜íšŒì›(1), ì •íšŒì›(2), ì¤€íšŒì›(3), ë¹„íšŒì›(99), íƒˆí‡´íšŒì›(999)
+		// ì •íšŒì›ì´ìƒ ì‚¬ìš©ì²˜ë¦¬
 		if(level > 2) {
 			RequestDispatcher dispatcher;
-			if(level == 99) {	// ë¹„íšŒ?› ì²˜ë¦¬
+			if(level == 99) {	// ë¹„íšŒì› ì²˜ë¦¬
 				dispatcher = request.getRequestDispatcher("/message/memberNo");
 			}
-			else {	// ì¤??šŒ?›
+			else {	// ì¤€íšŒì›
 				dispatcher = request.getRequestDispatcher("/message/memberLevelNo");
 			}
 			dispatcher.forward(request, response);

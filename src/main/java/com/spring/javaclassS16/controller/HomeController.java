@@ -47,7 +47,7 @@ public class HomeController {
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/ckeditor/");
 		String oFileName = upload.getOriginalFilename();
 		
-		// �뙆�씪紐� 以묐났諛⑹�瑜� �쐞�븳 �씠由� �꽕�젙�븯湲�(�궇吏쒕줈 遺꾨쪟泥섎━...)
+		// 파일명 중복방지를 위한 이름 설정하기(날짜로 분류처리...)
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
 		oFileName = sdf.format(date) + "_" + oFileName;

@@ -15,8 +15,8 @@ public class Level3Interceptor extends HandlerInterceptorAdapter {
 		HttpSession session = request.getSession();
 		int level = session.getAttribute("sLevel")==null ? 99 : (int) session.getAttribute("sLevel");
 		
-		// ê´?ë¦¬ìž(0), ?š°?ˆ˜?šŒ?›(1), ? •?šŒ?›(2), ì¤??šŒ?›(3), ë¹„íšŒ?›(99), ?ƒˆ?‡´?šŒ?›(999)
-		// ì¤??šŒ?›?´?ƒ(ë¹„íšŒ?›(99)) ?‚¬?š©ì²˜ë¦¬
+		// ê´€ë¦¬ìž(0), ìš°ìˆ˜íšŒì›(1), ì •íšŒì›(2), ì¤€íšŒì›(3), ë¹„íšŒì›(99), íƒˆí‡´íšŒì›(999)
+		// ì¤€íšŒì›ì´ìƒ(ë¹„íšŒì›(99)) ì‚¬ìš©ì²˜ë¦¬
 		if(level > 3) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/message/memberNo");
 			dispatcher.forward(request, response);
