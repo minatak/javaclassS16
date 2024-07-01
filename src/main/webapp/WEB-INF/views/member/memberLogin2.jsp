@@ -10,27 +10,28 @@
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
   <style>
     body {
+      /* font-family: 'Arial', sans-serif; */
       display: flex; 
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+     /*  background-color: #f7f7f7; */
     }
-
-    .container {
+			
+		.container {
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    
+		}
+		
     .login-container {
       background: #fff;
       padding: 20px 40px;
-      margin-top: 20px;
+     /*  border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+      margin-top: 50px;
       width: 100%;
-      max-width: 500px;
+      max-width: 500px; 
+		
     }
 
     .logo {
@@ -40,30 +41,18 @@
       margin-bottom: 50px;
     }
 
-    h3 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
+    h2 {margin-bottom: 20px;}
 
     .input-group {
       margin-bottom: 15px;
       text-align: left;
       position: relative;
-      display: flex;
-      flex-direction: column;
     }
 
     .input-group label {
       display: block;
       margin-bottom: 5px;
       font-weight: bold;
-    }
-
-    .input-group .forgot-link {
-      position: absolute;
-      right: 0;
-      top: 0;
-      font-weight: 500;
     }
 
     .input-group input[type="text"],
@@ -77,9 +66,9 @@
 
     .input-group .fa {
       position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
+      right: 20px;
+      /* top: 50%; */
+      /* transform: translateY(-50%); */
       cursor: pointer;
     }
 
@@ -94,29 +83,20 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-
     .kakaoLogin {
-      background-color: #ffeb00; 
-      color: black;
+    	background-color: #ffeb00; 
+    	color: black;
       font-weight: 500;
     }
-
-    .login-button:hover {
-      background-color: #5f7dc5;
-    }
-
-    .kakaoLogin:hover {
-      background-color: #ffeb00;
-    }
+    .login-button:hover {background-color: #5f7dc5;}
+    .kakaoLogin:hover {background-color: #ffeb00;}
 
     .login-links {
       margin: 20px 0;
     }
-
     .login-links a {
       margin: 0 10px;
     }
-
     a:hover {
       text-decoration: underline;
     }
@@ -126,48 +106,13 @@
       text-decoration: none;
       font-weight: 500;
     }
-
-    .forgot-link {
-      display: block;
-      text-align: right;
-      margin-top: -10px;
-      margin-bottom: 15px;
-    }
-
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .checkbox-container input[type="checkbox"] {
-      margin-right: 10px;
-    }
   </style>
-   <script>
+  <script>
     'use strict';
 
     $(function(){
       $("#searchPassword").hide();
-
-   		// 비밀번호 표시 토글
-      $('.fa-eye-slash').on('click', function() {
-        // 비밀번호 입력 필드를 선택합니다.
-        var passwordField = $('input[name="pwd"]');
-        
-        // 현재 비밀번호 입력 필드의 타입이 "password"인지 확인합니다.
-        if (passwordField.attr('type') === "password") {
-          // 비밀번호 필드의 타입을 "text"로 변경하여 비밀번호를 표시합니다.
-          passwordField.attr('type', 'text');
-          // 아이콘을 눈 모양으로 변경하여 비밀번호가 표시됨을 나타냅니다.
-          $(this).removeClass('fa-eye-slash').addClass('fa-eye');
-        } else {
-          // 비밀번호 필드의 타입을 "password"로 변경하여 비밀번호를 숨깁니다.
-          passwordField.attr('type', 'password');
-          // 아이콘을 눈에 슬래시가 그어진 모양으로 변경하여 비밀번호가 숨겨짐을 나타냅니다.
-          $(this).removeClass('fa-eye').addClass('fa-eye-slash');
-        }
-      });
+    });
 
     // 비밀번호 찾기
     function pwdSearch() {
@@ -220,39 +165,56 @@
         }
       });
     }
+
+    // 비밀번호 표시 토글
+    function togglePassword() {
+      var passwordField = document.querySelector('input[name="pwd"]');
+      var passwordIcon = document.querySelector('.fa-eye-slash');
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        passwordIcon.classList.remove('fa-eye-slash');
+        passwordIcon.classList.add('fa-eye');
+      } else {
+        passwordField.type = "password";
+        passwordIcon.classList.remove('fa-eye');
+        passwordIcon.classList.add('fa-eye-slash');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelector('.fa-eye-slash').addEventListener('click', togglePassword);
+    });
   </script>
 </head>
 <body>
+  <p><br/></p>
   <div class="container">
-    <h1 class="logo mb-4">Homelink</h1>
-    <div class="login-container">
-      <h3>로그인</h3>
-      <form class="login-form">
-        <div class="input-group">
-          <label for="username">아이디</label>
-          <a href="javascript:midSearch()" class="forgot-link">아이디를 잊어버리셨나요?</a>
-          <input type="text" name="mid" value="${mid}" autofocus required placeholder="아이디를 입력해주세요.">
-        </div>
-        <div class="input-group">
-          <label for="password">비밀번호</label>
-          <a href="javascript:pwdSearch()" class="forgot-link">비밀번호를 잊어버리셨나요?</a>
-          <input type="password" name="pwd" required placeholder="비밀번호를 입력해주세요.">
-          <i class="fa fa-eye-slash" aria-hidden="true"></i>
-        </div>
-        <button type="submit" class="login-button">로그인</button>
-        <div class="checkbox-container">
-          <input type="checkbox" name="idSave" checked /> 아이디 저장
-        </div>
-      </form>
-      <div class="login-links">
-        홈링크가 처음인가요?<a href="${ctp}/member/memberJoin"><font color="#5f7dc5"><b>회원가입하기</b></font></a>
+	  <h1 class="logo mb-4">Homelink</h1>
+  <div class="login-container">
+    <h3>로그인</h3>
+    <form class="login-form">
+      <div class="input-group">
+        <label for="username">아이디</label>
+        <a href="javascript:midSearch()">아이디를 잊어버리셨나요?</a>
+        <input type="text" name="mid" value="${mid}" autofocus required placeholder="아이디를 입력해주세요.">
       </div>
-      <hr/>
-      <div>
-        <p class="mb-2">이미 카카오로 회원가입을 완료했다면?</p>
-        <button onclick="kakaoLogin()" class="login-button kakaoLogin"><i class="fa-solid fa-comment"></i>&nbsp;카카오 로그인</button>
+      <div class="input-group">
+        <label for="password">비밀번호</label>
+        <a href="javascript:pwdSearch()">비밀번호를 잊어버리셨나요?</a>
+        <input type="password" name="pwd" required placeholder="비밀번호를 입력해주세요.">
+        <i class="fa fa-eye-slash" aria-hidden="true"></i>
       </div>
+      <button type="submit" class="login-button">로그인</button>
+      <input type="checkbox" name="idSave" class="text-left" checked /> 아이디 저장
+    </form>
+    <div class="login-links">
+      홈링크가 처음인가요?<a href="${ctp}/member/memberJoin"><font color="#5f7dc5"><b>회원가입하기</b></font></a>
     </div>
+    <hr/>
+    <div><p class="mb-2">이미 카카오로 회원가입을 완료했다면?</p>
+    	<button onclick="kakaoLogin()" class="login-button kakaoLogin" ><i class="fa-solid fa-comment"></i>&nbsp;카카오 로그인</button>
+  	</div>
+  </div>
   </div>
 </body>
 </html>

@@ -186,7 +186,6 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
-<jsp:include page="/WEB-INF/views/include/side.jsp" />
 <p><br/></p>
 <div class="container">
   <form name="myform" method="post" class="was-validated" enctype="multipart/form-data">

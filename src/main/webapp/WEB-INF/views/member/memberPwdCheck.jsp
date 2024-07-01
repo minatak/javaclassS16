@@ -86,7 +86,6 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
-<jsp:include page="/WEB-INF/views/include/side.jsp" />
 <p><br/></p>
 <div class="container">
   <form name="myform" id="pwdForm" method="post">
