@@ -142,114 +142,128 @@
     
   </style>
   <script>
-    let ResponseCode;
-    let timer;
+    'use strict';
 
     function innerReset() {
       document.getElementById('emailError').innerHTML = "";
     }
 
     window.onload = function() {
-      let emailInput = document.myform.email;
+      let email = document.email.value;
 
-      emailInput.oninput = function() {
+      email.oninput = function() {
         innerReset();
         let regEmail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
-        if (!regEmail.test(emailInput.value)) {
+        if (!regEmail.test(email.value)) {
           document.getElementById('emailError').innerHTML = "올바른 이메일 형식이 아닙니다.";
         }
       };
     };
-      
+    
     function fCheck() {
-      let email = document.myform.email.value;
-        
-      if(email.trim() == "") {
-        showAlert("이메일을 입력해주세요.");
-        document.myform.email.focus();
-      }
-    }
+      let email = document.email.value;
       
-    function showAlert(message) {
-      Swal.fire({
-        html: message,
-        confirmButtonText: '확인',
-        customClass: {
-          confirmButton: 'swal2-confirm',
-          popup: 'custom-swal-popup',
-          htmlContainer: 'custom-swal-text'
-        }
-      });
+    	if(email.trim() == "") {
+    		showAlert(‎"이메일을 입력해주세요.");
+        myform.email.focus();
+    	}
     }
-   
+    
+    
+    let code_valid = false;
+    let current_time = 0;
+    let minutes, seconds;
+    let timer_thread;
+    let responseCode;
+
     function timer_start() {
-      let timeLeft = 300; // 5분
-      timer = setInterval(function() {
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          document.getElementById('timer').textContent = "시간 초과!";
-        } else {
-          document.getElementById('timer').textContent = Math.floor(timeLeft / 60) + ":" + ('0' + (timeLeft % 60)).slice(-2);
+      code_valid = true;
+      current_time = 0;
+      let count = 20;
+
+      document.getElementById('timer').innerHTML = "00:20";
+      timer_thread = setInterval(function () {
+        minutes = parseInt(count / 60, 10);
+        seconds = parseInt(count % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        document.getElementById('timer').innerHTML = minutes + ":" + seconds;
+
+        if (--count < 0) {
+          timer_stop();
+          document.getElementById('timer').textContent = "시간초과";
+          document.getElementById('code_msg').style.display = "block";
+          document.getElementById('code_msg').textContent = "인증코드가 만료되었습니다.";
+          document.getElementById('code_msg').style.color = "red";
         }
-        timeLeft -= 1;
+
+        current_time++;
       }, 1000);
     }
 
-    function sendVerificationCode() {
-      let emailInput = document.myform.email;
-      let email = emailInput.value.trim();
-
-      if (email === "") {
-        showAlert("이메일을 입력하세요");
-        return;
-      }
-
-      if (!validateEmail(email)) {
-        showAlert("올바른 이메일 형식을 입력하세요.");
-        return;
-      }
-
-      $.ajax({
-        type: 'POST',
-        url: "${ctp}/member/joinEmailCheck",
-        data: { email: email },
-        success: function(response) {
-          ResponseCode = response;  // 서버에서 실제로 받아온 코드
-          emailInput.readOnly = true;
-          emailInput.style.backgroundColor = "#e9ecef";
-          document.getElementById('sendCodeBtn').disabled = true;
-          timer_start();
-          document.getElementById('auth_container').style.display = "block";
-          document.getElementById('code_msg').textContent = "인증코드 발송 성공";
-          document.getElementById('code_msg').style.color = "green";
-          document.getElementById('code_msg').style.display = "block";
-        },
-        error: function() {
-          showAlert('인증코드 발송에 실패했습니다. 다시 시도해주세요.');
-        }
-      });
+    function timer_stop() {
+      clearInterval(timer_thread);
+      code_valid = false;
     }
 
-    function validateEmail(email) {
-      var re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      return re.test(String(email).toLowerCase());
+    function sendVerificationCode() {
+      const email = document.email.value;
+      const regEmail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+      if (!regEmail.test(email)) {
+        document.getElementById('emailError').innerHTML = "올바른 이메일 형식이 아닙니다.";
+        return;
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '${ctp}/sendVerificationCode', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          responseCode = xhr.responseText.trim();
+          document.forms[0].email.readOnly = true;
+          document.getElementById('emailError').innerHTML = "";
+          timer_start();
+          document.getElementById('auth_container').style.display = "block";
+        }
+      };
+      xhr.send(`email=${email}`);
     }
 
     function verifyCode() {
-      let enteredCode = document.myform.verificationCode.value.trim();
-      if (enteredCode === ResponseCode) {
-        clearInterval(timer);
-        alert("인증 성공!");
+      const code = document.forms[0].verificationCode.value;
+      if (code_valid) {
+        if (responseCode === code) {
+          document.getElementById('code_msg').textContent = "이메일 인증 성공!";
+          document.getElementById('code_msg').style.display = "block";
+          document.getElementById('code_msg').style.color = "green";
+        } else {
+          document.getElementById('code_msg').textContent = "인증코드가 일치하지 않습니다.";
+          document.getElementById('code_msg').style.display = "block";
+          document.getElementById('code_msg').style.color = "red";
+        }
       } else {
-        alert("인증에 실패했습니다. 인증코드를 다시 확인해주세요.");
+        document.getElementById('code_msg').textContent = "인증코드가 만료되었습니다.";
+        document.getElementById('code_msg').style.display = "block";
+        document.getElementById('code_msg').style.color = "red";
       }
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('sendCodeBtn').addEventListener('click', sendVerificationCode);
-      document.getElementById('verifyCodeBtn').addEventListener('click', verifyCode);
-      document.querySelector('.next').addEventListener('click', fCheck);
-    });
+    
+    
+    // 커스텀 알럿
+    function showAlert(‎message) {
+      Swal.fire({
+        html : message,
+        confirm‎ButtonText : '확인',
+        customClass : {
+          confirm‎Button : 'swal2-confirm‎',
+          popup : 'custom-swal-popup',
+          htmlContainer : 'custom-swal-text'
+        }
+      });
+    }
+ 
   </script>
 </head>
 <body>
@@ -267,17 +281,17 @@
           <span id="emailError" style="color: red;"></span>
         </div>
         <div class="form-group">
-          <button type="button" id="sendCodeBtn">인증번호 전송</button>
+          <button type="button" onclick="sendVerificationCode()">인증번호 전송</button>
         </div>
         <div class="form-group" id="auth_container" style="display:none;">
           <input type="text" name="verificationCode" placeholder="인증번호 입력" required>
-          <button type="button" id="verifyCodeBtn">인증코드 확인</button>
+          <button type="button" onclick="verifyCode()">인증코드 확인</button>
           <span id="timer" class="timer"></span>
           <span id="code_msg" style="display:none;"></span>
         </div>
         <div class="form-actions">
           <button type="button" class="back" onclick="history.back()">이전</button>
-          <button type="button" class="next">다음</button>
+          <button type="button" onclick="fCheck()" class="next">다음</button>
         </div>
       </form>
       <div class="login-links">
