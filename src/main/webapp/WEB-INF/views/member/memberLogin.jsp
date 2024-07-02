@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>memberLogin.jsp</title>
+  <title>로그인 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
   <style>
     body {
@@ -41,7 +41,8 @@
     }
 
     h3 {
-      font-size: 1.5rem;
+      /* font-size: 1.5rem; */
+      font-weight : 800;
       margin-bottom: 20px;
     }
 
@@ -71,7 +72,7 @@
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 10px;
       box-sizing: border-box;
     }
 
@@ -79,16 +80,16 @@
       position: absolute;
       right: 10px;
       top: 50%;
-      transform: translateY(-50%);
+      transform: translateY(30%);
       cursor: pointer;
     }
 
     .login-button {
       width: 100%;
       padding: 10px;
-      background-color: #769cf8;
+      background-color: #000000;
       border: none;
-      border-radius: 4px;
+      border-radius: 10px;
       color: white;
       font-size: 16px;
       cursor: pointer;
@@ -100,11 +101,7 @@
       color: black;
       font-weight: 500;
     }
-
-    .login-button:hover {
-      background-color: #5f7dc5;
-    }
-
+    
     .kakaoLogin:hover {
       background-color: #ffeb00;
     }
@@ -117,23 +114,17 @@
       margin: 0 10px;
     }
 
-    a:hover {
-      text-decoration: underline;
-    }
+   a:hover {
+      /* text-decoration: underline; */
+      text-decoration: none;
+    } 
     
     a {
-      color: #5f7dc5;
+     /*  color: #5f7dc5; */
       text-decoration: none;
       font-weight: 500;
     }
-
-    .forgot-link {
-      display: block;
-      text-align: right;
-      margin-top: -10px;
-      margin-bottom: 15px;
-    }
-
+    
     .checkbox-container {
       display: flex;
       align-items: center;
@@ -144,31 +135,26 @@
       margin-right: 10px;
     }
   </style>
-   <script>
+	<script>
     'use strict';
 
-    $(function(){
-      $("#searchPassword").hide();
+    $(function() {
+        $("#searchPassword").hide();
 
-   		// 비밀번호 표시 토글
-      $('.fa-eye-slash').on('click', function() {
-        // 비밀번호 입력 필드를 선택합니다.
-        var passwordField = $('input[name="pwd"]');
-        
-        // 현재 비밀번호 입력 필드의 타입이 "password"인지 확인합니다.
-        if (passwordField.attr('type') === "password") {
-          // 비밀번호 필드의 타입을 "text"로 변경하여 비밀번호를 표시합니다.
-          passwordField.attr('type', 'text');
-          // 아이콘을 눈 모양으로 변경하여 비밀번호가 표시됨을 나타냅니다.
-          $(this).removeClass('fa-eye-slash').addClass('fa-eye');
-        } else {
-          // 비밀번호 필드의 타입을 "password"로 변경하여 비밀번호를 숨깁니다.
-          passwordField.attr('type', 'password');
-          // 아이콘을 눈에 슬래시가 그어진 모양으로 변경하여 비밀번호가 숨겨짐을 나타냅니다.
-          $(this).removeClass('fa-eye').addClass('fa-eye-slash');
-        }
+
+        // 비밀번호 표시 토글
+        $('.fa-eye-slash').on('click', function() {
+          var passwordField = $('input[name="pwd"]');
+          if (passwordField.attr('type') === "password") {
+            passwordField.attr('type', 'text');
+            $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+          } else {
+            passwordField.attr('type', 'password');
+            $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+          }
+        });
       });
-
+    
     // 비밀번호 찾기
     function pwdSearch() {
       $("#searchPassword").show();
@@ -224,11 +210,11 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="logo mb-4">Homelink</h1>
+   	<!-- <a href="/" class="logo mb-4" style="font-size:10px;"><h5>Homelink</h5></a> -->
+    <h3>로 그 인</h3>
     <div class="login-container">
-      <h3>로그인</h3>
       <form class="login-form">
-        <div class="input-group">
+        <div class="input-group mb-3">
           <label for="username">아이디</label>
           <a href="javascript:midSearch()" class="forgot-link">아이디를 잊어버리셨나요?</a>
           <input type="text" name="mid" value="${mid}" autofocus required placeholder="아이디를 입력해주세요.">
@@ -245,7 +231,7 @@
         </div>
       </form>
       <div class="login-links">
-        홈링크가 처음인가요?<a href="${ctp}/member/memberJoin"><font color="#5f7dc5"><b>회원가입하기</b></font></a>
+        홈링크가 처음인가요?<a href="${ctp}/member/memberJoin"><b>회원가입하기</b></a>
       </div>
       <hr/>
       <div>

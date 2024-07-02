@@ -13,17 +13,16 @@
 <script src="https://kit.fontawesome.com/df66332deb.js" crossorigin="anonymous"></script>
 
 <!-- 폰트 -->
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
 <link href="https://webfontworld.github.io/SCoreDream/SCoreDream.css" rel="stylesheet">
 <link href="https://webfontworld.github.io/Cafe24Ssurround/Cafe24Ssurround.css" rel="stylesheet">
 
 <style>
   body, a {
-    font-family: 'SCoreDream';
-    font-weight: 300;
+    font-family: 'pretendard';
   }
   h1, h2, h3, h4, h5 {
-    font-family: 'SCoreDream';
-    font-weight: 500;
+    font-family: 'pretendard';
   }
   .profile-img {
     width: 60px;
