@@ -3,51 +3,44 @@
 <mapper namespace="com.spring.javaclassS16.dao.MemberDAO">
 	
 	<select id="getMemberIdCheck" resultType="com.spring.javaclassS16.vo.MemberVO">
-		select * from member2 where mid = #{mid};
+		select * from member where mid = #{mid};
 	</select>
 	
-	<select id="getMemberNickCheck" resultType="com.spring.javaclassS16.vo.MemberVO">
-		select * from member2 where nickName = #{nickName};
+	<select id="getMemberNameCheck" resultType="com.spring.javaclassS16.vo.MemberVO">
+		select * from member where name = #{name};
 	</select>
-	<!-- 
-	<select id="getMemberList" resultType="com.spring.javaclassS.vo.MemberVO">
-	  <if test="level == 0">
-		  select * from member2 order by nickName;
-		</if>
-	  <if test="level != 0">
-			select * from member2 where userInfor = '공개' order by nickName;
-		</if>
-	</select>
-	-->
-	<select id="getMemberList" resultType="com.spring.javaclassS16.vo.MemberVO">
-		select * from member2 <if test="level != 0"> where userInfor = '공개'</if> order by nickName;
+	
+	<select id="getMemberNameEmailCheck" resultType="com.spring.javaclassS16.vo.MemberVO">
+		select * from member where name = #{name} and email = #{email} limit 1;
 	</select>
 	
 	
 	
 	<insert id="setMemberJoinOk">
-	  insert into member2 values (default,#{vo.mid},#{vo.pwd},#{vo.nickName},#{vo.name},#{vo.gender},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.email},#{vo.homePage},#{vo.job},#{vo.hobby},#{vo.photo},#{vo.content},#{vo.userInfor},default,default,default,default,default,default,default);
+	  insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.name},#{vo.email},#{vo.relationship},#{vo.birthday},#{vo.photo},#{vo.family_code},default,default,default);
+	</insert>
+	
+	<insert id="setKakaoMemberInput">
+		insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.name},#{vo.email},#{vo.relationship},#{vo.birthday},#{vo.photo},#{vo.family_code},default,default,default);
 	</insert>
 	
 	
-	<update id="setMemberPasswordUpdate">
-	  update member2 set pwd = #{pwd} where mid = #{mid};
-	</update>
 	
-	<update id="setMemberInforUpdate">
-	  update member2 set visitCnt=visitCnt+1, lastDate=now(), todayCnt=todayCnt+1, point=#{point} where mid=#{mid};
+	<update id="setPasswordUpdate">
+	  update member set pwd = #{pwd} where mid = #{mid};
 	</update>
-	
+
 	<update id="setPwdChangeOk">
-	  update member2 set pwd = #{pwd} where mid = #{mid};
+	  update member set pwd = #{pwd} where mid = #{mid};
 	</update>
 	
   <update id="setMemberUpdateOk">
-    update member2 set nickName=#{vo.nickName},name=#{vo.name},gender=#{vo.gender},birthday=#{vo.birthday},tel=#{vo.tel},address=#{vo.address},email=#{vo.email},homePage=#{vo.homePage},job=#{vo.job},hobby=#{vo.hobby},photo=#{vo.photo},content=#{vo.content},userInfor=#{vo.userInfor} where mid=#{vo.mid};
+    update member set name=#{vo.name},email=#{vo.email},relationship=#{vo.relationship},birthday=#{vo.birthday},photo=#{vo.photo},family_code=#{vo.family_code} where mid=#{vo.mid};
   </update>
   
-  <update id="setUserDel">
-    update member2 set userDel = 'OK' where mid = #{mid};
+  <update id="setMemberDel">
+    update member set userDel = 'OK' where mid = #{mid};
   </update>
+	
 	
 </mapper>

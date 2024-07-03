@@ -210,8 +210,9 @@
 </head>
 <body>
   <div class="container">
+  <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.jpg" width="130" alt="Logo"></a>
    	<!-- <a href="/" class="logo mb-4" style="font-size:10px;"><h5>Homelink</h5></a> -->
-    <h3>로 그 인</h3>
+    <h3 class="mt-4">로 그 인</h3>
     <div class="login-container">
       <form class="login-form">
         <div class="input-group mb-3">

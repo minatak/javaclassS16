@@ -1,5 +1,7 @@
 package com.spring.javaclassS16.controller;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -26,6 +28,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.javaclassS16.common.JavaclassProvide;
 import com.spring.javaclassS16.service.MemberService;
 import com.spring.javaclassS16.vo.MemberVO;
 
@@ -42,6 +45,10 @@ public class MemberController {
 	@Autowired
 	JavaMailSender mailSender;
 	
+	@Autowired
+	JavaclassProvide javaclassProvide;
+	
+	// 일반 로그인 폼
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
 	public String memberLoginGet(HttpServletRequest request) {
 		// 로그인창에 아이디 체크 유무에 대한 처리
@@ -59,6 +66,73 @@ public class MemberController {
 		return "member/memberLogin";
 	}
 	
+	// 카카오 로그인
+	@RequestMapping(value = "/kakaoLogin", method = RequestMethod.GET)
+	public String kakaoLoginGet(String name, String email, String accessToken,
+			HttpServletRequest request,
+			HttpSession session
+		) throws MessagingException {
+		// 카카오 로그아웃을 위한 카카오앱키를 세션에 저장시켜둔다.
+		session.setAttribute("sAccessToken", accessToken);
+		
+		// 카카오 로그인한 회원인 경우에는 우리 회원인지를 조사한다.(넘어온 이메일을 @를 기준으로 아이디와 분리해서 기존 memeber2테이블의 아이디와 비교한다.)
+		MemberVO vo = memberService.getMemberNameEmailCheck(name, email);
+		
+		// 현재 카카오로그인에의한 우리회원이 아니였다면, 자동으로 우리회원에 가입처리한다.
+		// 필수입력:아이디, 닉네임, 이메일, 성명(닉네임으로 대체), 비밀번호(임시비밀번호 발급처리)
+		String newMember = "NO"; // 신규회원인지에 대한 정의(신규회원:OK, 기존회원:NO)
+		if(vo == null) {
+			// 아이디 결정하기
+			String mid = email.substring(0, email.indexOf("@"));
+			
+			// 만약에 기존에 같은 아이디가 존재한다면 가입처리 불가...
+			MemberVO vo2 = memberService.getMemberIdCheck(mid);
+			if(vo2 != null) return "redirect:/message/midSameSearch";
+			
+			// 비밀번호(임시비밀번호 발급처리)
+			UUID uid = UUID.randomUUID();
+			String pwd = uid.toString().substring(0,8);
+			session.setAttribute("sImsiPwd", pwd);
+			
+			vo.setMid(mid);
+			vo.setPwd(passwordEncoder.encode(pwd));
+			vo.setName(name);
+			vo.setEmail(email);
+			
+			// 새로 발급된 비밀번호를 암호화 시켜서 db에 저장처리한다.(카카오 로그인한 신입회원은 바로 정회원으로 등업 시켜준다.)
+			memberService.setKakaoMemberInput(vo);
+			
+			// 새로 발급받은 임시비밀번호를 메일로 전송한다.
+			javaclassProvide.mailSend(email, "임시 비밀번호를 발급하였습니다.", pwd);
+			
+			// 새로 가입처리된 회원의 정보를 다시 vo에 담아준다.
+			vo = memberService.getMemberIdCheck(mid);
+			
+			// 비밀번호를 새로 발급처리했을때 sLogin세션을 발생시켜주고, memberMain창에 비밀번호 변경메세지를 지속적으로 뿌려준다.
+			session.setAttribute("sLogin", "OK");
+			
+			newMember = "OK";
+		}
+		
+		// 로그인 인증완료시 처리할 부분(1.세션, 3.기타 설정값....)
+		// 1.세션처리
+		String strLevel = "";
+		if(vo.getLevel() == 0) strLevel = "관리자";
+		else if(vo.getLevel() == 1) strLevel = "우수회원";
+		else if(vo.getLevel() == 2) strLevel = "정회원";
+		else if(vo.getLevel() == 3) strLevel = "준회원";
+		
+		session.setAttribute("sMid", vo.getMid());
+		session.setAttribute("sName", vo.getName());
+		session.setAttribute("sLevel", vo.getLevel());
+		session.setAttribute("strLevel", strLevel);
+		
+		// 로그인 완료후 모든 처리가 끝나면 필요한 메세지처리후 memberMain으로 보낸다.
+		if(newMember.equals("NO")) return "redirect:/message/memberLoginOk?mid="+vo.getMid();
+		else return "redirect:/message/memberLoginNewOk?mid="+vo.getMid();
+	}
+	
+  // 일반 로그인 처리하기
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
 	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			@RequestParam(name="mid", defaultValue = "hkd1234", required = false) String mid,
@@ -78,7 +152,7 @@ public class MemberController {
 			else if(vo.getLevel() == 3) strLevel = "준회원";
 			
 			session.setAttribute("sMid", mid);
-			session.setAttribute("sNickName", vo.getNickName());
+			session.setAttribute("sName", vo.getName());
 			session.setAttribute("sLevel", vo.getLevel());
 			session.setAttribute("strLevel", strLevel);
 			
@@ -102,13 +176,6 @@ public class MemberController {
 				}
 			}
 			
-			// 3. 기타처리(DB에 처리해야할것들(방문카운트, 포인트,... 등)
-			// 방문포인트 : 1회방문시 point 10점할당, 1일 최대 50점까지 할당가능
-			// 숙제...
-			int point = 10;
-			
-			// 방문카운트
-			memberService.setMemberInforUpdate(mid, point);
 			
 			return "redirect:/message/memberLoginOk?mid="+mid;
 		}
@@ -117,12 +184,38 @@ public class MemberController {
 		}
 	}
 	
+	// 일반 로그아웃
 	@RequestMapping(value = "/memberLogout", method = RequestMethod.GET)
 	public String memberMainGet(HttpSession session) {
 		String mid = (String) session.getAttribute("sMid");
 		session.invalidate();
 		
 		return "redirect:/message/memberLogout?mid="+mid;
+	}
+	
+	// kakao 로그아웃
+	@RequestMapping(value = "/kakaoLogout", method = RequestMethod.GET)
+	public String kakaoLogoutGet(HttpSession session) {
+		String mid = (String) session.getAttribute("sMid");
+		String accessToken = (String) session.getAttribute("sAccessToken");
+		String reqURL = "https://kapi.kakao.com/v1/user/unlink";
+		
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Authorization", " " + accessToken);
+			
+			// 카카오에서 정상적으로 처리 되었다면 200번이 돌아온다.
+			int responseCode = conn.getResponseCode();
+			System.out.println("responseCode : " + responseCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		session.invalidate();
+		
+		return "redirect:/message/kakaoLogout?mid="+mid;
 	}
 	
 	@RequestMapping(value = "/memberMain", method = RequestMethod.GET)
@@ -134,42 +227,92 @@ public class MemberController {
 		return "member/memberMain";
 	}
 	
+	@ResponseBody
+    @RequestMapping(value = "/joinEmailCheck", method = RequestMethod.POST)
+    public String memberEmailCheckPost(String email, HttpSession session) throws MessagingException {
+        UUID uid = UUID.randomUUID();
+        String emailKey = uid.toString().substring(0, 8);
+        session.setAttribute("sEmailKey", emailKey);
+
+        joinMailSend(email, "HomeLink 이메일 인증 번호 안내",
+            "안녕하세요 회원님, 홈링크입니다 :)\r\n"
+            + "이메일 인증 절차 진행을 위한 인증 번호 6자리를 발급해 드렸습니다.\r\n"
+            + "진행하시던 화면에 아래 인증 번호를 입력하신 후 인증을 완료해 주시기 바랍니다.\r\n"
+            + "인증번호 : " + emailKey);
+        return emailKey;
+    }
+
+    // 가입 메일 전송
+    private void joinMailSend(String toMail, String title, String content) throws MessagingException {
+        if (mailSender == null) {
+            throw new MessagingException("Mail sender is not configured properly.");
+        }
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+
+        messageHelper.setTo(toMail);
+        messageHelper.setSubject(title);
+        messageHelper.setText(content, true);
+
+        mailSender.send(message);
+    }
+	
+	
+	
+	// 이메일 확인하기
+	@ResponseBody
+	@RequestMapping(value = "/memberEmailCheckOk", method = RequestMethod.POST)
+	public String memberEmailCheckOkPost(String checkKey, HttpSession session) throws MessagingException {
+		String sCheckKey = (String) session.getAttribute("sEmailKey");
+		if(checkKey.equals(sCheckKey)) return "1";
+		else return "0";
+	}
+	
 	@RequestMapping(value = "/memberJoin", method = RequestMethod.GET)
 	public String memberJoinGet() {
 		return "member/memberJoin";
 	}
 	
 	@RequestMapping(value = "/memberJoin", method = RequestMethod.POST)
-	public String memberJoinPost(MemberVO vo, MultipartFile fName) {
+	public String memberJoinPost(String name, String email, Model model) {
+		model.addAttribute("name", name);
+		model.addAttribute("email", email);
+		
+		return "member/memberJoin2";
+	}
+	
+	@RequestMapping(value = "/memberJoin2", method = RequestMethod.POST)
+	public String memberJoin2Post(MemberVO vo, MultipartFile fName) {
 		// 아이디/닉네임 중복체크
 		if(memberService.getMemberIdCheck(vo.getMid()) != null) return "redirect:/message/idCheckNo";
-		if(memberService.getMemberNickCheck(vo.getNickName()) != null) return "redirect:/message/nickCheckNo";
 		
 		// 비밀번호 암호화
 		vo.setPwd(passwordEncoder.encode(vo.getPwd()));
 		
 		// 회원 사진 처리(service객체에서 처리후 DB에 저장한다.)
 		if(!fName.getOriginalFilename().equals("")) vo.setPhoto(memberService.fileUpload(fName, vo.getMid(), ""));
-		else vo.setPhoto("noimage.jpg");
+		else vo.setPhoto("noimage.png");
 		
 		int res = memberService.setMemberJoinOk(vo);
 		
-		if(res != 0) return "redirect:/message/memberJoinOk";
-		else return "redirect:/message/memberJoinNo";
+//		if(res != 0) return "redirect:/message/memberJoinOk";
+//		else return "redirect:/message/memberJoinNo";
+		return "member/memberFamCode";
 	}
+	
+	@RequestMapping(value = "/memberFamCode", method = RequestMethod.GET)
+	public String memberFamCodeGet() {
+		return "member/memberFamCode";
+	}
+	
+	
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/memberIdCheck", method = RequestMethod.GET)
 	public String memberIdCheckGet(String mid) {
 		MemberVO vo = memberService.getMemberIdCheck(mid);
-		if(vo != null) return "1";
-		else return "0";
-	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/memberNickCheck", method = RequestMethod.GET)
-	public String memberNickCheckGet(String nickName) {
-		MemberVO vo = memberService.getMemberNickCheck(nickName);
 		if(vo != null) return "1";
 		else return "0";
 	}
@@ -185,7 +328,7 @@ public class MemberController {
 			String pwd = uid.toString().substring(0,8);
 			
 			// 새로 발급받은 비밀번호를 암호화 한후, DB에 저장한다.
-			memberService.setMemberPasswordUpdate(mid, passwordEncoder.encode(pwd));
+			memberService.setPasswordUpdate(mid, passwordEncoder.encode(pwd));
 			
 			// 발급받은 비밀번호를 메일로 전송처리한다.
 			String title = "임시 비밀번호를 발급하셨습니다.";
@@ -202,6 +345,7 @@ public class MemberController {
 		return "0";
 	}
 
+    
 	// 메일 전송하기(아이디찾기, 비밀번호 찾기)
 	private String mailSend(String toMail, String title, String mailFlag) throws MessagingException {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
@@ -219,8 +363,6 @@ public class MemberController {
 		// 메세지 보관함의 내용(content)에 , 발신자의 필요한 정보를 추가로 담아서 전송처리한다.
 		content = content.replace("\n", "<br>");
 		content += "<br><hr><h3>"+mailFlag+"</h3><hr><br>";
-		content += "<p><img src=\"cid:main.jpg\" width='500px'></p>";
-		content += "<p>방문하기 : <a href='http://49.142.157.251:9090/cjgreen'>javaclass</a></p>";
 		content += "<hr>";
 		messageHelper.setText(content, true);
 		
@@ -254,14 +396,6 @@ public class MemberController {
 		return memberService.setPwdChangeOk(mid, passwordEncoder.encode(pwd)) + "";
 	}
 	
-	@RequestMapping(value = "/memberList", method = RequestMethod.GET)
-	public String memberListGet(Model model, HttpSession session) {
-		int level = (int) session.getAttribute("sLevel");
-		ArrayList<MemberVO> vos = memberService.getMemberList(level);
-		model.addAttribute("vos", vos);
-		return "member/memberList";
-	}
-	
 	@RequestMapping(value = "/memberUpdate", method = RequestMethod.GET)
 	public String memberUpdateGet(Model model, HttpSession session) {
 		String mid = (String) session.getAttribute("sMid");
@@ -272,24 +406,19 @@ public class MemberController {
 	
 	@RequestMapping(value = "/memberUpdate", method = RequestMethod.POST)
 	public String memberUpdatePost(MemberVO vo, MultipartFile fName, HttpSession session) {
-		// 닉네임 체크
-		String nickName = (String) session.getAttribute("sNickName");
-		if(memberService.getMemberNickCheck(vo.getNickName()) != null && !nickName.equals(vo.getNickName())) {
-			return "redirect:/message/nickCheckNo";
-		}
 		
 		// 회원 사진 처리(service객체에서 처리후 DB에 저장한다. 원본파일은 noimage.jpg가 아닐경우 삭제한다.)
 		if(fName.getOriginalFilename() != null && !fName.getOriginalFilename().equals("")) vo.setPhoto(memberService.fileUpload(fName, vo.getMid(), vo.getPhoto()));
 		
 		int res = memberService.setMemberUpdateOk(vo);
 		if(res != 0) {
-			session.setAttribute("sNickName", vo.getNickName());
+			session.setAttribute("sName", vo.getName());
 			return "redirect:/message/memberUpdateOk";
 		}
 		else return "redirect:/message/memberUpdateNo";
 	}
 
-	// 회원 탈퇴 신청 
+	// 회원 탈퇴...신청...
 	@ResponseBody
 	@RequestMapping(value = "/userDel", method = RequestMethod.POST)
 	public String userDelPost(HttpSession session, HttpServletRequest request) {

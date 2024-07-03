@@ -26,8 +26,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MemberVO getMemberNickCheck(String nickName) {
-		return memberDAO.getMemberNickCheck(nickName);
+	public MemberVO getMemberNameCheck(String name) {
+		return memberDAO.getMemberNameCheck(name);
 	}
 
 	@Override
@@ -36,13 +36,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void setMemberPasswordUpdate(String mid, String pwd) {
-		memberDAO.setMemberPasswordUpdate(mid, pwd);
-	}
-
-	@Override
-	public void setMemberInforUpdate(String mid, int point) {
-		memberDAO.setMemberInforUpdate(mid, point);
+	public void setPasswordUpdate(String mid, String pwd) {
+		memberDAO.setPasswordUpdate(mid, pwd);
 	}
 
 	@Override
@@ -61,17 +56,12 @@ public class MemberServiceImpl implements MemberService {
 			// 서버에 파일 올리기
 			javaclassProvide.writeFile(fName, sFileName, "member");
 			
-			// 기존 사진파일이 noimage.jpg가 아니라면 서버에서 삭제시킨다.
-			if(!photo.equals("noimage.jpg")) javaclassProvide.deleteFile(photo, "member");
+			// 기존 사진파일이 noimage.png가 아니라면 서버에서 삭제시킨다.
+			if(!photo.equals("noimage.png")) javaclassProvide.deleteFile(photo, "member");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return sFileName;
-	}
-
-	@Override
-	public ArrayList<MemberVO> getMemberList(int level) {
-		return memberDAO.getMemberList(level);
 	}
 
 	@Override
@@ -82,6 +72,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int setUserDel(String mid) {
 		return memberDAO.setUserDel(mid);
+	}
+
+	@Override
+	public MemberVO getMemberNameEmailCheck(String name, String email) {
+		return memberDAO.getMemberNameEmailCheck(name, email);
+	}
+
+	@Override
+	public void setKakaoMemberInput(MemberVO vo) {
+		memberDAO.setKakaoMemberInput(vo);
 	}
 	
 }
