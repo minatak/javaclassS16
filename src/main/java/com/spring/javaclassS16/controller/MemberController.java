@@ -234,11 +234,18 @@ public class MemberController {
         String emailKey = uid.toString().substring(0, 8);
         session.setAttribute("sEmailKey", emailKey);
 
-        joinMailSend(email, "HomeLink 이메일 인증 번호 안내",
-            "안녕하세요 회원님, 홈링크입니다 :)\r\n"
-            + "이메일 인증 절차 진행을 위한 인증 번호 6자리를 발급해 드렸습니다.\r\n"
-            + "진행하시던 화면에 아래 인증 번호를 입력하신 후 인증을 완료해 주시기 바랍니다.\r\n"
-            + "인증번호 : " + emailKey);
+        joinMailSend(email, "HomeLink 이메일 인증번호 안내",
+            "<p>홈링크에 오신 것을 환영합니다 :)</p>" +
+            "<p>아래 8자리 인증번호를 사용하여 이메일 인증을 완료해주세요.</p>" +
+            "인증번호 : <b><h5>" + emailKey + "</h5></b>" +
+            "<p>인증 방법:<ol><li>가입하신 화면으로 돌아가세요.</li><li>\"이메일 인증\" 탭으로 이동합니다.</li><li>위에 발급된 8자리 인증번호를 입력합니다.</li><li>\"인증 완료\" 버튼을 클릭합니다.</li></ol></p>" +
+            "<p>이메일 인증을 완료하면 홈링크의 모든 서비스를 이용할 수 있습니다.</p>" +
+            "<p>감사합니다!</p>" +
+            "<p>HomeLink 팀</p>" +
+            "</div>" +
+            "<p>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
+            "<p><a href=\"\" >HomeLink 홈페이지 바로가기</a></p>" +
+            "</div>");
         return emailKey;
     }
 
@@ -248,16 +255,25 @@ public class MemberController {
             throw new MessagingException("Mail sender is not configured properly.");
         }
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
 
-        messageHelper.setTo(toMail);
-        messageHelper.setSubject(title);
-        messageHelper.setText(content, true);
+        messageHelper.setTo(toMail); 			// 받는 사람 메일 주소
+        messageHelper.setSubject(title); 		// 메일 제목
+        messageHelper.setText(content, true);	// 메일 내용
 
-        mailSender.send(message);
+        
+		messageHelper.setText(content, true);
+		
+		// 본문에 기재될 그림파일의 경로를 별도로 표시시켜준다. 그런후 다시 보관함에 저장한다.
+		FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/logo.png"));
+		messageHelper.addInline("logo.png", file);
+
+		mailSender.send(message);
+		
     }
-	
 	
 	
 	// 이메일 확인하기
@@ -267,6 +283,11 @@ public class MemberController {
 		String sCheckKey = (String) session.getAttribute("sEmailKey");
 		if(checkKey.equals(sCheckKey)) return "1";
 		else return "0";
+	}
+	
+	@RequestMapping(value = "/memberJoin0", method = RequestMethod.GET)
+	public String memberJoin0Get() {
+		return "member/memberJoin0";
 	}
 	
 	@RequestMapping(value = "/memberJoin", method = RequestMethod.GET)
@@ -283,7 +304,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/memberJoin2", method = RequestMethod.POST)
-	public String memberJoin2Post(MemberVO vo, MultipartFile fName) {
+	public String memberJoin2Post(MemberVO vo, MultipartFile fName, HttpSession session) {
 		// 아이디/닉네임 중복체크
 		if(memberService.getMemberIdCheck(vo.getMid()) != null) return "redirect:/message/idCheckNo";
 		
@@ -296,9 +317,12 @@ public class MemberController {
 		
 		int res = memberService.setMemberJoinOk(vo);
 		
-//		if(res != 0) return "redirect:/message/memberJoinOk";
-//		else return "redirect:/message/memberJoinNo";
-		return "member/memberFamCode";
+		session.setAttribute("sMid", vo.getMid());
+		session.setAttribute("sName", vo.getName());
+		
+		if(res != 0) return "redirect:/message/memberJoinOk";
+		else return "redirect:/message/memberJoinNo";
+//		return "member/memberFamCode";
 	}
 	
 	@RequestMapping(value = "/memberFamCode", method = RequestMethod.GET)
@@ -368,7 +392,7 @@ public class MemberController {
 		
 		// 본문에 기재될 그림파일의 경로를 별도로 표시시켜준다. 그런후 다시 보관함에 저장한다.
 		FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/main.jpg"));
-		messageHelper.addInline("main.jpg", file);
+		messageHelper.addInline("logo.png", file);
 		
 		// 메일 전송하기
 		mailSender.send(message);

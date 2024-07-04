@@ -59,7 +59,7 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 10px;
-      box-sizing: border-box;
+      /* box-sizing: border-box; */
       transition: border-color 0.3s;
       outline-width: 0.7px;
     }
@@ -372,7 +372,7 @@
 </head>
 <body>
   <div class="container">
-    <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.jpg" width="130" alt="Logo"></a>
+    <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.png" width="130" alt="Logo"></a>
     <div class="login-container">
       <h3>회원가입</h3>
       <form name="myform" method="post">

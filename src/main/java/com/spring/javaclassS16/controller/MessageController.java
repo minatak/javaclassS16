@@ -88,8 +88,8 @@ public class MessageController {
 			model.addAttribute("url", "/member/memberJoin");
 		}
 		else if(msgFlag.equals("memberJoinOk")) {
-			model.addAttribute("msg", "회원에 가입되셨습니다.");
-			model.addAttribute("url", "/member/memberLogin");
+			model.addAttribute("msg", "환영합니다 :) 회원에 가입되셨습니다!");
+			model.addAttribute("url", "/member/memberFamCode");
 		}
 		else if(msgFlag.equals("memberJoinNo")) {
 			model.addAttribute("msg", "회원 가입 실패~~");

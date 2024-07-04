@@ -210,7 +210,7 @@
 </head>
 <body>
   <div class="container">
-  <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.jpg" width="130" alt="Logo"></a>
+  <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.png" width="130" alt="Logo"></a>
    	<!-- <a href="/" class="logo mb-4" style="font-size:10px;"><h5>Homelink</h5></a> -->
     <h3 class="mt-4">로 그 인</h3>
     <div class="login-container">
@@ -234,7 +234,7 @@
       <div class="login-links">
         홈링크가 처음인가요?<a href="${ctp}/member/memberJoin"><b>회원가입하기</b></a>
       </div>
-      <hr/>
+      <hr/>			
       <div>
         <p class="mb-2">이미 카카오로 회원가입을 완료했다면?</p>
         <button onclick="kakaoLogin()" class="login-button kakaoLogin"><i class="fa-solid fa-comment"></i>&nbsp;카카오 로그인</button>

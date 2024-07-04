@@ -281,7 +281,6 @@
         document.getElementById("midBtn").focus();
       }
       else {
-    	  alert("submit");
         myform.submit();
       }
     }
@@ -358,8 +357,8 @@
 </head>
 <body>
   <div class="container">
-   <%--  <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.jpg" width="130" alt="Logo"></a> --%>
-      <h3>회원가입</h3>
+  <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.png" width="130" alt="Logo"></a>  
+      <h3 class="mt-3">회원가입</h3>
     <div class="login-container">
       <form name="myform" method="post" action="${ctp}/member/memberJoin2" class="was-validated" enctype="multipart/form-data">
         <div class="form-group mid">

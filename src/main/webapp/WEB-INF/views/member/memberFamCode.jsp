@@ -207,18 +207,23 @@
 </head>
 <body>
   <div class="container">
-    <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.jpg" width="130" alt="Logo"></a>
-    <div class="code-container">
-      <h3>가족 코드 등록</h3>
+    <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.png" width="130" alt="Logo"></a>
+      <h3 class="m-5">가족 코드 등록</h3>
+      <p>${sName}님 환영합니다 :)</p>
       <p>가족 코드를 입력해서 가족들과 연결 후 모든 기능을 누려보세요!</p>
+    <div class="code-container">
       <div class="form-group">
-        <button type="button" class="button" data-toggle="modal" data-target="#myModal">먼저 가입한 가족이 있는 경우</button>
+        <button type="button" class="button" data-toggle="modal" data-target="#myModal">먼저 가입한 가족이 있어요</button>
       </div>
 
       <div class="form-group">
         <button type="button" id="generateButton" onclick="newFamilyCode()">코드 생성하기</button>
       </div>
-
+<!-- 
+      <div class="form-group">
+        <button type="button" id="generateButton" onclick="newFamilyCode()">홈으로</button>
+      </div>
+ -->
       <div id="generated-code"></div>
 
       <!-- <div class="form-group">
