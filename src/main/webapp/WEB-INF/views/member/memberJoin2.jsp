@@ -290,18 +290,22 @@
     }
 
     function showAlert(message) {
-      Swal.fire({
-        html: message,
-        confirmButtonText: '확인',
-        customClass: {
-          confirmButton: 'swal2-confirm',
-          popup: 'custom-swal-popup',
-          htmlContainer: 'custom-swal-text'
-        }
-      });
-    }
-    
-
+    	  Swal.fire({
+    	    html: message,
+    	    confirmButtonText: '확인',
+    	    customClass: {
+    	      confirmButton: 'swal2-confirm',
+    	      popup: 'custom-swal-popup',
+    	      htmlContainer: 'custom-swal-text'
+    	    },
+    	    scrollbarPadding: false,
+    	    allowOutsideClick: false,
+    	    heightAuto: false,
+    	    didOpen: () => {
+    	      document.body.style.paddingRight = '0px';
+    	    }
+    	  });
+    	}
     // 아이디 중복체크
     function idCheck() {
       let mid = myform.mid.value;
@@ -319,10 +323,10 @@
           data : {mid : mid},
           success:function(res) {
             if(res != '0') {
-              showAlert("이미 사용중인 아이디 입니다. 다시 입력하세요.");
+              showAlert("이미 사용중인 아이디입니다.");
               myform.mid.focus();
             }
-            else showAlert("사용 가능한 아이디 입니다.");
+            else showAlert("사용 가능한 아이디입니다.");
           },
           error : function() {
             showAlert("전송 오류!");

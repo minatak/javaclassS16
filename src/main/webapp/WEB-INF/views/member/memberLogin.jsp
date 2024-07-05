@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로그인 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
+  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
   <style>
     body {
       display: flex; 
@@ -214,7 +215,7 @@
    	<!-- <a href="/" class="logo mb-4" style="font-size:10px;"><h5>Homelink</h5></a> -->
     <h3 class="mt-4">로 그 인</h3>
     <div class="login-container">
-      <form class="login-form">
+      <form method="post" class="login-form">
         <div class="input-group mb-3">
           <label for="username">아이디</label>
           <a href="javascript:midSearch()" class="forgot-link">아이디를 잊어버리셨나요?</a>
@@ -232,7 +233,7 @@
         </div>
       </form>
       <div class="login-links">
-        홈링크가 처음인가요?<a href="${ctp}/member/memberJoin"><b>회원가입하기</b></a>
+        홈링크가 처음인가요?<a href="${ctp}/member/memberJoin0"><b>회원가입하기</b></a>
       </div>
       <hr/>			
       <div>

@@ -3,6 +3,8 @@ package com.spring.javaclassS16.controller;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.javaclassS16.common.JavaclassProvide;
 import com.spring.javaclassS16.service.MemberService;
@@ -48,233 +51,79 @@ public class MemberController {
 	@Autowired
 	JavaclassProvide javaclassProvide;
 	
-	// 일반 로그인 폼
-	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
-	public String memberLoginGet(HttpServletRequest request) {
-		// 로그인창에 아이디 체크 유무에 대한 처리
-		// 쿠키를 검색해서 cMid가 있을때 가져와서 아이디입력창에 뿌릴수 있게 한다.
-		Cookie[] cookies = request.getCookies();
 
-		if(cookies != null) {
-			for(int i=0; i<cookies.length; i++) {
-				if(cookies[i].getName().equals("cMid")) {
-					request.setAttribute("mid", cookies[i].getValue());
-					break;
-				}
-			}
-		}
-		return "member/memberLogin";
-	}
-	
-	// 카카오 로그인
-	@RequestMapping(value = "/kakaoLogin", method = RequestMethod.GET)
-	public String kakaoLoginGet(String name, String email, String accessToken,
-			HttpServletRequest request,
-			HttpSession session
-		) throws MessagingException {
-		// 카카오 로그아웃을 위한 카카오앱키를 세션에 저장시켜둔다.
-		session.setAttribute("sAccessToken", accessToken);
-		
-		// 카카오 로그인한 회원인 경우에는 우리 회원인지를 조사한다.(넘어온 이메일을 @를 기준으로 아이디와 분리해서 기존 memeber2테이블의 아이디와 비교한다.)
-		MemberVO vo = memberService.getMemberNameEmailCheck(name, email);
-		
-		// 현재 카카오로그인에의한 우리회원이 아니였다면, 자동으로 우리회원에 가입처리한다.
-		// 필수입력:아이디, 닉네임, 이메일, 성명(닉네임으로 대체), 비밀번호(임시비밀번호 발급처리)
-		String newMember = "NO"; // 신규회원인지에 대한 정의(신규회원:OK, 기존회원:NO)
-		if(vo == null) {
-			// 아이디 결정하기
-			String mid = email.substring(0, email.indexOf("@"));
-			
-			// 만약에 기존에 같은 아이디가 존재한다면 가입처리 불가...
-			MemberVO vo2 = memberService.getMemberIdCheck(mid);
-			if(vo2 != null) return "redirect:/message/midSameSearch";
-			
-			// 비밀번호(임시비밀번호 발급처리)
-			UUID uid = UUID.randomUUID();
-			String pwd = uid.toString().substring(0,8);
-			session.setAttribute("sImsiPwd", pwd);
-			
-			vo.setMid(mid);
-			vo.setPwd(passwordEncoder.encode(pwd));
-			vo.setName(name);
-			vo.setEmail(email);
-			
-			// 새로 발급된 비밀번호를 암호화 시켜서 db에 저장처리한다.(카카오 로그인한 신입회원은 바로 정회원으로 등업 시켜준다.)
-			memberService.setKakaoMemberInput(vo);
-			
-			// 새로 발급받은 임시비밀번호를 메일로 전송한다.
-			javaclassProvide.mailSend(email, "임시 비밀번호를 발급하였습니다.", pwd);
-			
-			// 새로 가입처리된 회원의 정보를 다시 vo에 담아준다.
-			vo = memberService.getMemberIdCheck(mid);
-			
-			// 비밀번호를 새로 발급처리했을때 sLogin세션을 발생시켜주고, memberMain창에 비밀번호 변경메세지를 지속적으로 뿌려준다.
-			session.setAttribute("sLogin", "OK");
-			
-			newMember = "OK";
-		}
-		
-		// 로그인 인증완료시 처리할 부분(1.세션, 3.기타 설정값....)
-		// 1.세션처리
-		String strLevel = "";
-		if(vo.getLevel() == 0) strLevel = "관리자";
-		else if(vo.getLevel() == 1) strLevel = "우수회원";
-		else if(vo.getLevel() == 2) strLevel = "정회원";
-		else if(vo.getLevel() == 3) strLevel = "준회원";
-		
-		session.setAttribute("sMid", vo.getMid());
-		session.setAttribute("sName", vo.getName());
-		session.setAttribute("sLevel", vo.getLevel());
-		session.setAttribute("strLevel", strLevel);
-		
-		// 로그인 완료후 모든 처리가 끝나면 필요한 메세지처리후 memberMain으로 보낸다.
-		if(newMember.equals("NO")) return "redirect:/message/memberLoginOk?mid="+vo.getMid();
-		else return "redirect:/message/memberLoginNewOk?mid="+vo.getMid();
-	}
-	
-  // 일반 로그인 처리하기
-	@RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
-	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response, HttpSession session,
-			@RequestParam(name="mid", defaultValue = "hkd1234", required = false) String mid,
-			@RequestParam(name="pwd", defaultValue = "1234", required = false) String pwd,
-			@RequestParam(name="idSave", defaultValue = "1234", required = false) String idSave
-		) {
-		//  로그인 인증처리(스프링 시큐리티의 BCryptPasswordEncoder객체를 이용한 암호화되어 있는 비밀번호 비교하기)
-		MemberVO vo = memberService.getMemberIdCheck(mid);
-		
-		if(vo != null && vo.getUserDel().equals("NO") && passwordEncoder.matches(pwd, vo.getPwd())) {
-			// 로그인 인증완료시 처리할 부분(1.세션, 2.쿠키, 3.기타 설정값....)
-			// 1.세션처리
-			String strLevel = "";
-			if(vo.getLevel() == 0) strLevel = "관리자";
-			else if(vo.getLevel() == 1) strLevel = "우수회원";
-			else if(vo.getLevel() == 2) strLevel = "정회원";
-			else if(vo.getLevel() == 3) strLevel = "준회원";
-			
-			session.setAttribute("sMid", mid);
-			session.setAttribute("sName", vo.getName());
-			session.setAttribute("sLevel", vo.getLevel());
-			session.setAttribute("strLevel", strLevel);
-			
-			// 2.쿠키 저장/삭제
-			if(idSave.equals("on")) {
-				Cookie cookieMid = new Cookie("cMid", mid);
-				cookieMid.setPath("/");
-				cookieMid.setMaxAge(60*60*24*7);		// 쿠키의 만료시간을 7일로 지정
-				response.addCookie(cookieMid);
-			}
-			else {
-				Cookie[] cookies = request.getCookies();
-				if(cookies != null) {
-					for(int i=0; i<cookies.length; i++) {
-						if(cookies[i].getName().equals("cMid")) {
-							cookies[i].setMaxAge(0);
-							response.addCookie(cookies[i]);
-							break;
-						}
-					}
-				}
-			}
-			
-			
-			return "redirect:/message/memberLoginOk?mid="+mid;
+//	@RequestMapping(value = "/memberMain", method = RequestMethod.GET)
+//	public String memberMainGet(HttpSession session, Model model) {
+//		String mid = (String) session.getAttribute("sMid");
+//		MemberVO mVo = memberService.getMemberIdCheck(mid);
+//		model.addAttribute("mVo", mVo);
+//		
+//		return "member/memberMain";
+//	}
+
+	// 이메일 인증
+	@ResponseBody
+	@RequestMapping(value = "/joinEmailCheck", method = RequestMethod.POST)
+	public String memberEmailCheckPost(String email, HttpSession session) throws MessagingException {
+		MemberVO vo = memberService.getMemberEmailCheck(email);
+		if(vo != null) {
+			return "alreadyMember";
 		}
 		else {
-			return "redirect:/message/memberLoginNo";
+		    UUID uid = UUID.randomUUID();
+		    String emailKey = uid.toString().substring(0, 8);
+		    session.setAttribute("sEmailKey", emailKey);
+		    
+		    String emailContent = 
+		        "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;'>" +
+		            "<img src='cid:logo.png' alt='HomeLink Logo' style='display: block; margin: 0 auto; max-width: 150px;'>" +
+		            "<h2 style='color: #333; text-align: center;'>HomeLink 이메일 인증</h2>" +
+		            "<p style='color: #666; line-height: 1.6;'>홈링크에 오신 것을 환영합니다 :)</p>" +
+		            "<p style='color: #666; line-height: 1.6;'>아래 8자리 인증번호를 사용하여 이메일 인증을 완료해주세요.</p>" +
+		            "<div style='background-color: #f0f0f0; padding: 15px; border-radius: 5px; text-align: center; margin: 20px 0;'>" +
+		                "<h3 style='margin: 0; color: #333;'>인증번호</h3>" +
+		                "<p style='font-size: 24px; font-weight: bold; color: #4a90e2; letter-spacing: 2px; margin: 10px 0;'>" + emailKey + "</p>" +
+		            "</div>" +
+		            "<h4 style='color: #333;'>인증 방법:</h4>" +
+		            "<ol style='color: #666; line-height: 1.6;'>" +
+		                "<li>가입하신 화면으로 돌아가세요.</li>" +
+		                "<li>\"이메일 인증\" 탭으로 이동합니다.</li>" +
+		                "<li>위에 발급된 8자리 인증번호를 입력합니다.</li>" +
+		                "<li>\"인증 완료\" 버튼을 클릭합니다.</li>" +
+		            "</ol>" +
+		            "<p style='color: #666; line-height: 1.6;'>이메일 인증을 완료하면 홈링크의 모든 서비스를 이용할 수 있습니다.</p>" +
+		            "<p style='color: #666; line-height: 1.6;'>감사합니다!</p>" +
+		            "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
+		            "<p style='color: #999; font-size: 12px; margin-top: 20px;'>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
+		            "<p style='text-align: center;'>" +
+		                "<a href='' style='display: inline-block; background-color: #4a90e2; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
+		            "</p>" +
+		        "</div>";
+	
+		    joinMailSend(email, "HomeLink 이메일 인증번호 안내", emailContent);
+		    return emailKey;
 		}
 	}
-	
-	// 일반 로그아웃
-	@RequestMapping(value = "/memberLogout", method = RequestMethod.GET)
-	public String memberMainGet(HttpSession session) {
-		String mid = (String) session.getAttribute("sMid");
-		session.invalidate();
-		
-		return "redirect:/message/memberLogout?mid="+mid;
+
+	// 가입 메일 전송
+	private void joinMailSend(String toMail, String title, String content) throws MessagingException {
+	    if (mailSender == null) {
+	        throw new MessagingException("Mail sender is not configured properly.");
+	    }
+	    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+	    
+	    MimeMessage message = mailSender.createMimeMessage();
+	    MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+	    messageHelper.setTo(toMail);
+	    messageHelper.setSubject(title);
+	    messageHelper.setText(content, true);
+	    
+	    // 로고 이미지 첨부
+	    FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/logo.png"));
+	    messageHelper.addInline("logo.png", file);
+	    
+	    mailSender.send(message);
 	}
-	
-	// kakao 로그아웃
-	@RequestMapping(value = "/kakaoLogout", method = RequestMethod.GET)
-	public String kakaoLogoutGet(HttpSession session) {
-		String mid = (String) session.getAttribute("sMid");
-		String accessToken = (String) session.getAttribute("sAccessToken");
-		String reqURL = "https://kapi.kakao.com/v1/user/unlink";
-		
-		try {
-			URL url = new URL(reqURL);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Authorization", " " + accessToken);
-			
-			// 카카오에서 정상적으로 처리 되었다면 200번이 돌아온다.
-			int responseCode = conn.getResponseCode();
-			System.out.println("responseCode : " + responseCode);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		session.invalidate();
-		
-		return "redirect:/message/kakaoLogout?mid="+mid;
-	}
-	
-	@RequestMapping(value = "/memberMain", method = RequestMethod.GET)
-	public String memberMainGet(HttpSession session, Model model) {
-		String mid = (String) session.getAttribute("sMid");
-		MemberVO mVo = memberService.getMemberIdCheck(mid);
-		model.addAttribute("mVo", mVo);
-		
-		return "member/memberMain";
-	}
-	
-	@ResponseBody
-    @RequestMapping(value = "/joinEmailCheck", method = RequestMethod.POST)
-    public String memberEmailCheckPost(String email, HttpSession session) throws MessagingException {
-        UUID uid = UUID.randomUUID();
-        String emailKey = uid.toString().substring(0, 8);
-        session.setAttribute("sEmailKey", emailKey);
-
-        joinMailSend(email, "HomeLink 이메일 인증번호 안내",
-            "<p>홈링크에 오신 것을 환영합니다 :)</p>" +
-            "<p>아래 8자리 인증번호를 사용하여 이메일 인증을 완료해주세요.</p>" +
-            "인증번호 : <b><h5>" + emailKey + "</h5></b>" +
-            "<p>인증 방법:<ol><li>가입하신 화면으로 돌아가세요.</li><li>\"이메일 인증\" 탭으로 이동합니다.</li><li>위에 발급된 8자리 인증번호를 입력합니다.</li><li>\"인증 완료\" 버튼을 클릭합니다.</li></ol></p>" +
-            "<p>이메일 인증을 완료하면 홈링크의 모든 서비스를 이용할 수 있습니다.</p>" +
-            "<p>감사합니다!</p>" +
-            "<p>HomeLink 팀</p>" +
-            "</div>" +
-            "<p>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
-            "<p><a href=\"\" >HomeLink 홈페이지 바로가기</a></p>" +
-            "</div>");
-        return emailKey;
-    }
-
-    // 가입 메일 전송
-    private void joinMailSend(String toMail, String title, String content) throws MessagingException {
-        if (mailSender == null) {
-            throw new MessagingException("Mail sender is not configured properly.");
-        }
-
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-
-        messageHelper.setTo(toMail); 			// 받는 사람 메일 주소
-        messageHelper.setSubject(title); 		// 메일 제목
-        messageHelper.setText(content, true);	// 메일 내용
-
-        
-		messageHelper.setText(content, true);
-		
-		// 본문에 기재될 그림파일의 경로를 별도로 표시시켜준다. 그런후 다시 보관함에 저장한다.
-		FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/logo.png"));
-		messageHelper.addInline("logo.png", file);
-
-		mailSender.send(message);
-		
-    }
-	
 	
 	// 이메일 확인하기
 	@ResponseBody
@@ -303,6 +152,19 @@ public class MemberController {
 		return "member/memberJoin2";
 	}
 	
+	// 카카오로 회원가입 진행시 들어오는 화면
+	@RequestMapping(value = "/memberJoin2", method = RequestMethod.GET)
+	public String memberJoin2Get(Model model) {
+	    // 리다이렉트로 전달된 데이터가 있다면 모델에 추가
+	    if (model.asMap().containsKey("name")) {
+	        model.addAttribute("name", model.asMap().get("name"));
+	    }
+	    if (model.asMap().containsKey("email")) {
+	        model.addAttribute("email", model.asMap().get("email"));
+	    }
+	    return "member/memberJoin2";
+	}
+	
 	@RequestMapping(value = "/memberJoin2", method = RequestMethod.POST)
 	public String memberJoin2Post(MemberVO vo, MultipartFile fName, HttpSession session) {
 		// 아이디/닉네임 중복체크
@@ -319,10 +181,10 @@ public class MemberController {
 		
 		session.setAttribute("sMid", vo.getMid());
 		session.setAttribute("sName", vo.getName());
+		session.setAttribute("sPhoto", vo.getPhoto());
 		
 		if(res != 0) return "redirect:/message/memberJoinOk";
 		else return "redirect:/message/memberJoinNo";
-//		return "member/memberFamCode";
 	}
 	
 	@RequestMapping(value = "/memberFamCode", method = RequestMethod.GET)
@@ -330,15 +192,183 @@ public class MemberController {
 		return "member/memberFamCode";
 	}
 	
-	
-	
-	
+	// 아이디 중복체크
 	@ResponseBody
 	@RequestMapping(value = "/memberIdCheck", method = RequestMethod.GET)
 	public String memberIdCheckGet(String mid) {
 		MemberVO vo = memberService.getMemberIdCheck(mid);
 		if(vo != null) return "1";
 		else return "0";
+	}
+	
+
+	// 가족 코드 생성
+  @ResponseBody
+  @RequestMapping(value = "/createCode", method = RequestMethod.POST)
+  public String createFamilyCode(HttpSession session) {
+      String mid = (String) session.getAttribute("sMid");
+      String familyCode = memberService.createFamilyCode();
+      memberService.updateMemberFamilyCode(mid, familyCode);
+      session.setAttribute("sFamCode", familyCode);
+      return familyCode;
+  }
+
+  // 가족 코드 연결 
+  @ResponseBody
+  @RequestMapping(value = "/connectCode", method = RequestMethod.POST)
+  public String connectFamilyCode(@RequestParam String familyCode, HttpSession session) {
+  	familyCode = familyCode.toUpperCase();
+      String mid = (String) session.getAttribute("sMid");
+      boolean isConnected = memberService.connectToFamily(mid, familyCode);
+      if(isConnected) {
+      	session.setAttribute("sFamCode", familyCode);        	
+      }
+      return isConnected ? "success" : "error";
+  }
+
+  
+  @RequestMapping(value = "/kakaoJoin", method = RequestMethod.GET)
+  public String kakaoJoinGet(String name, String email, String accessToken,
+          RedirectAttributes redirectAttributes,
+          HttpSession session
+      ) throws MessagingException {
+      // 카카오 로그아웃을 위한 카카오앱키를 세션에 저장시켜둔다.
+      session.setAttribute("sAccessToken", accessToken);
+      
+      // 카카오로 가입하는 회원인 경우 이미 회원인지 조사한다.(해당 이메일이 존재하는지 검색)
+      MemberVO vo = memberService.getMemberEmailCheck(email);
+      
+      // 만약 이메일 정보가 있다면 로그인창으로 반환한다.
+      if(vo != null) {
+          return "alreadyMember";
+      }
+      else {
+          redirectAttributes.addFlashAttribute("name", name);
+          redirectAttributes.addFlashAttribute("email", email);
+          return "redirect:/member/memberJoin2";
+      }
+  }
+    
+	// 일반 로그인 폼
+	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
+	public String memberLoginGet(HttpServletRequest request) {
+		// 로그인창에 아이디 체크 유무에 대한 처리
+		// 쿠키를 검색해서 cMid가 있을때 가져와서 아이디입력창에 뿌릴수 있게 한다.
+		Cookie[] cookies = request.getCookies();
+
+		if(cookies != null) {
+			for(int i=0; i<cookies.length; i++) {
+				if(cookies[i].getName().equals("cMid")) {
+					request.setAttribute("mid", cookies[i].getValue());
+					break;
+				}
+			}
+		}
+		return "member/memberLogin";
+	}
+	
+	// 카카오 로그인
+	@RequestMapping(value = "/kakaoLogin", method = RequestMethod.GET)
+	public String kakaoLoginGet(String name, String email, String accessToken,
+			HttpServletRequest request,
+			HttpSession session
+		) throws MessagingException {
+		// 카카오 로그아웃을 위한 카카오앱키를 세션에 저장시켜둔다.
+		session.setAttribute("sAccessToken", accessToken);
+		
+		// 카카오 로그인한 회원인 경우에는 우리 회원인지를 조사한다. 
+		MemberVO vo = memberService.getMemberNameEmailCheck(name, email);
+		
+		if(vo != null && vo.getUserDel().equals("NO")) {
+			session.setAttribute("sMid", vo.getMid());
+			session.setAttribute("sName", vo.getName());
+			session.setAttribute("sFamCode", vo.getFamily_code());
+			session.setAttribute("sPhoto", vo.getPhoto());
+			return "redirect:/message/memberLoginOk?name="+vo.getName();
+		}
+		else { // 가입된 회원이 아니었을 경우
+			return "redirect:/message/memberNot";
+		}
+	}
+	
+	// 일반 로그인 처리하기
+	@SuppressWarnings("deprecation")
+	@RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
+	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response, HttpSession session,
+			@RequestParam(name="mid", defaultValue = "hkd1234", required = false) String mid,
+			@RequestParam(name="pwd", defaultValue = "1234", required = false) String pwd,
+			@RequestParam(name="idSave", defaultValue = "1234", required = false) String idSave
+		) {
+		//  로그인 인증처리(스프링 시큐리티의 BCryptPasswordEncoder객체를 이용한 암호화되어 있는 비밀번호 비교하기)
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		
+		if(vo != null && vo.getUserDel().equals("NO") && passwordEncoder.matches(pwd, vo.getPwd())) {
+			// 로그인 인증완료시 처리할 부분(1.세션, 2.쿠키, 3.기타 설정값....)
+			// 1.세션처리
+			session.setAttribute("sMid", mid);
+			session.setAttribute("sName", vo.getName());
+			session.setAttribute("sFamCode", vo.getFamily_code());
+			session.setAttribute("sPhoto", vo.getPhoto());
+
+			// 2.쿠키 저장/삭제
+			if(idSave.equals("on")) {
+				Cookie cookieMid = new Cookie("cMid", mid);
+				cookieMid.setPath("/");
+				cookieMid.setMaxAge(60*60*24*7);		// 쿠키의 만료시간을 7일로 지정
+				response.addCookie(cookieMid);
+			}
+			else {
+				Cookie[] cookies = request.getCookies();
+				if(cookies != null) {
+					for(int i=0; i<cookies.length; i++) {
+						if(cookies[i].getName().equals("cMid")) {
+							cookies[i].setMaxAge(0);
+							response.addCookie(cookies[i]);
+							break;
+						}
+					}
+				}
+			}
+			return "redirect:/message/memberLoginOk?name="+ java.net.URLEncoder.encode(vo.getName());
+		}
+		else {
+			return "redirect:/message/memberLoginNo";
+		}
+	}
+	
+	// 일반 로그아웃
+	@SuppressWarnings("deprecation")
+	@RequestMapping(value = "/memberLogout", method = RequestMethod.GET)
+	public String memberMainGet(HttpSession session) {
+		String name = (String) session.getAttribute("sName");
+		session.invalidate();
+		
+		return "redirect:/message/memberLogout?name="+ java.net.URLEncoder.encode(name);
+	}
+	
+	// kakao 로그아웃
+	@RequestMapping(value = "/kakaoLogout", method = RequestMethod.GET)
+	public String kakaoLogoutGet(HttpSession session) {
+		String mid = (String) session.getAttribute("sMid");
+		String accessToken = (String) session.getAttribute("sAccessToken");
+		String reqURL = "https://kapi.kakao.com/v1/user/unlink";
+		
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Authorization", " " + accessToken);
+			
+			// 카카오에서 정상적으로 처리 되었다면 200번이 돌아온다.
+			int responseCode = conn.getResponseCode();
+			System.out.println("responseCode : " + responseCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		session.invalidate();
+		
+		return "redirect:/message/kakaoLogout?mid="+mid;
 	}
 	
 	@ResponseBody
@@ -442,7 +472,7 @@ public class MemberController {
 		else return "redirect:/message/memberUpdateNo";
 	}
 
-	// 회원 탈퇴...신청...
+	// 회원 탈퇴 신청 
 	@ResponseBody
 	@RequestMapping(value = "/userDel", method = RequestMethod.POST)
 	public String userDelPost(HttpSession session, HttpServletRequest request) {
@@ -455,5 +485,7 @@ public class MemberController {
 		}
 		else return "0";
 	}
+	
+
 	
 }

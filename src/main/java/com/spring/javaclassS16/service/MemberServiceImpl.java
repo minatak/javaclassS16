@@ -3,6 +3,7 @@ package com.spring.javaclassS16.service;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,6 +83,36 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void setKakaoMemberInput(MemberVO vo) {
 		memberDAO.setKakaoMemberInput(vo);
+	}
+
+	@Override
+	public MemberVO getMemberEmailCheck(String email) {
+		return memberDAO.getMemberEmailCheck(email);
+	}
+
+	@Override
+	public String createFamilyCode() {
+		String code;
+	    do {
+	        code = RandomStringUtils.randomAlphanumeric(8).toUpperCase();
+	    } while (memberDAO.familyCodeExists(code));
+	    
+	    memberDAO.createFamily(code);
+	    return code;
+	}
+
+	@Override
+	public void updateMemberFamilyCode(String mid, String familyCode) {
+		memberDAO.updateMemberFamilyCode(mid, familyCode);
+	}
+
+	@Override
+	public boolean connectToFamily(String mid, String familyCode) {
+		if (memberDAO.familyCodeExists(familyCode)) {
+            memberDAO.updateMemberFamilyCode(mid, familyCode);
+            return true;
+        }
+        return false;
 	}
 	
 }

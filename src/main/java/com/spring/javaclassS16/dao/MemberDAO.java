@@ -24,5 +24,13 @@ public interface MemberDAO {
 
 	public MemberVO getMemberNameEmailCheck(@Param("name") String name, @Param("email") String email);
 
+	public MemberVO getMemberEmailCheck(@Param("email") String email);
+
+	public boolean familyCodeExists(@Param("code") String code);
+
+	public void createFamily(@Param("code") String code);
+
+	public void updateMemberFamilyCode(@Param("mid") String mid, @Param("familyCode") String familyCode);
+
 
 }

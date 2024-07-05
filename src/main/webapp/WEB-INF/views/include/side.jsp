@@ -25,8 +25,8 @@
 <body>
 <nav class="w3-sidebar w3-collapse w3-white sidebar" id="mySidebar">
   <div class="w3-container text-center">
-    <img src="${ctp}/member/noimage.png" class="w3-round profile-image"><br><br>
-    <h5 class="profile-name">h</h5>
+    <img src="${ctp}/member/${sPhoto}" class="w3-round profile-image"><br><br>
+    <h5 class="profile-name">${sName}</h5>
     <p class="profile-age">24.6.25. (만 0세)</p>
     <div class="dropdown">
       <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

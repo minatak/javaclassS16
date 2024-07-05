@@ -274,30 +274,24 @@
       document.getElementById(elementId).innerHTML = message;
     }
 
+    
     function showAlert(message) {
-        // 저장 현재 스크롤 위치 저장
-        scrollTop = window.scrollY;
-
-        // Prevent body from scrolling
-        document.body.style.overflow = 'hidden';
-
-        Swal.fire({
-          html: message,
-          confirmButtonText: '확인',
-          customClass: {
-            confirmButton: 'swal2-confirm',
-            popup: 'custom-swal-popup',
-            htmlContainer: 'custom-swal-text'
-          },
-          didDestroy: () => {
-            // Re-enable body scrolling after alert is closed
-            document.body.style.overflow = 'auto';
-            // 스크롤 위치 복원
-            window.scrollTo(0, scrollTop);
-          }
-        });
-      }
-
+    	  Swal.fire({
+    	    html: message,
+    	    confirmButtonText: '확인',
+    	    customClass: {
+    	      confirmButton: 'swal2-confirm',
+    	      popup: 'custom-swal-popup',
+    	      htmlContainer: 'custom-swal-text'
+    	    },
+    	    scrollbarPadding: false,
+    	    allowOutsideClick: false,
+    	    heightAuto: false,
+    	    didOpen: () => {
+    	      document.body.style.paddingRight = '0px';
+    	    }
+    	  });
+    	}
 
     function timer_start() {
       let timeLeft = 300; // 5분
@@ -308,6 +302,7 @@
           showAlert("시간이 초과되었습니다<br/>인증번호를 다시 발급해주세요");
           // 세션 초기화
           sessionStorage.removeItem('sEmailKey');
+          document.getElementById('sendCodeBtn').style.display = "block";
           document.getElementById('auth_container').style.display = "none";
         } else {
           document.getElementById('timer').textContent = Math.floor(timeLeft / 60) + ":" + ('0' + (timeLeft % 60)).slice(-2);
@@ -331,12 +326,17 @@
         url: '${ctp}/member/joinEmailCheck',
         data: { email: email },
         success: function(response) {
-          ResponseCode = response;
-          sessionStorage.setItem('sEmailKey', ResponseCode);
-          showAlert("인증 코드가 전송되었습니다<br/>이메일을 확인해주세요 :)");
-          document.getElementById('auth_container').style.display = "block";
-          document.getElementById('sendCodeBtn').style.display = "none";
-          timer_start();
+        	if(response == "alreadyMember") {
+        		window.location.href = '${ctp}/message/alreadyMember';
+        	}
+        	else {
+	          ResponseCode = response;
+	          sessionStorage.setItem('sEmailKey', ResponseCode);
+	          showAlert("인증 코드가 전송되었습니다");
+	          document.getElementById('auth_container').style.display = "block";
+	          document.getElementById('sendCodeBtn').style.display = "none";
+	          timer_start();        		
+        	}
         },
         error: function() {
           showAlert("인증 코드 전송 중 오류가 발생했습니다<br/>다시 시도해주세요");
@@ -360,7 +360,7 @@
         return false;
       }
       else {
-        showAlert("인증이 완료되었습니다<br/>'다음' 버튼을 클릭해 <br/>회원가입을 진행해주세요!");
+        showAlert("인증이 완료되었습니다<p><br/><p>'다음' 버튼을 클릭해 <br/>회원가입을 진행해주세요!");
         emailCheckSw = 1;
         document.myform.verificationCode.readOnly = true;
         document.getElementById('auth_container').readOnly = true;

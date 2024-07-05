@@ -26,4 +26,12 @@ public interface MemberService {
 
 	public void setKakaoMemberInput(MemberVO vo);
 
+	public MemberVO getMemberEmailCheck(String email);
+
+	public String createFamilyCode();
+
+	public void updateMemberFamilyCode(String mid, String familyCode);
+
+	public boolean connectToFamily(String mid, String familyCode);
+
 }
