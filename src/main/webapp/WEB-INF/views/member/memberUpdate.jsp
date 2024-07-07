@@ -172,16 +172,6 @@
     	});
     });
     
-    // 선택된 사진 미리보기
-    function imgCheck(e) {
-    	if(e.files && e.files[0]) {
-    		let reader = new FileReader();
-    		reader.onload = function(e) {
-    			document.getElementById("photoDemo").src = e.target.result;
-    		}
-    		reader.readAsDataURL(e.files[0]);
-    	}
-    }
   </script>
 </head>
 <body>
@@ -189,7 +179,7 @@
 <p><br/></p>
 <div class="container">
   <form name="myform" method="post" class="was-validated" enctype="multipart/form-data">
-    <h2>회 원 정 보 수 정</h2>
+    <h2>내 정보 설정</h2>
     <br/>
     <div>아이디 : ${sMid}</div>
     <div class="form-group">

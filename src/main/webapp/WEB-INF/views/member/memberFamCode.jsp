@@ -237,9 +237,10 @@
         url: '${ctp}/member/createCode',
         success: function(response) {
           showAlert('나의 가족 코드가 생성되었습니다! 가족들에게 코드를 공유해 연결해보세요!');
-          document.getElementById('generated-code').innerText = "나의 가족 코드 : " + response;
+          /* document.getElementById('generated-code').innerText = "나의 가족 코드 : " + response;
           document.getElementById('code-container').style.display = 'none';
-          document.getElementById('code-result').style.display = 'block';
+          document.getElementById('code-result').style.display = 'block'; */
+          location.reload();
         },
         error: function() {
           showAlert('가족 코드 생성 중 오류가 발생했습니다.<br/>다시 시도해주세요.');
@@ -297,10 +298,13 @@
   </script>
 </head>
 <body>
+  	<%@ include file = "/WEB-INF/views/include/nav.jsp" %>
   <div class="container">
-    <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.png" width="130" alt="Logo"></a>
+    <%-- <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.png" width="130" alt="Logo"></a> --%>
     <h3 class="m-2 mb-3">가족 코드 등록</h3>
-    <p class="welcome-text">${sName}님 환영합니다 :)<br>가족 코드를 연결 후 모든 기능을 누려보세요!</p>
+    <c:if test="${empty sFamCode}">
+    	<p class="welcome-text">${sName}님 환영합니다 :)<br>가족 코드를 연결 후 모든 기능을 누려보세요!</p>
+    </c:if>
     <div class="code-container" id="code-container">
     	<c:if test="${!empty sFamCode}">
 			  <div class="form-group">

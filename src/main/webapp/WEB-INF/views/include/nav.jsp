@@ -22,8 +22,8 @@
               <img src="${ctp}/member/noimage.png" alt="Profile Picture">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-              <li><a class="dropdown-item" href="${ctp}/member/memberInfo"><i class="fa-solid fa-user"></i> 내 정보 확인</a></li>
-              <li><a class="dropdown-item" href="${ctp}/member/memberUpdate"><i class="fa-solid fa-gear"></i> 정보 수정</a></li>
+              <li><a class="dropdown-item" href="${ctp}/member/memberInfo"><i class="fa-solid fa-user"></i> 내 정보</a></li>
+              <li><a class="dropdown-item" href="${ctp}/member/memberFamCode"><i class="fa-solid fa-user"></i> 가족 코드 연결</a></li>
               <li><a class="dropdown-item" href="${ctp}/member/memberLogout"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</a></li>
             </ul>
           </li>
@@ -32,6 +32,3 @@
     </div>
   </div>
 </nav>
-<style>
-	.navbar-brand {font-family: 'Cafe24Ssurround';}
-</style>

@@ -22,7 +22,7 @@ public interface MemberService {
 
 	public int setUserDel(String mid);
 
-	public MemberVO getMemberNameEmailCheck(String nickName, String email);
+	public MemberVO getMemberNameEmailCheck(String name, String email);
 
 	public void setKakaoMemberInput(MemberVO vo);
 

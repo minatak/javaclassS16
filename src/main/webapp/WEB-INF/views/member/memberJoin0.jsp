@@ -134,7 +134,7 @@
             success: function(res) {
               console.log('User info success', res);
               const kakao_account = res.kakao_account;
-              const redirectUrl = "${ctp}/member/kakaoJoin?nickName=" + encodeURIComponent(kakao_account.profile.nickname) + "&email=" + encodeURIComponent(kakao_account.email) + "&accessToken=" + encodeURIComponent(Kakao.Auth.getAccessToken());
+              const redirectUrl = "${ctp}/member/kakaoJoin?name=" + encodeURIComponent(kakao_account.profile.nickname) + "&email=" + encodeURIComponent(kakao_account.email) + "&accessToken=" + encodeURIComponent(Kakao.Auth.getAccessToken());
               console.log('Redirecting to:', redirectUrl);
               window.location.href = redirectUrl;
             },

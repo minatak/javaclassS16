@@ -52,14 +52,6 @@ public class MemberController {
 	JavaclassProvide javaclassProvide;
 	
 
-//	@RequestMapping(value = "/memberMain", method = RequestMethod.GET)
-//	public String memberMainGet(HttpSession session, Model model) {
-//		String mid = (String) session.getAttribute("sMid");
-//		MemberVO mVo = memberService.getMemberIdCheck(mid);
-//		model.addAttribute("mVo", mVo);
-//		
-//		return "member/memberMain";
-//	}
 
 	// 이메일 인증
 	@ResponseBody
@@ -227,6 +219,7 @@ public class MemberController {
   }
 
   
+  // 카카오 회원가입
   @RequestMapping(value = "/kakaoJoin", method = RequestMethod.GET)
   public String kakaoJoinGet(String name, String email, String accessToken,
           RedirectAttributes redirectAttributes,
@@ -240,7 +233,7 @@ public class MemberController {
       
       // 만약 이메일 정보가 있다면 로그인창으로 반환한다.
       if(vo != null) {
-          return "alreadyMember";
+          return "redirect:/message/alreadyMember";
       }
       else {
           redirectAttributes.addFlashAttribute("name", name);
@@ -276,15 +269,19 @@ public class MemberController {
 		// 카카오 로그아웃을 위한 카카오앱키를 세션에 저장시켜둔다.
 		session.setAttribute("sAccessToken", accessToken);
 		
+		System.out.println("name:"+name+"email:"+email);
+		
 		// 카카오 로그인한 회원인 경우에는 우리 회원인지를 조사한다. 
 		MemberVO vo = memberService.getMemberNameEmailCheck(name, email);
+		
+		System.out.println("vo : " + vo);
 		
 		if(vo != null && vo.getUserDel().equals("NO")) {
 			session.setAttribute("sMid", vo.getMid());
 			session.setAttribute("sName", vo.getName());
 			session.setAttribute("sFamCode", vo.getFamily_code());
 			session.setAttribute("sPhoto", vo.getPhoto());
-			return "redirect:/message/memberLoginOk?name="+vo.getName();
+			return "redirect:/message/memberLoginOk?name="+ java.net.URLEncoder.encode(vo.getName());
 		}
 		else { // 가입된 회원이 아니었을 경우
 			return "redirect:/message/memberNot";
@@ -350,6 +347,7 @@ public class MemberController {
 	@RequestMapping(value = "/kakaoLogout", method = RequestMethod.GET)
 	public String kakaoLogoutGet(HttpSession session) {
 		String mid = (String) session.getAttribute("sMid");
+		String name = (String) session.getAttribute("sName");
 		String accessToken = (String) session.getAttribute("sAccessToken");
 		String reqURL = "https://kapi.kakao.com/v1/user/unlink";
 		
@@ -368,9 +366,22 @@ public class MemberController {
 		
 		session.invalidate();
 		
-		return "redirect:/message/kakaoLogout?mid="+mid;
+		return "redirect:/message/kakaoLogout?name="+ java.net.URLEncoder.encode(name);
 	}
 	
+	// 회원 정보 보기, 수정
+	@RequestMapping(value = "/memberInfo", method = RequestMethod.GET)
+	public String memberInfoGet(HttpSession session, Model model) {
+		String mid = (String) session.getAttribute("sMid");
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		
+		model.addAttribute("vo", vo);
+		return "member/memberInfo";
+	}
+	
+	
+	
+	// 여기부터 그냥 복붙해놓은 코드
 	@ResponseBody
 	@RequestMapping(value = "/memberNewPassword", method = RequestMethod.POST)
 	public String memberNewPasswordPost(String mid, String email, HttpSession session) throws MessagingException {

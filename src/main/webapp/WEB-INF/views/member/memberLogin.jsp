@@ -201,7 +201,7 @@
             success:function(res) {
               const kakao_account = res.kakao_account;
               console.log(kakao_account);
-              location.href = "${ctp}/member/kakaoLogin?nickName="+kakao_account.profile.nickname+"&email="+kakao_account.email+"&accessToken="+Kakao.Auth.getAccessToken();
+              location.href = "${ctp}/member/kakaoLogin?name="+kakao_account.profile.nickname+"&email="+kakao_account.email+"&accessToken="+Kakao.Auth.getAccessToken();
             }
           });
         }
