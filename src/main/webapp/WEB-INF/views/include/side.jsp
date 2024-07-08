@@ -60,7 +60,7 @@
   <div class="w3-container text-center">
     <img src="${ctp}/member/${sPhoto}" class="w3-round profile-image"><br><br> 
     <h5 class="profile-name">${sName}</h5>
-    <p class="profile-age">만 0세</p>
+    <p class="profile-age">만 ${sAge}세</p>
     <div class="dropdown">
       <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         호칭: 딸
@@ -71,8 +71,8 @@
     </div>
   </div>
   <div class="w3-bar-block mt-5 ml-2">
-    <a href="calender/calenderList" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-home fa-fw w3-margin-right"></i>홈</a>
-    <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-calendar fa-fw w3-margin-right"></i>일정 관리</a>
+    <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-home fa-fw w3-margin-right"></i>홈</a>
+    <a href="${ctp}/calendar/calendarMain" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-calendar fa-fw w3-margin-right"></i>일정 관리</a>
     <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tasks fa-fw w3-margin-right"></i>가사 분담</a>
     <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullhorn fa-fw w3-margin-right"></i>공지사항</a>
     <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-shopping-cart fa-fw w3-margin-right"></i>위치 공유</a>
