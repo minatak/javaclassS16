@@ -42,6 +42,47 @@
   }
 
 </style>
+<script>
+	'use strict';
+	
+	document.addEventListener('DOMContentLoaded', function() {
+		  var calendarEl = document.getElementById('weeklyCalendar');
+		  var calendar = new FullCalendar.Calendar(calendarEl, {
+		    height: 'auto',
+		    headerToolbar: {
+		      left: 'prev,next today',
+		      center: 'title',
+		      right: 'listWeek'
+		    },
+		    initialView: 'listWeek',
+		    navLinks: true,
+		    editable: false,
+		    dayMaxEvents: true,
+		    events: function(fetchInfo, successCallback, failureCallback) {
+		      $.ajax({
+		        url: "${ctp}/calendar/calendarListAll",
+		        type: "POST",
+		        dataType: "json",
+		        success: function(data) {
+		          successCallback(data.map(function(event) {
+		            return {
+		              title: event.title,
+		              start: event.startTime,
+		              end: event.endTime,
+		              allDay: event.allDay
+		            };
+		          }));
+		        },
+		        error: function() {
+		          failureCallback("연결 오류");
+		        }
+		      });
+		    }
+		  });
+		  calendar.render();
+		});
+
+</script>
 </head>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 
@@ -53,9 +94,10 @@
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 content">
   <div class="family-schedule">
-    <h2>가족 일정 한눈에 보기</h2>
-    <p>가족들의 중요한 일정을 한눈에 확인할 수 있습니다.</p>
-  </div>
+	  <h2>가족 일정 한눈에 보기</h2>
+	  <p>가족들의 중요한 일정을 한눈에 확인할 수 있습니다.</p>
+	  <div id="weeklyCalendar"></div>
+	</div>
   <div class="row mb-4">
     <div class="col-12">
       <div class="family-schedule">

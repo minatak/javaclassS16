@@ -140,21 +140,21 @@
     'use strict';
 
     $(function() {
-        $("#searchPassword").hide();
+      $("#searchPassword").hide();
 
 
-        // 비밀번호 표시 토글
-        $('.fa-eye-slash').on('click', function() {
-          var passwordField = $('input[name="pwd"]');
-          if (passwordField.attr('type') === "password") {
-            passwordField.attr('type', 'text');
-            $(this).removeClass('fa-eye-slash').addClass('fa-eye');
-          } else {
-            passwordField.attr('type', 'password');
-            $(this).removeClass('fa-eye').addClass('fa-eye-slash');
-          }
-        });
+      // 비밀번호 표시 토글
+      $('.fa-eye-slash').on('click', function() {
+        var passwordField = $('input[name="pwd"]');
+        if (passwordField.attr('type') === "password") {
+          passwordField.attr('type', 'text');
+          $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+        } else {
+          passwordField.attr('type', 'password');
+          $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+        }
       });
+    });
     
     // 비밀번호 찾기
     function pwdSearch() {
