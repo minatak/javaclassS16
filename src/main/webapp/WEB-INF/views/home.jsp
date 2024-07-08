@@ -11,6 +11,36 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 <style>
+
+	.serviceCard {
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #e7e7e7;
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.2s;
+  }
+  .serviceCard:hover {
+    transform: scale(1.05);
+  }
+  
+  .content {
+    margin-left: 300px;
+    padding: 20px;
+    padding-top: 60px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+ 
+  .family-schedule {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+
 </style>
 </head>
 <body class="w3-light-grey w3-content" style="max-width:1600px">

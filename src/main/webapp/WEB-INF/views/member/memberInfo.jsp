@@ -9,21 +9,31 @@
   <title>내 정보 | HomeLink</title>
   <%@ include file="/WEB-INF/views/include/bs4.jsp" %>
   <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      background-color: #f4f4f4;
-    }
-    .container {
-      max-width: 600px;
-      background-color: #fff;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
+	  body {
+	    display: flex;
+	    flex-direction: column;
+	    min-height: 100vh;
+	    margin: 0;
+	    background-color: #fff;
+	  }
+	  .page-container {
+	    display: flex;
+	    flex-direction: column;
+	    min-height: 100vh;
+	  }
+	  .content-wrap {
+	    flex: 1;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    padding: 20px 0;
+	  }
+	  .infoContainer {
+	    max-width: 600px;  
+	    width: 100%;
+	    background-color: #fff;
+	    padding: 40px;
+	  }
     h1 {
       color: #333;
       margin-bottom: 20px;
@@ -272,61 +282,66 @@
   </head>
   <body>
     <%@ include file="/WEB-INF/views/include/nav.jsp" %>
-
-    <div class="container">
-      <h1>내 정보 설정</h1>
-      <p>본인확인이 필요한 경우 사용할 정보이므로, 정확하게 입력해주세요</p>
-      
-      <form name="myform" method="post" action="${ctp}/member/memberUpdateOk" enctype="multipart/form-data">
-        <div class="form-group">
-          <label>회원 사진</label>
-          <img src="${ctp}/member/${vo.photo}" width="100px" id="photoDemo"/>
-          <input type="file" name="fName" id="file" onchange="imgCheck(this)" class="form-control-file border"/>
-        </div>
-        
-        <div class="form-group">
-          <label>아이디</label>
-          <span id="mid">${vo.mid}</span>
-        </div>
-        
-        <div class="form-group">
-          <label>이름</label>
-          <span id="name">${vo.name}</span>
-          <button type="button" class="edit-button" onclick="editField('name')">변경</button>
-          <div id="nameError" class="error-message"></div>
-        </div>
-        
-        <div class="form-group">
-          <label>이메일</label>
-          <span id="email">${vo.email}</span>
-          <button type="button" class="edit-button" onclick="editField('email')">변경</button>
-          <div id="emailError" class="error-message"></div>
-          <button type="button" id="sendCodeBtn" onclick="sendVerificationCode()" class="btn btn-secondary mt-2" style="display:none;">인증번호 받기</button>
-          <div id="loading-container">인증번호 전송중...</div>
-          <div id="auth_container" style="display:none;">
-            <input type="text" name="verificationCode" placeholder="인증번호 입력" class="form-control mt-2">
-            <button type="button" onclick="verifyCode()" class="btn btn-secondary mt-2">인증하기</button>
-            <span id="timer"></span>
-            <div id="codeError" class="error-message"></div>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label>비밀번호</label>
-          <span id="password">********</span>
-          <button type="button" class="edit-button" onclick="editField('password')">변경</button>
-        </div>
-
-        <div class="form-group">
-          <input type="button" value="정보수정" onclick="fCheck()" class="btn btn-primary"/>
-        </div>
-
-        <input type="hidden" name="mid" value="${sMid}" />
-        <input type="hidden" name="photo" id="photo" value="${vo.photo}" />
-      </form>
-    </div>
-
+		<div class="page-container">
+    	<div class="content-wrap">
+		    <div class="infoContainer">
+		      <h1>내 정보 설정</h1>
+		      <p>본인확인이 필요한 경우 사용할 정보이므로 정확하게 입력해주세요</p>
+		      
+		      <form name="myform" method="post" action="${ctp}/member/memberUpdateOk" enctype="multipart/form-data">
+		        <div class="form-group">
+		          <label>회원 사진</label>
+		          <img src="${ctp}/member/${vo.photo}" width="100px" id="photoDemo"/>
+		          <input type="file" name="fName" id="file" onchange="imgCheck(this)" class="form-control-file border"/>
+		        </div>
+		        
+		        <div class="form-group">
+		          <label>아이디</label>
+		          <span id="mid">${vo.mid}</span>
+		        </div>
+		        <div class="form-group">
+		          <label>비밀번호</label>
+		          <button type="button" class="edit-button" onclick="editField('password')">변경</button>
+		        </div>
+		        <div class="form-group">
+		          <label>이름</label>
+		          <span id="name">${vo.name}</span>
+		          <button type="button" class="edit-button" onclick="editField('name')">변경</button>
+		          <div id="nameError" class="error-message"></div>
+		        </div>
+		        <div class="form-group">
+		          <label>이메일</label>
+		          <span id="email">${vo.email}</span>
+		          <button type="button" class="edit-button" onclick="editField('email')">변경</button>
+		          <div id="emailError" class="error-message"></div>
+		          <button type="button" id="sendCodeBtn" onclick="sendVerificationCode()" class="btn btn-secondary mt-2" style="display:none;">인증번호 받기</button>
+		          <div id="loading-container">인증번호 전송중...</div>
+		          <div id="auth_container" style="display:none;">
+		            <input type="text" name="verificationCode" placeholder="인증번호 입력" class="form-control mt-2">
+		            <button type="button" onclick="verifyCode()" class="btn btn-secondary mt-2">인증하기</button>
+		            <span id="timer"></span>
+		            <div id="codeError" class="error-message"></div>
+		          </div>
+		        </div>
+						<div class="form-group">
+	            <label>가족관계</label>
+	            <select id="relationship" onchange="">
+	              <option value="">선택하기</option>
+	              <option ${vo.relationship == '엄마' ? 'selected' : ''}>엄마</option>
+	              <option ${vo.relationship == '아빠' ? 'selected' : ''}>아빠</option>
+	              <option ${vo.relationship == '딸' ? 'selected' : ''}>딸</option>
+	              <option ${vo.relationship == '아들' ? 'selected' : ''}>아들</option>
+	              <option ${vo.relationship == '할머니' ? 'selected' : ''}>할머니</option>
+	              <option ${vo.relationship == '할아버지' ? 'selected' : ''}>할아버지</option>
+	            </select>
+	          </div>
+		        <input type="hidden" name="mid" value="${sMid}" />
+		        <input type="hidden" name="photo" id="photo" value="${vo.photo}" />
+		      </form>
+		    </div>
+			</div>
     <%@ include file="/WEB-INF/views/include/footer.jsp" %>
+		</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>

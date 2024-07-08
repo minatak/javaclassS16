@@ -8,27 +8,36 @@
   <title>가족 코드 등록 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
   <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      /* background-color: #f0f4f8; */
-    }
-
-    .container {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background-color: white;
-      padding: 40px;
-      border-radius: 10px;
-    }
+     body {
+	    display: flex;
+	    flex-direction: column;
+	    min-height: 100vh;
+	    margin: 0;
+	    background-color: #fff;
+	  }
+	  .page-container {
+	    display: flex;
+	    flex-direction: column;
+	    min-height: 100vh;
+	  }
+	  .content-wrap {
+	    flex: 1;
+	    display: flex;
+	    justify-content: center;
+	    text-align: center; 
+	    align-items: center;
+	    padding: 20px 0;
+	  }
+	  .famContainer {
+	    justify-content: center;
+	    max-width: 600px;  
+	    width: 100%;
+	    background-color: #fff;
+	    padding: 40px;
+	  }
 
     .code-container {
+		  align-items: center; /* 추가 */
       background: #fff;
       padding: 0px;
       margin-top: 0px;
@@ -237,9 +246,6 @@
         url: '${ctp}/member/createCode',
         success: function(response) {
           showAlert('나의 가족 코드가 생성되었습니다! 가족들에게 코드를 공유해 연결해보세요!');
-          /* document.getElementById('generated-code').innerText = "나의 가족 코드 : " + response;
-          document.getElementById('code-container').style.display = 'none';
-          document.getElementById('code-result').style.display = 'block'; */
           location.reload();
         },
         error: function() {
@@ -298,76 +304,83 @@
   </script>
 </head>
 <body>
-  	<%@ include file = "/WEB-INF/views/include/nav.jsp" %>
-  <div class="container">
-    <%-- <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.png" width="130" alt="Logo"></a> --%>
-    <h3 class="m-2 mb-3">가족 코드 등록</h3>
-    <c:if test="${empty sFamCode}">
-    	<p class="welcome-text">${sName}님 환영합니다 :)<br>가족 코드를 연결 후 모든 기능을 누려보세요!</p>
-    </c:if>
-    <div class="code-container" id="code-container">
-    	<c:if test="${!empty sFamCode}">
-			  <div class="form-group">
-			    <div class="my-code">
-			      <span class="my-code-label">내 코드 : </span>
-			      <span class="my-code-value">${sFamCode}</span>
+	<%@ include file = "/WEB-INF/views/include/nav.jsp" %>
+  	<div class="page-container">
+    	<div class="content-wrap">
+			  <div class="famContainer">
+			    <%-- <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.png" width="130" alt="Logo"></a> --%>
+			    <h3 class="m-2 mb-3">가족 코드 등록</h3>
+			    <c:if test="${empty sFamCode}">
+			    	<p class="welcome-text">${sName}님 환영합니다 :)<br>가족 코드를 연결 후 모든 기능을 누려보세요!</p>
+			    </c:if>
+			    <div class="code-container" id="code-container" style="width:600px;margin:0 auto;">
+			    	<c:if test="${!empty sFamCode}">
+						  <div class="form-group">
+						    <div class="my-code">
+						      <span class="my-code-label">내 코드 : </span>
+						      <span class="my-code-value">${sFamCode}</span>
+						    </div>
+						  </div>
+						  <div class="form-group">
+					    	<button type="button" class="button register-code-button" data-toggle="modal" data-target="#myModal">코드 등록하기</button>
+					  	</div>
+						</c:if>
+			      
+			      <c:if test="${empty sFamCode}">
+			      	<div class="mt-5">
+				        <div class="form-group">
+				          <label>먼저 가입한 가족이 있나요?</label>
+				          <button type="button" class="button" data-toggle="modal" data-target="#myModal">코드 등록하기</button>
+				        </div>
+				        <div class="form-group">
+				          <label>가족중에 첫번째로 가입했어요!</label>
+				          <button type="button" id="generateButton" onclick="newFamilyCode()">코드 만들기</button>
+				        </div>
+			        </div>
+			      </c:if>
+			    </div>
+			    
+			    <div id="code-result" style="display: none;">
+			      <div id="generated-code"></div>
+			    </div>
+			
+			    <!-- The Modal -->
+			    <div class="modal fade" id="myModal">
+			      <div class="modal-dialog modal-dialog-centered">
+			        <div class="modal-content">
+			          <!-- Modal Header -->
+			          <div class="modal-header">
+			            <h4 class="modal-title">가족 코드 입력</h4>
+			            <button type="button" class="close" data-dismiss="modal">&times;</button>
+			          </div>
+			
+			          <!-- Modal body -->
+			          <div class="modal-body">
+			            <div class="form-group code-input-group" id="familyCodeDiv">
+			              <input type="text" maxlength="1">
+			              <input type="text" maxlength="1">
+			              <input type="text" maxlength="1">
+			              <input type="text" maxlength="1">
+			              <input type="text" maxlength="1">
+			              <input type="text" maxlength="1">
+			              <input type="text" maxlength="1">
+			              <input type="text" maxlength="1">
+			            </div>
+			            <div id="error-msg" class="error-msg"></div>
+			          </div>
+			
+			          <!-- Modal footer -->
+			          <div class="modal-footer">
+			            <button type="button" onclick="validateAndSubmit()">등록하기</button>
+			          </div>
+			        </div>
+			      </div>
 			    </div>
 			  </div>
-			  <div class="form-group">
-		    	<button type="button" class="button register-code-button" data-toggle="modal" data-target="#myModal">코드 등록하기</button>
-		  	</div>
-			</c:if>
-      
-      <c:if test="${empty sFamCode}">
-      	<div class="mt-5">
-	        <div class="form-group">
-	          <label>먼저 가입한 가족이 있나요?</label>
-	          <button type="button" class="button" data-toggle="modal" data-target="#myModal">코드 등록하기</button>
-	        </div>
-	        <div class="form-group">
-	          <label>가족중에 첫번째로 가입했어요!</label>
-	          <button type="button" id="generateButton" onclick="newFamilyCode()">코드 만들기</button>
-	        </div>
-        </div>
-      </c:if>
-    </div>
-    
-    <div id="code-result" style="display: none;">
-      <div id="generated-code"></div>
-    </div>
+			</div>
+    <%@ include file="/WEB-INF/views/include/footer.jsp" %>
+  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	</div>	
 
-    <!-- The Modal -->
-    <div class="modal fade" id="myModal">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">가족 코드 입력</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="modal-body">
-            <div class="form-group code-input-group" id="familyCodeDiv">
-              <input type="text" maxlength="1">
-              <input type="text" maxlength="1">
-              <input type="text" maxlength="1">
-              <input type="text" maxlength="1">
-              <input type="text" maxlength="1">
-              <input type="text" maxlength="1">
-              <input type="text" maxlength="1">
-              <input type="text" maxlength="1">
-            </div>
-            <div id="error-msg" class="error-msg"></div>
-          </div>
-
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <button type="button" onclick="validateAndSubmit()">등록하기</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </body>
 </html>

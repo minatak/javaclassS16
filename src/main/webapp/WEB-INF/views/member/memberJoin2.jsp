@@ -239,9 +239,8 @@
       let regMid = /^[a-zA-Z0-9_]{4,20}$/; // 아이디는 4~20의 영문 대/소문자와 숫자와 밑줄 가능
       let regPwd = /^[a-zA-Z0-9!@#$%^*+=-_]{8,16}$/   // 비밀번호는 8~16의 영문 대/소문자와 특수문자 숫자와 밑줄 가능
       
-      // 전송전에 파일에 관련된 사항들을 체크해준다.
-      let fName = document.getElementById("file").value;
-
+    	  let submitFlag = 0;		// 체크 완료를 체크하기위한 변수. 체크가 완료되면 submitFlag=1 이 된다.
+      
        if(mid == "") {
          showAlert("아이디를 입력하세요.");
          document.myform.name.focus();
@@ -262,27 +261,40 @@
          document.myform.pwd.focus();
          return false;
        }
-       else if(fName.trim() != "") {
-        let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
-        let maxSize = 1024 * 1024 * 5;
-        let fileSize = document.getElementById("file").files[0].size;
-        
-        if(ext != 'jpg' && ext != 'gif' && ext != 'png') {
-          showAlert("그림파일만 업로드 가능합니다.");
-          return false;
-        }
-        else if(fileSize > maxSize) {
-          showAlert("업로드할 파일의 최대용량은 5MByte입니다.");
-          return false;
-        }
-      }
        else if(idCheckSw == 0) {
         showAlert("아이디 중복체크버튼을 눌러주세요");
         document.getElementById("midBtn").focus();
       }
       else {
-        myform.submit();
+    	  submitFlag = 1;
       }
+       
+	    // 전송전에 파일에 관련된 사항들을 체크해준다.
+			let fName = document.getElementById("file").value;
+			if(fName.trim() != "") {
+				let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
+				let maxSize = 1024 * 1024 * 2;
+				let fileSize = document.getElementById("file").files[0].size;
+				
+				if(ext != 'jpg' && ext != 'gif' && ext != 'png') {
+					alert("그림파일만 업로드 가능합니다.");
+					return false;
+				}
+				else if(fileSize > maxSize) {
+					alert("업로드할 파일의 최대용량은 2MByte입니다.");
+					return false;
+				}
+				submitFlag == 1;
+			}
+			
+			// 전송전에 모든 체크가 끝나면 submitFlag가 1로 되게된다. 이때 값들을 서버로 전송처리한다.
+			if(submitFlag == 1) {
+    		myform.submit();
+    	}
+			else {
+    		alert("회원정보수정 실패~~ 폼의 내용을 확인하세요.");
+    	}
+       
     }
       
     function showErrorMsg(elementId, message) {

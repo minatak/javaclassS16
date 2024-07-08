@@ -11,14 +11,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 	.profile-image {
-	    width: 25%;
-	    border-radius: 50%;
+	    width: 25%; /* Reduced to half of 50% */
+	    border-radius: 50%; /* Makes the image circular */
 	}
 	.profile-name {
-	    font-weight: bold;
+	    font-weight: bold; /* Makes the name bold */
 	}
 	.profile-age {
-	    color: grey;
+	    color: grey; /* Makes the age grey */
 	}
 	.sidebar {
 	  width: 280px;
@@ -29,34 +29,27 @@
 	  height: 100%;
 	  padding-top: 60px;
 	  border-right: 1px solid #e7e7e7;
-	} 
- .sidebar a {
+	}
+	.sidebar a {
 	  display: block;
 	  color: black;
-	  padding: 20px 16px;  
-	  font-size: 16px;  
+	  padding: 16px;
+	  text-decoration: none;
 	}
 	.sidebar a:hover {
-	  text-decoration: none !important;
 	  background-color: #ddd;
-	}  
+	}
 	.profile-img {
     width: 60px;
     height: 60px;
     border-radius: 50%;
     background: #ddd;
   }
-  /* 오버레이 스타일 수정 */
- /*  .w3-overlay {
-    background-color: rgba(0,0,0,0.5) !important;
-  } */
 </style>
 </head>
 <body>
 <!-- Sidebar/menu -->
-<!-- <nav class="w3-sidebar w3-collapse w3-white sidebar" id="mySidebar"> -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left sidebar" style="z-index:3;width:300px;" id="mySidebar"><br>
-
+<nav class="w3-sidebar w3-collapse w3-white sidebar" id="mySidebar">
   <div class="w3-container text-center">
     <img src="${ctp}/member/${sPhoto}" class="w3-round profile-image"><br><br> 
     <h5 class="profile-name">${sName}</h5>
@@ -71,7 +64,7 @@
     </div>
   </div>
   <div class="w3-bar-block mt-5 ml-2">
-    <a href="calender/calenderList" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-home fa-fw w3-margin-right"></i>홈</a>
+    <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home fa-fw w3-margin-right"></i>홈</a>
     <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-calendar fa-fw w3-margin-right"></i>일정 관리</a>
     <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tasks fa-fw w3-margin-right"></i>가사 분담</a>
     <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullhorn fa-fw w3-margin-right"></i>공지사항</a>

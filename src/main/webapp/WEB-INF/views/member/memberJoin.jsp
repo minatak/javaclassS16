@@ -404,9 +404,9 @@
         </div>
       </form>
     </div>
-    <div class="login-links">
+    <%-- <div class="login-links">
       이미 계정이 있나요?<a href="${ctp}/member/memberLogin"><b>로그인하기</b></a>
-    </div>
+    </div> --%>
   </div>
   <div id="loading-container" class="loading-container">
     <div class="loading-spinner"></div>
