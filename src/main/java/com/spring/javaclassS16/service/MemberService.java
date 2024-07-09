@@ -34,4 +34,6 @@ public interface MemberService {
 
 	public boolean connectToFamily(String mid, String familyCode);
 
+	public int calculateAge(String birthday);
+
 }

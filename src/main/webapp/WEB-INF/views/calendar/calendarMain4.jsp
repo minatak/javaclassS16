@@ -117,36 +117,21 @@
 	
 	      function openEventModal(event, start, end, allDay) {
 	    	  $('#eventModal').modal('show');
-	    	  $('#modalTitle').text(event ? '일정 상세' : '일정 등록');
-	    	  
-	    	  const isAuthor = event ? (event.extendedProps.memberId === '${sMid}') : true;
-	    	  const isNewEvent = !event;
-
+	    	  $('#modalTitle').text(event ? '일정 수정' : '일정 등록');
 	    	  $('#eventId').val(event ? event.id : '');
-	    	  $('#eventTitle').val(event ? event.title : '').prop('readonly', !isAuthor);
-	    	  $('#eventAllDay').prop('checked', event ? event.allDay : allDay).prop('disabled', !isAuthor);
-	    	  $('#eventStart').val(event ? moment(event.start).format('YYYY-MM-DD') : moment(start).format('YYYY-MM-DD')).prop('readonly', !isAuthor);
-	    	  $('#eventEnd').val(event ? moment(event.end).format('YYYY-MM-DD') : moment(end).format('YYYY-MM-DD')).prop('readonly', !isAuthor);
-	    	  $('#eventStartTime').val(event ? moment(event.start).format('HH:mm') : '09:00').prop('readonly', !isAuthor);
-	    	  $('#eventEndTime').val(event ? moment(event.end).format('HH:mm') : '18:00').prop('readonly', !isAuthor);
-	    	  $('#eventDescription').val(event ? event.extendedProps.description : '').prop('readonly', !isAuthor);
-	    	  $('#eventSharing').prop('checked', event ? event.extendedProps.sharing : false).prop('disabled', !isAuthor);
+	    	  $('#eventTitle').val(event ? event.title : '');
+	    	  $('#eventAllDay').prop('checked', event ? event.allDay : allDay);
+	    	  $('#eventStart').val(event ? moment(event.start).format('YYYY-MM-DD') : moment(start).format('YYYY-MM-DD'));
+	    	  $('#eventEnd').val(event ? moment(event.end).format('YYYY-MM-DD') : moment(end).format('YYYY-MM-DD'));
+	    	  $('#eventStartTime').val(event ? moment(event.start).format('HH:mm') : '09:00');
+	    	  $('#eventEndTime').val(event ? moment(event.end).format('HH:mm') : '18:00');
+	    	  $('#eventDescription').val(event ? event.extendedProps.description : '');
+	    	  $('#eventSharing').prop('checked', event ? event.extendedProps.sharing : false);
 	    	  $('#eventAuthor').text(event ? '작성자: ' + event.extendedProps.memberId : '');
-
-	    	  // 저장/수정 버튼 설정
-	    	  if (isAuthor) {
-	    	    $('#saveEvent').show();
-	    	    $('#saveEvent').text(isNewEvent ? '저장' : '수정');
-	    	  } else {
-	    	    $('#saveEvent').hide();
-	    	  }
 	    	  
-	    	  // 삭제 버튼 설정 (새 이벤트가 아니고 작성자인 경우에만 표시)
-	    	  $('#deleteEvent').toggle(!isNewEvent && isAuthor);
+	    	  toggleAllDay();  
 
-	    	  toggleAllDay();
-
-	    	  if (event && isAuthor) {
+	    	  if (event) {
 	    	    $('#deleteEvent').show().removeClass('btn-secondary').addClass('btn-danger');
 	    	    $('#deleteEvent').off('click').on('click', function() {
 	    	      if (confirm('이 일정을 삭제하시겠습니까?')) {
@@ -194,11 +179,6 @@
 	        });
 	    
 	        function toggleAllDay() {
-        	  const isAllDay = $('#eventAllDay').prop('checked');
-        	  $('#eventStartTime, #eventEndTime').closest('div').toggle(!isAllDay);
-        	}
-	        
-	        /* function toggleAllDay() {
 	            var isAllDay = $('#eventAllDay').prop('checked');
 	            $('#eventStartTime, #eventEndTime').prop('disabled', isAllDay);
 	            if (isAllDay) {
@@ -207,7 +187,7 @@
 	              $('#eventStartTime').val('09:00');
 	              $('#eventEndTime').val('18:00');
 	            }
-	          } */
+	          }
 	        
 	        $('#eventAllDay').change(toggleAllDay);
 	        
@@ -260,6 +240,64 @@
 	      });
 	    }
 	
+	    function createRepeatingEvents(event) {
+	      var startDate = moment(event.startTime);
+	      var endDate = moment(event.endTime);
+	      var repeatEvents = [];
+	
+	      switch(event.repeatType) {
+	        case 'daily':
+	          for (var i = 0; i < 365; i++) {
+	            repeatEvents.push({
+	              title: event.title,
+	              start: startDate.clone().add(i, 'days'),
+	              end: endDate.clone().add(i, 'days'),
+	              allDay: event.allDay,
+	              extendedProps: {
+	                description: event.description,
+	                sharing: event.sharing,
+	                repeatType: event.repeatType
+	              }
+	            });
+	          }
+	          break;
+	        case 'weekly':
+	          for (var i = 0; i < 52; i++) {
+	            repeatEvents.push({
+	              title: event.title,
+	              start: startDate.clone().add(i, 'weeks'),
+	              end: endDate.clone().add(i, 'weeks'),
+	              allDay: event.allDay,
+	              extendedProps: {
+	                description: event.description,
+	                sharing: event.sharing,
+	                repeatType: event.repeatType
+	              }
+	            });
+	          }
+	          break;
+	        case 'monthly':
+	          for (var i = 0; i < 12; i++) {
+	            repeatEvents.push({
+	              title: event.title,
+	              start: startDate.clone().add(i, 'months'),
+	              end: endDate.clone().add(i, 'months'),
+	              allDay: event.allDay,
+	              extendedProps: {
+	                description: event.description,
+	                sharing: event.sharing,
+	                repeatType: event.repeatType
+	              }
+	            });
+	          }
+	          break;
+	      }
+	
+	      repeatEvents.forEach(function(event) {
+	        calendar.addEvent(event);
+	      });
+	    }
+	
 	    function validateEventForm() {
 	      if (!$('#eventTitle').val()) {
 	        alert('제목을 입력해주세요.');
@@ -303,45 +341,60 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
-        <input type="hidden" id="eventId">
-        <div>
-          <label for="eventTitle">제목:</label>
-          <input type="text" class="form-control" id="eventTitle" required>
-        </div>
-        <div>
-          <label for="eventAllDay">종일:</label>
-          <input type="checkbox" id="eventAllDay" onchange="toggleAllDay()">
-        </div>
-        <div>
-          <label for="eventStart">시작일:</label>
-          <input type="date" class="form-control" id="eventStart" required>
-        </div>
-        <div>
-          <label for="eventStartTime">시작 시간:</label>
-          <input type="time" class="form-control" id="eventStartTime">
-        </div>
-        <div>
-          <label for="eventEnd">종료일:</label>
-          <input type="date" class="form-control" id="eventEnd" required>
-        </div>
-        <div>
-          <label for="eventEndTime">종료 시간:</label>
-          <input type="time" class="form-control" id="eventEndTime">
-        </div>
-        <div>
-          <label for="eventDescription">설명:</label>
-          <textarea class="form-control" id="eventDescription" rows="3"></textarea>
-        </div>
-        <div>
-          <label for="eventSharing">공개:</label>
-          <input type="checkbox" id="eventSharing">
-        </div>
-        <div id="eventAuthor" class="mt-2"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="saveEvent">저장</button>
-        <button type="button" class="btn btn-danger" id="deleteEvent">삭제</button>
-      </div>
+			  <input type="hidden" id="eventId">
+			  <div>
+			    <label for="eventTitle">제목:</label>
+			    <input type="text" class="form-control" id="eventTitle" required>
+			  </div>
+			  <div>
+			    <label for="eventAllDay">종일:</label>
+			    <input type="checkbox" id="eventAllDay">
+			  </div>
+			  <div>
+			    <label for="eventStart">시작일:</label>
+			    <input type="date" class="form-control" id="eventStart" required>
+			  </div>
+			  <div>
+			    <label for="eventStartTime">시작 시간:</label>
+			    <input type="time" class="form-control" id="eventStartTime">
+			  </div>
+			  <div>
+			    <label for="eventEnd">종료일:</label>
+			    <input type="date" class="form-control" id="eventEnd" required>
+			  </div>
+			  <div>
+			    <label for="eventEndTime">종료 시간:</label>
+			    <input type="time" class="form-control" id="eventEndTime">
+			  </div>
+			  <div>
+			    <label for="eventRepeat">반복:</label>
+			    <select class="form-control" id="eventRepeat">
+			      <option value="none">반복안함</option>
+			      <option value="daily">매일</option>
+			      <option value="weekly">매주</option>
+			      <option value="monthly">매달</option>
+			      <option value="yearly">매년</option>
+			    </select>
+			  </div>
+			  <div id="repeatEndDateDiv" style="display:none;">
+			    <label for="eventRepeatEndDate">반복 종료일:</label>
+			    <input type="date" class="form-control" id="eventRepeatEndDate">
+			  </div>
+			  <div>
+			    <label for="eventDescription">설명:</label>
+			    <textarea class="form-control" id="eventDescription" rows="3"></textarea>
+			  </div>
+			  <div>
+			    <label for="eventSharing">공개:</label>
+			    <input type="checkbox" id="eventSharing">
+			  </div>
+			  <div id="eventAuthor" class="mt-2"></div>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-primary" id="saveEvent">저장</button>
+			  <button type="button" class="btn btn-danger" id="deleteEvent">삭제</button>
+			  <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+			</div>
     </div>
   </div>
 </div>

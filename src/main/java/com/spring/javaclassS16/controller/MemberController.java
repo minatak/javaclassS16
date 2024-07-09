@@ -175,6 +175,9 @@ public class MemberController {
 		session.setAttribute("sName", vo.getName());
 		session.setAttribute("sPhoto", vo.getPhoto());
 		
+		int age = memberService.calculateAge(vo.getBirthday());
+		session.setAttribute("sAge", age);
+		
 		if(res != 0) return "redirect:/message/memberJoinOk";
 		else return "redirect:/message/memberJoinNo";
 	}
@@ -277,10 +280,14 @@ public class MemberController {
 		System.out.println("vo : " + vo);
 		
 		if(vo != null && vo.getUserDel().equals("NO")) {
+			int age = memberService.calculateAge(vo.getBirthday());
+
 			session.setAttribute("sMid", vo.getMid());
 			session.setAttribute("sName", vo.getName());
 			session.setAttribute("sFamCode", vo.getFamily_code());
 			session.setAttribute("sPhoto", vo.getPhoto());
+			session.setAttribute("sAge", age);
+			
 			return "redirect:/message/memberLoginOk?name="+ java.net.URLEncoder.encode(vo.getName());
 		}
 		else { // 가입된 회원이 아니었을 경우
@@ -307,6 +314,11 @@ public class MemberController {
 			session.setAttribute("sFamCode", vo.getFamily_code());
 			session.setAttribute("sPhoto", vo.getPhoto());
 
+			
+			int age = memberService.calculateAge(vo.getBirthday());
+			System.out.println("age : " + age);
+			session.setAttribute("sAge", age);
+			
 			// 2.쿠키 저장/삭제
 			if(idSave.equals("on")) {
 				Cookie cookieMid = new Cookie("cMid", mid);

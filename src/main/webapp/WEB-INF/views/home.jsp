@@ -96,7 +96,7 @@
 	            $("#calendarSummary").html(calendarHtml);
 	        },
 	        error: function() {
-	            $("#calendarSummary").html("<p>일정을 불러오는 데 실패했습니다.</p>");
+	            $("#calendarSummary").html("<p>가족들의 중요한 일정을 한눈에 확인할 수 있습니다.</p>");
 	        }
 	    });
 	});
@@ -112,9 +112,9 @@
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 content">
   <div class="family-schedule">
-	  <h2>가족 일정 한눈에 보기</h2>
-	  <p>가족들의 중요한 일정을 한눈에 확인할 수 있습니다.</p>
-	   <div id="calendarSummary"></div>
+	  <h4>가족 일정 한눈에 보기</h4>
+	  <hr/>
+	  <div id="calendarSummary"></div>
 	  <!-- <div id="calendar" class="calendar"></div> -->
 	</div>
   <div class="row mb-4">

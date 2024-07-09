@@ -1,5 +1,6 @@
 package com.spring.javaclassS16.service;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -113,5 +114,26 @@ public class MemberServiceImpl implements MemberService {
         }
         return false;
 	}
+	
+	// 나이 구하는 메소드
+  public int calculateAge(String birthday) {
+	  int birthYear = Integer.parseInt(birthday.substring(0, 4));
+	  int birthMonth = Integer.parseInt(birthday.substring(5, 7));
+	  int birthDay = Integer.parseInt(birthday.substring(8, 10));
+	
+	  Calendar current = Calendar.getInstance();
+	  int currentYear = current.get(Calendar.YEAR);
+	  int currentMonth = current.get(Calendar.MONTH) + 1;
+	  int currentDay = current.get(Calendar.DAY_OF_MONTH);
+	
+	  int age = currentYear - birthYear;
+	
+	  if (birthMonth * 100 + birthDay > currentMonth * 100 + currentDay) {
+	      age--;
+	  }
+	
+	  return age;
+  }
+  
 	
 }
