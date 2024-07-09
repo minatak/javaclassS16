@@ -2,27 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.javaclassS16.dao.CalendarDAO">
 
-	<select id="calendarListAll" resultType="com.spring.javaclassS16.vo.CalendarVO">
-    select * from calendar;
-  </select>
+		<select id="getCalendarList" resultType="com.spring.javaclassS16.vo.CalendarVO">
+	    SELECT * FROM calendar 
+	    WHERE memberId = #{memberId} 
+	       OR (sharing = true AND familyCode = #{familyCode})
+		</select>
+
+    <select id="calendarListAll" resultType="com.spring.javaclassS16.vo.CalendarVO">
+      SELECT * FROM calendar;
+    </select>
+    
+    <select id="getCalendarSummary" resultType="com.spring.javaclassS16.vo.CalendarVO">
+      SELECT * FROM calendar 
+      WHERE (memberId = #{memberId} OR (sharing = true AND familyCode = #{familyCode}))
+      AND startTime >= CURDATE()
+      ORDER BY startTime ASC
+      LIMIT 5
+    </select>
+    
+    <select id="selectCalendarList" resultType="com.spring.javaclassS16.vo.CalendarVO">
+	    SELECT * FROM calendar 
+	    WHERE memberId = #{memberId} 
+	       OR (sharing = true AND familyCode = #{familyCode})
+	    ORDER BY startTime ASC
+		</select>
+    
+  
+    <insert id="calendarInput" parameterType="com.spring.javaclassS16.vo.CalendarVO">
+		  INSERT INTO calendar (title, description, startTime, endTime, allDay, repeatType, memberId, familyCode, sharing)
+		  VALUES (#{title}, #{description}, #{startTime}, #{endTime}, #{allDay}, #{repeatType}, #{memberId}, #{familyCode}, #{sharing});
+		</insert>
   
   
-  <insert id="calendarInput">
-    insert into calendar values(default, #{vo.title}, #{vo.startTime}, #{vo.endTime}, #{vo.allDay});
-  </insert>
+    <delete id="calendarDeleteTrue">
+      DELETE FROM calendar WHERE title = #{title} AND startTime = #{startTime}
+    </delete>
+  
+    <delete id="calendarDelete">
+      DELETE FROM calendar WHERE title = #{title} AND startTime = #{startTime} AND endTime = #{endTime} AND allDay = #{allDay}
+    </delete>
   
   
-  <delete id="calendarDeleteTrue">
-    delete from calendar where title = #{title} and  startTime = #{startTime}
-  </delete>
+    <update id="calendarUpdate" parameterType="com.spring.javaclassS16.vo.CalendarVO">
+		  UPDATE calendar 
+		  SET title = #{title}, 
+		      description = #{description},
+		      startTime = #{startTime}, 
+		      endTime = #{endTime}, 
+		      allDay = #{allDay},
+		      repeatType = #{repeatType},
+		      memberId = #{memberId},
+		      familyCode = #{familyCode},
+		      sharing = #{sharing}
+		  WHERE idx = #{idx}
+		</update>
   
-  <delete id="calendarDelete">
-    delete from calendar where title = #{title} and  startTime = #{startTime} and endTime = #{endTime} and allDay=#{allDay}
-  </delete>
-  
-  
-  <update id="calendarUpdate">
-    update calendar set title=#{vo.title}, startTime=#{vo.startTime}, endTime=#{vo.endTime}, allDay=#{vo.allDay} where idx=#{vo.idx}
-  </update>
-  
+
 </mapper>

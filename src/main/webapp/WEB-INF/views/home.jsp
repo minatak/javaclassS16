@@ -30,8 +30,7 @@
     padding-top: 60px;
     text-align: center;
     max-width: 900px;
-    margin: 0 auto;
-  }
+    margin: 0 auto;  }
  
   .family-schedule {
     background: #fff;
@@ -43,45 +42,64 @@
 
 </style>
 <script>
-	'use strict';
-	
-	document.addEventListener('DOMContentLoaded', function() {
-		  var calendarEl = document.getElementById('weeklyCalendar');
-		  var calendar = new FullCalendar.Calendar(calendarEl, {
-		    height: 'auto',
-		    headerToolbar: {
-		      left: 'prev,next today',
-		      center: 'title',
-		      right: 'listWeek'
-		    },
-		    initialView: 'listWeek',
-		    navLinks: true,
-		    editable: false,
-		    dayMaxEvents: true,
-		    events: function(fetchInfo, successCallback, failureCallback) {
-		      $.ajax({
-		        url: "${ctp}/calendar/calendarListAll",
-		        type: "POST",
-		        dataType: "json",
-		        success: function(data) {
-		          successCallback(data.map(function(event) {
-		            return {
-		              title: event.title,
-		              start: event.startTime,
-		              end: event.endTime,
-		              allDay: event.allDay
-		            };
-		          }));
-		        },
-		        error: function() {
-		          failureCallback("연결 오류");
-		        }
-		      });
-		    }
-		  });
-		  calendar.render();
-		});
-
+  'use strict';
+  
+  document.addEventListener('DOMContentLoaded', function() {
+	  var calendarEl = document.getElementById('calendar');
+	  var calendar = new FullCalendar.Calendar(calendarEl, {
+	    height: 'auto',
+	    headerToolbar: {
+	      left: 'prev,next today',
+	      center: 'title',
+	      right: 'dayGridMonth,listWeek'
+	    },
+	    initialView: 'dayGridMonth',
+	    navLinks: true,
+	    editable: true,
+	    dayMaxEvents: true,
+	    events: function(fetchInfo, successCallback, failureCallback) {
+	      $.ajax({
+	        url: "${ctp}/calendar/calendarListAll",
+	        type: "POST",
+	        dataType: "json",
+	        success: function(data) {
+	          successCallback(data.map(function(event) {
+	            return {
+	              title: event.title,
+	              start: event.startTime,
+	              end: event.endTime,
+	              allDay: event.allDay,
+	              color: event.sharing ? '#4CAF50' : '#2196F3' // 공유 일정은 초록색, 개인 일정은 파란색
+	            };
+	          }));
+	        },
+	        error: function() {
+	          failureCallback("연결 오류");
+	        }
+	      });
+	    }
+	  });
+	  calendar.render();
+	});
+  
+  $(document).ready(function() {
+	    $.ajax({
+	        url: "${ctp}/calendar/calendarSummary",
+	        type: "POST",
+	        dataType: "json",
+	        success: function(data) {
+	            var calendarHtml = "<ul>";
+	            $.each(data, function(index, event) {
+	                calendarHtml += "<li>" + event.startTime + " - " + event.title + "</li>";
+	            });
+	            calendarHtml += "</ul>";
+	            $("#calendarSummary").html(calendarHtml);
+	        },
+	        error: function() {
+	            $("#calendarSummary").html("<p>일정을 불러오는 데 실패했습니다.</p>");
+	        }
+	    });
+	});
 </script>
 </head>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
@@ -96,7 +114,8 @@
   <div class="family-schedule">
 	  <h2>가족 일정 한눈에 보기</h2>
 	  <p>가족들의 중요한 일정을 한눈에 확인할 수 있습니다.</p>
-	  <div id="weeklyCalendar"></div>
+	   <div id="calendarSummary"></div>
+	  <!-- <div id="calendar" class="calendar"></div> -->
 	</div>
   <div class="row mb-4">
     <div class="col-12">

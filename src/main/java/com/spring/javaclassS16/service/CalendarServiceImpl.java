@@ -1,6 +1,7 @@
 package com.spring.javaclassS16.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,16 @@ public class CalendarServiceImpl implements CalendarService {
 	@Override
 	public int calendarUpdate(CalendarVO vo) {
 		return calendarDAO.calendarUpdate(vo);
+	}
+
+	@Override
+	public List<CalendarVO> getCalendarList(String memberId, String familyCode) {
+		return calendarDAO.getCalendarList(memberId, familyCode);
+	}
+
+	@Override
+	public List<CalendarVO> getCalendarSummary(String memberId, String familyCode) {
+		return calendarDAO.getCalendarSummary(memberId, familyCode);
 	}
 	
 }
