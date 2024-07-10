@@ -16,11 +16,17 @@
         let content = CKEDITOR.instances.content.getData();
         
         if(title.trim() == "") {
-            alert("제목을 입력하세요");
+            alert("제목을 입력해주세요");
             return false;
         }
         if(content.trim() == "") {
-            alert("사진을 업로드하세요");
+            alert("사진을 업로드해주세요");
+            return false;
+        }
+        
+        let textContent = content.replace(/<p>\s*<img [^>]+>\s*<\/p>/g, "").replace(/<[^>]+>/g, "").trim();
+        if (textContent.length > 0) {
+            alert("사진 업로드 칸에는 텍스트를 입력할 수 없습니다. 이미지만 업로드해주세요.");
             return false;
         }
         
@@ -46,17 +52,6 @@
         myform.submit();
     }
 
-    // 파일 업로드 전 확장자 검사
-    CKEDITOR.on('fileUploadRequest', function(evt) {
-        var fileLoader = evt.data.fileLoader;
-        var fileName = fileLoader.fileName;
-        var fileExt = fileName.split('.').pop().toLowerCase();
-        
-        if (!['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
-            evt.cancel();
-            alert('지원되지 않는 파일 형식입니다. JPG, PNG, GIF 파일만 업로드 가능합니다.');
-        }
-    });
 </script>
 </head>
 <body>
@@ -91,31 +86,23 @@
             <textarea name="description" id="description" rows="3" class="form-control"></textarea>
         </div>
         <div class="mb-2">
-				    <label for="content">사진 업로드</label>
+				    <label for="content">사진 업로드 (파일을 드롭하시면 업로드됩니다)</label>
 				    <textarea name="content" id="content" rows="10" class="form-control" required></textarea>
 				</div>
 				<script>
-				    CKEDITOR.replace("content", {
-				        height: 400,
-				        filebrowserUploadUrl: "${ctp}/photo/imageUpload",
-				        uploadUrl: "${ctp}/photo/imageUpload",
-				        removePlugins: 'elementspath',
-				        resize_enabled: false,
-				        extraPlugins: 'uploadimage',
-				        toolbar: [
-				            { name: 'insert', items: [ 'Image' ] },
-				            { name: 'tools', items: [ 'Maximize' ] }
-				        ],
-				        removeButtons: 'PasteFromWord'
-				    });
-				
-				    CKEDITOR.instances.content.on('change', function() {
-				        var content = this.getData();
-				        if (content.replace(/<img[^>]*>/g,"").replace(/\s/g, "").length > 0) {
-				            alert("텍스트를 입력할 수 없습니다. 이미지만 업로드해 주세요.");
-				            this.setData(content.replace(/[^\s<img][^<>]*(?=>|$)/g, ""));
-				        }
-				    });
+					CKEDITOR.replace("content", {
+				    height: 400,
+				    filebrowserUploadUrl: "${ctp}/photo/imageUpload",
+				    uploadUrl: "${ctp}/photo/imageUpload",
+				    removePlugins: 'elementspath',
+				    resize_enabled: false,
+				    extraPlugins: 'uploadimage',
+				    toolbar: [
+				        { name: 'insert', items: [ 'Image' ] },
+				        { name: 'tools', items: [ 'Maximize' ] }
+				    ],
+				    removeButtons: 'PasteFromWord'
+					});
 				</script>
         <div class="row">
             <div class="col"><input type="button" value="글올리기" onclick="fCheck()" class="btn btn-success"/></div>

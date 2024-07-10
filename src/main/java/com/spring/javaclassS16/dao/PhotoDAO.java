@@ -28,5 +28,7 @@ public interface PhotoDAO {
   public int setPhotoReplyDelete(@Param("idx") int idx);
 
   public MemberVO getMemberIdxByMid(@Param("mid") String mid);
+
+	public MemberVO getWriterPhoto(@Param("idx") int idx); // member의 idx임
     
 }

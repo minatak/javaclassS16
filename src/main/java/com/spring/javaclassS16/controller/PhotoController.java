@@ -73,8 +73,13 @@ public class PhotoController {
       }
       
       ArrayList<PhotoReplyVO> replyVos = photoService.getPhotoReply(idx);
+      
+      MemberVO mVo = photoService.getWriterPhoto(vo.getMemberIdx());
+      String photo = mVo.getPhoto();
+      
       model.addAttribute("vo", vo);
       model.addAttribute("replyVos", replyVos);
+      model.addAttribute("photo", photo);
       return "photo/photoContent";
     }
 

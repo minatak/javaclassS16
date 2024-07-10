@@ -29,4 +29,6 @@ public interface PhotoService {
 
 	public MemberVO getMemberVoByMid(String mid);
 
+	public MemberVO getWriterPhoto(int idx);
+
 }

@@ -163,8 +163,8 @@
     </div>
     <div class="col-md-4 mb-4">
       <div class="serviceCard">
-        <i class="fa fa-shopping-cart fa-2x"></i>
-        <h4 class="mt-2">쇼핑 리스트</h4>
+        <i class="fa fa-location-dot fa-2x"></i>
+        <h4 class="mt-2">위치 공유</h4>
         <div class="icon-container">
           <i class="fa-solid fa-arrow-right" style="color:#35ae5f"></i>
         </div>

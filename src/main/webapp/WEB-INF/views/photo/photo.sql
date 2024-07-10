@@ -7,6 +7,7 @@ CREATE TABLE photo (
 	familyCode varchar(20),								 /* 엘범이 속한 가족 코드 */
 	part VARCHAR(10) NOT NULL,             /* 엘범 분류(풍경/인물/학습/사물/기타 등) */
 	title VARCHAR(100) NOT NULL,           /* 엘범 제목 */
+	description VARCHAR(100),           	 /* 사진 설명 */	
 	content TEXT,                      		 /* 엘범 내용 */
 	photoCount INT NOT NULL,               /* 업로드된 사진 수량 */
 	thumbnail VARCHAR(100),                /* 썸네일 이미지 경로 */

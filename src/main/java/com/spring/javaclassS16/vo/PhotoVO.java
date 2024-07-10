@@ -10,6 +10,7 @@ public class PhotoVO {
   private String familyCode;      // 가족 코드
   private String part;            // 사진 분류(풍경/인물/학습/사물/기타 등)
   private String title;           // 사진 제목
+  private String description;    	// 사진 설명
   private String content;     		// 사진 내용
   private int photoCount;         // 업로드된 사진 수량
   private String thumbnail;       // 썸네일 이미지 경로
@@ -17,7 +18,7 @@ public class PhotoVO {
   private int goodCount;          // 좋아요 수
   private int readNum;            // 조회수
   
-  private int replyCnt;            // 댓글수
+  private int replyCnt;            // 댓글 수
 
     
 }

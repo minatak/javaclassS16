@@ -196,4 +196,9 @@ public class PhotoServiceImpl implements PhotoService {
     out.flush();
   }
 
+	@Override
+	public MemberVO getWriterPhoto(int idx) {
+		return photoDAO.getWriterPhoto(idx);
+	}
+
 }
