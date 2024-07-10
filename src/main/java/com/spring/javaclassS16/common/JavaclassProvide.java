@@ -1,22 +1,34 @@
 package com.spring.javaclassS16.common;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.AbstractView;
 
 @Service
 public class JavaclassProvide {
@@ -95,4 +107,13 @@ public class JavaclassProvide {
 		return "1";
 	}
 
+	public String newNameCreate(int len) {
+		Date today = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+		String newName = sdf.format(today);
+		newName += RandomStringUtils.randomAlphanumeric(len) + "_";
+		return newName;
+	}
+	
+	
 }

@@ -6,18 +6,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Calendar</title>
+  <title>캘린더 | HomeLink</title>
   <%@ include file="/WEB-INF/views/include/bs4.jsp" %>
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <style>
     body, .modal { font-family: 'pretendard' !important; }
-  /*   #calendar { max-width: 900px; margin: 0 auto; } */
     #eventModal .modal-body > div { margin-bottom: 10px; }
     .home-icon { 
       font-size: 24px; 
-      color: #adb5bd; 
-      /* top: 20px; */
+      color: #cecece; 
     }
     .modal-header { 
       justify-content: center; 
@@ -31,9 +29,7 @@
     .calendarContainer {
     	margin-left: 300px;
 	    padding: 20px;
-	    /* padding-top: 60px; */
-	  /*   text-align: center; */
-	    max-width: 800px;
+	    max-width: 850px;
 	    margin: 0 auto;
     }
     h2, h3, h4, h5 {
@@ -42,17 +38,156 @@
     .header {
     	font-weight:600 !important;
     }
+    
+    /* ---- 캘린더 UI 변경 ---- */
+    
+		.fc {
+		  font-family: 'Pretendard', sans-serif;
+		  max-width: 900px;
+		  margin: 0 auto;
+		  background-color: white;
+		}
+		
+		.fc .fc-day-today {
+		  background-color: white !important;
+		}
+		
+		/* 헤더 스타일 */
+		.fc .fc-toolbar.fc-header-toolbar {
+		  margin-bottom: 1.5em;
+		}
+		
+		.fc .fc-toolbar-title {
+		  font-size: 1.5em;
+		  font-weight: bold;
+		  color: #333;
+		}
+		
+		/* 버튼 스타일 */
+		.fc .fc-button {
+		  background-color: white;
+		  border: 1px solid #cecece;
+		  color: #333;
+		  /* text-transform: capitalize; */
+		  font-weight: normal;
+		  padding: 0.3em 1.5em;
+		  margin: 0 4px;
+		 /*  transition: all 0.3s ease; */
+		  border-radius: 0;
+		}
+		
+		.fc .fc-button:hover {
+		  background-color: #fff;
+		  border: 1px solid #cecece;
+		  color: #333;
+		}
+		
+		.fc .fc-button-primary:not(:disabled).fc-button-active,
+		.fc .fc-button-primary:not(:disabled):active {
+		  background-color: #333;
+		  color: white;
+		  font-weight: bold;
+		  box-shadow: none;
+		}
+		
+		.fc .fc-button:focus {
+		  box-shadow: none;
+		}
+		
+		/* 날짜 셀 스타일 */
+		.fc .fc-daygrid-day-number {
+		  font-size: 1em;
+		  padding: 0.4em;
+		  color: #333;
+		}
+		
+		/* 오늘 날짜 스타일 */
+		.fc .fc-day-today .fc-daygrid-day-number {
+		  background-color: #333;
+		  color: white;
+		  border-radius: 50%;
+		  width: 30px;
+		  height: 30px;
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  margin: 5px;
+		}
+
+		
+		/* 날짜 선택시 스타일 */
+		.fc .fc-highlight {
+		  background-color: #e9ecef;
+		  opacity: 0.7;
+		}
+		
+		/* 테두리 색상 */
+		.fc th, .fc td {
+		  border-color: #e9ecef;
+		}
+		
+		/* 요일 헤더 */
+		.fc .fc-col-header-cell-cushion {
+		  color: #495057;
+		  font-weight: bold;
+		}
+		
+		/* 이벤트 스타일 */
+		.fc-event {
+		  background-color: #4dabf7;
+		  border: none;
+		  padding: 2px 4px;
+		}
+		
+		.fc-event-title {
+		  font-weight: normal;
+		}
+		
+		.fc .fc-button-primary:focus,
+		.fc .fc-button-primary:not(:disabled):active:focus {
+		  box-shadow: none;
+		}
+		
+		.fc .fc-button-group > .fc-button {
+		  margin: 0;
+		}
+		
+		#eventModal .btn {
+		  border-radius: 7px;
+		}
+		
+		/* 모달 버튼 스타일 */
+		#eventModal .btn-primary,
+		#eventModal .btn-danger {
+		  background-color: #333;
+		  border-color: #333;
+		  color: white;
+		}
+		
+		#eventModal .btn-primary:hover,
+		#eventModal .btn-danger:hover {
+		  background-color: #555;
+		  border-color: #555;
+		}
   </style>
   <script>
 	  document.addEventListener('DOMContentLoaded', function() {
 	    var calendarEl = document.getElementById('calendar');
+	    var showSharedOnly = false;
+	    
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
-	      initialView: 'dayGridMonth',
-	      headerToolbar: {
-	        left: 'prev,next today',
-	        center: 'title',
-	        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-	      },
+    	 initialView: 'dayGridMonth',
+    	  headerToolbar: {
+    	    left: 'prev,next today',
+    	    center: 'title',
+    	    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    	  },
+    	  buttonText: {
+    	    today: '오늘',
+    	    month: '월',
+    	    week: '주',
+    	    day: '일'
+    	  },
 	      events: function(info, successCallback, failureCallback) {
 	    	  $.ajax({
 	    	    url: '${ctp}/calendar/calendarListAll',
@@ -72,6 +207,14 @@
 	    	          color: event.sharing ? '#84a98c' : '#829aae'
 	    	        };
 	    	      });
+	    	      
+	    	      // 체크박스 상태에 따라 이벤트 필터링
+              if (showSharedOnly) {
+                events = events.filter(function(event) {
+                  return event.sharing;
+                });
+              }
+	    	      
 	    	      successCallback(events);
 	    	    },
 	    	    error: function(jqXHR, textStatus, errorThrown) {
@@ -115,6 +258,13 @@
 	      });
 	      calendar.render();
 	
+	   		// 체크박스 이벤트 리스너 추가
+	      $('#showSharedOnly').change(function() {
+	        showSharedOnly = $(this).is(':checked');
+	        calendar.refetchEvents();
+	      });
+	      
+	      
 	      function openEventModal(event, start, end, allDay) {
 	    	  $('#eventModal').modal('show');
 	    	  $('#modalTitle').text(event ? '일정 상세' : '일정 등록');
@@ -290,6 +440,9 @@
 	<div class="calendarContainer">
 	  <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
 	  <font size="5" class="mb-4 header">일정관리</font>
+	  <div class="text-right">
+		  <input type="checkbox" id="showSharedOnly"/>공유 일정만 보기
+		</div>
 	  <hr/>
 	  <div id='calendar' class="mt-4"></div>
 	</div>
@@ -309,8 +462,8 @@
           <input type="text" class="form-control" id="eventTitle" required>
         </div>
         <div>
-          <label for="eventAllDay">종일:</label>
           <input type="checkbox" id="eventAllDay" onchange="toggleAllDay()">
+          <label for="eventAllDay">하루종일</label>
         </div>
         <div>
           <label for="eventStart">시작일:</label>
@@ -333,8 +486,8 @@
           <textarea class="form-control" id="eventDescription" rows="3"></textarea>
         </div>
         <div>
-          <label for="eventSharing">공개:</label>
           <input type="checkbox" id="eventSharing">
+          <label for="eventSharing">가족 공유</label>
         </div>
         <div id="eventAuthor" class="mt-2"></div>
       </div>

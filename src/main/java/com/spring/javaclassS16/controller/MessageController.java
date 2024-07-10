@@ -52,6 +52,14 @@ public class MessageController {
 			model.addAttribute("msg", "회원가입이 되지 않은 사용자에요.\\n회원가입 후 진행해주세요!");
 			model.addAttribute("url", "/member/memberJoin0");
 		}
+		else if(msgFlag.equals("photoInputOk")) {
+			model.addAttribute("msg", "사진이 업로드되었어요 :)");
+			model.addAttribute("url", "/photo/photoList");
+		}
+		else if(msgFlag.equals("photoInputNo")) {
+			model.addAttribute("msg", "사진 업로드에 실패했어요");
+			model.addAttribute("url", "/photo/photoInput");
+		}
 		
 		
 		return "include/message";

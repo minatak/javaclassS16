@@ -284,7 +284,7 @@ public class MemberController {
 
 			session.setAttribute("sMid", vo.getMid());
 			session.setAttribute("sName", vo.getName());
-			session.setAttribute("sFamCode", vo.getFamily_code());
+			session.setAttribute("sFamCode", vo.getFamilyCode());
 			session.setAttribute("sPhoto", vo.getPhoto());
 			session.setAttribute("sAge", age);
 			
@@ -311,7 +311,7 @@ public class MemberController {
 			// 1.세션처리
 			session.setAttribute("sMid", mid);
 			session.setAttribute("sName", vo.getName());
-			session.setAttribute("sFamCode", vo.getFamily_code());
+			session.setAttribute("sFamCode", vo.getFamilyCode());
 			session.setAttribute("sPhoto", vo.getPhoto());
 
 			

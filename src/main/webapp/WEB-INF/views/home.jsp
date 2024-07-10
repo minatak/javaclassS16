@@ -120,7 +120,7 @@
   <div class="row mb-4">
     <div class="col-12">
       <div class="family-schedule">
-        <h4 class="border-bottom pb-2">공지사항 0개</h4>
+        <h4 class="border-bottom pb-2">공지사항 0개</h4> 
         <p>작성된 알림장이 없습니다.</p>
       </div>
     </div>

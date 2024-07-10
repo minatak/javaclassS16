@@ -116,7 +116,10 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	// 나이 구하는 메소드
+	@Override
   public int calculateAge(String birthday) {
+		System.out.println("birthday : " + birthday);
+		
 	  int birthYear = Integer.parseInt(birthday.substring(0, 4));
 	  int birthMonth = Integer.parseInt(birthday.substring(5, 7));
 	  int birthDay = Integer.parseInt(birthday.substring(8, 10));

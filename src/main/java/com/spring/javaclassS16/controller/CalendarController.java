@@ -29,11 +29,6 @@ public class CalendarController {
     return "calendar/calendarMain";
   }
   
-  @RequestMapping(value = "/claude", method = RequestMethod.GET)
-  public String claudeGet() {
-    return "home_claude";
-  }
-  
   @ResponseBody
   @RequestMapping(value = "/calendarListAll", method = RequestMethod.POST)
   public ResponseEntity<?> calendarListAllPost(HttpSession session) {
