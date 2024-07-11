@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
   <title>자세히 보기 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
-  <style>
+   <style>
     body {
       font-family: 'pretendard' !important;
       background-color: #fafafa;
@@ -26,10 +26,9 @@
       background-color: #fff;
       border: 1px solid #dbdbdb;
       border-radius: 3px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     .header {
-      padding: 16px;
+      padding: 14px 16px;
       display: flex;
       align-items: center;
       border-bottom: 1px solid #efefef;
@@ -38,7 +37,7 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      margin-right: 12px;
+      margin-right: 10px;
     }
     .user-name {
       font-weight: 600;
@@ -73,12 +72,12 @@
       transform: translateY(-50%);
       width: 30px;
       height: 30px;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(255, 255, 255, 0.7);
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #fff;
+      color: #000;
       font-size: 18px;
       text-decoration: none;
       transition: 0.3s ease;
@@ -87,11 +86,11 @@
     .prev { left: 10px; }
     .next { right: 10px; }
     .prev:hover, .next:hover {
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: rgba(255, 255, 255, 0.9);
     }
     .dot {
-      height: 6px;
-      width: 6px;
+      height: 8px;
+      width: 8px;
       margin: 0 4px;
       background-color: #bbb;
       border-radius: 50%;
@@ -118,16 +117,13 @@
     .add-comment {
       display: flex;
       border-top: 1px solid #efefef;
-      padding: 16px;
+      padding-top: 16px;
     }
     .comment-input {
       flex-grow: 1;
       border: none;
       outline: none;
       font-size: 14px;
-      padding: 8px;
-      background-color: #fafafa;
-      border-radius: 3px;
     }
     .post-comment-btn {
       border: none;
@@ -136,21 +132,20 @@
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
-      padding-left: 16px;
     }
     .post-comment-btn:disabled {
       opacity: 0.3;
       cursor: default;
     }
     .view-all-comments {
-      padding: 18px;
       color: #8e8e8e;
       font-size: 14px;
       margin-bottom: 8px;
       cursor: pointer;
     }
+    /* 모달 스타일 */
     .modal-content {
-      border-radius: 0;
+      border-radius: 12px;
       border: none;
     }
     .modal-header {
@@ -186,18 +181,9 @@
       font-size: 12px;
       margin-top: 4px;
     }
+    /* 좋아요 버튼 스타일 */
     .fa-heart.fas {
       color: #ed4956;
-    }
-    .delete-btn {
-      color: #ed4956;
-      cursor: pointer;
-      margin-left: auto;
-    }
-    .reply-comment {
-      margin-left: 20px;
-      border-left: 2px solid #efefef;
-      padding-left: 10px;
     }
   </style>
   <script>
@@ -207,12 +193,8 @@
 
     document.addEventListener("DOMContentLoaded", function() {
       showSlides(slideIndex);
-      
-      if (${vo.photoCount} <= 1) {
-        document.querySelector('.prev').style.display = 'none';
-        document.querySelector('.next').style.display = 'none';
-      }
     });
+    
     
     let replyCnt = ${replyCnt};
     let commentsVisible = false;
@@ -371,104 +353,87 @@
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
 <p><br/></p>
 <div class="container">
-  <a href="${ctp}/photo/photoList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
-  <div class="contentContainer">
-    <div class="header">
-      <img src="${ctp}/member/${photo}" alt="User Avatar" class="user-avatar">
-      <span class="user-name">${vo.name}</span>
-      <span class="post-time">${fn:substring(vo.PDate,0,16)}</span>
-      <c:if test="${sMid == vo.mid}">
-        <span class="delete-btn" onclick="deletePhoto()"><i class="fas fa-trash"></i></span>
-      </c:if>
+	<a href="${ctp}/photo/photoList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+	<div class="contentContainer">
+	  <div class="header">
+	    <img src="${ctp}/member/${photo}" alt="User Avatar" class="user-avatar">
+	    <span class="user-name">${vo.name}</span>
+	    <span class="post-time">${fn:substring(vo.PDate,0,16)}</span>
+	  </div>
+	  
+	  <input type="hidden" name="idx" id="idx" value="${vo.idx}"/>
+	  
+	  <div class="slideshow-container">
+		  <c:if test="${not empty vo.content}">
+		    <c:set var="imageCount" value="0" />
+		    <c:forEach var="item" items="${fn:split(vo.content, '\"')}">
+		      <c:if test="${fn:contains(item, '/javaclassS16/photo/')}">
+		        <c:set var="imageCount" value="${imageCount + 1}" />
+		        <c:set var="imagePath" value="${fn:substringAfter(item, '/javaclassS16/')}" />
+		        <div class="mySlides">
+		          <img src="${ctp}/${imagePath}" alt="Photo ${imageCount}">
+		        </div>
+		      </c:if>
+		    </c:forEach>
+		  </c:if>
+		  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+		  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+		</div>
+	  
+	  <div style="text-align:center">
+	    <c:forEach var="i" begin="1" end="${vo.photoCount}" varStatus="st">
+	      <span class="dot" onclick="currentSlide(${i})"></span> 
+	    </c:forEach>
+	  </div>
+	  
+	  <div class="interaction-bar">
+	    <i id="likeButton" class="interaction-icon fa-heart ${isLiked ? 'fas' : 'far'}" onclick="toggleLike()"></i>
+	    <i class="interaction-icon fa-regular fa-comment" data-bs-toggle="modal" data-bs-target="#commentsModal"></i>
+	    <i class="interaction-icon fa-regular fa-paper-plane"></i>
+	  </div>
+	  
+	  <div class="description">
+	    <p><strong>${vo.name}</strong> ${fn:replace(vo.description, newLine, "<br/>")}</p>
+	  </div>
+	  
+	  <div class="comments-container">
+    <div class="view-all-comments" data-bs-toggle="modal" data-bs-target="#commentsModal">
+      댓글 ${replyCnt}개 모두 보기
     </div>
     
-    <input type="hidden" name="idx" id="idx" value="${vo.idx}"/>
-    
-    <div class="slideshow-container">
-        <c:set var="imageCount" value="0" />
-        <c:forEach var="item" items="${fn:split(vo.content, '\"')}">
-          <c:if test="${fn:contains(item, '/javaclassS16/photo/')}">
-            <c:set var="imageCount" value="${imageCount + 1}" />
-            <c:set var="imagePath" value="${fn:substringAfter(item, '/javaclassS16/')}" />
-            <div class="mySlides">
-              <img src="${ctp}/${imagePath}" alt="Photo ${imageCount}">
-            </div>
-          </c:if>
-        </c:forEach>
-      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    <div class="add-comment">
+      <input type="text" id="content" class="comment-input" placeholder="댓글 달기...">
+      <button class="post-comment-btn" onclick="replyCheck()">게시</button>
     </div>
-    
-    <div style="text-align:center">
-      <c:forEach var="i" begin="1" end="${vo.photoCount}" varStatus="st">
-        <span class="dot" onclick="currentSlide(${i})"></span> 
-      </c:forEach>
-    </div>
-    
-    <div class="interaction-bar">
-      <i id="likeButton" class="interaction-icon fa-heart ${isLiked ? 'fas' : 'far'}" onclick="toggleLike()"></i>
-      <i class="interaction-icon fa-regular fa-comment" data-bs-toggle="modal" data-bs-target="#commentsModal"></i>
-      <i class="interaction-icon fa-solid fa-arrow-down" onclick="photoDown()"></i>
-    </div>
-    
-    <div class="description">
-      <p><strong>${vo.name}</strong> ${fn:replace(vo.description, newLine, "<br/>")}</p>
-    </div>
-    
-    <div class="comments-container">
-      <div class="view-all-comments" data-bs-toggle="modal" data-bs-target="#commentsModal">
-        댓글 ${replyCnt}개 모두 보기
-      </div>
-      
-      <div class="add-comment">
-        <input type="text" id="content" class="comment-input" placeholder="댓글 달기...">
-        <button class="post-comment-btn" onclick="replyCheck()">게시</button>
-      </div>
-    </div>
-    
-    <!-- 댓글 모달 -->
-    <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="commentsModalLabel">댓글</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
-              <div class="modal-comment" id="comment${replyVo.idx}">
-                <span class="modal-comment-username">${replyVo.name}</span>
-                <span class="modal-comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</span>
-                <div class="modal-comment-time">
-                  ${fn:substring(replyVo.prDate, 0, 10)}
-                  <c:if test="${sMid == replyVo.mid}">
-                    <a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제">삭제</a>
-                  </c:if>
-                  <a href="javascript:replyToComment(${replyVo.idx})">답글</a>
-                </div>
-              </div>
-              <!-- 대댓글 표시 -->
-              <%-- <c:forEach var="childReply" items="${childReplies}">
-                <c:if test="${childReply.parentIdx == replyVo.idx}">
-                  <div class="modal-comment reply-comment">
-                    <span class="modal-comment-username">${childReply.mid}</span>
-                    <span class="modal-comment-content">${fn:replace(childReply.content, newLine, "<br/>")}</span>
-                    <div class="modal-comment-time">
-                      ${fn:substring(childReply.prDate, 0, 10)}
-                      <c:if test="${sMid == childReply.mid}">
-                        <a href="javascript:replyDelete(${childReply.idx})" title="댓글삭제">삭제</a>
-                      </c:if>
-                    </div>
-                  </div>
+  </div>
+  
+  <!-- 댓글 모달 -->
+  <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="commentsModalLabel">댓글</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
+            <div class="modal-comment">
+              <span class="modal-comment-username">${replyVo.mid}</span>
+              <span class="modal-comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</span>
+              <div class="modal-comment-time">
+                ${fn:substring(replyVo.prDate, 0, 10)}
+                <c:if test="${sMid == replyVo.mid}">
+                  <a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제">삭제</a>
                 </c:if>
-              </c:forEach> --%>
-            </c:forEach>
-          </div>
+              </div>
+            </div>
+          </c:forEach>
         </div>
       </div>
     </div>
-    
   </div>
+  
+	</div>
 </div>
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />

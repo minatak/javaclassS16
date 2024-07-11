@@ -10,25 +10,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 public interface PhotoService {
-	
-	public ArrayList<PhotoVO> getPhotoList(int startIndexNo, int pageSize, String familyCode, String part, String choice);
-	
-	public int setPhotoInput(PhotoVO vo);
-	
-	public PhotoVO getPhotoContent(int idx);
-	
-	public ArrayList<PhotoReplyVO> getPhotoReply(int idx);
-	
-	public String setPhotoGoodCheck(int idx, HttpSession session);
-	
-	public String setPhotoReplyInput(PhotoReplyVO vo);
-	
-	public String setPhotoReplyDelete(int idx);
-	
-	public void imageUpload(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) throws Exception;
+    
+  public ArrayList<PhotoVO> getPhotoList(int pag, int pageSize, String familyCode, String choice);
+  
+  public int setPhotoInput(PhotoVO vo);
+  
+  public PhotoVO getPhotoContent(int idx);
+  
+  public ArrayList<PhotoReplyVO> getPhotoReply(int idx);
+  
+  public String togglePhotoLike(int idx, HttpSession session);
+  
+  public String setPhotoReplyInput(PhotoReplyVO vo);
+  
+  public String setPhotoReplyDelete(int idx);
+  
+  public void imageUpload(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) throws Exception;
+  
+  public MemberVO getMemberVoByMid(String mid);
 
-	public MemberVO getMemberVoByMid(String mid);
+  public MemberVO getWriterPhoto(int idx);
+  
+  public boolean checkPhotoLike(int idx, String mid);
 
-	public MemberVO getWriterPhoto(int idx);
-
+	public int getPhotoReplyCount(int idx);
+  
 }

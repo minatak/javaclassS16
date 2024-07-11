@@ -25,11 +25,11 @@
     
 	
 	<insert id="setMemberJoinOk">
-	  insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.name},#{vo.email},#{vo.relationship},#{vo.birthday},#{vo.photo},#{vo.family_code},default,default,default);
+	  insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.name},#{vo.email},#{vo.relationship},#{vo.birthday},#{vo.photo},#{vo.familyCode},default,default,default);
 	</insert>
 	
 	<insert id="setKakaoMemberInput">
-		insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.name},#{vo.email},#{vo.relationship},#{vo.birthday},#{vo.photo},#{vo.family_code},default,default,default);
+		insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.name},#{vo.email},#{vo.relationship},#{vo.birthday},#{vo.photo},#{vo.familyCode},default,default,default);
 	</insert>
 	
 	<insert id="createFamily">
@@ -47,7 +47,7 @@
 	</update>
 	
   <update id="setMemberUpdateOk">
-    update member set name=#{vo.name},email=#{vo.email},relationship=#{vo.relationship},birthday=#{vo.birthday},photo=#{vo.photo},family_code=#{vo.family_code} where mid=#{vo.mid};
+    update member set name=#{vo.name},email=#{vo.email},relationship=#{vo.relationship},birthday=#{vo.birthday},photo=#{vo.photo},familyCode=#{vo.familyCode} where mid=#{vo.mid};
   </update>
   
   <update id="setMemberDel">
@@ -55,7 +55,7 @@
   </update>
 	
 	<update id="updateMemberFamilyCode">
-  	UPDATE member SET family_code = #{familyCode} WHERE mid = #{mid}
+  	UPDATE member SET familyCode = #{familyCode} WHERE mid = #{mid}
   </update>
 	
 </mapper>

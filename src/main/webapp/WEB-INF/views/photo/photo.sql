@@ -33,3 +33,13 @@ CREATE TABLE photoReply (
 	FOREIGN KEY (photoIdx) REFERENCES photo(idx)
 );
 
+CREATE TABLE photoLikes (
+	idx INT NOT NULL AUTO_INCREMENT,  /* 좋아요 고유번호 */
+	photoIdx INT NOT NULL,  					/* 좋아요 눌린 사진의 고유번호 */
+	mid VARCHAR(20) NOT NULL, 				/* 좋아요 누른 회원의 아이디 */
+	PRIMARY KEY (idx),               
+	UNIQUE KEY (photoIdx, mid),        
+	FOREIGN KEY (photoIdx) REFERENCES photo(idx),
+	FOREIGN KEY (mid) REFERENCES member(mid)
+);
+

@@ -33,9 +33,9 @@ public class PhotoServiceImpl implements PhotoService {
   @Autowired
 	JavaclassProvide javaclassProvide;
 
-  public ArrayList<PhotoVO> getPhotoList(int pag, int pageSize, String familyCode, String part, String choice) {
+  public ArrayList<PhotoVO> getPhotoList(int pag, int pageSize, String familyCode, String choice) {
     int startIndexNo = Math.max(0, (pag - 1) * pageSize);
-    return photoDAO.getPhotoList(startIndexNo, pageSize, familyCode, part, choice);
+    return photoDAO.getPhotoList(startIndexNo, pageSize, familyCode, choice);
   }
   
   @Override
@@ -49,11 +49,6 @@ public class PhotoServiceImpl implements PhotoService {
       // 사진 수량 계산
       int photoCount = countPhotos(content);
       vo.setPhotoCount(photoCount);
-      
-      System.out.println("Content: " + content);
-      System.out.println("Extracted thumbnail: " + thumbnail);
-      System.out.println("Photo count: " + photoCount);
-      System.out.println("VO after setting: " + vo);
       
       return photoDAO.setPhotoInput(vo);
   }
@@ -107,14 +102,13 @@ public class PhotoServiceImpl implements PhotoService {
         // 썸네일 파일 생성
         File thumbnailFile = new File(thumbnailPath + sFileName);
         
-        int width = 200;  // 원하는 썸네일 너비
-        int height = 150; // 원하는 썸네일 높이
+        int width = 300;  // 원하는 썸네일 너비
+        int height = 300; // 원하는 썸네일 높이
         Thumbnailator.createThumbnail(originalFile, thumbnailFile, width, height);
         
         // 썸네일 파일명만 반환
         res = sFileName;
         
-        System.out.println("Thumbnail created: " + thumbnailFile.getAbsolutePath());
     } catch (IOException e) {
         e.printStackTrace();
         System.out.println("Error creating thumbnail: " + e.getMessage());
@@ -125,7 +119,7 @@ public class PhotoServiceImpl implements PhotoService {
   
   @Override
   public MemberVO getMemberVoByMid(String mid) {
-      return photoDAO.getMemberIdxByMid(mid);
+      return photoDAO.getMemberVoByMid(mid);
   }
 
   @Override
@@ -149,18 +143,19 @@ public class PhotoServiceImpl implements PhotoService {
   }
 
   @Override
-  public String setPhotoGoodCheck(int idx, HttpSession session) {
-    @SuppressWarnings("unchecked")
-    ArrayList<String> contentGood = (ArrayList<String>) session.getAttribute("sContentGood");
-    if (contentGood == null) contentGood = new ArrayList<>();
-    String imsiContentGood = "photoGood" + idx;
-    if (!contentGood.contains(imsiContentGood)) {
-      photoDAO.setPhotoGoodCheck(idx);
-      contentGood.add(imsiContentGood);
-      session.setAttribute("sContentGood", contentGood);
-      return "1";
-    }
-    return "0";
+  public String togglePhotoLike(int idx, HttpSession session) {
+      String mid = (String) session.getAttribute("sMid");
+
+      boolean liked = photoDAO.checkPhotoLike(idx, mid);
+      if (liked) {
+          photoDAO.removePhotoLike(idx, mid);
+          photoDAO.decreasePhotoLikeCount(idx);
+          return "unliked";
+      } else {
+          photoDAO.addPhotoLike(idx, mid);
+          photoDAO.increasePhotoLikeCount(idx);
+          return "liked";
+      }
   }
 
   @Override
@@ -199,6 +194,16 @@ public class PhotoServiceImpl implements PhotoService {
 	@Override
 	public MemberVO getWriterPhoto(int idx) {
 		return photoDAO.getWriterPhoto(idx);
+	}
+
+	 @Override
+   public boolean checkPhotoLike(int idx, String mid) {
+     return photoDAO.checkPhotoLike(idx, mid);
+   }
+
+	@Override
+	public int getPhotoReplyCount(int idx) {
+		return photoDAO.getPhotoReplyCount(idx);
 	}
 
 }

@@ -3,41 +3,50 @@
 <mapper namespace="com.spring.javaclassS16.dao.PhotoDAO">
     
     <select id="getPhotoList" resultType="com.spring.javaclassS16.vo.PhotoVO">
-		  SELECT p.*, IFNULL(r.replyCnt, 0) as replyCnt
-		  FROM photo p
-		  LEFT JOIN (
-		    SELECT photoIdx, COUNT(*) as replyCnt
-		    FROM photoReply
-		    GROUP BY photoIdx
-		  ) r ON p.idx = r.photoIdx
-		  WHERE p.familyCode = #{familyCode}
-		  <if test="part != '전체'">AND p.part = #{part}</if>
-		  ORDER BY
-		  <choose>
-		    <when test="choice == '추천순'">p.goodCount DESC</when>
-		    <when test="choice == '조회순'">p.readNum DESC</when>
-		    <otherwise>p.idx DESC</otherwise>
-		  </choose>
-		  LIMIT #{startIndexNo}, #{pageSize}
-		</select>
+        SELECT p.*, IFNULL(r.replyCnt, 0) as replyCnt
+        FROM photo p
+        LEFT JOIN (
+            SELECT photoIdx, COUNT(*) as replyCnt
+            FROM photoReply
+            GROUP BY photoIdx
+        ) r ON p.idx = r.photoIdx
+        WHERE p.familyCode = #{familyCode}
+        ORDER BY
+        <choose>
+            <when test="choice == '추천순'">p.goodCount DESC</when>
+            <when test="choice == '조회순'">p.readNum DESC</when>
+            <otherwise>p.idx DESC</otherwise>
+        </choose>
+        LIMIT #{startIndexNo}, #{pageSize}
+    </select>
     
     <select id="getPhotoContent" resultType="com.spring.javaclassS16.vo.PhotoVO">
-      SELECT * FROM photo
-      WHERE idx = #{idx}
+        SELECT * FROM photo
+        WHERE idx = #{idx}
     </select>
+    
+    <select id="getPhotoReplyCount" resultType="int">
+		    SELECT COUNT(*) FROM photoReply WHERE photoIdx = #{idx}
+		</select>
     
     <select id="getPhotoReply" resultType="com.spring.javaclassS16.vo.PhotoReplyVO">
-      SELECT r.*, m.name FROM photoReply r
-      JOIN member m ON r.memberIdx = m.idx
-      WHERE r.photoIdx = #{idx} ORDER BY r.idx DESC
-    </select>
+		    SELECT r.*, m.name, m.mid
+		    FROM photoReply r
+		    JOIN member m ON r.memberIdx = m.idx 
+		    WHERE r.photoIdx = #{idx} 
+		    ORDER BY r.idx DESC
+		</select>
     
-    <select id="getMemberIdxByMid" resultType="com.spring.javaclassS16.vo.MemberVO">
-      SELECT * FROM member WHERE mid = #{mid}
+    <select id="getMemberVoByMid" resultType="com.spring.javaclassS16.vo.MemberVO">
+        SELECT * FROM member WHERE mid = #{mid}
     </select>
     
     <select id="getWriterPhoto" resultType="com.spring.javaclassS16.vo.MemberVO">
-      SELECT * FROM member WHERE idx = #{idx}
+        SELECT * FROM member WHERE idx = #{idx}
+    </select>
+    
+    <select id="checkPhotoLike" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM photoLikes WHERE photoIdx = #{idx} AND mid = #{mid}
     </select>
     
     <insert id="setPhotoInput" parameterType="com.spring.javaclassS16.vo.PhotoVO">
@@ -46,20 +55,32 @@
     </insert>
     
     <insert id="setPhotoReplyInput">
-      INSERT INTO photoReply (memberIdx, photoIdx, content)
-      VALUES (#{vo.memberIdx}, #{vo.photoIdx}, #{vo.content})
+	    INSERT INTO photoReply (memberIdx, photoIdx, content)
+	    VALUES (#{vo.memberIdx}, #{vo.photoIdx}, #{vo.content})
+		</insert>
+    
+    <insert id="addPhotoLike">
+        INSERT INTO photoLikes (photoIdx, mid) VALUES (#{idx}, #{mid})
     </insert>
     
     <update id="setPhotoReadNumPlus">
-      UPDATE photo SET readNum = readNum + 1 WHERE idx = #{idx}
+        UPDATE photo SET readNum = readNum + 1 WHERE idx = #{idx}
     </update>
     
-    <update id="setPhotoGoodCheck">
-      UPDATE photo SET goodCount = goodCount + 1 WHERE idx = #{idx}
+    <update id="increasePhotoLikeCount">
+        UPDATE photo SET goodCount = goodCount + 1 WHERE idx = #{idx}
+    </update>
+    
+    <update id="decreasePhotoLikeCount">
+        UPDATE photo SET goodCount = goodCount - 1 WHERE idx = #{idx}
     </update>
     
     <delete id="setPhotoReplyDelete">
-      DELETE FROM photoReply WHERE idx = #{idx}
+        DELETE FROM photoReply WHERE idx = #{idx}
+    </delete>
+    
+    <delete id="removePhotoLike">
+        DELETE FROM photoLikes WHERE photoIdx = #{idx} AND mid = #{mid}
     </delete>
     
 </mapper>

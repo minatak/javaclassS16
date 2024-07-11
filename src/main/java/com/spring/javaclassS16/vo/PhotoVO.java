@@ -19,6 +19,7 @@ public class PhotoVO {
   private int readNum;            // 조회수
   
   private int replyCnt;            // 댓글 수
+  private String mid;            // 작성자 아이디
 
     
 }
