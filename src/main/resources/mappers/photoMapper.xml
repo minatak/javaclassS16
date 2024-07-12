@@ -63,6 +63,14 @@
 		  select * from photoReply where photoIdx = #{photoIdx} order by idx desc limit 1;
 		</select>
     
+    <select id="getPhotoLikers" parameterType="int" resultType="com.spring.javaclassS16.vo.MemberVO">
+	    SELECT m.idx, m.mid, m.name, m.photo
+	    FROM member m
+	    JOIN photoLikes pl ON m.idx = pl.memberIdx
+	    WHERE pl.photoIdx = #{photoIdx}
+	    ORDER BY pl.idx DESC
+		</select>
+    
     
     <insert id="setPhotoInput" parameterType="com.spring.javaclassS16.vo.PhotoVO">
         INSERT INTO photo (memberIdx, name, familyCode, part, title, description, content, photoCount, thumbnail, pDate)

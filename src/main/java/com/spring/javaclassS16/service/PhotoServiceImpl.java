@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -224,6 +225,11 @@ public class PhotoServiceImpl implements PhotoService {
 	@Override
 	public PhotoVO getPreNexSearch(int idx, String str) {
 		return photoDAO.getPreNexSearch(idx, str);
+	}
+
+	@Override
+	public List<MemberVO> getPhotoLikers(int idx) {
+		return photoDAO.getPhotoLikers(idx);
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.spring.javaclassS16.dao;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import com.spring.javaclassS16.vo.MemberVO;
 import com.spring.javaclassS16.vo.PhotoReplyVO;
@@ -45,5 +47,7 @@ public interface PhotoDAO {
 	public void setReplyOrderUpdate(@Param("photoIdx") int photoIdx, @Param("re_order") int re_order);
 
 	public PhotoVO getPreNexSearch(@Param("idx") int idx, @Param("str") String str);
+
+	public List<MemberVO> getPhotoLikers(int idx);
   
 }

@@ -71,42 +71,45 @@ public class PhotoController {
     // 사진 보기 처리
     @RequestMapping(value = "/photoContent", method = RequestMethod.GET)
     public String photoContent(@RequestParam int idx, Model model, HttpSession session,
-    		@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-  			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-    	PhotoVO vo = photoService.getPhotoContent(idx);
-      
-      MemberVO mVo = photoService.getWriterPhoto(vo.getMemberIdx());
-      String photo = mVo.getPhoto();
-      int memberIdx = (int) session.getAttribute("sIdx");
-      boolean isLiked = photoService.getPhotoLike(idx, memberIdx);
-      
-      int replyCnt = photoService.getPhotoReplyCount(idx);
-      
-      PhotoReplyVO latestReply = photoService.getLatestReply(idx);
-
-      vo.setMid(mVo.getMid());
-      
-      model.addAttribute("isLiked", isLiked);
-      
-      model.addAttribute("vo", vo);
-      model.addAttribute("photo", photo);
-      model.addAttribute("replyCnt", replyCnt);
-      model.addAttribute("latestReply", latestReply);
-      
-      model.addAttribute("pag", pag);
-  		model.addAttribute("pageSize", pageSize);
-      
-      // 이전글/다음글 가져오기
-  		PhotoVO preVo = photoService.getPreNexSearch(idx, "preVo");
-  		PhotoVO nextVo = photoService.getPreNexSearch(idx, "nextVo");
-  		model.addAttribute("preVo", preVo);
-  		model.addAttribute("nextVo", nextVo);
-  		
-  		// 댓글(대댓글) 추가 입력처리
-  		List<PhotoReplyVO> replyVos = photoService.getPhotoReply(idx);
-  		model.addAttribute("replyVos", replyVos);
-  		
-      return "photo/photoContent";
+            @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+            @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+	    PhotoVO vo = photoService.getPhotoContent(idx);
+	    
+	    MemberVO mVo = photoService.getWriterPhoto(vo.getMemberIdx());
+	    String photo = mVo.getPhoto();
+	    int memberIdx = (int) session.getAttribute("sIdx");
+	    boolean isLiked = photoService.getPhotoLike(idx, memberIdx);
+	    
+	    int replyCnt = photoService.getPhotoReplyCount(idx);
+	    
+	    PhotoReplyVO latestReply = photoService.getLatestReply(idx);
+	    vo.setMid(mVo.getMid());
+	    
+	    model.addAttribute("isLiked", isLiked);
+	    
+	    model.addAttribute("vo", vo);
+	    model.addAttribute("photo", photo);
+	    model.addAttribute("replyCnt", replyCnt);
+	    model.addAttribute("latestReply", latestReply);
+	    
+	    model.addAttribute("pag", pag);
+	    model.addAttribute("pageSize", pageSize);
+	    
+	    // 이전글/다음글 가져오기
+	    PhotoVO preVo = photoService.getPreNexSearch(idx, "preVo");
+	    PhotoVO nextVo = photoService.getPreNexSearch(idx, "nextVo");
+	    model.addAttribute("preVo", preVo);
+	    model.addAttribute("nextVo", nextVo);
+	    
+	    // 댓글(대댓글) 가져오기
+	    List<PhotoReplyVO> replyVos = photoService.getPhotoReply(idx);
+	    model.addAttribute("replyVos", replyVos);
+	    
+	    // 좋아요 누른 사람들 가져오기
+	    List<MemberVO> likers = photoService.getPhotoLikers(idx);
+	    model.addAttribute("likers", likers);
+	    
+	    return "photo/photoContent";
     }
 
     @ResponseBody
@@ -148,7 +151,9 @@ public class PhotoController {
   	// 부모댓글 입력처리(원본글에 대한 댓글)
   	@ResponseBody
   	@RequestMapping(value = "/photoReplyInput", method = RequestMethod.POST)
-  	public String photoReplyInputPost(PhotoReplyVO replyVO) {
+  	public String photoReplyInputPost(PhotoReplyVO replyVO, HttpSession session) {
+  		String name = (String) session.getAttribute("sName");
+  		
   		// 부모댓글의 경우는 re_step=0, re_order=1로 처리.(단, 원본글의 첫번째 부모댓글은 re_order=1이지만, 2번이상은 마지막부모댓글의 re_order보다 +1처리 시켜준다.
   		PhotoReplyVO replyParentVO = photoService.getPhotoParentReplyCheck(replyVO.getPhotoIdx());
   		
@@ -159,6 +164,8 @@ public class PhotoController {
   			replyVO.setRe_order(replyParentVO.getRe_order() + 1);
   		}
   		replyVO.setRe_step(0);
+  		
+  		replyVO.setName(name);
   		
   		int res = photoService.setPhotoReplyInput(replyVO);
   		

@@ -318,7 +318,6 @@ public class MemberController {
 			session.setAttribute("sIdx", vo.getIdx());
 			
 			int age = memberService.calculateAge(vo.getBirthday());
-			System.out.println("age : " + age);
 			session.setAttribute("sAge", age);
 			
 			// 2.쿠키 저장/삭제

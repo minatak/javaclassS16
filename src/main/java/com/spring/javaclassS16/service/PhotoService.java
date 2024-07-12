@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface PhotoService {
     
@@ -42,5 +43,7 @@ public interface PhotoService {
 	public void setReplyOrderUpdate(int photoIdx, int re_order);
 
 	public PhotoVO getPreNexSearch(int idx, String str);
+
+	public List<MemberVO> getPhotoLikers(int idx);
   
 }
