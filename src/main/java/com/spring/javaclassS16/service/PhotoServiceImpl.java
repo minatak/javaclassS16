@@ -135,7 +135,7 @@ public class PhotoServiceImpl implements PhotoService {
         e.printStackTrace();
         return null;
     }
-}
+  }
 
   @Override
   public ArrayList<PhotoReplyVO> getPhotoReply(int idx) {
@@ -144,23 +144,18 @@ public class PhotoServiceImpl implements PhotoService {
 
   @Override
   public String togglePhotoLike(int idx, HttpSession session) {
-      String mid = (String) session.getAttribute("sMid");
+      int memberIdx = (int) session.getAttribute("sIdx");
 
-      boolean liked = photoDAO.checkPhotoLike(idx, mid);
+      boolean liked = photoDAO.getPhotoLike(idx, memberIdx);
       if (liked) {
-          photoDAO.removePhotoLike(idx, mid);
+          photoDAO.removePhotoLike(idx, memberIdx);
           photoDAO.decreasePhotoLikeCount(idx);
           return "unliked";
       } else {
-          photoDAO.addPhotoLike(idx, mid);
+          photoDAO.addPhotoLike(idx, memberIdx);
           photoDAO.increasePhotoLikeCount(idx);
           return "liked";
       }
-  }
-
-  @Override
-  public String setPhotoReplyInput(PhotoReplyVO vo) {
-    return photoDAO.setPhotoReplyInput(vo) == 1 ? "1" : "0";
   }
 
   @Override
@@ -197,13 +192,38 @@ public class PhotoServiceImpl implements PhotoService {
 	}
 
 	 @Override
-   public boolean checkPhotoLike(int idx, String mid) {
-     return photoDAO.checkPhotoLike(idx, mid);
+   public boolean getPhotoLike(int idx, int memberIdx) {
+     return photoDAO.getPhotoLike(idx, memberIdx);
    }
 
 	@Override
 	public int getPhotoReplyCount(int idx) {
 		return photoDAO.getPhotoReplyCount(idx);
+	}
+
+	@Override
+	public PhotoReplyVO getLatestReply(int idx) {
+		return photoDAO.getLatestReply(idx);
+	}
+
+	@Override
+	public PhotoReplyVO getPhotoParentReplyCheck(int photoIdx) {
+		return photoDAO.getPhotoParentReplyCheck(photoIdx);
+	}
+
+	@Override
+	public int setPhotoReplyInput(PhotoReplyVO replyVO) {
+		return photoDAO.setPhotoReplyInput(replyVO);
+	}
+
+	@Override
+	public void setReplyOrderUpdate(int photoIdx, int re_order) {
+		photoDAO.setReplyOrderUpdate(photoIdx, re_order);
+	}
+
+	@Override
+	public PhotoVO getPreNexSearch(int idx, String str) {
+		return photoDAO.getPreNexSearch(idx, str);
 	}
 
 }

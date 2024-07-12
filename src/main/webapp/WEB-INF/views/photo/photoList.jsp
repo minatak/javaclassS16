@@ -116,7 +116,18 @@
       color: white;
       font-size: 20px;
     }
+    .search-bar, .title-search {
+	    display: flex;
+	    align-items: center;
+	  }
+	  #titleSearch {
+	    margin-right: 10px;
+	    padding: 8px;
+	    border: 1px solid #dbdbdb;
+	    border-radius: 0px;
+	  }
     .searchContainer {
+    	/* max-width: 600px; */
 		  display: flex;
 		  justify-content: space-between;
 		  align-items: center;
@@ -148,89 +159,92 @@
     	location.href = "${ctp}/photo/photoList?choice="+choice;
     }
     
-    
-    // 무한 스크롤 구현(aJax처리)
-    let lastScroll = 0;
     let curPage = 1;
-    
-    $(document).scroll(function(){
-    	let currentScroll = $(this).scrollTop();			// 스크롤바 위쪽시작 위치, 처음은 0이다.
-    	let documentHeight = $(document).height();		// 화면에 표시되는 전체 문서의 높이
-    	let nowHeight = $(this).scrollTop() + $(window).height();	// 현재 화면상단 + 현재 화면높이
-    	
-    	// 스크롤이 아래로 내려갔을때 이벤트 처리..
-    	if(currentScroll > lastScroll) {
-    		if(documentHeight < (nowHeight + (documentHeight*0.1))) {
-    			console.log("다음페이지 가져오기");
-    			curPage++;
-    			//getList(curPage);
-    			$.ajax({
-  	    		url  : "photo/photoPaging",
-  	    		type : "post",
-  	    		data : {pag : curPage},
-  	    		success:function(res) {
-  	    			$("#list-wrap").append(res);
-  	    		}
-  	    	});
-    		}
-    	}
-    	lastScroll = currentScroll;
+    let loading = false;
+    let hasMore = true;
+
+    $(document).ready(function() {
+        curPage = 1;
+        loading = false;
+        hasMore = true;
     });
-    
-    // 리스트 불러오기 함수(ajax처리)
-    function getList(curPage) {
-    	$.ajax({
-    		url  : "photo/PhotoGallery",
-    		type : "post",
-    		data : {pag : curPage},
-    		success:function(res) {
-    			$("#list-wrap").append(res);
-    		}
-    	});
+
+    function loadMorePhotos() {
+        if (loading || !hasMore) return;
+        loading = true;
+        $.ajax({
+            url: "${ctp}/photo/photoPaging",
+            type: "post",
+            data: {pag: curPage, choice: $("#choice").val()},
+            success: function(res) {
+                let $res = $(res);
+                if ($res.find('.card').length > 0) {
+                    $("#list-wrap").append($res.find('.card'));
+                    curPage++;
+                    hasMore = $res.find('#hasMore').val() === 'true';
+                } else {
+                    hasMore = false;
+                }
+                loading = false;
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX 요청 실패:", error);
+                loading = false;
+            }
+        });
     }
+
+    $(window).on('scroll', function() {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+            loadMorePhotos();
+        }
+    });
+
   </script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
 <div class="photoContainer">
-  <div class="top-bar">
-    <div style="display: flex; align-items: center; gap: 20px;">
-      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
-      <h2>앨범</h2>
-    </div>
-  </div>
-  <hr/>
-  <div class="searchContainer">
-	  <div class="search-bar">
-	    <%-- <select name="part" id="part">
-	      <option value="전체" ${part == '전체' ? 'selected' : ''}>전체</option>
-	      <option value="풍경" ${part == '풍경' ? 'selected' : ''}>풍경</option>
-	      <option value="인물" ${part == '인물' ? 'selected' : ''}>인물</option>
-	      <option value="음식" ${part == '음식' ? 'selected' : ''}>음식</option>
-	      <option value="여행" ${part == '여행' ? 'selected' : ''}>여행</option>
-	      <option value="학습" ${part == '학습' ? 'selected' : ''}>학습</option>
-	      <option value="사물" ${part == '사물' ? 'selected' : ''}>사물</option>
-	      <option value="기타" ${part == '기타' ? 'selected' : ''}>기타</option>
-	    </select> --%>
-	    <select name="choice" id="choice" onchange="photoSearch()">
-	      <option value="최신순" ${choice == '최신순' ? 'selected' : ''}>최신순</option>
-	      <option value="추천순" ${choice == '추천순' ? 'selected' : ''}>추천순</option>
-	      <option value="조회순" ${choice == '조회순' ? 'selected' : ''}>조회순</option>
-	      <option value="댓글순" ${choice == '댓글순' ? 'selected' : ''}>댓글순</option>
-	    </select>
-	    <!-- <button onclick="photoSearch()" class="btn ml-2" >적용</button> -->
-	  </div>		
-	  <div class="title-search">
-      <input type="text" name="titleSearch" id="titleSearch" placeholder="사진의 해시태그를 검색하세요"/>
-	    <button onclick="titleSearch()" class="btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+	<div class="searchItems">
+	  <div class="top-bar">
+	    <div style="display: flex; align-items: center; gap: 20px;">
+	      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
+	      <h2>앨범</h2>
+	    </div>
 	  </div>
-	  <div class="action-buttons">
-	    <button onclick="location.href='${ctp}/photo/photoInput';" class="btn">업로드</button>
-	    <button onclick="location.href='${ctp}/photo/photoSingle';" class="btn">싱글뷰</button>
-	  </div>
+	  <hr/>
+	  <div class="searchContainer">
+		  <div class="search-bar">
+		    <%-- <select name="part" id="part">
+		      <option value="전체" ${part == '전체' ? 'selected' : ''}>전체</option>
+		      <option value="풍경" ${part == '풍경' ? 'selected' : ''}>풍경</option>
+		      <option value="인물" ${part == '인물' ? 'selected' : ''}>인물</option>
+		      <option value="음식" ${part == '음식' ? 'selected' : ''}>음식</option>
+		      <option value="여행" ${part == '여행' ? 'selected' : ''}>여행</option>
+		      <option value="학습" ${part == '학습' ? 'selected' : ''}>학습</option>
+		      <option value="사물" ${part == '사물' ? 'selected' : ''}>사물</option>
+		      <option value="기타" ${part == '기타' ? 'selected' : ''}>기타</option>
+		    </select> --%>
+		    <select name="choice" id="choice" onchange="photoSearch()">
+		      <option value="최신순" ${choice == '최신순' ? 'selected' : ''}>최신순</option>
+		      <option value="추천순" ${choice == '추천순' ? 'selected' : ''}>추천순</option>
+		      <option value="조회순" ${choice == '조회순' ? 'selected' : ''}>조회순</option>
+		      <option value="댓글순" ${choice == '댓글순' ? 'selected' : ''}>댓글순</option>
+		      <option value="오래된순" ${choice == '오래된순' ? 'selected' : ''}>오래된순</option>
+		    </select>
+		    <!-- <button onclick="photoSearch()" class="btn ml-2" >적용</button> -->
+		  </div>		
+		  <!-- <div class="title-search">
+	      <input type="text" name="titleSearch" id="titleSearch" placeholder="사진의 해시태그를 검색하세요"/>
+		    <button onclick="titleSearch()" class="btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+		  </div> -->
+		  <div class="action-buttons">
+		    <button onclick="location.href='${ctp}/photo/photoInput';" class="btn">업로드</button>
+		    <button onclick="location.href='${ctp}/photo/photoList';" class="btn">내 업로드 보기</button>
+		  </div>
+		</div>
 	</div>
-
 
   <div class="grid" id="list-wrap">
     <c:forEach var="vo" items="${vos}" varStatus="st">

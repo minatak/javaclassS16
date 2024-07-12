@@ -1,20 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
-  <c:forEach var="vo" items="${vos}" varStatus="st">
-    <div class="card mb-5" style="width:220px;">
-	    <div class="card-body m-0 p-2 text-center">
-	      <a href="photo/photoContent?idx=${vo.idx}">
-	        <img src="${ctp}/photo/${vo.thumbnail}" width="200px" height="150px" title="${vo.title}" class="m-0" />
-	      </a>
-	    </div> 
-	    <div class="card-footer">
-	      <div class="row text-center" style="font-size:11px">
-	        <div class="col p-0"><i class="fa-regular fa-pen-to-square" title="댓글수"></i> ${vo.replyCnt}</div>
-	        <div class="col p-0"><i class="fa-regular fa-face-grin-hearts" title="좋아요"></i> ${vo.goodCount}</div>
-	        <div class="col p-0"><i class="fa-regular fa-eye" title="조회수"></i> ${vo.readNum}</div>
-	        <div class="col p-0"><i class="fa-solid fa-layer-group" title="사진수"></i> ${vo.photoCount}</div>
-	      </div>
-	    </div>
-	  </div>
-  </c:forEach>
+
+<c:forEach var="vo" items="${vos}" varStatus="st">
+<div class="card">
+  <a href="${ctp}/photo/photoContent?idx=${vo.idx}">
+    <img src="${ctp}/thumbnail/${vo.thumbnail}" alt="${vo.title}" />
+    <c:if test="${vo.photoCount > 1}">
+      <div class="multiple-photos">
+        <i class="fas fa-clone"></i>
+      </div>
+    </c:if>
+    <div class="card-overlay">
+      <div class="card-stats">
+        <div class="card-stat"><i class="fas fa-comment"></i> ${vo.replyCnt}</div>
+        <div class="card-stat"><i class="fas fa-heart"></i> ${vo.goodCount}</div>
+      </div>
+    </div>
+  </a>
+</div>
+</c:forEach>
+<input type="hidden" id="hasMore" value="${hasMore}"/>

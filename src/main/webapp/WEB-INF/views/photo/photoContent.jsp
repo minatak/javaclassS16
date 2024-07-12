@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
   <title>자세히 보기 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
-  <style>
+   <style>
     body {
       font-family: 'pretendard' !important;
       background-color: #fafafa;
@@ -112,6 +112,12 @@
       color: #262626;
       cursor: pointer;
     }
+    .post-likes {
+      padding: 0 16px;
+      margin-bottom: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
     .description, .comments-section {
       padding: 0 16px;
     }
@@ -143,14 +149,14 @@
       cursor: default;
     }
     .view-all-comments {
-      padding: 18px;
+      padding-left: 18px;
       color: #8e8e8e;
       font-size: 14px;
       margin-bottom: 8px;
       cursor: pointer;
     }
     .modal-content {
-      border-radius: 0;
+      border-radius: 12px;
       border: none;
     }
     .modal-header {
@@ -199,6 +205,63 @@
       border-left: 2px solid #efefef;
       padding-left: 10px;
     }
+    .latest-comment {
+      padding: 1px 16px;
+    }
+    .comment-username {
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .comment-content {
+      word-break: break-word;
+    }
+    .comment-time {
+      color: #8e8e8e;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    .navigation-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.3);
+      color: white;
+      padding: 10px;
+      text-decoration: none;
+      font-size: 18px;
+    }
+    .prev-btn {
+      left: 10px;
+    }
+    .next-btn {
+      right: 10px;
+    }
+    .post-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #262626;
+    }
+    .swal2-confirm {
+      background-color: white !important;
+      color: black !important;
+      border-radius: 0px !important;
+      box-shadow: none !important;
+      font-weight: bold !important;
+      font-size: 18px !important;
+      margin: 0 !important;
+    }
+    .custom-swal-popup {
+      width: 350px !important;
+      padding-top: 20px !important;
+      border-radius: 0px !important;
+    }
+    .swal2-confirm:hover {
+      background-color: none !important;
+    }
+		 
+		    
   </style>
   <script>
     'use strict';
@@ -213,6 +276,28 @@
         document.querySelector('.next').style.display = 'none';
       }
     });
+    
+    function showAlert(message, callback) {
+  	  Swal.fire({
+  	    html: message,
+  	    confirmButtonText: '확인',
+  	    customClass: {
+  	      confirmButton: 'swal2-confirm',
+  	      popup: 'custom-swal-popup',
+  	      htmlContainer: 'custom-swal-text'
+  	    },
+  	    scrollbarPadding: false,
+  	    allowOutsideClick: false,
+  	    heightAuto: false,
+  	    didOpen: () => {
+  	      document.body.style.paddingRight = '0px';
+  	    }
+  	  }).then((result) => {
+  	    if (result.isConfirmed && callback) {
+  	      callback();
+  	    }
+  	  });
+  	}
     
     let replyCnt = ${replyCnt};
     let commentsVisible = false;
@@ -249,7 +334,7 @@
     function replyCheck() {
   	  let content = $("#content").val();
   	  if(content.trim() == "") {
-  	    alert("댓글을 입력하세요");
+  	    showAlert("댓글을 입력하세요");
   	    return false;
   	  }
   	  let query = {
@@ -263,14 +348,15 @@
   	    type : "post",
   	    data : query,
   	    success:function(res) {
-	    	 if(res != "0") {
-	            alert("댓글이 입력되었습니다.");
-	            location.reload();
-	          }
-	          else alert("댓글 입력 실패~~");
-	        },
+		    	if(res != "0") {
+		          showAlert("댓글이 입력되었습니다.", function() {
+		            location.reload();
+		          });
+		        }
+		        else showAlert("댓글 입력에 실패했어요");
+		      },
 	        error : function() {
-	          alert("전송 오류!");
+	          showAlert("전송 오류!");
 	        }
 	      });
   	}
@@ -285,13 +371,14 @@
         data : {idx : idx},
         success:function(res) {
           if(res != "0") {
-            alert("댓글이 삭제되었습니다.");
-            location.reload();
+            showAlert("댓글이 삭제되었습니다.", function() {
+	            location.reload();
+	          });
           }
-          else alert("삭제 실패~~");
+          else showAlert("댓글 삭제에 실패했어요");
         },
         error : function() {
-          alert("전송 오류!");
+          showAlert("전송 오류!");
         }
       });
     }
@@ -304,14 +391,16 @@
         success: function(res) {
           if(res === "liked") {
             $("#likeButton").removeClass("far").addClass("fas");
+            location.reload();
           } else if(res === "unliked") {
             $("#likeButton").removeClass("fas").addClass("far");
+            location.reload();
           } else {
-            alert("좋아요 처리 중 오류가 발생했습니다.");
+            showAlert("좋아요 처리 중 오류가 발생했습니다.");
           }
         },
         error: function() {
-          alert("서버 통신 오류");
+          showAlert("서버 통신 오류");
         }
       });
     }
@@ -364,6 +453,66 @@
     	    viewAllCommentsBtn.textContent = `댓글 ${replyCnt}개 모두 보기`;
     	  }
     	}
+    
+    
+ 	// 처음에는 대댓글 '닫기'버튼은 보여주지 않는다.
+    $(function(){
+    	$(".replyCloseBtn").hide();
+    });
+    
+    // 대댓글 입력버튼 클릭시 입력박스 보여주기
+    function replyShow(idx) {
+    	$("#replyShowBtn"+idx).hide();
+    	$("#replyCloseBtn"+idx).show();
+    	$("#replyDemo"+idx).slideDown(100);
+    }
+    
+    // 대댓글 박스 감추기
+    function replyClose(idx) {
+    	$("#replyShowBtn"+idx).show();
+    	$("#replyCloseBtn"+idx).hide();
+    	$("#replyDemo"+idx).slideUp(300);
+    }
+    
+    // 대댓글(부모댓글의 답변글)의 입력처리
+    function replyCheckRe(idx, re_step, re_order) {
+    	let content = $("#contentRe"+idx).val();
+    	if(content.trim() == "") {
+    		alert("답변글을 입력하세요");
+    		$("#contentRe"+idx).focus();
+    		return false;
+    	}
+    	
+    	let query = {
+    			boardIdx : ${vo.idx},
+    			re_step : re_step,
+    			re_order : re_order,
+    			mid      : '${sMid}',
+    			name : '${sName}',
+    			content  : content
+    	}
+    	
+    	$.ajax({
+    		url  : "${ctp}/photo/photoReplyInputRe",
+    		type : "post",
+    		data : query,
+    		success:function(res) {
+    			if(res != "0") {
+    				showAlert("댓글이 입력되었습니다.", function() {
+	            location.reload();
+	          });
+    			}
+    			else alert("답변글 입력 실패~~");
+    		},
+    		error : function() {
+    			alert("전송오류!");
+    		}
+    	});
+    }
+    
+    function showLikesModal() {
+      $('#likesModal').modal('show');
+    }
 	</script>
 </head>
 <body>
@@ -371,8 +520,11 @@
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
 <p><br/></p>
 <div class="container">
-  <a href="${ctp}/photo/photoList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+  
+  <a href="${ctp}/photo/photoList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
+  <%-- <h2 class="post-title">${vo.title}</h2> --%>
   <div class="contentContainer">
+  
     <div class="header">
       <img src="${ctp}/member/${photo}" alt="User Avatar" class="user-avatar">
       <span class="user-name">${vo.name}</span>
@@ -405,10 +557,15 @@
       </c:forEach>
     </div>
     
+    
     <div class="interaction-bar">
       <i id="likeButton" class="interaction-icon fa-heart ${isLiked ? 'fas' : 'far'}" onclick="toggleLike()"></i>
       <i class="interaction-icon fa-regular fa-comment" data-bs-toggle="modal" data-bs-target="#commentsModal"></i>
       <i class="interaction-icon fa-solid fa-arrow-down" onclick="photoDown()"></i>
+    </div>
+    
+    <div class="post-likes" onclick="showLikesModal()">
+      좋아요 ${vo.goodCount}개
     </div>
     
     <div class="description">
@@ -416,16 +573,31 @@
     </div>
     
     <div class="comments-container">
-      <div class="view-all-comments" data-bs-toggle="modal" data-bs-target="#commentsModal">
-        댓글 ${replyCnt}개 모두 보기
-      </div>
-      
-      <div class="add-comment">
-        <input type="text" id="content" class="comment-input" placeholder="댓글 달기...">
-        <button class="post-comment-btn" onclick="replyCheck()">게시</button>
-      </div>
-    </div>
-    
+		  <!-- 최신 댓글 1개 표시 -->
+		  <c:if test="${!empty latestReply}">
+		    <div class="latest-comment">
+		      <span class="comment-username">${latestReply.name}</span>
+		      <span class="comment-content">${fn:replace(latestReply.content, newLine, "<br/>")}</span>
+		      <div class="comment-time">
+		        ${fn:substring(latestReply.prDate, 0, 10)}
+		        <c:if test="${sMid == latestReply.mid}">
+		          <a href="javascript:replyDelete(${latestReply.idx})" title="댓글삭제">삭제</a>
+		        </c:if>
+		      </div>
+		    </div>
+		  </c:if>
+		  <c:if test="${replyCnt > 1}">
+			  <div class="view-all-comments" data-bs-toggle="modal" data-bs-target="#commentsModal">
+			    댓글 ${replyCnt}개 모두 보기
+			  </div>
+		  </c:if>
+		  
+		  <div class="add-comment">
+		    <input type="text" id="content" class="comment-input" placeholder="댓글 달기...">
+		    <button class="post-comment-btn" onclick="replyCheck()">게시</button>
+		  </div>
+		</div>
+		
     <!-- 댓글 모달 -->
     <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -448,7 +620,7 @@
                 </div>
               </div>
               <!-- 대댓글 표시 -->
-              <%-- <c:forEach var="childReply" items="${childReplies}">
+              <c:forEach var="childReply" items="${childReplies}">
                 <c:if test="${childReply.parentIdx == replyVo.idx}">
                   <div class="modal-comment reply-comment">
                     <span class="modal-comment-username">${childReply.mid}</span>
@@ -461,12 +633,41 @@
                     </div>
                   </div>
                 </c:if>
-              </c:forEach> --%>
+              </c:forEach>  
             </c:forEach>
           </div>
         </div>
       </div>
     </div>
+    
+    
+		<!-- 좋아요 모달 -->
+		<div class="modal fade" id="likesModal" tabindex="-1" aria-labelledby="likesModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="likesModalLabel">좋아요</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <!-- 여기에 좋아요 누른 사람들의 목록을 추가하세요 -->
+		        <c:forEach var="liker" items="${likers}">
+		          <div class="modal-comment">
+		            <span class="modal-comment-username">${liker.name}</span>
+		          </div>
+		        </c:forEach>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+    
+    <!-- 이전/다음 게시물 버튼 -->
+		<c:if test="${!empty preVo.title}">
+		  <a href="${ctp}/photo/photoContent?idx=${vo.idx - 1}" class="navigation-btn prev-btn">&lt;</a>
+		</c:if>
+		<c:if test="${!empty nextVo.title}">
+		  <a href="${ctp}/photo/photoContent?idx=${nextVo.idx}" class="navigation-btn next-btn">&gt;</a>
+		</c:if>
     
   </div>
 </div>

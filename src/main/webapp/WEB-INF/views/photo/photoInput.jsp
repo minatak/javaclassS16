@@ -79,28 +79,62 @@
 	  }
 	  .explain {
 	    color: #aeaeae;
-	  	
 	  }
+		.swal2-confirm {
+      background-color: white !important;
+      color: black !important;
+      border-radius: 0px !important;
+      box-shadow: none !important;
+      font-weight: bold !important;
+      font-size: 18px !important;
+      margin: 0 !important;
+    }
+    .custom-swal-popup {
+      width: 350px !important;
+      padding-top: 20px !important;
+      border-radius: 0px !important;
+    }
+    .swal2-confirm:hover {
+      background-color: none !important;
+    }
 	</style>
   <script>
     'use strict';
+    
+    function showAlert(message) {
+      Swal.fire({
+        html: message,
+        confirmButtonText: '확인',
+        customClass: {
+          confirmButton: 'swal2-confirm',
+          popup: 'custom-swal-popup',
+          htmlContainer: 'custom-swal-text'
+        },
+        scrollbarPadding: false,
+        allowOutsideClick: false,
+        heightAuto: false,
+        didOpen: () => {
+          document.body.style.paddingRight = '0px';
+        }
+      });
+    }
     
     function fCheck() {
         let title = document.getElementById("title").value;
         let content = CKEDITOR.instances.content.getData();
         
         if(title.trim() == "") {
-            alert("제목을 입력해주세요");
+            showAlert("제목을 입력해주세요");
             return false;
         }
         if(content.trim() == "") {
-            alert("사진을 업로드해주세요");
+            showAlert("사진을 업로드해주세요");
             return false;
         }
         
         let textContent = content.replace(/<p>\s*<img [^>]+>\s*<\/p>/g, "").replace(/<[^>]+>/g, "").trim();
         if (textContent.length > 0) {
-            alert("사진 업로드 칸에는 텍스트를 입력할 수 없습니다. 이미지만 업로드해주세요.");
+            showAlert("사진 업로드 칸에는 텍스트를 입력할 수 없습니다.");
             return false;
         }
         
@@ -119,7 +153,7 @@
         }
         
         if (invalidFiles.length > 0) {
-            alert("지원되지 않는 파일 형식이 포함되어있어요. JPG, PNG, GIF 파일만 업로드 가능해요!");
+            showAlert("지원되지 않는 파일 형식이 포함되어있어요. JPG, PNG, GIF 파일만 업로드 가능해요!");
             return false;
         }
         
@@ -141,7 +175,7 @@
     <strong>Tip:</strong> JPG, PNG, GIF 형식의 이미지를 공유해보세요.
   </div>
   <form name="myform" method="post">
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label for="part">카테고리</label>
       <select name="part" id="part" class="form-control">
         <option value="풍경" selected>풍경</option>
@@ -152,43 +186,44 @@
         <option value="사물">사물</option>
         <option value="기타">기타</option>
       </select>
-    </div>
+    </div> -->
     <div class="form-group">
       <label for="title">제목</label>
       <input type="text" name="title" id="title" class="form-control" placeholder="당신의 순간에 제목을 붙여주세요"/>
     </div>
-    <div class="form-group">
-      <label for="description">설명 <span class="explain">선택사항</span></label>
-      <textarea name="description" id="description" rows="3" class="form-control" placeholder="이 순간에 대해 더 자세히 알려주세요"></textarea>
-    </div>
+    
     <div class="form-group">
       <label for="content">사진 업로드 <span class="explain">파일의 사진을 끌어와주세요! 여러장의 사진 업로드도 가능합니다. </span></label>
       <textarea name="content" id="content" rows="10" class="form-control" required></textarea>
     </div>
     <script>
-					CKEDITOR.replace("content", {
-				    height: 400,
-				    filebrowserUploadUrl: "${ctp}/photo/imageUpload",
-				    uploadUrl: "${ctp}/photo/imageUpload",
-				    removePlugins: 'elementspath',
-				    resize_enabled: false,
-				    extraPlugins: 'uploadimage',
-				    toolbar: [
-				        { name: 'insert', items: [ 'Image' ] },
-				        { name: 'tools', items: [ 'Maximize' ] }
-				    ],
-				    removeButtons: 'PasteFromWord'
-					});
-					 </script>
-					    <div class="form-group">
-					      <button type="button" onclick="fCheck()" class="btn btn-upload">공유하기</button>
-					    </div>
-					    <div class="form-group">
-					      <button type="button" onclick="location.href='${ctp}/photo/photoList';" class="btn btn-back">돌아가기</button>
-					    </div>
-					    <input type="hidden" name="mid" value="${sMid}" />
-					  </form>
-				</div>
+			CKEDITOR.replace("content", {
+		    height: 400,
+		    filebrowserUploadUrl: "${ctp}/photo/imageUpload",
+		    uploadUrl: "${ctp}/photo/imageUpload",
+		    removePlugins: 'elementspath',
+		    resize_enabled: false,
+		    extraPlugins: 'uploadimage',
+		    toolbar: [
+		        { name: 'insert', items: [ 'Image' ] },
+		        { name: 'tools', items: [ 'Maximize' ] }
+		    ],
+		    removeButtons: 'PasteFromWord'
+			});
+		</script>
+		<div class="form-group">
+      <label for="description">설명 <span class="explain">선택사항</span></label>
+      <textarea name="description" id="description" rows="3" class="form-control" placeholder="이 순간에 대해 더 자세히 알려주세요"></textarea>
+    </div>
+    <div class="form-group">
+      <button type="button" onclick="fCheck()" class="btn btn-upload">공유하기</button>
+    </div>
+    <div class="form-group">
+      <button type="button" onclick="location.href='${ctp}/photo/photoList';" class="btn btn-back">돌아가기</button>
+    </div>
+    <input type="hidden" name="mid" value="${sMid}" />
+  </form>
+</div>
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>

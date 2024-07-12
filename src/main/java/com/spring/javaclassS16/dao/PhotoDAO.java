@@ -18,17 +18,15 @@ public interface PhotoDAO {
   
   public ArrayList<PhotoReplyVO> getPhotoReply(@Param("idx") int idx);
   
-  public boolean checkPhotoLike(@Param("idx") int idx, @Param("mid") String mid);
+  public boolean getPhotoLike(@Param("idx") int idx, @Param("memberIdx") int memberIdx);
   
-  public void addPhotoLike(@Param("idx") int idx, @Param("mid") String mid);
+  public void addPhotoLike(@Param("idx") int idx, @Param("memberIdx") int memberIdx);
   
-  public void removePhotoLike(@Param("idx") int idx, @Param("mid") String mid);
+  public void removePhotoLike(@Param("idx") int idx, @Param("memberIdx") int memberIdx);
   
   public void increasePhotoLikeCount(@Param("idx") int idx);
   
   public void decreasePhotoLikeCount(@Param("idx") int idx);
-  
-  public int setPhotoReplyInput(@Param("vo") PhotoReplyVO vo);
   
   public int setPhotoReplyDelete(@Param("idx") int idx);
   
@@ -37,5 +35,15 @@ public interface PhotoDAO {
   public MemberVO getWriterPhoto(@Param("idx") int idx);
 
 	public int getPhotoReplyCount(@Param("idx") int idx);
+
+	public PhotoReplyVO getLatestReply(@Param("idx") int idx);
+
+	public PhotoReplyVO getPhotoParentReplyCheck(@Param("photoIdx") int photoIdx);
+
+	public int setPhotoReplyInput(@Param("replyVO") PhotoReplyVO replyVO);
+
+	public void setReplyOrderUpdate(@Param("photoIdx") int photoIdx, @Param("re_order") int re_order);
+
+	public PhotoVO getPreNexSearch(@Param("idx") int idx, @Param("str") String str);
   
 }

@@ -21,8 +21,6 @@ public interface PhotoService {
   
   public String togglePhotoLike(int idx, HttpSession session);
   
-  public String setPhotoReplyInput(PhotoReplyVO vo);
-  
   public String setPhotoReplyDelete(int idx);
   
   public void imageUpload(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) throws Exception;
@@ -31,8 +29,18 @@ public interface PhotoService {
 
   public MemberVO getWriterPhoto(int idx);
   
-  public boolean checkPhotoLike(int idx, String mid);
+  public boolean getPhotoLike(int idx, int memberIdx);
 
 	public int getPhotoReplyCount(int idx);
+
+	public PhotoReplyVO getLatestReply(int idx);
+
+	public PhotoReplyVO getPhotoParentReplyCheck(int photoIdx);
+
+	public int setPhotoReplyInput(PhotoReplyVO replyVO);
+
+	public void setReplyOrderUpdate(int photoIdx, int re_order);
+
+	public PhotoVO getPreNexSearch(int idx, String str);
   
 }

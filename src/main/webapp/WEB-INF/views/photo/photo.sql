@@ -22,6 +22,7 @@ CREATE TABLE photo (
 drop table photo;
 drop table photoReply;
 
+/* 수정함.
 CREATE TABLE photoReply (
 	idx INT NOT NULL AUTO_INCREMENT,       /* 댓글 고유번호 */
 	memberIdx INT NOT NULL,                /* 댓글을 작성한 회원의 고유번호 */
@@ -32,14 +33,34 @@ CREATE TABLE photoReply (
 	FOREIGN KEY (memberIdx) REFERENCES member(idx),
 	FOREIGN KEY (photoIdx) REFERENCES photo(idx)
 );
+*/
+
+/* 댓글 달기 */
+create table photoReply (
+  idx       int not null auto_increment,	/* 댓글 고유번호 */
+  photoIdx  int not null,						/* 원본글(부모글)의 고유번호-외래키로 지정 */
+  re_step   int not null,						/* 레벨(re_step)에 따른 들여쓰기(계층번호): 부모댓글의 re_step는 0이다. 대댓글의 경우는 '부모re_step+1'로 처리한다. */
+  re_order  int not null,						/* 댓글의 순서를 결정한다. 부모댓글을 1번, 대댓글의 경우는 부모댓글보다 큰 대댓글은 re_order+1 처리하고, 자신은 부모댓글의 re_order보다 +1 처리한다. */  
+  mid				varchar(20) not null,		/* 댓글 올린이의 아이디 */
+  name	varchar(20) not null,				/* 댓글 올린이의 이름 */
+  prDate			datetime	default now(),/* 댓글 올린 날짜/시간 */
+  content		text not null,					/* 댓글 내용 */
+  primary key(idx),
+  foreign key(photoIdx) references photo(idx)
+  on update cascade
+  on delete restrict
+);
+desc photoReply;
 
 CREATE TABLE photoLikes (
 	idx INT NOT NULL AUTO_INCREMENT,  /* 좋아요 고유번호 */
 	photoIdx INT NOT NULL,  					/* 좋아요 눌린 사진의 고유번호 */
-	mid VARCHAR(20) NOT NULL, 				/* 좋아요 누른 회원의 아이디 */
+	memberIdx INT NOT NULL, 					/* 좋아요 누른 회원의 idx */
 	PRIMARY KEY (idx),               
-	UNIQUE KEY (photoIdx, mid),        
+	UNIQUE KEY (photoIdx, memberIdx),        
 	FOREIGN KEY (photoIdx) REFERENCES photo(idx),
-	FOREIGN KEY (mid) REFERENCES member(mid)
+	FOREIGN KEY (memberIdx) REFERENCES member(idx)
 );
 
+
+drop table photoLikes;

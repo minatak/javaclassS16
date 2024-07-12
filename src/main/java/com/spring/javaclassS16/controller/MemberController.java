@@ -174,6 +174,7 @@ public class MemberController {
 		session.setAttribute("sMid", vo.getMid());
 		session.setAttribute("sName", vo.getName());
 		session.setAttribute("sPhoto", vo.getPhoto());
+		session.setAttribute("sIdx", vo.getIdx());
 		
 		int age = memberService.calculateAge(vo.getBirthday());
 		session.setAttribute("sAge", age);
@@ -287,6 +288,7 @@ public class MemberController {
 			session.setAttribute("sFamCode", vo.getFamilyCode());
 			session.setAttribute("sPhoto", vo.getPhoto());
 			session.setAttribute("sAge", age);
+			session.setAttribute("sIdx", vo.getIdx());
 			
 			return "redirect:/message/memberLoginOk?name="+ java.net.URLEncoder.encode(vo.getName());
 		}
@@ -313,7 +315,7 @@ public class MemberController {
 			session.setAttribute("sName", vo.getName());
 			session.setAttribute("sFamCode", vo.getFamilyCode());
 			session.setAttribute("sPhoto", vo.getPhoto());
-
+			session.setAttribute("sIdx", vo.getIdx());
 			
 			int age = memberService.calculateAge(vo.getBirthday());
 			System.out.println("age : " + age);
