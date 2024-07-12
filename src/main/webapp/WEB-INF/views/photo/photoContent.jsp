@@ -455,18 +455,16 @@
     	    viewAllCommentsBtn.textContent = `댓글 ${replyCnt}개 모두 보기`;
     	  }
     	}
-    
-    
-    $(function(){
+    document.addEventListener('DOMContentLoaded', function() {
         // 페이지 로드 시 모든 닫기 버튼을 숨깁니다.
-        $(".replyCloseBtn").hide();
-        
+        const closeBtns = document.querySelectorAll('.replyCloseBtn');
+        closeBtns.forEach(btn => btn.style.display = 'none');
+
         const commentsModal = document.getElementById('commentsModal');
-        
+
         if (commentsModal) {
             commentsModal.addEventListener('show.bs.modal', function () {
                 console.log('Modal is about to be shown');
-                // 모달이 표시되기 직전에 setupReplyButtons 호출
                 setupReplyButtons();
             });
         } else {
@@ -491,9 +489,10 @@
 
     function toggleReplyForm(idx) {
         console.log('toggleReplyForm called with idx:', idx);
-        const replyForm = document.querySelector(`#replyDemo${idx}`);
-        const showBtn = document.querySelector(`#replyShowBtn${idx}`);
-        const closeBtn = document.querySelector(`#replyCloseBtn${idx}`);
+
+        const replyForm = document.getElementById(`replyDemo${idx}`);
+        const showBtn = document.getElementById(`replyShowBtn${idx}`);
+        const closeBtn = document.getElementById(`replyCloseBtn${idx}`);
 
         console.log('Elements:', {replyForm, showBtn, closeBtn});
 
@@ -508,11 +507,11 @@
                 replyForm.style.display = "none";
             }
         } else {
-            console.error(`Elements not found for idx: ${idx}`, {
+            console.error(`Elements not found 	for idx: ${idx}`, {
                 replyForm: !!replyForm,
                 showBtn: !!showBtn,
                 closeBtn: !!closeBtn
-            });
+            });	
         }
     }
 
@@ -659,41 +658,40 @@
 		  </div>
 		</div>
 		
-    <!-- 댓글 모달 -->
-		<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-centered">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="commentsModalLabel">댓글</h5>
-		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-		      </div>
-		      <div class="modal-body">
-		        <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
-		          <div class="modal-comment ${replyVo.re_step > 0 ? 'reply-comment' : ''}" id="comment${replyVo.idx}">
-		            <span class="modal-comment-username">${replyVo.name}</span>
-		            <span class="modal-comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</span>
-		            <div class="modal-comment-time">
-		              ${fn:substring(replyVo.prDate, 0, 10)}
-		              <c:if test="${sMid == replyVo.mid}">
-		                <a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제" class="delete-btn">삭제</a>
-		              </c:if>
-		              <c:if test="${replyVo.re_step == 0}">
-		                <input type="button" id="replyShowBtn${replyVo.idx}" class="reply-btn" value="답글"/> 
-		                <a href="javascript:void(0);" id="replyCloseBtn${replyVo.idx}" class="reply-btn replyCloseBtn" style="display:none;">닫기</a>
-		                <!-- 답글 입력 폼 (부모 댓글에만 표시) -->
-		                <div id="replyDemo${replyVo.idx}" class="reply-form" style="display:none;">
-		                  <textarea class="form-control" rows="2" id="contentRe${replyVo.idx}"></textarea>
-		                  <button onclick="submitReply(${replyVo.idx}, ${replyVo.photoIdx}, ${replyVo.re_step}, ${replyVo.re_order})" class="btn btn-primary btn-sm mt-2">답글 작성</button>
-		                </div>
-		              </c:if>
-		            </div>
-		          </div>
-		        </c:forEach>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-
+   <!-- 댓글 모달 -->
+<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="commentsModalLabel">댓글</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
+          <div class="modal-comment ${replyVo.re_step > 0 ? 'reply-comment' : ''}" id="comment${replyVo.idx}">
+            <span class="modal-comment-username">${replyVo.name}</span>
+            <span class="modal-comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</span>
+            <div class="modal-comment-time">
+              ${fn:substring(replyVo.prDate, 0, 10)}
+              <c:if test="${sMid == replyVo.mid}">
+                <a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제" class="delete-btn">삭제</a>
+              </c:if>
+              <c:if test="${replyVo.re_step == 0}">
+                <a href="javascript:void(0);" id="replyShowBtn${replyVo.idx}" class="reply-btn" onclick="toggleReplyForm(${replyVo.idx})">답글</a>
+                <a href="javascript:void(0);" id="replyCloseBtn${replyVo.idx}" class="reply-btn replyCloseBtn" style="display:none;" onclick="toggleReplyForm(${replyVo.idx})">닫기</a>
+                <!-- 답글 입력 폼 (부모 댓글에만 표시) -->
+                <div id="replyDemo${replyVo.idx}" class="reply-form" style="display:none;">
+                  <textarea class="form-control" rows="2" id="contentRe${replyVo.idx}"></textarea>
+                  <button onclick="submitReply(${replyVo.idx}, ${replyVo.photoIdx}, ${replyVo.re_step}, ${replyVo.re_order})" class="btn btn-primary btn-sm mt-2">답글 작성</button>
+                </div>
+              </c:if>
+            </div>
+          </div>
+        </c:forEach>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
