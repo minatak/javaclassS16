@@ -42,7 +42,7 @@ public interface PhotoService {
 
 	public void setReplyOrderUpdate(int photoIdx, int re_order);
 
-	public PhotoVO getPreNexSearch(int idx, String str);
+	public PhotoVO getPreNexSearch(int idx, String familyCode, String str);
 
 	public List<MemberVO> getPhotoLikers(int idx);
   

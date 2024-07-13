@@ -187,10 +187,10 @@
         <option value="기타">기타</option>
       </select>
     </div> -->
-    <div class="form-group">
+   <!--  <div class="form-group">
       <label for="title">제목</label>
       <input type="text" name="title" id="title" class="form-control" placeholder="당신의 순간에 제목을 붙여주세요"/>
-    </div>
+    </div> -->
     
     <div class="form-group">
       <label for="content">사진 업로드 <span class="explain">파일의 사진을 끌어와주세요! 여러장의 사진 업로드도 가능합니다. </span></label>

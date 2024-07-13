@@ -216,16 +216,6 @@
 	  <hr/>
 	  <div class="searchContainer">
 		  <div class="search-bar">
-		    <%-- <select name="part" id="part">
-		      <option value="전체" ${part == '전체' ? 'selected' : ''}>전체</option>
-		      <option value="풍경" ${part == '풍경' ? 'selected' : ''}>풍경</option>
-		      <option value="인물" ${part == '인물' ? 'selected' : ''}>인물</option>
-		      <option value="음식" ${part == '음식' ? 'selected' : ''}>음식</option>
-		      <option value="여행" ${part == '여행' ? 'selected' : ''}>여행</option>
-		      <option value="학습" ${part == '학습' ? 'selected' : ''}>학습</option>
-		      <option value="사물" ${part == '사물' ? 'selected' : ''}>사물</option>
-		      <option value="기타" ${part == '기타' ? 'selected' : ''}>기타</option>
-		    </select> --%>
 		    <select name="choice" id="choice" onchange="photoSearch()">
 		      <option value="최신순" ${choice == '최신순' ? 'selected' : ''}>최신순</option>
 		      <option value="추천순" ${choice == '추천순' ? 'selected' : ''}>추천순</option>
@@ -250,7 +240,7 @@
     <c:forEach var="vo" items="${vos}" varStatus="st">
       <div class="card">
         <a href="${ctp}/photo/photoContent?idx=${vo.idx}">
-          <img src="${ctp}/thumbnail/${vo.thumbnail}" alt="${vo.title}" />
+          <img src="${ctp}/thumbnail/${vo.thumbnail}" />
           <c:if test="${vo.photoCount > 1}">
             <div class="multiple-photos">
               <i class="fas fa-clone"></i>

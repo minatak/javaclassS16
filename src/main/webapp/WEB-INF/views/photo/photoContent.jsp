@@ -161,8 +161,7 @@
     }
     .modal-header {
       border-bottom: 1px solid #efefef;
-      text-align: center;
-      padding: 10px;
+      padding: 10px 15px;
     }
     .modal-title {
       font-weight: 600;
@@ -192,9 +191,37 @@
       font-size: 12px;
       margin-top: 4px;
     }
+    .reply-btn {
+      color: #8e8e8e;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .reply-form {
+      margin-top: 10px;
+    }
+    .reply-form textarea {
+      width: 100%;
+      border: 1px solid #efefef;
+      border-radius: 3px;
+      padding: 5px;
+      resize: none;
+    }
+    .reply-form button {
+      background-color: #0095f6;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 5px;
+    }
     .fa-heart.fas {
       color: #ed4956;
-    }
+    } 
     .delete-btn {
       color: #ed4956;
       cursor: pointer;
@@ -260,7 +287,57 @@
     .swal2-confirm:hover {
       background-color: none !important;
     }
-		 
+		
+		 .contentContainer {
+      position: relative;  /* 이전/다음 버튼의 기준점 */
+    }
+    
+    .navigation-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.3);
+      color: white;
+      padding: 10px;
+      text-decoration: none;
+      font-size: 18px;
+      z-index: 10;  /* 버튼이 콘텐츠 위에 표시되도록 */
+    }
+    .prev-btn {
+      left: 10px;
+    }
+    .next-btn {
+      right: 10px;
+    }
+    
+    .reply-form {
+      display: flex;
+      border-top: 1px solid #efefef;
+      padding: 8px 16px;
+    }
+    .reply-form textarea {
+      flex-grow: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      padding: 8px;
+      background-color: #fafafa;
+      border-radius: 3px;
+      resize: none;
+    }
+    .reply-form button {
+      border: none;
+      background: none;
+      color: #0095f6;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      padding-left: 16px;
+    }
+    .reply-form button:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
 		    
   </style>
   <script>
@@ -301,6 +378,10 @@
   	    }
   	  });
   	}
+    
+    function showLikesModal() {
+    	  $('#likesModal').modal('show');
+    	}
     
     let replyCnt = ${replyCnt};
     let commentsVisible = false;
@@ -385,6 +466,42 @@
       });
     }
     
+    function submitReply(idx, re_step, re_order) {
+      let content = $("#contentRe"+idx).val();
+    	alert("content : ", content)
+    	if(content.trim() == "") {
+    		showAlert("답변글을 입력하세요");
+    		$("#contentRe"+idx).focus();
+    		return false;
+    	}
+    	let query = {
+          photoIdx: ${vo.idx},
+          re_step: re_step,
+          re_order: re_order,
+          mid: '${sMid}',
+          name: '${sName}',
+          content: content
+        };
+
+        $.ajax({
+          url: "${ctp}/photo/photoReplyInputRe",
+          type: "POST",
+          data: query,
+          success: function(res) {
+            if (res !== "0") {
+              showAlert("댓글이 입력되었습니다.", function() {
+                location.reload();
+              });
+            } else {
+              showAlert("답변글 입력 실패~~");
+            }
+          },
+          error: function() {
+            showAlert("전송오류!");
+          }
+        });
+      }
+    
     function toggleLike() {
       $.ajax({
         url: "${ctp}/photo/photoToggleLike",
@@ -455,123 +572,46 @@
     	    viewAllCommentsBtn.textContent = `댓글 ${replyCnt}개 모두 보기`;
     	  }
     	}
-    document.addEventListener('DOMContentLoaded', function() {
-        // 페이지 로드 시 모든 닫기 버튼을 숨깁니다.
-        const closeBtns = document.querySelectorAll('.replyCloseBtn');
-        closeBtns.forEach(btn => btn.style.display = 'none');
+ 
 
-        const commentsModal = document.getElementById('commentsModal');
 
-        if (commentsModal) {
-            commentsModal.addEventListener('show.bs.modal', function () {
-                console.log('Modal is about to be shown');
-                setupReplyButtons();
-            });
-        } else {
-            console.error('Comments modal not found');
-        }
-    });
+    	function replyDelete(idx) {
+    	  if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+    	    $.ajax({
+    	      url: "${ctp}/photo/photoReplyDelete",
+    	      type: "POST",
+    	      data: {idx: idx},
+    	      success: function(res) {
+    	        if (res === "1") {
+    	          showAlert("댓글이 삭제되었습니다.", function() {
+    	            location.reload();
+    	          });
+    	        } else {
+    	          showAlert("댓글 삭제에 실패했습니다.");
+    	        }
+    	      },
+    	      error: function() {
+    	        showAlert("전송오류!");
+    	      }
+    	    });
+    	  }
+    	}
+    	
+    	 function replyShow(idx) {
+	      const replyForm = document.getElementById('replyForm' + idx);
+	      const showBtn = document.getElementById('showReplyBtn' + idx);
+	      const closeBtn = document.getElementById('closeReplyBtn' + idx);
 
-    function setupReplyButtons() {
-        const modalBody = document.querySelector('#commentsModal .modal-body');
-        if (!modalBody) {
-            console.error('Modal body not found');
-            return;
-        }
-
-        modalBody.addEventListener('click', function(e) {
-            if (e.target.id.startsWith('replyShowBtn') || e.target.id.startsWith('replyCloseBtn')) {
-                const idx = e.target.id.replace('replyShowBtn', '').replace('replyCloseBtn', '');
-                toggleReplyForm(idx);
-            }
-        });
-    }
-
-    function toggleReplyForm(idx) {
-        console.log('toggleReplyForm called with idx:', idx);
-
-        const replyForm = document.getElementById(`replyDemo${idx}`);
-        const showBtn = document.getElementById(`replyShowBtn${idx}`);
-        const closeBtn = document.getElementById(`replyCloseBtn${idx}`);
-
-        console.log('Elements:', {replyForm, showBtn, closeBtn});
-
-        if (replyForm && showBtn && closeBtn) {
-            if (window.getComputedStyle(replyForm).display === "none") {
-                showBtn.style.display = "none";
-                closeBtn.style.display = "inline";
-                replyForm.style.display = "block";
-            } else {
-                showBtn.style.display = "inline";
-                closeBtn.style.display = "none";
-                replyForm.style.display = "none";
-            }
-        } else {
-            console.error(`Elements not found 	for idx: ${idx}`, {
-                replyForm: !!replyForm,
-                showBtn: !!showBtn,
-                closeBtn: !!closeBtn
-            });	
-        }
-    }
-
-    
-    function submitReply(parentIdx, photoIdx, re_step, re_order) {
-        const content = $(`#contentRe${parentIdx}`).val();
-        if (content.trim() === '') {
-            alert('댓글 내용을 입력해주세요.');
-            $(`#contentRe${parentIdx}`).focus();
-            return;
-        }
-
-        const data = {
-            photoIdx: photoIdx,
-            re_step: re_step + 1,
-            re_order: re_order,
-            mid: '${sMid}',
-            name: '${sName}',
-            content: content
-        };
-
-        $.ajax({
-            url: "${ctp}/photo/photoReplyInputRe",
-            type: "POST",
-            data: data,
-            success: function(res) {
-                if (res !== "0") {
-                    showAlert("댓글이 입력되었습니다.", function() {
-                        location.reload();
-                    });
-                } else {
-                    alert("답변글 입력 실패~~");
-                }
-            },
-            error: function() {
-                alert("전송오류!");
-            }
-        });
-    }
-
-    function replyDelete(replyIdx) {
-        if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
-            $.ajax({
-                url: `${ctp}/photo/photoReplyDelete/${replyIdx}`,
-                type: "POST",
-                success: function(res) {
-                    if (res === "1") {
-                        showAlert("댓글이 삭제되었습니다.", function() {
-                            location.reload();
-                        });
-                    } else {
-                        alert("댓글 삭제에 실패했습니다.");
-                    }
-                },
-                error: function() {
-                    alert("전송오류!");
-                }
-            });
-        }
-    }
+	      if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+	        replyForm.style.display = 'block';
+	        showBtn.style.display = 'none';
+	        closeBtn.style.display = 'inline';
+	      } else {
+	        replyForm.style.display = 'none';
+	        showBtn.style.display = 'inline';
+	        closeBtn.style.display = 'none';
+	      }
+	    }
 
 	</script>
 </head>
@@ -658,40 +698,51 @@
 		  </div>
 		</div>
 		
-   <!-- 댓글 모달 -->
-<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="commentsModalLabel">댓글</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
-          <div class="modal-comment ${replyVo.re_step > 0 ? 'reply-comment' : ''}" id="comment${replyVo.idx}">
-            <span class="modal-comment-username">${replyVo.name}</span>
-            <span class="modal-comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</span>
-            <div class="modal-comment-time">
-              ${fn:substring(replyVo.prDate, 0, 10)}
-              <c:if test="${sMid == replyVo.mid}">
-                <a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제" class="delete-btn">삭제</a>
-              </c:if>
-              <c:if test="${replyVo.re_step == 0}">
-                <a href="javascript:void(0);" id="replyShowBtn${replyVo.idx}" class="reply-btn" onclick="toggleReplyForm(${replyVo.idx})">답글</a>
-                <a href="javascript:void(0);" id="replyCloseBtn${replyVo.idx}" class="reply-btn replyCloseBtn" style="display:none;" onclick="toggleReplyForm(${replyVo.idx})">닫기</a>
-                <!-- 답글 입력 폼 (부모 댓글에만 표시) -->
-                <div id="replyDemo${replyVo.idx}" class="reply-form" style="display:none;">
-                  <textarea class="form-control" rows="2" id="contentRe${replyVo.idx}"></textarea>
-                  <button onclick="submitReply(${replyVo.idx}, ${replyVo.photoIdx}, ${replyVo.re_step}, ${replyVo.re_order})" class="btn btn-primary btn-sm mt-2">답글 작성</button>
-                </div>
-              </c:if>
-            </div>
-          </div>
-        </c:forEach>
-      </div>
-    </div>
+		
+		<c:if test="${!empty nextVo.idx}">
+      <a href="${ctp}/photo/photoContent?idx=${nextVo.idx}" class="navigation-btn prev-btn">&lt;</a>
+    </c:if>
+    <c:if test="${!empty preVo.idx}">
+      <a href="${ctp}/photo/photoContent?idx=${preVo.idx}" class="navigation-btn next-btn">&gt;</a>
+    </c:if>
   </div>
 </div>
+
+   <!-- 댓글 모달 -->
+	<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="commentsModalLabel">댓글</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
+	          <div class="modal-comment ${replyVo.re_step > 0 ? 'reply-comment' : ''}" id="comment${replyVo.idx}">
+	            <span class="modal-comment-username">${replyVo.name}</span>
+	            <span class="modal-comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</span>
+	            <div class="modal-comment-time">
+	              ${fn:substring(replyVo.prDate, 0, 10)}
+	              <c:if test="${sMid == replyVo.mid}">
+	                <a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제" class="delete-btn">삭제</a>
+	              </c:if>
+	              <c:if test="${replyVo.re_step == 0}">
+	                <span id="showReplyBtn${replyVo.idx}" class="reply-btn" onclick="replyShow(${replyVo.idx})">답글 달기</span>
+	                <span id="closeReplyBtn${replyVo.idx}" class="reply-btn" onclick="replyShow(${replyVo.idx})" style="display:none;">닫기</span>
+	              </c:if>
+	            </div>
+	            <c:if test="${replyVo.re_step == 0}">
+	              <div class="reply-form" id="replyForm${replyVo.idx}" style="display:none;">
+	                <textarea rows="2" name="contentRe" id="contentRe${replyVo.idx}" placeholder="답글을 입력하세요...">@${replyVo.name} </textarea>
+	                <button onclick="submitReply(${replyVo.idx}, ${replyVo.re_step}, ${replyVo.re_order})">게시</button>
+	              </div>
+	            </c:if>
+	          </div>
+	        </c:forEach>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 
 
@@ -705,7 +756,7 @@
 		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		      </div>
 		      <div class="modal-body">
-		        <!-- 여기에 좋아요 누른 사람들의 목록을 추가하세요 -->
+		        <!-- 좋아요 누른 사람들의 목록 -->
 		        <c:forEach var="liker" items="${likers}">
 		          <div class="modal-comment">
 		            <span class="modal-comment-username">${liker.name}</span>
@@ -716,16 +767,6 @@
 		  </div>
 		</div>
     
-    <!-- 이전/다음 게시물 버튼 -->
-		<c:if test="${!empty preVo.title}">
-		  <a href="${ctp}/photo/photoContent?idx=${vo.idx - 1}" class="navigation-btn prev-btn">&lt;</a>
-		</c:if>
-		<c:if test="${!empty nextVo.title}">
-		  <a href="${ctp}/photo/photoContent?idx=${nextVo.idx}" class="navigation-btn next-btn">&gt;</a>
-		</c:if>
-    
-  </div>
-</div>
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

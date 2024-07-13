@@ -46,7 +46,7 @@ public interface PhotoDAO {
 
 	public void setReplyOrderUpdate(@Param("photoIdx") int photoIdx, @Param("re_order") int re_order);
 
-	public PhotoVO getPreNexSearch(@Param("idx") int idx, @Param("str") String str);
+	public PhotoVO getPreNexSearch(@Param("idx") int idx, @Param("familyCode") String familyCode, @Param("str") String str);
 
 	public List<MemberVO> getPhotoLikers(int idx);
   

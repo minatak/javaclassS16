@@ -223,8 +223,8 @@ public class PhotoServiceImpl implements PhotoService {
 	}
 
 	@Override
-	public PhotoVO getPreNexSearch(int idx, String str) {
-		return photoDAO.getPreNexSearch(idx, str);
+	public PhotoVO getPreNexSearch(int idx, String familyCode, String str) {
+		return photoDAO.getPreNexSearch(idx, familyCode, str);
 	}
 
 	@Override

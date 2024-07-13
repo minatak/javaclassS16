@@ -73,6 +73,7 @@ public class PhotoController {
     public String photoContent(@RequestParam int idx, Model model, HttpSession session,
             @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
             @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+    	String familyCode = (String) session.getAttribute("sFamCode");
 	    PhotoVO vo = photoService.getPhotoContent(idx);
 	    
 	    MemberVO mVo = photoService.getWriterPhoto(vo.getMemberIdx());
@@ -96,8 +97,8 @@ public class PhotoController {
 	    model.addAttribute("pageSize", pageSize);
 	    
 	    // 이전글/다음글 가져오기
-	    PhotoVO preVo = photoService.getPreNexSearch(idx, "preVo");
-	    PhotoVO nextVo = photoService.getPreNexSearch(idx, "nextVo");
+	    PhotoVO preVo = photoService.getPreNexSearch(idx, familyCode, "preVo");
+	    PhotoVO nextVo = photoService.getPreNexSearch(idx, familyCode, "nextVo");
 	    model.addAttribute("preVo", preVo);
 	    model.addAttribute("nextVo", nextVo);
 	    

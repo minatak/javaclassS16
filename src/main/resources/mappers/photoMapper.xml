@@ -3,22 +3,24 @@
 <mapper namespace="com.spring.javaclassS16.dao.PhotoDAO">
     
     <select id="getPhotoList" resultType="com.spring.javaclassS16.vo.PhotoVO">
-        SELECT p.*, IFNULL(r.replyCnt, 0) as replyCnt
-        FROM photo p
-        LEFT JOIN (
-            SELECT photoIdx, COUNT(*) as replyCnt
-            FROM photoReply
-            GROUP BY photoIdx
-        ) r ON p.idx = r.photoIdx
-        WHERE p.familyCode = #{familyCode}
-        ORDER BY
-        <choose>
-            <when test="choice == '추천순'">p.goodCount DESC</when>
-            <when test="choice == '조회순'">p.readNum DESC</when>
-            <otherwise>p.idx DESC</otherwise>
-        </choose>
-        LIMIT #{startIndexNo}, #{pageSize}
-    </select>
+		    SELECT p.*, IFNULL(r.replyCnt, 0) as replyCnt
+		    FROM photo p
+		    LEFT JOIN (
+		        SELECT photoIdx, COUNT(*) as replyCnt
+		        FROM photoReply
+		        GROUP BY photoIdx
+		    ) r ON p.idx = r.photoIdx
+		    WHERE p.familyCode = #{familyCode}
+		    ORDER BY
+		    <choose>
+		        <when test="choice == '추천순'">p.goodCount DESC</when>
+		        <when test="choice == '조회순'">p.readNum DESC</when>
+		        <when test="choice == '댓글순'">IFNULL(r.replyCnt, 0) DESC</when>
+		        <when test="choice == '오래된순'">p.idx ASC</when>
+		        <otherwise>p.idx DESC</otherwise>
+		    </choose>
+		    LIMIT #{startIndexNo}, #{pageSize}
+		</select>
     
     <select id="getPhotoContent" resultType="com.spring.javaclassS16.vo.PhotoVO">
         SELECT * FROM photo
@@ -52,10 +54,10 @@
     
     <select id="getPreNexSearch" resultType="com.spring.javaclassS16.vo.PhotoVO">
 		  <if test="str == 'preVo'">
-		    select idx from photo where <![CDATA[idx < #{idx}]]> order by idx desc limit 1;
+		    select idx from photo where familyCode = #{familyCode} and <![CDATA[idx < #{idx}]]> order by idx desc limit 1;
 		  </if>
 		  <if test="str != 'preVo'">
-		    select idx from photo where <![CDATA[idx > #{idx}]]> order by idx limit 1;
+		    select idx from photo where familyCode = #{familyCode} and <![CDATA[idx > #{idx}]]> order by idx limit 1;
 		  </if>
 		</select>
 		
@@ -73,8 +75,8 @@
     
     
     <insert id="setPhotoInput" parameterType="com.spring.javaclassS16.vo.PhotoVO">
-        INSERT INTO photo (memberIdx, name, familyCode, part, title, description, content, photoCount, thumbnail, pDate)
-        VALUES (#{vo.memberIdx}, #{vo.name}, #{vo.familyCode}, #{vo.part}, #{vo.title}, #{vo.description}, #{vo.content}, #{vo.photoCount}, #{vo.thumbnail}, NOW())
+        INSERT INTO photo (memberIdx, name, familyCode, description, content, photoCount, thumbnail, pDate)
+        VALUES (#{vo.memberIdx}, #{vo.name}, #{vo.familyCode}, #{vo.description}, #{vo.content}, #{vo.photoCount}, #{vo.thumbnail}, NOW())
     </insert>
     
     <insert id="addPhotoLike">
