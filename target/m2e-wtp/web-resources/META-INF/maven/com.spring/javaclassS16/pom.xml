@@ -221,7 +221,7 @@
 	    <artifactId>jsoup</artifactId>
 	    <version>1.17.2</version>
 		</dependency>
-		<!-- 웹크롤잉를 하기위한 라이브러리(selenium) -->
+		<!-- 웹크롤링을 하기위한 라이브러리(selenium) -->
 		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
 		<dependency>
 	    <groupId>org.seleniumhq.selenium</groupId>

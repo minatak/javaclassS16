@@ -120,13 +120,8 @@
     }
     
     function fCheck() {
-        let title = document.getElementById("title").value;
         let content = CKEDITOR.instances.content.getData();
         
-        if(title.trim() == "") {
-            showAlert("제목을 입력해주세요");
-            return false;
-        }
         if(content.trim() == "") {
             showAlert("사진을 업로드해주세요");
             return false;

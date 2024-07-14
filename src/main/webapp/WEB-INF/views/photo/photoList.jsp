@@ -231,7 +231,7 @@
 		  </div> -->
 		  <div class="action-buttons">
 		    <button onclick="location.href='${ctp}/photo/photoInput';" class="btn">업로드</button>
-		    <button onclick="location.href='${ctp}/photo/photoList';" class="btn">내 업로드 보기</button>
+		    <%-- <button onclick="location.href='${ctp}/photo/photoList';" class="btn">내 업로드 보기</button> --%>
 		  </div>
 		</div>
 	</div>
