@@ -1,85 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.javaclassS16.dao.NoticeDAO">
-	
-	<select id="getNoticeList" resultType="com.spring.javaclassS16.vo.NoticeVO">
-			SELECT 
-	    n.*,
-	    DATEDIFF(n.createdAt, NOW()) AS date_diff,
-	    TIMESTAMPDIFF(HOUR, n.createdAt, NOW()) AS hour_diff,
-	    (SELECT COUNT(*) FROM noticeReply WHERE noticeIdx = n.idx) AS replyCnt
-	  FROM 
-	    notice n
-	  WHERE
-	    n.familyCode = #{familyCode}
-	  ORDER BY 
-	    n.isImportant DESC,
-	    n.isPinned DESC,
-	    n.idx DESC
-	  LIMIT #{startIndexNo}, #{pageSize}
-	</select>
-	
-	<select id="getNoticeContent" resultType="com.spring.javaclassS16.vo.NoticeVO">
-		select * from notice where idx = #{idx} and familyCode = #{familyCode};
-	</select>
-	
-	<select id="totRecCnt" resultType="int">
-		select count(*) from notice where familyCode = #{familyCode};
-	</select>
-	
-	<select id="getPreNexSearch" resultType="com.spring.javaclassS16.vo.NoticeVO">
-	  <if test="str == 'preVo'">
-	    select idx,title from notice where <![CDATA[idx < #{idx}]]> and familyCode = #{familyCode} order by idx desc limit 1;
-	  </if>
-	  <if test="str != 'preVo'">
-	    select idx,title from notice where <![CDATA[idx > #{idx}]]> and familyCode = #{familyCode} order by idx limit 1;
-	  </if>
-	</select>
-
-	<select id="getNoticeParentReplyCheck" resultType="com.spring.javaclassS16.vo.NoticeReplyVO">
-	  select * from noticeReply where noticeIdx = #{noticeIdx} order by idx desc limit 1;
-	</select>
-	
-	<select id="getNoticeReply" resultType="com.spring.javaclassS16.vo.NoticeReplyVO">
-	  select * from noticeReply where noticeIdx = #{idx} order by re_order;
-	</select>
-	
-	<select id="totRecCntSearch"  resultType="int">
-		select count(*) from notice where ${search} like concat("%",#{searchString},"%") and familyCode = #{familyCode}; 
-	</select>
-	
-	<select id="getNoticeSearchList" resultType="com.spring.javaclassS16.vo.NoticeVO">
-		select * from notice where ${search} like concat("%",#{searchString},"%") and familyCode = #{familyCode} order by idx desc limit #{startIndexNo},#{pageSize};
-	</select>
-
-	
-	
-	<insert id="setNoticeInput">
-	  insert into notice values (default,#{vo.memberIdx},#{vo.memberName},#{vo.familyCode},#{vo.title},#{vo.content},default,,default,default,default,${vo.isImportant},${vo.isPinned});
-	</insert>
-
-	<insert id="setNoticeReplyInput">
-	  insert into noticeReply values (default,#{replyVO.noticeIdx},#{replyVO.re_step},#{replyVO.re_order},#{replyVO.mid},#{replyVO.nickName},default,#{replyVO.hostIp},#{replyVO.content});
-	</insert>
-
-	
-	<update id="setReadNumPlus">
-	  update notice set readNum = readNum + 1 where idx = #{idx};
-	</update>
-	
-	<update id="setNoticeUpdate">
-	  update notice set title=#{vo.title}, content=#{vo.content}, openSw=#{vo.openSw}, wDate=now() where idx=#{vo.idx};
-	</update>
-	
-	<update id="setReplyOrderUpdate">
-	  update noticeReply set re_order = re_order + 1 where noticeIdx = #{noticeIdx} and re_order > #{re_order};
-	</update>
-	
-	
-	
-	<delete id="setNoticeDelete">
-	  delete from notice where idx = #{idx};
-	</delete>
-	
-	
+    
+    <select id="getNoticeList" resultType="com.spring.javaclassS16.vo.NoticeVO">
+		    SELECT 
+		        n.*,
+		        DATEDIFF(n.createdAt, NOW()) AS date_diff,
+		        TIMESTAMPDIFF(HOUR, n.createdAt, NOW()) AS hour_diff,
+		        (SELECT COUNT(*) FROM noticeReply WHERE noticeIdx = n.idx) AS replyCnt,
+		        CASE WHEN nrs.idx IS NOT NULL THEN true ELSE false END AS isRead
+		    FROM 
+		        notice n
+		    LEFT JOIN 
+		        noticeReadStatus nrs ON n.idx = nrs.noticeIdx AND nrs.readerIdx = #{memberIdx}
+		    WHERE
+		        n.familyCode = #{familyCode}
+		    ORDER BY 
+		        n.important DESC,
+		        n.pinned DESC,
+		        n.idx DESC
+		    LIMIT #{startIndexNo}, #{pageSize}
+		</select>
+    
+    <select id="getNoticeContent" resultType="com.spring.javaclassS16.vo.NoticeVO">
+        SELECT 
+            n.*,
+            DATEDIFF(NOW(), n.createdAt) AS date_diff,
+            TIMESTAMPDIFF(HOUR, n.createdAt, NOW()) AS hour_diff,
+            (SELECT COUNT(*) FROM noticeReply WHERE noticeIdx = n.idx) AS replyCnt
+        FROM 
+            notice n
+        WHERE 
+            n.idx = #{idx} 
+            AND n.familyCode = #{familyCode}
+    </select>
+    
+    <select id="totRecCnt" resultType="int">
+        SELECT COUNT(*) FROM notice WHERE familyCode = #{familyCode}
+    </select>
+    
+    <select id="getPreNexSearch" resultType="com.spring.javaclassS16.vo.NoticeVO">
+        <if test="str == 'preVo'">
+            SELECT idx, title FROM notice WHERE <![CDATA[idx < #{idx}]]> AND familyCode = #{familyCode} ORDER BY idx DESC LIMIT 1
+        </if>
+        <if test="str != 'preVo'">
+            SELECT idx, title FROM notice WHERE <![CDATA[idx > #{idx}]]> AND familyCode = #{familyCode} ORDER BY idx LIMIT 1
+        </if>
+    </select>
+    
+    <select id="getNoticeParentReplyCheck" resultType="com.spring.javaclassS16.vo.NoticeReplyVO">
+        SELECT * FROM noticeReply WHERE noticeIdx = #{noticeIdx} ORDER BY idx DESC LIMIT 1
+    </select>
+    
+    <select id="getNoticeReply" resultType="com.spring.javaclassS16.vo.NoticeReplyVO">
+        SELECT * FROM noticeReply WHERE noticeIdx = #{idx} ORDER BY created_at
+    </select>
+    
+    <select id="totRecCntSearch" resultType="int">
+        SELECT COUNT(*) FROM notice WHERE ${search} LIKE CONCAT("%",#{searchString},"%") AND familyCode = #{familyCode}
+    </select>
+    
+    <select id="getNoticeSearchList" resultType="com.spring.javaclassS16.vo.NoticeVO">
+        SELECT * FROM notice WHERE ${search} LIKE CONCAT("%",#{searchString},"%") AND familyCode = #{familyCode} ORDER BY idx DESC LIMIT #{startIndexNo},#{pageSize}
+    </select>
+    
+    
+    <insert id="setNoticeInput">
+        INSERT INTO notice 
+        (memberIdx, memberName, familyCode, title, content, important, pinned)
+        VALUES 
+        (#{vo.memberIdx}, #{vo.memberName}, #{vo.familyCode}, #{vo.title}, #{vo.content}, #{vo.important}, #{vo.pinned})
+    </insert>
+    
+    <insert id="setNoticeReplyInput">
+        INSERT INTO noticeReply 
+        (noticeIdx, memberIdx, content, parentIdx)
+        VALUES 
+        (#{replyVO.noticeIdx}, #{replyVO.memberIdx}, #{replyVO.content}, #{replyVO.parentIdx})
+    </insert>
+    
+    <insert id="setNoticeRead">
+        INSERT INTO noticeReadStatus (noticeIdx, readerIdx) VALUES (#{idx}, #{memberIdx})
+    </insert>
+    
+    
+    <update id="setReadNumPlus">
+        UPDATE notice SET viewCount = viewCount + 1 WHERE idx = #{idx}
+    </update>
+    
+    <update id="setNoticeUpdate">
+        UPDATE notice SET title=#{vo.title}, content=#{vo.content}, updatedAt=NOW() WHERE idx=#{vo.idx}
+    </update>
+    
+    <delete id="setNoticeDelete">
+        DELETE FROM notice WHERE idx = #{idx}
+    </delete>
+    
 </mapper>

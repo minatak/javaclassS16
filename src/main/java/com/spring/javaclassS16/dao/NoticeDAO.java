@@ -12,15 +12,15 @@ public interface NoticeDAO {
 
 	public int setNoticeInput(@Param("vo") NoticeVO vo);
 
-	public NoticeVO getNoticeContent(@Param("idx") int idx);
+	public NoticeVO getNoticeContent(@Param("idx") int idx, @Param("familyCode") String familyCode);
 
 	public int totRecCnt();
 
-	public ArrayList<NoticeVO> getNoticeList(@Param("familyCode") String familyCode, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+	public ArrayList<NoticeVO> getNoticeList(@Param("familyCode") String familyCode, @Param("memberIdx") int memberIdx, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
 
 	public void setReadNumPlus(@Param("idx") int idx);
 
-	public NoticeVO getPreNexSearch(@Param("idx") int idx, @Param("str") String str);
+	public NoticeVO getPreNexSearch(@Param("idx") int idx, @Param("str") String str, @Param("familyCode") String familyCode);
 
 	public int setNoticeUpdate(@Param("vo") NoticeVO vo);
 
@@ -30,12 +30,14 @@ public interface NoticeDAO {
 
 	public int setNoticeReplyInput(@Param("replyVO") NoticeReplyVO replyVO);
 
-	public List<NoticeReplyVO> getNoticeReply(@Param("idx") int idx);
+	public List<NoticeReplyVO> getNoticeReply(@Param("idx") int idx, @Param("familyCode") String familyCode);
 
 	public void setReplyOrderUpdate(@Param("noticeIdx") int noticeIdx, @Param("re_order") int re_order);
 
 	public int totRecCntSearch(@Param("search") String search, @Param("searchString") String searchString);
 
 	public List<NoticeVO> getNoticeSearchList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("search") String search, @Param("searchString") String searchString);
+
+	public void setNoticeRead(@Param("idx") int idx, @Param("memberIdx") int memberIdx);
 	
 }

@@ -31,13 +31,13 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public NoticeVO getNoticeContent(int idx) {
-		return noticeDAO.getNoticeContent(idx);
+	public NoticeVO getNoticeContent(int idx, String familyCode) {
+		return noticeDAO.getNoticeContent(idx, familyCode);
 	}
 
 	@Override
-	public ArrayList<NoticeVO> getNoticeList(String familyCode, int startIndexNo, int pageSize) {
-		return noticeDAO.getNoticeList(familyCode, startIndexNo, pageSize);
+	public ArrayList<NoticeVO> getNoticeList(String familyCode, int memberIdx, int startIndexNo, int pageSize) {
+		return noticeDAO.getNoticeList(familyCode, memberIdx, startIndexNo, pageSize);
 	}
 
 	@Override
@@ -46,8 +46,8 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public NoticeVO getPreNexSearch(int idx, String str) {
-		return noticeDAO.getPreNexSearch(idx, str);
+	public NoticeVO getPreNexSearch(int idx, String str, String familyCode) {
+		return noticeDAO.getPreNexSearch(idx, str, familyCode);
 	}
 
 	// content에 이미지가 있다면 이미지를 'ckeditor'폴더에서 'notice'폴더로 복사처리한다.
@@ -179,8 +179,8 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public List<NoticeReplyVO> getNoticeReply(int idx) {
-		return noticeDAO.getNoticeReply(idx);
+	public List<NoticeReplyVO> getNoticeReply(int idx, String familyCode) {
+		return noticeDAO.getNoticeReply(idx, familyCode);
 	}
 
 	@Override
@@ -191,6 +191,11 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public List<NoticeVO> getNoticeSearchList(int startIndexNo, int pageSize, String search, String searchString) {
 		return noticeDAO.getNoticeSearchList(startIndexNo, pageSize, search, searchString);
+	}
+
+	@Override
+	public void setNoticeRead(int idx, int memberIdx) {
+		noticeDAO.setNoticeRead(idx, memberIdx);
 	}
 	
 }

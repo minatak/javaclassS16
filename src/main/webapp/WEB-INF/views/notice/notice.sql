@@ -10,9 +10,9 @@ CREATE TABLE notice (
   viewCount INT DEFAULT 0,              /* 조회수 */
   likeCount INT DEFAULT 0,              /* 좋아요 수 */
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,  /* 작성 일시 */
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  /* 수정 일시 */
-  isImportant BOOLEAN DEFAULT FALSE,    /* 중요 공지사항 여부 */
-  isPinned BOOLEAN DEFAULT FALSE,       /* 고정된 공지사항 여부 */
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,  /* 수정 일시 */
+  important BOOLEAN DEFAULT FALSE,    /* 중요 공지사항 여부 */
+  pinned BOOLEAN DEFAULT FALSE,       /* 고정된 공지사항 여부 */
   PRIMARY KEY (idx),
   FOREIGN KEY (memberIdx) REFERENCES member(idx)
 );

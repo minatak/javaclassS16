@@ -68,6 +68,14 @@ public class MessageController {
 			model.addAttribute("msg", "사진 삭제에 실패했어요");
 			model.addAttribute("url", "/photo/photoContent?idx="+idx);
 		}
+		else if(msgFlag.equals("noticeInputOk")) {
+			model.addAttribute("msg", "공지사항이 등록되었습니다");
+			model.addAttribute("url", "/notice/noticeList");
+		}
+		else if(msgFlag.equals("noticeInputNo")) {
+			model.addAttribute("msg", "공지사항 등록에 실패했어요");
+			model.addAttribute("url", "/notice/noticeInput");
+		}
 		
 		
 		return "include/message";

@@ -32,16 +32,18 @@ public class NoticeController {
 	
 	@RequestMapping(value = "/noticeList", method = RequestMethod.GET)
 	public String noticeListGet(Model model, HttpSession session,
-			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-		PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", "", "");
-		String familyCode = (String) session.getAttribute("sFamCode");
-		ArrayList<NoticeVO> vos = noticeService.getNoticeList(familyCode, pageVO.getStartIndexNo(), pageSize);
-		
-		model.addAttribute("vos", vos);
-		model.addAttribute("pageVO", pageVO);
-		
-		return "notice/noticeList";
+	        @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+	        @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+	    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", "", "");
+	    String familyCode = (String) session.getAttribute("sFamCode");
+	    int memberIdx = (int) session.getAttribute("sIdx"); // 세션에서 현재 로그인한 사용자의 idx를 가져옵니다.
+	
+	    ArrayList<NoticeVO> vos = noticeService.getNoticeList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize);
+	
+	    model.addAttribute("vos", vos);
+	    model.addAttribute("pageVO", pageVO);
+	
+	    return "notice/noticeList";
 	}
 	
 	@RequestMapping(value = "/noticeInput", method = RequestMethod.GET)
@@ -64,54 +66,62 @@ public class NoticeController {
 		else  return "redirect:/message/noticeInputNo";
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/noticeContent", method = RequestMethod.GET)
-	public String noticeContentPost(int idx, Model model, HttpServletRequest request,
-			@RequestParam(name="flag", defaultValue = "", required = false) String flag,
-			@RequestParam(name="search", defaultValue = "", required = false) String search,
-			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
-			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-		// 조회수 증가하기
-		//noticeService.setReadNumPlus(idx);
-		// 게시글 조회수 1씩 증가시키기(중복방지)
-		HttpSession session = request.getSession();
-		ArrayList<String> contentReadNum = (ArrayList<String>) session.getAttribute("sContentIdx");
-		if(contentReadNum == null) contentReadNum = new ArrayList<String>();
-		String imsiContentReadNum = "notice" + idx;
-		if(!contentReadNum.contains(imsiContentReadNum)) {
-			noticeService.setReadNumPlus(idx);
-			contentReadNum.add(imsiContentReadNum);
-		}
-		session.setAttribute("sContentIdx", contentReadNum);
-		
-		NoticeVO vo = noticeService.getNoticeContent(idx);
-		model.addAttribute("vo", vo);
-		model.addAttribute("flag", flag);
-		model.addAttribute("search", search);
-		model.addAttribute("searchString", searchString);
-		model.addAttribute("pag", pag);
-		model.addAttribute("pageSize", pageSize);
-		
-		// 이전글/다음글 가져오기
-		NoticeVO preVo = noticeService.getPreNexSearch(idx, "preVo");
-		NoticeVO nextVo = noticeService.getPreNexSearch(idx, "nextVo");
-		model.addAttribute("preVo", preVo);
-		model.addAttribute("nextVo", nextVo);
-		
-		// 댓글(대댓글) 추가 입력처리
-		List<NoticeReplyVO> replyVos = noticeService.getNoticeReply(idx);
-		model.addAttribute("replyVos", replyVos);
-		
-		return "notice/noticeContent";
+	public String noticeContentPost(int idx, Model model, HttpSession session,
+	        @RequestParam(name="flag", defaultValue = "", required = false) String flag,
+	        @RequestParam(name="search", defaultValue = "", required = false) String search,
+	        @RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+	        @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+	        @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+	    
+	    String familyCode = (String) session.getAttribute("sFamCode");
+	    int memberIdx = (int) session.getAttribute("sIdx");
+
+	    // 게시글 조회수 1씩 증가시키기(중복방지)
+	    ArrayList<String> contentReadNum = (ArrayList<String>) session.getAttribute("sContentIdx");
+	    if(contentReadNum == null) contentReadNum = new ArrayList<String>();
+	    String imsiContentReadNum = "notice" + idx;
+	    if(!contentReadNum.contains(imsiContentReadNum)) {
+	        noticeService.setReadNumPlus(idx);
+	        contentReadNum.add(imsiContentReadNum);
+	    }
+	    session.setAttribute("sContentIdx", contentReadNum);
+
+	    // 공지사항 내용 가져오기
+	    NoticeVO vo = noticeService.getNoticeContent(idx, familyCode);
+	    
+	    
+	    // 읽음 상태 업데이트
+	    noticeService.setNoticeRead(idx, memberIdx);
+
+	    model.addAttribute("vo", vo);
+	    model.addAttribute("flag", flag);
+	    model.addAttribute("search", search);
+	    model.addAttribute("searchString", searchString);
+	    model.addAttribute("pag", pag);
+	    model.addAttribute("pageSize", pageSize);
+
+	    // 이전글/다음글 가져오기
+	    NoticeVO preVo = noticeService.getPreNexSearch(idx, "preVo", familyCode);
+	    NoticeVO nextVo = noticeService.getPreNexSearch(idx, "nextVo", familyCode);
+	    model.addAttribute("preVo", preVo);
+	    model.addAttribute("nextVo", nextVo);
+
+	    // 댓글(대댓글) 추가 입력처리
+	    List<NoticeReplyVO> replyVos = noticeService.getNoticeReply(idx, familyCode);
+	    model.addAttribute("replyVos", replyVos);
+
+	    return "notice/noticeContent";
 	}
 	
 	@RequestMapping(value = "/noticeUpdate", method = RequestMethod.GET)
-	public String noticeUpdateGet(int idx, Model model,
+	public String noticeUpdateGet(int idx, Model model, HttpSession session,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		String familyCode = (String) session.getAttribute("sFamCode");
+		NoticeVO vo = noticeService.getNoticeContent(idx, familyCode);
+		
 		// 수정화면으로 이동할시에는 기존 원본파일의 그림파일이 존재한다면, 현재폴더(notice)의 그림파일을 ckeditor폴더로 복사시켜준다.
-		NoticeVO vo = noticeService.getNoticeContent(idx);
 		if(vo.getContent().indexOf("src=\"/") != -1) noticeService.imgBackup(vo.getContent());
 		
 		model.addAttribute("pag", pag);
@@ -121,21 +131,24 @@ public class NoticeController {
 	}
 	
 	@RequestMapping(value = "/noticeUpdate", method = RequestMethod.POST)
-	public String noticeUpdatePost(NoticeVO vo, Model model,
+	public String noticeUpdatePost(NoticeVO vo, Model model, HttpSession session,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-		// 수정된 자료가 원본자료와 완전히 동일하다면 수정할 필요가 없다. 즉, DB에 저장된 원본자료를 불러와서 현재 vo에 담긴 내용(content)과 비교해본다.
-		NoticeVO origVo = noticeService.getNoticeContent(vo.getIdx());
+		String familyCode = (String) session.getAttribute("sFamCode");
+		vo.setFamilyCode(familyCode);
+		
+		// 수정된 자료가 원본자료와 완전히 동일하다면 수정할 필요가 없다.
+		NoticeVO origVo = noticeService.getNoticeContent(vo.getIdx(), familyCode);
 		
 		// content의 내용이 조금이라도 변경이 되었다면 내용을 수정한것이기에, 그림파일 처리유무를 결정한다.
 		if(!origVo.getContent().equals(vo.getContent())) {
-			// 1.기존 notice폴더에 그림이 존재했다면 원본그림을 모두 삭제처리한다.(원본그림은 수정창에 들어오기전에 ckeditor폴더에 저장시켜두었다.)
+			// 기존 notice폴더에 그림이 존재했다면 원본그림을 모두 삭제처리한다.(원본그림은 수정창에 들어오기전에 ckeditor폴더에 저장시켜두었다.)
 			if(origVo.getContent().indexOf("src=\"/") != -1) noticeService.imgDelete(origVo.getContent());
 			
-			// 2.앞의 삭제 작업이 끝나면 'notice'폴더를 'ckeditor'로 경로 변경한다.
+			// 앞의 삭제 작업이 끝나면 'notice'폴더를 'ckeditor'로 경로 변경한다.
 			vo.setContent(vo.getContent().replace("/data/notice/", "/data/ckeditor/"));
 			
-			// 1,2, 작업을 마치면 파일을 처음 업로드한것과 같은 작업처리를 해준다.
+			// 파일을 처음 업로드한것과 같은 작업처리를 해준다.
 			// 즉, content에 이미지가 저장되어 있다면, 저장된 이미지만 골라서 '/data/notice/'폴더에 복사 저장처리한다.
 			if(vo.getContent().indexOf("src=\"/") != -1) noticeService.imgCheck(vo.getContent());
 			
@@ -155,40 +168,39 @@ public class NoticeController {
 	}
 	
 	@RequestMapping(value = "/noticeDelete", method = RequestMethod.GET)
-	public String noticeDeleteGet(int idx,
+	public String noticeDeleteGet(int idx, HttpSession session,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		String familyCode = (String) session.getAttribute("sFamCode");
 		// 게시글에 사진이 존재한다면 서버에 저장된 사진을 삭제처리한다.
-		NoticeVO vo = noticeService.getNoticeContent(idx);
+		NoticeVO vo = noticeService.getNoticeContent(idx, familyCode);
 		if(vo.getContent().indexOf("src=\"/") != -1) noticeService.imgDelete(vo.getContent());
 		
-		// 사진작업을 끝나면 DB에 저장된 실제 정보레코드를 삭제처리한다.
-		int res = noticeService.setNoticeDelete(idx);
+		// DB에서 실제로 존재하는 게시글을 삭제처리한다.
+		noticeService.setNoticeDelete(idx);
 		
-		
-		if(res != 0) return "redirect:/message/noticeDeleteOk";
-		else return "redirect:/message/noticeDeleteNo?idx="+idx+"&pag="+pag+"&pageSize="+pageSize;
+		return "redirect:/notice/noticeList?pag="+pag+"&pageSize="+pageSize;
 	}
 	
-	// 부모댓글 입력처리(원본글에 대한 댓글)
 	@ResponseBody
 	@RequestMapping(value = "/noticeReplyInput", method = RequestMethod.POST)
-	public String noticeReplyInputPost(NoticeReplyVO vo) {
-		vo.setParentIdx(null);  // 부모 댓글이므로 parentIdx는 null
-		
-		int res = noticeService.setNoticeReplyInput(vo);
-		
-		return res + "";
-	}
-	
-	// 대댓글 입력처리(부모댓글에 대한 댓글)
-	@ResponseBody
-	@RequestMapping(value = "/noticeReplyInputRe", method = RequestMethod.POST)
-	public String noticeReplyInputRePost(NoticeReplyVO replyVO) {
+	public String noticeReplyInputPost(NoticeReplyVO replyVO) {
+		// 댓글의 모든 내용이 정상적으로 저장되면 '1'을, 비정상이면 '0'을 반환시켜준다.
 		int res = noticeService.setNoticeReplyInput(replyVO);
 		
-		return res + "";
+		return res+"";
 	}
+	
+	/*
+	@ResponseBody
+	@RequestMapping(value = "/noticeReplyDeleteOk", method = RequestMethod.POST)
+	public String noticeReplyDeleteOkPost(int idx) {
+		// 댓글의 삭제처리후 '1'을, 비정상이면 '0'을 반환시켜준다.
+		int res = noticeService.setNoticeReplyDeleteOk(idx);
+		
+		return res+"";
+	}
+	*/
 	
 	// 게시글 검색처리(검색기)
 	@RequestMapping(value = "/noticeSearch")
@@ -199,7 +211,7 @@ public class NoticeController {
 		PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", search, searchString);
 		
 		List<NoticeVO> vos = noticeService.getNoticeSearchList(pageVO.getStartIndexNo(), pageSize, search, searchString);
-
+	
 		String searchTitle = "";
 		if(pageVO.getSearh().equals("title")) searchTitle = "글제목";
 		else if(pageVO.getSearh().equals("nickName")) searchTitle = "글쓴이";
@@ -214,5 +226,4 @@ public class NoticeController {
 		
 		return "notice/noticeSearchList";
 	}
-	
 }

@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <% pageContext.setAttribute("newLine", "\n"); %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
@@ -11,33 +10,31 @@
   <title>공지사항 상세보기 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
    <style>
-     body {
-      font-family: 'Pretendard' !important;
-      background-color: #ffffff;
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background-color: #f5f6f7;
       color: #333333;
     }
     
     .noticeContainer {
-      max-width: 900px;
+      max-width: 960px;
       margin: 40px auto;
       background-color: #fff;
       padding: 40px;
+      border: 1px solid #e4e6eb;
     }
     
     h2 {
-      font-family: 'Pretendard' !important; 
       color: #333;
       font-size: 24px;
-      font-weight: 700 !important;
-      text-align: center;
-      margin-bottom: 40px;
+      font-weight: 700;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e4e6eb;
+      margin-bottom: 20px;
     }
     
     .notice-info {
       margin-bottom: 20px;
-      /* border-top: 2px solid #333; */
-      border-bottom: 1px solid #e4e6eb;
-      padding: 20px 0;
     }
     
     .notice-info h3 {
@@ -54,7 +51,8 @@
     .notice-content {
       padding: 20px 0;
       line-height: 1.6;
-      min-height: 200px;
+      border-top: 1px solid #e4e6eb;
+      border-bottom: 1px solid #e4e6eb;
     }
     
     .interaction-bar {
@@ -62,7 +60,6 @@
       display: flex;
       justify-content: flex-end;
       color: #666;
-      border-top: 1px solid #e4e6eb;
     }
     
     .interaction-icon {
@@ -123,22 +120,6 @@
     .navigation-icon {
       color: #84a98c;
       margin-right: 8px;
-    }
-
-    .btn-list {
-      display: block;
-      width: 100px;
-      margin: 40px auto 0;
-      padding: 10px;
-      text-align: center;
-      background-color: #fff;
-      color: #333;
-      border: 1px solid #ccc;
-      text-decoration: none;
-    }
-
-    .btn-list:hover {
-      background-color: #f8f8f8;
     }
 	  .swal2-confirm {
       background-color: white !important;
@@ -312,22 +293,12 @@
   <div class="notice-info">
     <h3>${vo.title}</h3>
     <div class="notice-meta">
-		  <span>${vo.memberName}</span> | 
-		  <span>
-		    <fmt:parseDate value="${vo.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDate" type="both" />
-		    <c:choose>
-		      <c:when test="${vo.hour_diff < 24}">
-		        <fmt:formatDate value="${parsedDate}" pattern="yyyy.MM.dd HH:mm"/>
-		      </c:when>
-		      <c:otherwise>
-		        <fmt:formatDate value="${parsedDate}" pattern="yyyy.MM.dd"/>
-		      </c:otherwise>
-		    </c:choose>
-		  </span>
-		  <c:if test="${vo.createdAt != vo.updatedAt}">
-		    <span class="edited-mark">| 수정됨</span>
-		  </c:if>
-		</div>
+      <span>${vo.memberName}</span> | 
+      <span>${fn:substring(vo.createdAt,0,16)}</span>
+      <c:if test="${vo.createdAt != vo.updatedAt}">
+        <span class="edited-mark">| 수정됨</span>
+      </c:if>
+    </div>
   </div>
   
   <div class="notice-content">
@@ -350,9 +321,7 @@
         <span class="comment-author">${replyVo.name}</span>
         <span>${fn:replace(replyVo.content, newLine, "<br/>")}</span>
         <div class="notice-meta">
-          <fmt:parseDate value="${replyVo.WDate}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedReplyDate" type="both" />
-          <fmt:formatDate value="${parsedReplyDate}" pattern="yyyy.MM.dd" var="formattedReplyDate" />
-          <span>${formattedReplyDate}</span>
+          <span>${fn:substring(replyVo.WDate, 0, 10)}</span>
         </div>
       </div>
     </c:forEach>
@@ -371,8 +340,6 @@
       </a>
     </c:if>
   </div>
-
-  <a href="noticeList" class="btn-list">목록</a>
 </div>
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />

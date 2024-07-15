@@ -186,19 +186,19 @@
     <div class="form-group">
 		  <label>고정여부</label>
 		  <div class="radio-inline">
-		    <input type="radio" name="isPinned" id="isPinnedTrue" value="true" />
+		    <input type="radio" name="pinned" id="pinnedTrue" value="true" />
 		    <label for="isPinnedTrue">고정</label>
-		    <input type="radio" name="isPinned" id="isPinnedFalse" value="false" checked />
+		    <input type="radio" name="pinned" id="pinnedFalse" value="false" checked />
 		    <label for="isPinnedFalse">고정 안 함</label>
 		  </div>
 		</div>
 		<div class="form-group">
 		  <label>중요도</label>
 		  <div class="radio-inline">
-		    <input type="radio" name="openSw" id="openSwTrue" value="true" />
-		    <label for="openSwTrue">중요</label>
-		    <input type="radio" name="openSw" id="openSwFalse" value="false" checked />
-		    <label for="openSwFalse">일반</label>
+		    <input type="radio" name="important" id="importantTrue" value="true" />
+		    <label for="important">중요</label>
+		    <input type="radio" name="important" id="importantFalse" value="false" checked />
+		    <label for="important">일반</label>
 		  </div>
 		</div>
     <div class="form-group">

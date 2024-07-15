@@ -12,7 +12,7 @@
    <style>
     body {
       font-family: 'pretendard' !important;
-      background-color: #fafafa;
+      background-color: #ffffff;
       margin: 0;
       padding: 0;
     }
@@ -23,7 +23,7 @@
     .bodyContainer {
       max-width: 900px;
       margin: 0 auto;
-    position: relative;  /* 이전/다음 버튼의 기준점 */
+    	position: relative;  /* 이전/다음 버튼의 기준점 */
     }
     
     .contentContainer {
