@@ -7,6 +7,7 @@ public class NoticeVO {
 	private int idx;                  // 공지사항 고유번호
 	private int memberIdx;            // 작성자 IDX
 	private String memberName;        // 작성자 이름
+	private String familyCode;        // 작성자 가족 코드
 	private String title;             // 공지사항 제목
 	private String content;           // 공지사항 내용
 	private int viewCount;            // 조회수
