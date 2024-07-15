@@ -60,6 +60,14 @@ public class MessageController {
 			model.addAttribute("msg", "사진 업로드에 실패했어요");
 			model.addAttribute("url", "/photo/photoInput");
 		}
+		else if(msgFlag.equals("photoDeleteOk")) {
+			model.addAttribute("msg", "사진이 삭제되었습니다");
+			model.addAttribute("url", "/photo/photoList");
+		}
+		else if(msgFlag.equals("photoDeleteNo")) {
+			model.addAttribute("msg", "사진 삭제에 실패했어요");
+			model.addAttribute("url", "/photo/photoContent?idx="+idx);
+		}
 		
 		
 		return "include/message";

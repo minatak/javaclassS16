@@ -243,6 +243,10 @@
       cursor: pointer;
       margin-left: auto;
     }
+    .updateBtn {
+      cursor: pointer;
+      margin-left: auto;
+    }
     .reply-comment {
       margin-left: 20px;
       border-left: 2px solid #efefef;
@@ -287,6 +291,16 @@
       font-weight: bold !important;
       font-size: 18px !important;
       margin: 0 !important;
+      
+    }
+    .swal2-cancel {
+      background-color: white !important;
+      color: black !important;
+      border-radius: 0px !important;
+      box-shadow: none !important;
+      /* font-weight: bold !important; */
+      font-size: 18px !important;
+      margin: 0 !important;
     }
     .custom-swal-popup {
       width: 350px !important;
@@ -297,10 +311,6 @@
       background-color: none !important;
     }
 		
-		 .contentContainer {
-      
-    }
-    
     .navigation-btn {
       position: absolute;
       top: 50%;
@@ -366,6 +376,7 @@
     	  }
     	});
     
+    // 커스텀 알럿
     function showAlert(message, callback) {
   	  Swal.fire({
   	    html: message,
@@ -387,6 +398,34 @@
   	    }
   	  });
   	}
+    
+    function showConfirm(message, confirmCallback, cancelCallback) {
+    	  Swal.fire({
+    	    html: message,
+    	    showCancelButton: true,
+    	    cancelButtonText: '취소',
+    	    confirmButtonText: '확인',
+    	    customClass: {
+    	      cancelButton: 'swal2-cancel',
+    	      confirmButton: 'swal2-confirm',
+    	      popup: 'custom-swal-popup',
+    	      htmlContainer: 'custom-swal-text'
+    	    },
+    	    scrollbarPadding: false,
+    	    allowOutsideClick: false,
+    	    heightAuto: false,
+    	    didOpen: () => {
+    	      document.body.style.paddingRight = '0px';
+    	    }
+    	  }).then((result) => {
+    	    if (result.isConfirmed && confirmCallback) {
+    	      confirmCallback();
+    	    } else if (result.isDismissed && cancelCallback) {
+    	      cancelCallback();
+    	    }
+    	  });
+    	}
+
     
     function showLikesModal() {
     	  $('#likesModal').modal('show');
@@ -430,9 +469,10 @@
   	    return false;
   	  }
   	  let query = {
-  			mid				: '${sMid}',
-				photoIdx	: '${vo.idx}',
-  	    content   : content
+  			photoIdx: ${vo.idx},
+		    mid: '${sMid}',
+		    name: '${sName}',
+		    content: content
   	  }
   	  
   	  $.ajax({
@@ -453,8 +493,8 @@
 	      });
   	}
     
-    function replyDelete(idx) {
-      let ans = confirm("선택한 댓글을 삭제하시겠습니까?");
+   /*  function replyDelete(idx) {
+      let ans = showConfirm("선택한 댓글을 삭제하시겠습니까?");
       if(!ans) return false;
       
       $.ajax({
@@ -473,42 +513,40 @@
           showAlert("전송 오류!");
         }
       });
-    }
+    } */
     
-    function submitReply(idx, re_step, re_order) {
-      let content = $("#contentRe"+idx).val();
-    	if(content.trim() == "") {
-    		showAlert("답변글을 입력하세요");
-    		$("#contentRe"+idx).focus();
-    		return false;
+    function submitReply(idx, photoIdx) {
+    	  let content = $("#contentRe"+idx).val();
+    	  if(content.trim() == "") {
+    	    showAlert("답변글을 입력하세요");
+    	    $("#contentRe"+idx).focus();
+    	    return false;
+    	  }
+    	  let query = {
+    	    photoIdx: photoIdx,
+    	    parentIdx: idx,  // 부모 댓글의 idx
+    	    mid: '${sMid}',
+    	    name: '${sName}',
+    	    content: content
+    	  };
+    	  $.ajax({
+    	    url: "${ctp}/photo/photoReplyInputRe",
+    	    type: "POST",
+    	    data: query,
+    	    success: function(res) {
+    	      if (res !== "0") {
+    	        showAlert("댓글이 입력되었습니다.", function() {
+    	          location.reload();
+    	        });
+    	      } else {
+    	        showAlert("답변글 입력 실패~~");
+    	      }
+    	    },
+    	    error: function() {
+    	      showAlert("전송오류!");
+    	    }
+    	  });
     	}
-    	let query = {
-          photoIdx: ${vo.idx},
-          re_step: re_step,
-          re_order: re_order,
-          mid: '${sMid}',
-          name: '${sName}',
-          content: content
-        };
-
-        $.ajax({
-          url: "${ctp}/photo/photoReplyInputRe",
-          type: "POST",
-          data: query,
-          success: function(res) {
-            if (res !== "0") {
-              showAlert("댓글이 입력되었습니다.", function() {
-                location.reload();
-              });
-            } else {
-              showAlert("답변글 입력 실패~~");
-            }
-          },
-          error: function() {
-            showAlert("전송오류!");
-          }
-        });
-      }
     
     function toggleLike() {
       $.ajax({
@@ -583,8 +621,8 @@
  
 
 
-    	function replyDelete(idx) {
-    	  if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+    	/* function replyDelete(idx) {
+    	  if (showConfirm('정말로 이 댓글을 삭제하시겠습니까?')) {
     	    $.ajax({
     	      url: "${ctp}/photo/photoReplyDelete",
     	      type: "POST",
@@ -603,7 +641,30 @@
     	      }
     	    });
     	  }
-    	}
+    	} */
+    	
+    	function replyDelete(idx) {
+    		  showConfirm('정말로 이 댓글을 삭제하시겠습니까?', function() {
+    		    $.ajax({
+    		      url: `${ctp}/photo/photoReplyDelete`,
+    		      type: "POST",
+    		      data: {idx: idx},
+    		      success: function(res) {
+    		        if (res === "1") {
+    		          showAlert("댓글이 삭제되었습니다.", function() {
+    		            location.reload();
+    		          });
+    		        } else {
+    		          showAlert("댓글 삭제에 실패했습니다.");
+    		        }
+    		      },
+    		      error: function() {
+    		        showAlert("전송오류!");
+    		      }
+    		    });
+    		  });
+    		}
+
     	
     	 function replyShow(idx) {
 	      const replyForm = document.getElementById('replyForm' + idx);
@@ -621,6 +682,13 @@
 	      }
 	    }
 
+    	 
+    function deletePhoto() {
+    	showConfirm('현재 사진을 삭제하시겠습니까?', function() {
+    		location.href = "photoDelete?idx=${vo.idx}";
+    	});
+    }
+    
 	</script>
 </head>
 <body>
@@ -636,8 +704,11 @@
 	      <img src="${ctp}/member/${photo}" alt="User Avatar" class="user-avatar">
 	      <span class="user-name">${vo.name}</span>
 	      <span class="post-time">${fn:substring(vo.pDate,0,16)}</span> <!-- 이부분 학원에서는 PDate로 바꿔야됨 -->
-	      <c:if test="${sMid == vo.mid}">
-	        <span class="delete-btn" onclick="deletePhoto()"><i class="fas fa-trash"></i></span>
+	      <c:if test="${sMid == vo.mid}"> 
+	      	<div class="updateBtn">
+		        <span class="updateBtn mr-1" onclick="location.href='photoUpdate?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}';"><i class="fa-solid fa-pen-to-square"></i></span>
+		        <span class="updateBtn" onclick="deletePhoto()"><i class="fa-solid fa-xmark"></i></span>	      	
+	      	</div>
 	      </c:if>
 	    </div>
 	    
@@ -668,7 +739,7 @@
 	    <div class="interaction-bar">
 	      <i id="likeButton" class="interaction-icon fa-heart ${isLiked ? 'fas' : 'far'}" onclick="toggleLike()"></i>
 	      <i class="interaction-icon fa-regular fa-comment" data-bs-toggle="modal" data-bs-target="#commentsModal"></i>
-	      <i class="interaction-icon fa-solid fa-arrow-down" onclick="photoDown()"></i>
+	      <a href="photoTotalDown?idx=${vo.idx}"><i class="interaction-icon fa-solid fa-arrow-down"></i></a>
 	    </div>
 	    
 	    <div class="post-likes" onclick="showLikesModal()">
@@ -715,7 +786,9 @@
 	    </c:if>
 	</div>
 </div>
-   <!-- 댓글 모달 -->
+
+
+	<!-- 댓글 모달 -->
 	<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered">
 	    <div class="modal-content">
@@ -724,36 +797,37 @@
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <div class="modal-body">
-		      <c:if test="${!empty replyVos}">	      
-		        <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
-		          <div class="modal-comment ${replyVo.re_step > 0 ? 'reply-comment' : ''}" id="comment${replyVo.idx}">
-		            <span class="modal-comment-username">${replyVo.name}</span>
-		            <span class="modal-comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</span>
-		            <div class="modal-comment-time">
-		              ${fn:substring(replyVo.prDate, 0, 10)}
-		              <c:if test="${sMid == replyVo.mid}">
-		                <a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제" class="delete-btn">삭제</a>
-		              </c:if>
-		                <span id="showReplyBtn${replyVo.idx}" class="reply-btn" onclick="replyShow(${replyVo.idx})">답글 달기</span>
-		                <span id="closeReplyBtn${replyVo.idx}" class="reply-btn" onclick="replyShow(${replyVo.idx})" style="display:none;">닫기</span>
-		            </div>
-		              <div class="reply-form" id="replyForm${replyVo.idx}" style="display:none;">
-			              <input type="text" id="contentRe${replyVo.idx}" placeholder="답글을 입력하세요..." class="comment-input-re" value="@${replyVo.name} ">
-		                <button onclick="submitReply(${replyVo.idx}, ${replyVo.re_step}, ${replyVo.re_order})">게시</button>
-		              </div>
-		          </div>
-		        </c:forEach>
-		      </c:if>
-		      <c:if test="${empty replyVos}">
-		      	<div class="m-3">
-			      	<span class="modal-comment-username">아직 작성된 댓글이 없어요</span>
-		      	</div>
-		      </c:if>
+	        <c:if test="${!empty replyVos}">      
+	          <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
+	            <div class="modal-comment ${replyVo.parentIdx != null ? 'reply-comment' : ''}" id="comment${replyVo.idx}">
+	              <span class="modal-comment-username">${replyVo.name}</span>
+	              <span class="modal-comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</span>
+	              <div class="modal-comment-time">
+	                ${fn:substring(replyVo.prDate, 0, 10)}
+	                <c:if test="${sMid == replyVo.mid}">
+	                  <a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제" class="delete-btn">삭제</a>
+	                </c:if>
+	                <c:if test="${replyVo.parentIdx == null}">
+	                  <span id="showReplyBtn${replyVo.idx}" class="reply-btn" onclick="replyShow(${replyVo.idx})">답글 달기</span>
+	                  <span id="closeReplyBtn${replyVo.idx}" class="reply-btn" onclick="replyShow(${replyVo.idx})" style="display:none;">닫기</span>
+	                </c:if>
+	              </div>
+	              <div class="reply-form" id="replyForm${replyVo.idx}" style="display:none;">
+	                <input type="text" id="contentRe${replyVo.idx}" placeholder="답글을 입력하세요..." class="comment-input-re" value="@${replyVo.name} ">
+	                <button onclick="submitReply(${replyVo.idx}, ${vo.idx})">게시</button>
+	              </div>
+	            </div>
+	          </c:forEach>
+	        </c:if>
+	        <c:if test="${empty replyVos}">
+	          <div class="m-3">
+	            <span class="modal-comment-username">아직 작성된 댓글이 없어요</span>
+	          </div>
+	        </c:if>
 	      </div>
 	    </div>
 	  </div>
 	</div>
-
 
 
     

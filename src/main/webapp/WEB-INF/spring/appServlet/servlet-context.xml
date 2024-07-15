@@ -19,7 +19,7 @@
 	<resources mapping="/images/**" location="/resources/images/" />
 	<resources mapping="/data/**" location="/resources/data/" />
 	<resources mapping="/member/**" location="/resources/data/member/" />
-	<resources mapping="/board/**" location="/resources/data/board/" />
+	<resources mapping="/notice/**" location="/resources/data/notice/" />
 	<resources mapping="/photo/**" location="/resources/data/photo/" />
 	<resources mapping="/thumbnail/**" location="/resources/data/thumbnail/" />
 	<resources mapping="/fileUpload/**" location="/resources/data/fileUpload/" />

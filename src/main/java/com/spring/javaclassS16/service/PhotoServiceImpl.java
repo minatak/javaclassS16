@@ -1,29 +1,35 @@
 package com.spring.javaclassS16.service;
 
-import com.spring.javaclassS16.common.JavaclassProvide;
-import com.spring.javaclassS16.dao.PhotoDAO;
-import com.spring.javaclassS16.vo.PhotoVO;
-
-import net.coobird.thumbnailator.Thumbnailator;
-
-import com.spring.javaclassS16.vo.MemberVO;
-import com.spring.javaclassS16.vo.PhotoReplyVO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.spring.javaclassS16.common.JavaclassProvide;
+import com.spring.javaclassS16.dao.PhotoDAO;
+import com.spring.javaclassS16.vo.MemberVO;
+import com.spring.javaclassS16.vo.PhotoReplyVO;
+import com.spring.javaclassS16.vo.PhotoVO;
+
+import net.coobird.thumbnailator.Thumbnailator;
 
 @Service
 public class PhotoServiceImpl implements PhotoService {
@@ -213,13 +219,8 @@ public class PhotoServiceImpl implements PhotoService {
 	}
 
 	@Override
-	public int setPhotoReplyInput(PhotoReplyVO replyVO) {
-		return photoDAO.setPhotoReplyInput(replyVO);
-	}
-
-	@Override
-	public void setReplyOrderUpdate(int photoIdx, int re_order) {
-		photoDAO.setReplyOrderUpdate(photoIdx, re_order);
+	public int setPhotoReplyInput(PhotoReplyVO vo) {
+		return photoDAO.setPhotoReplyInput(vo);
 	}
 
 	@Override
@@ -230,6 +231,137 @@ public class PhotoServiceImpl implements PhotoService {
 	@Override
 	public List<MemberVO> getPhotoLikers(int idx) {
 		return photoDAO.getPhotoLikers(idx);
+	}
+
+	@Override
+	public PhotoReplyVO getPhotoReplyVo(int idx) {
+		return photoDAO.getPhotoReplyVo(idx);
+	}
+
+	@Override
+	public void setPhotoReplyDeleteByParentIdx(int idx) {
+		photoDAO.setPhotoReplyDeleteByParentIdx(idx);
+	}
+
+	@Override
+	public List<String> extractImagePaths(String content) {
+    List<String> imagePaths = new ArrayList<>();
+    Pattern pattern = Pattern.compile("src=\"([^\"]+)\""); // pattern : 정규 표현식을 정의
+    Matcher matcher = pattern.matcher(content);						 // matcher : 주어진 문자열에서 패턴과 일치하는 부분을 찾음
+    while (matcher.find()) {
+      String fullPath = matcher.group(1);
+      String fileName = fullPath.substring(fullPath.lastIndexOf("/") + 1);
+      imagePaths.add(fileName);
+    }
+    return imagePaths;
+	}
+
+	@Override
+	public int setPhotoDelete(int idx) {
+		return photoDAO.setPhotoDelete(idx);
+	}
+
+	@Override
+	public void imgDelete(String content) {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/");
+		
+		int position = 28;
+		String nextImg = content.substring(content.indexOf("src=\"/") + position);
+		boolean sw = true;
+		
+		while(sw) {
+			String imgFile = nextImg.substring(0, nextImg.indexOf("\""));
+			
+			String origFilePath = realPath + "photo/" + imgFile;
+			
+			fileDelete(origFilePath);	// photo 폴더의 그림파일을 삭제한다.
+			
+			if(nextImg.indexOf("src=\"/") == -1) sw = false;
+			else nextImg = nextImg.substring(nextImg.indexOf("src=\"/") + position);		
+		}
+	}
+	
+	//서버에 존재하는 파일 삭제처리
+	private void fileDelete(String origFilePath) {
+		File delFile = new File(origFilePath);
+		if(delFile.exists()) delFile.delete();
+	}
+	
+	//파일 복사처리
+	private void fileCopyCheck(String origFilePath, String copyFilePath) {
+		try {
+			FileInputStream fis = new FileInputStream(new File(origFilePath));
+			FileOutputStream fos = new FileOutputStream(new File(copyFilePath));
+			
+			byte[] b = new byte[2048];
+			int cnt = 0;
+			while((cnt = fis.read(b)) != -1) {
+				fos.write(b, 0, cnt);
+			}
+			fos.flush();
+			fos.close();
+			fis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void imgBackup(String content) {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/");
+		
+		int position = 28;
+		String nextImg = content.substring(content.indexOf("src=\"/") + position);
+		boolean sw = true;
+		
+		while(sw) {
+			String imgFile = nextImg.substring(0, nextImg.indexOf("\""));
+			
+			String origFilePath = realPath + "photo/" + imgFile;
+			String copyFilePath = realPath + "ckeditor/" + imgFile;
+			
+			fileCopyCheck(origFilePath, copyFilePath);	// ckeditor폴더의 그림파일을 photo폴더위치로 복사처리하는 메소드.
+			
+			if(nextImg.indexOf("src=\"/") == -1) sw = false;
+			else nextImg = nextImg.substring(nextImg.indexOf("src=\"/") + position);
+		}
+	}
+
+	//content에 이미지가 있다면 이미지를 'ckeditor'폴더에서 'photo'폴더로 복사처리한다.
+	@Override
+	public void imgCheck(String content) {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/");
+		
+		int position = 31;
+		String nextImg = content.substring(content.indexOf("src=\"/") + position);
+		boolean sw = true;
+		
+		while(sw) {
+			String imgFile = nextImg.substring(0, nextImg.indexOf("\""));
+			
+			String origFilePath = realPath + "ckeditor/" + imgFile;
+			String copyFilePath = realPath + "photo/" + imgFile;
+			
+			fileCopyCheck(origFilePath, copyFilePath);	// ckeditor폴더의 그림파일을 photo폴더위치로 복사처리하는 메소드.
+			
+			if(nextImg.indexOf("src=\"/") == -1) sw = false;
+			else nextImg = nextImg.substring(nextImg.indexOf("src=\"/") + position);
+		}
+	}
+
+	@Override
+	public int setPhotoUpdate(PhotoVO vo) {
+		return photoDAO.setPhotoUpdate(vo);
+	}
+
+	@Override
+	public void deletePhotoReply(int idx) {
+		photoDAO.deletePhotoReply(idx);
 	}
 
 }

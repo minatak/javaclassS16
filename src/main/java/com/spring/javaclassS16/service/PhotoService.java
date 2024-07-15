@@ -38,12 +38,28 @@ public interface PhotoService {
 
 	public PhotoReplyVO getPhotoParentReplyCheck(int photoIdx);
 
-	public int setPhotoReplyInput(PhotoReplyVO replyVO);
-
-	public void setReplyOrderUpdate(int photoIdx, int re_order);
+	public int setPhotoReplyInput(PhotoReplyVO vo);
 
 	public PhotoVO getPreNexSearch(int idx, String familyCode, String str);
 
 	public List<MemberVO> getPhotoLikers(int idx);
-  
+
+	public PhotoReplyVO getPhotoReplyVo(int idx);
+
+	public void setPhotoReplyDeleteByParentIdx(int idx);
+
+	public List<String> extractImagePaths(String content);
+
+	public int setPhotoDelete(int idx);
+
+	public void imgDelete(String content);
+
+	public void imgBackup(String content);
+
+	public void imgCheck(String content);
+
+	public int setPhotoUpdate(PhotoVO vo);
+
+	public void deletePhotoReply(int idx);
+
 }

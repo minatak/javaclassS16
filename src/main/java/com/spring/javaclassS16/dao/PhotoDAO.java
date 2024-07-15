@@ -10,7 +10,7 @@ import com.spring.javaclassS16.vo.PhotoVO;
 
 public interface PhotoDAO {
     
-  ArrayList<PhotoVO> getPhotoList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("familyCode") String familyCode, @Param("choice") String choice);
+	public ArrayList<PhotoVO> getPhotoList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("familyCode") String familyCode, @Param("choice") String choice);
   
   public int setPhotoInput(@Param("vo") PhotoVO vo);
   
@@ -42,12 +42,20 @@ public interface PhotoDAO {
 
 	public PhotoReplyVO getPhotoParentReplyCheck(@Param("photoIdx") int photoIdx);
 
-	public int setPhotoReplyInput(@Param("replyVO") PhotoReplyVO replyVO);
-
-	public void setReplyOrderUpdate(@Param("photoIdx") int photoIdx, @Param("re_order") int re_order);
+	public int setPhotoReplyInput(@Param("vo") PhotoReplyVO vo);
 
 	public PhotoVO getPreNexSearch(@Param("idx") int idx, @Param("familyCode") String familyCode, @Param("str") String str);
 
 	public List<MemberVO> getPhotoLikers(int idx);
+
+	public PhotoReplyVO getPhotoReplyVo(@Param("idx") int idx);
+
+	public void setPhotoReplyDeleteByParentIdx(@Param("idx") int idx);
+
+	public int setPhotoDelete(@Param("idx") int idx);
+
+	public int setPhotoUpdate(@Param("vo") PhotoVO vo);
+
+	public void deletePhotoReply(@Param("idx") int idx);
   
 }

@@ -32,8 +32,16 @@
 		</select>
     
     <select id="getPhotoReply" resultType="com.spring.javaclassS16.vo.PhotoReplyVO">
-		    SELECT idx, photoIdx, re_step, re_order, mid, name, prDate, content FROM photoReply 
-		    WHERE photoIdx = #{idx} ORDER BY re_order ASC, idx ASC
+		    SELECT idx, photoIdx, mid, name, prDate, content, parentIdx 
+		    FROM photoReply 
+		    WHERE photoIdx = #{idx} 
+		    ORDER BY 
+		        CASE WHEN parentIdx IS NULL THEN idx ELSE parentIdx END DESC,
+		        CASE WHEN parentIdx IS NULL THEN 0 ELSE idx END ASC
+		</select>
+		
+		<select id="getPhotoReplyVo" resultType="com.spring.javaclassS16.vo.PhotoReplyVO">
+			select * FROM photoReply WHERE idx = #{idx}
 		</select>
 		
 		<select id="getLatestReply" resultType="com.spring.javaclassS16.vo.PhotoReplyVO">
@@ -84,7 +92,8 @@
     </insert>
     
     <insert id="setPhotoReplyInput">
-		  insert into photoReply values (default,#{replyVO.photoIdx},#{replyVO.re_step},#{replyVO.re_order},#{replyVO.mid},#{replyVO.name},default,#{replyVO.content});
+		    INSERT INTO photoReply (photoIdx, mid, name, content, parentIdx)
+		    VALUES (#{vo.photoIdx}, #{vo.mid}, #{vo.name}, #{vo.content}, #{vo.parentIdx})
 		</insert>
     
     <update id="setPhotoReadNumPlus">
@@ -99,17 +108,35 @@
         UPDATE photo SET goodCount = goodCount - 1 WHERE idx = #{idx}
     </update>
     
-    <update id="setReplyOrderUpdate">
-		  update photoReply set re_order = re_order + 1 where photoIdx = #{photoIdx} and re_order > #{re_order};
+    <update id="setPhotoUpdate">
+		  update photo set description=#{vo.description}, content=#{vo.content}, photoCount=#{vo.photoCount}, thumbnail=#{vo.thumbnail} where idx=#{vo.idx};
 		</update>
     
     
-    <delete id="setPhotoReplyDelete">
-        DELETE FROM photoReply WHERE idx = #{idx}
-    </delete>
-    
-    <delete id="removePhotoLike">
+     <delete id="removePhotoLike">
         DELETE FROM photoLikes WHERE photoIdx = #{idx} AND memberIdx = #{memberIdx}
     </delete>
     
+    <delete id="setPhotoReplyDelete">
+		    DELETE FROM photoReply WHERE idx = #{idx} 
+		</delete>
+    
+    <delete id="setPhotoReplyDeleteByParentIdx">
+		    DELETE FROM photoReply WHERE parentIdx = #{idx}
+		</delete>
+    
+    <delete id="setPhotoDelete">
+		    DELETE FROM photo WHERE idx = #{idx}
+		</delete>
+    
+    <delete id="deletePhotoReply">
+		   WITH RECURSIVE cte AS (
+		      SELECT idx FROM photoReply WHERE photoIdx = #{idx}
+		      UNION ALL
+		      SELECT pr.idx FROM photoReply pr
+		      INNER JOIN cte ON pr.parentIdx = cte.idx
+		  )
+		  DELETE FROM photoReply WHERE idx IN (SELECT idx FROM cte);
+		</delete>
+
 </mapper>

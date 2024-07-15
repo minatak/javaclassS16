@@ -1,15 +1,19 @@
-package pagination;
+package com.spring.javaclassS16.pagination;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.spring.javaclassS16.dao.NoticeDAO;
+import com.spring.javaclassS16.vo.PageVO;
 
 @Service
 public class PageProcess {
-/*
+
 	@Autowired
-	BoardDAO boardDAO;
+	NoticeDAO boardDAO;
 	
-	@Autowired
-	PdsDAO pdsDAO;
+//	@Autowired
+//	PdsDAO pdsDAO;
 
 	public PageVO totRecCnt(int pag, int pageSize, String section, String part, String searchString) {
 		PageVO pageVO = new PageVO();
@@ -24,7 +28,7 @@ public class PageProcess {
 				totRecCnt = boardDAO.totRecCntSearch(search, searchString);
 			}
 		}
-		else if(section.equals("pds")) totRecCnt = pdsDAO.totRecCnt(part);
+//		else if(section.equals("pds")) totRecCnt = pdsDAO.totRecCnt(part);
 		
 		int totPage = (totRecCnt % pageSize) == 0 ? (totRecCnt / pageSize) : (totRecCnt / pageSize) + 1;
 		int startIndexNo = (pag - 1) * pageSize;
@@ -50,5 +54,5 @@ public class PageProcess {
 		return pageVO;
 	}
 	
-	*/
+	
 }
