@@ -165,8 +165,8 @@
   </div> -->
   <form name="myform" method="post">
     <div class="form-group">
-      <label for="nickName">글쓴이</label>
-      <input type="text" name="nickName" id="nickName" value="${sName}" readonly class="form-control"/>
+      <label for="memberName">글쓴이</label>
+      <input type="text" name="memberName" id="memberName" value="${sName}" readonly class="form-control"/>
     </div>
     <div class="form-group">
       <label for="title">글제목</label>
@@ -208,9 +208,11 @@
       <input type="button" value="돌아가기" onclick="location.href='${ctp}/notice/noticeList';" class="btn btn-back"/>
     </div>
     <input type="hidden" name="familyCode" value="${sFamCode}"/>
+    <input type="hidden" name="memberIdx" value="${sIdx}"/>
   </form>
 </div>
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

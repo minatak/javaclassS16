@@ -55,7 +55,7 @@
 	
 	
 	<insert id="setNoticeInput">
-	  insert into notice values (default,#{vo.mid},#{vo.nickName},#{vo.title},#{vo.content},default,#{vo.hostIp},#{vo.openSw},default,default,default,#{vo.familyCode});
+	  insert into notice values (default,#{vo.memberIdx},#{vo.memberName},#{vo.familyCode},#{vo.title},#{vo.content},default,,default,default,default,${vo.isImportant},${vo.isPinned});
 	</insert>
 
 	<insert id="setNoticeReplyInput">
