@@ -8,28 +8,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>가족 위치 공유 | HomeLink</title>
+    <title>위치 공유 | HomeLink</title>
     <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_MAP_API_KEY"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=de6e07199c4aa87682edf478ce5966ae"></script>
     <style>
         body {
             font-family: 'Pretendard' !important;
-            background-color: #fff;
+            background-color: #ffffff;
             color: #333333;
-        }
-        .locationContainer {
-            max-width: 900px;
-            margin: 40px auto;
-            background-color: #fff;
-            padding: 40px;
-        }
-        h2 {
-            font-family: 'Pretendard' !important;
-            color: #333;
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 40px;
         }
         .swal2-confirm {
 		      background-color: white !important;
@@ -58,53 +44,28 @@
 		    .swal2-confirm:hover {
 		      background-color: none !important;
 		    }
+        .locationContainer {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 40px;
+        }
+        
+        h2 {
+            font-family: 'Pretendard' !important; 
+            color: #333;
+            font-size: 24px;
+            font-weight: 700 !important;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
         #map { 
             height: 400px; 
             width: 100%;
             margin-bottom: 20px;
         }
-        .family-members {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .family-member {
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .family-member:hover {
-            transform: scale(1.05);
-        }
-        .member-photo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 10px;
-            border: 3px solid #84a98c;
-        }
-        .member-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        .member-status {
-            font-size: 12px;
-            color: #666;
-        }
-        .location-details {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-        }
-        .location-details h4 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
+        
         .btn-update {
             display: block;
             width: 200px;
@@ -115,16 +76,52 @@
             color: #ffffff;
             border: none;
             text-decoration: none;
-            transition: background-color 0.3s;
         }
+        
         .btn-update:hover {
             background-color: #6b8e78;
         }
+        
+        .family-list {
+            margin-top: 40px;
+        }
+        
+        .family-list h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        #familyLocationList {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        #familyLocationList li {
+            padding: 15px 0;
+            border-top: 1px solid #e4e6eb;
+        }
+        
+        #familyLocationList li:last-child {
+            border-bottom: 1px solid #e4e6eb;
+        }
+        
+        #familyLocationList a {
+            color: #84a98c;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        
+        #familyLocationList a:hover {
+            text-decoration: underline;
+        }
+        
         .nav-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
         }
+        
         .nav-button {
             padding: 10px 20px;
             background-color: #84a98c;
@@ -132,12 +129,13 @@
             border: none;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s;
         }
+        
         .nav-button:hover {
             background-color: #6b8e78;
             color: #ffffff;
         }
+        
     </style>
     <script>
     'use strict';
@@ -163,6 +161,7 @@
                 $.ajax({
                     url: "${ctp}/location/locationUpdate",
                     type: "POST",
+                    contentType: "application/json",
                     data: JSON.stringify({ latitude: lat, longitude: lng }),
                     success: function(res) {
                         if(res == "1") {
@@ -179,6 +178,20 @@
         } else {
             showAlert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
         }
+    }
+
+    function loadFamilyLocations() {
+        $.ajax({
+            url: "${ctp}/location/familyLocation",
+            type: "POST",
+            success: function(response) {
+                updateMap(response);
+                updateFamilyList(response);
+            },
+            error: function() {
+                showAlert("가족 위치 정보를 불러오는데 실패했습니다.");
+            }
+        });
     }
 
     function updateMap(locations) {
@@ -203,37 +216,15 @@
         }
     }
 
-    function showMemberLocation(memberIdx) {
-        $.ajax({
-            url: "${ctp}/location/memberLocation",
-            type: "POST",
-            data: { memberIdx: memberIdx },
-            success: function(response) {
-                updateLocationDetails(response);
-                if (response.latitude && response.longitude) {
-                    var position = new kakao.maps.LatLng(response.latitude, response.longitude);
-                    map.setCenter(position);
-                    map.setLevel(3);
-                }
-            },
-            error: function() {
-                showAlert("멤버 위치 정보를 불러오는데 실패했습니다.");
-            }
-        });
-    }
-
-    function updateLocationDetails(location) {
-        var detailsHtml = '';
-        if (location.latitude && location.longitude) {
-            detailsHtml = `
-                <h4>${location.memberName}의 위치</h4>
-                <p>주소: ${location.address}</p>
-                <p>마지막 업데이트: ${location.updateTime}</p>
-            `;
-        } else {
-            detailsHtml = `<p>${location.memberName}님은 현재 위치를 공유하지 않았습니다.</p>`;
+    function updateFamilyList(locations) {
+        var list = $("#familyLocationList");
+        list.empty();
+        for (var i = 0; i < locations.length; i++) {
+            var location = locations[i];
+            list.append('<li>' + 
+                        location.memberName + ': ' + location.address + 
+                        ' <a href="${ctp}/location/memberDetail?memberIdx=' + location.memberIdx + '">상세보기</a></li>');
         }
-        $(".location-details").html(detailsHtml);
     }
 
     function showAlert(message, callback) {
@@ -271,29 +262,22 @@
 <div class="locationContainer">
     <h2>가족 위치 공유</h2>
     
-    <div class="family-members">
-		    <c:forEach items="${familyMembers}" var="member">
-		        <div class="family-member" onclick="showMemberLocation(${member.idx})">
-		            <img src="${ctp}/data/member/${member.photo}" alt="${member.name}" class="member-photo">
-		            <div class="member-name">${member.name}</div>
-		            <div class="member-status">${not empty member.updateTime ? '위치 공유 중' : '위치 미공유'}</div> 
-		        </div>
-		    </c:forEach>
-		</div>
-    
     <div id="map"></div>
-    
-    <div class="location-details">
-        <!-- 선택된 가족 구성원의 위치 정보가 여기에 표시됩니다 -->
-    </div>
     
     <button class="btn-update" onclick="updateMyLocation()">내 위치 업데이트</button>
     
-    <div class="nav-buttons">
+    <div class="family-list">
+        <h4>가족 구성원 위치</h4>
+        <ul id="familyLocationList">
+            <!-- 가족 구성원 위치 정보가 여기에 동적으로 추가됩니다 -->
+        </ul>
+    </div>
+		<div class="nav-buttons">
         <a href="${ctp}/location/locationSave" class="nav-button">저장된 장소</a>
         <a href="${ctp}/location/locationDetail" class="nav-button">가족 위치정보</a>
     </div>
 </div>
+
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>

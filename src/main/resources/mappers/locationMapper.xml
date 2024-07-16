@@ -3,10 +3,7 @@
 <mapper namespace="com.spring.javaclassS16.dao.LocationDAO">
   
   <select id="getFamilyLocations" resultType="com.spring.javaclassS16.vo.LocationVO">
-    SELECT l.* 
-    FROM location l
-    JOIN member m ON l.memberIdx = m.idx
-    WHERE m.familyCode = #{familyCode}
+    SELECT * FROM location WHERE memberIdx = #{memberIdx} and familyCode = #{familyCode};
   </select>
   
   <select id="getCurrentLocation" resultType="com.spring.javaclassS16.vo.LocationVO">
@@ -29,6 +26,15 @@
     WHERE memberIdx = #{memberIdx} 
     AND familyCode = #{familyCode}
   </select>
+  
+  <select id="getMemberLocation" resultType="com.spring.javaclassS16.vo.LocationVO">
+	  SELECT l.*, m.name, m.photo
+	  FROM location l
+	  JOIN member m ON l.memberIdx = m.idx
+	  WHERE l.memberIdx = #{memberIdx}
+	  ORDER BY l.updateTime DESC
+	  LIMIT 1
+	</select>
   
   
   <insert id="setSavePlace">

@@ -51,4 +51,9 @@ public class LocationServiceImpl implements LocationService {
     public int setDeletePlace(int placeIdx, int memberIdx, String familyCode) {
         return locationDAO.setDeletePlace(placeIdx, memberIdx, familyCode);
     }
+
+	@Override
+	public LocationVO getMemberLocation(int memberIdx) {
+		return locationDAO.getMemberLocation(memberIdx);
+	}
 }

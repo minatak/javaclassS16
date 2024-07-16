@@ -1,6 +1,7 @@
 package com.spring.javaclassS16.service;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -137,6 +138,11 @@ public class MemberServiceImpl implements MemberService {
 	
 	  return age;
   }
+
+	@Override
+	public List<MemberVO> getFamilyMembersByFamCode(String familyCode) {
+		return memberDAO.getFamilyMembersByFamCode(familyCode);
+	}
   
 	
 }

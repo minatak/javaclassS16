@@ -23,10 +23,15 @@ public class LocationController {
     MemberService memberService;
   
     @RequestMapping(value = "/locationMain", method = RequestMethod.GET)
-    public String locationMainGet() {
-        return "location/locationMain";
+    public String locationMainGet(HttpSession session, Model model) {
+	    String sFamCode = (String) session.getAttribute("sFamCode");
+    
+        List<MemberVO> familyMembers = memberService.getFamilyMembersByFamCode(sFamCode);
+        model.addAttribute("familyMembers", familyMembers);
+    
+	    return "location/locationMain";
     }
-
+    
     @ResponseBody
     @RequestMapping(value = "/locationUpdate", method = RequestMethod.POST)
     public String locationUpdatePost(@RequestBody LocationVO vo, HttpSession session) {
@@ -34,10 +39,8 @@ public class LocationController {
         vo.setMemberIdx(memberIdx);
         int res = locationService.setUpdateLocation(vo);
         
-        if(res != 0) return "redirect:/message/locationUpdateOk";
-        else return "redirect:/message/locationUpdateNo";
+        return res != 0 ? "1" : "0";
     }
-    
 
     @ResponseBody
     @RequestMapping(value = "/familyLocation", method = RequestMethod.POST)
@@ -48,6 +51,23 @@ public class LocationController {
         return locationService.getFamilyLocations(memberIdx, familyCode);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/memberLocation", method = RequestMethod.POST)
+    public LocationVO memberLocationPost(@RequestParam int memberIdx) {
+        return locationService.getMemberLocation(memberIdx);
+    }
+
+    @RequestMapping(value = "/locationDetail", method = RequestMethod.GET)
+    public String locationDetailGet() {
+        return "location/locationDetail";
+    }
+
+    @RequestMapping(value = "/locationSave", method = RequestMethod.GET)
+    public String locationSaveGet() {
+        return "location/locationSave";
+    }
+
+    /*
     @RequestMapping(value = "/locationDetail", method = RequestMethod.GET)
     public String getMemberLocationDetail(Model model, HttpSession session) {
         String familyCode = (String) session.getAttribute("sFamCode");
@@ -58,7 +78,9 @@ public class LocationController {
         model.addAttribute("locationHistoryVos", locationHistoryVos);
         return "location/locationDetail";
     }
+	*/
 
+    /*
     @RequestMapping(value = "/locationSave", method = RequestMethod.GET)
     public String getSavedPlaces(Model model, HttpSession session) {
         int memberIdx = (int) session.getAttribute("sIdx");
@@ -67,6 +89,7 @@ public class LocationController {
         model.addAttribute("vo", vo);
         return "location/locationSave";
     }
+	*/
 
     @ResponseBody
     @RequestMapping(value = "/savePlace", method = RequestMethod.POST)

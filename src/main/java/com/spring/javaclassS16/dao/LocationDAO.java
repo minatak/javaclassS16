@@ -28,6 +28,8 @@ public interface LocationDAO {
     // 저장된 장소 삭제
     public int setDeletePlace(@Param("placeIdx") int placeIdx, @Param("memberIdx") int memberIdx, @Param("familyCode") String familyCode);
 
-		public int setInsertLocation(@Param("vo") LocationVO vo);
+	public int setInsertLocation(@Param("vo") LocationVO vo);
+
+	public LocationVO getMemberLocation(@Param("memberIdx") int memberIdx);
 
 }

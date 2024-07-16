@@ -6,7 +6,7 @@ import com.spring.javaclassS16.vo.SavedPlaceVO;
 
 public interface LocationService {
   
-	public int setUpdateLocation(LocationVO locationVO);
+  public int setUpdateLocation(LocationVO locationVO);
   
   public List<LocationVO> getFamilyLocations(int memberIdx, String familyCode);
   
@@ -19,5 +19,7 @@ public interface LocationService {
   public int setSavePlace(SavedPlaceVO savedPlace);
   
   public int setDeletePlace(int placeIdx, int memberIdx, String familyCode);
+
+  public LocationVO getMemberLocation(int memberIdx);
 
 }

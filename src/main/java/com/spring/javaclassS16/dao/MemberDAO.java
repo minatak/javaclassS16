@@ -1,5 +1,7 @@
 package com.spring.javaclassS16.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.javaclassS16.vo.MemberVO;
@@ -31,6 +33,8 @@ public interface MemberDAO {
 	public void createFamily(@Param("code") String code);
 
 	public void updateMemberFamilyCode(@Param("mid") String mid, @Param("familyCode") String familyCode);
+
+	public List<MemberVO> getFamilyMembersByFamCode(@Param("familyCode") String familyCode);
 
 
 }

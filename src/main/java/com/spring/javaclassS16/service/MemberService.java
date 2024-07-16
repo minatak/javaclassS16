@@ -1,5 +1,7 @@
 package com.spring.javaclassS16.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javaclassS16.vo.MemberVO;
@@ -35,5 +37,7 @@ public interface MemberService {
 	public boolean connectToFamily(String mid, String familyCode);
 
 	public int calculateAge(String birthday);
+
+	public List<MemberVO> getFamilyMembersByFamCode(String familyCode);
 
 }
