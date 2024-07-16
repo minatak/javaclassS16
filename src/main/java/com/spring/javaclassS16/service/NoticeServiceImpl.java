@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.spring.javaclassS16.dao.NoticeDAO;
+import com.spring.javaclassS16.vo.MemberVO;
 import com.spring.javaclassS16.vo.NoticeReadStatusVO;
 import com.spring.javaclassS16.vo.NoticeReplyVO;
 import com.spring.javaclassS16.vo.NoticeVO;
@@ -32,8 +34,8 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public NoticeVO getNoticeContent(int idx, String familyCode) {
-		return noticeDAO.getNoticeContent(idx, familyCode);
+	public NoticeVO getNoticeContent(int idx) {
+		return noticeDAO.getNoticeContent(idx);
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public class NoticeServiceImpl implements NoticeService {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/");
 		
-		int position = 31;
+		int position = 32;
 		String nextImg = content.substring(content.indexOf("src=\"/") + position);
 		boolean sw = true;
 		
@@ -120,7 +122,7 @@ public class NoticeServiceImpl implements NoticeService {
 			String origFilePath = realPath + "notice/" + imgFile;
 			String copyFilePath = realPath + "ckeditor/" + imgFile;
 			
-			fileCopyCheck(origFilePath, copyFilePath);	// ckeditor폴더의 그림파일을 notice폴더위치로 복사처리하는 메소드.
+			fileCopyCheck(origFilePath, copyFilePath);	// ckeditor 폴더의 그림파일을 notice 폴더위치로 복사처리하는 메소드.
 			
 			if(nextImg.indexOf("src=\"/") == -1) sw = false;
 			else nextImg = nextImg.substring(nextImg.indexOf("src=\"/") + position);
@@ -170,11 +172,6 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public NoticeReplyVO getNoticeParentReplyCheck(int noticeIdx) {
-		return noticeDAO.getNoticeParentReplyCheck(noticeIdx);
-	}
-
-	@Override
 	public int setNoticeReplyInput(NoticeReplyVO replyVO) {
 		return noticeDAO.setNoticeReplyInput(replyVO);
 	}
@@ -182,11 +179,6 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public List<NoticeReplyVO> getNoticeReply(int idx) {
 		return noticeDAO.getNoticeReply(idx);
-	}
-
-	@Override
-	public void setReplyOrderUpdate(int noticeIdx, int re_order) {
-		noticeDAO.setReplyOrderUpdate(noticeIdx, re_order);
 	}
 
 	@Override
@@ -202,6 +194,45 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public NoticeReadStatusVO getReadStatus(int idx, int memberIdx) {
 		return noticeDAO.getReadStatus(idx, memberIdx);
+	}
+
+	@Override
+	public boolean getNoticeLike(int idx, int memberIdx) {
+		return noticeDAO.getNoticeLike(idx, memberIdx);
+	}
+
+	@Override
+	public NoticeReplyVO getNoticeReplyVo(int idx) {
+		return noticeDAO.getNoticeReplyVo(idx);
+	}
+
+	@Override
+	public void setNoticeReplyDeleteByParentIdx(int idx) {
+		noticeDAO.setNoticeReplyDeleteByParentIdx(idx);
+	}
+
+	@Override
+	public String toggleNoticeLike(int idx, int memberIdx) {
+		 boolean liked = noticeDAO.getNoticeLike(idx, memberIdx);
+     if (liked) {
+    	 noticeDAO.removeNoticeLike(idx, memberIdx);
+    	 noticeDAO.decreaseNoticeLikeCount(idx);
+       return "unliked";
+     } else {
+    	 noticeDAO.addNoticeLike(idx, memberIdx);
+    	 noticeDAO.increaseNoticeLikeCount(idx);
+       return "liked";
+     }
+	}
+
+	@Override
+	public String setNoticeReplyDelete(int idx) {
+		return noticeDAO.setNoticeReplyDelete(idx);
+	}
+
+	@Override
+	public List<MemberVO> getNoticeLikers(int idx) {
+		return noticeDAO.getNoticeLikers(idx);
 	}
 	
 }

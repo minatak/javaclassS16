@@ -32,28 +32,66 @@
       font-weight: 700;
     }
     .notice-item {
-      border-bottom: 1px solid #e5e5e5;
-      padding: 15px 0;
-      display: flex;
-      align-items: center;
-    }
-    .notice-item:hover {
-      background-color: #f8f9fa;
-    }
-    .notice-number {
-      flex: 0 0 60px;
-      font-weight: bold;
-      color: #666;
-    }
-    .notice-title {
-      flex: 1;
-      font-weight: 500;
-    }
-    .notice-date {
-      flex: 0 0 100px;
-      text-align: center;
-      color: #666;
-    }
+		  border-bottom: 1px solid #e5e5e5;
+		  padding: 15px 0;
+		  display: flex;
+		  align-items: center;
+		}
+		.notice-number {
+		  flex: 0 0 60px;
+		  font-weight: bold;
+		  color: #666;
+		}
+		.notice-title {
+		  flex: 1;
+		  font-weight: 500;
+		}
+		.notice-author {
+		  flex: 0 0 100px;
+		  text-align: center;
+		}
+		.notice-views {
+		  flex: 0 0 60px;
+		  text-align: center;
+		}
+		.notice-date {
+		  flex: 0 0 100px;
+		  text-align: center;
+		}
+		.pinned {
+		  background-color: #f0f8ff;
+		}
+		.pinned-icon {
+		  color: #e4e6eb;
+		  margin-right: 5px;
+		}
+    /* 
+    .notice-item {
+		  border-bottom: 1px solid #e5e5e5;
+		  padding: 15px 0;
+		  display: flex;
+		  align-items: center;
+		}
+		.notice-number {
+		  flex: 0 0 120px;
+		  display: flex;
+		  align-items: center;
+		}
+		.notice-title {
+		  flex: 1;
+		  font-weight: 500;
+		}
+		.notice-info {
+		  flex: 0 0 150px;
+		  display: flex;
+		  flex-direction: column;
+		  align-items: flex-end;
+		}
+		.notice-date {
+		  flex: 0 0 100px;
+		  text-align: right;
+		} */
+    
     .btn-write {
       background-color: #e4e6eb;
       border-color: #e4e6eb;
@@ -81,13 +119,15 @@
       color: white;
     }
     .badge-unread {
-      background-color: #007bff;
-      color: white;
-    }
-    .badge-important {
-      background-color: #eb4444;	
-      color: white;
-    }
+	    background-color: #f0f2f5;
+	    color: #333;
+	  }
+	  
+	  .badge-important {
+	    background-color: #e4e6eb;
+	    color: #333;
+	    font-weight: bold;
+	  }
     .searchContainer {
       display: flex;
       justify-content: center;
@@ -168,30 +208,35 @@
       <a href="noticeInput" class="btn btn-write">글쓰기</a> 
     </div>
     
+    <c:set var="pinnedCount" value="${fn:length(vos.stream().filter(vo -> vo.pinned).toList())}" />
+		<c:set var="counter" value="${(pageVO.pag-1) * pageVO.pageSize - pinnedCount}" />
     <div class="notice-list">
-      <c:forEach var="vo" items="${vos}" varStatus="st">
-        <div class="notice-item ${vo.pinned ? 'pinned' : ''}">
-          <div class="notice-number">
-            <c:if test="${vo.pinned}"><i class="fa-solid fa-thumbtack pinned-icon"></i></c:if>
-            <c:if test="${!vo.read}"><span class="badge badge-unread ml-1">안읽음</span></c:if>
-            <c:if test="${vo.important}"><span class="badge badge-important ml-1">중요</span></c:if>
-            <c:if test="${!vo.pinned}">${st.count}</c:if>
-          </div>
-          <div class="notice-title">
-            <a href="noticeContent?idx=${vo.idx}&pag=${pageVO.pag}&pageSize=${pageVO.pageSize}" class="text-dark">
-              ${vo.title}
-              <c:if test="${vo.hour_diff <= 24}"><span class="badge badge-new ml-1">N</span></c:if>
-            </a>
-          </div>
-          <div class="notice-date">
-            ${fn:substring(vo.createdAt,0,10)}
-          </div>
-        </div>
-      </c:forEach>
-    </div>
+		  <c:forEach var="vo" items="${vos}" varStatus="st">
+		    <c:set var="counter" value="${counter + 1}" />
+		    <div class="notice-item ${vo.pinned ? 'pinned' : ''}">
+		      <div class="notice-number">
+		        <c:if test="${vo.pinned}"><i class="fa-solid fa-thumbtack pinned-icon"></i></c:if>
+		        <c:if test="${!vo.pinned}">${counter}</c:if>
+		      </div>
+		      <div class="notice-title">
+		        <a href="noticeContent?idx=${vo.idx}&pag=${pageVO.pag}&pageSize=${pageVO.pageSize}" class="text-dark">
+		          ${vo.title}
+		          <c:if test="${vo.hour_diff <= 24}"><span class="badge badge-new ml-1">N</span></c:if>
+		          <c:if test="${vo.important}"><span class="badge badge-important ml-1">중요</span></c:if>
+		          <c:if test="${!vo.read}"><span class="badge badge-unread ml-1">안읽음</span></c:if>
+		        </a>
+		      </div>
+		      <div class="notice-author">${vo.memberName}</div>
+		      <div class="notice-views text-muted">${vo.viewCount}</div>
+		      <div class="notice-date text-muted">
+		        ${fn:substring(vo.createdAt,0,10)}
+		      </div>
+		    </div> 
+		  </c:forEach>
+		</div>
     
     <!-- 페이지네이션 -->
-    <div class="d-flex justify-content-center my-4">
+  <%--   <div class="d-flex justify-content-center my-4">
       <ul class="pagination">
         <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link" href="noticeList?pag=1&pageSize=${pageVO.pageSize}">처음</a></li></c:if>
         <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link" href="noticeList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전</a></li></c:if>
@@ -202,8 +247,42 @@
         <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link" href="noticeList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음</a></li></c:if>
         <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link" href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막</a></li></c:if>
       </ul>
-    </div>
+    </div>  --%>
     
+    
+    <div class="d-flex justify-content-center my-4">
+		  <ul class="pagination">
+		    <c:if test="${pageVO.pag > 1}">
+		      <li class="page-item"><a class="page-link" href="noticeList?pag=1&pageSize=${pageVO.pageSize}">처음</a></li>
+		      <li class="page-item"><a class="page-link" href="noticeList?pag=${pageVO.pag-1}&pageSize=${pageVO.pageSize}">이전</a></li>
+		    </c:if>
+		    <c:forEach var="i" begin="${pageVO.pag > 2 ? pageVO.pag-2 : 1}" end="${pageVO.pag+2 > pageVO.totPage ? pageVO.totPage : pageVO.pag+2}" varStatus="st">
+		      <li class="page-item ${i == pageVO.pag ? 'active' : ''}">
+		        <a class="page-link" href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a>
+		      </li>
+		    </c:forEach>
+		    <c:if test="${pageVO.pag < pageVO.totPage}">
+		      <li class="page-item"><a class="page-link" href="noticeList?pag=${pageVO.pag+1}&pageSize=${pageVO.pageSize}">다음</a></li>
+		      <li class="page-item"><a class="page-link" href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막</a></li>
+		    </c:if>
+		  </ul>
+		</div>
+    
+    <!-- 블록페이지 시작 -->
+		<div class="text-center">
+		  <ul class="pagination justify-content-center">
+			  <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=1&pageSize=${pageVO.pageSize}">첫페이지</a></li></c:if>
+			  <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전블록</a></li></c:if>
+			  <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
+			    <c:if test="${i <= pageVO.totPage && i == pageVO.pag}"><li class="page-item active"><a class="page-link bg-secondary border-secondary" href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
+			    <c:if test="${i <= pageVO.totPage && i != pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
+			  </c:forEach>
+			  <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음블록</a></li></c:if>
+			  <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막페이지</a></li></c:if>
+		  </ul>
+		</div>
+		<!-- 블록페이지 끝 -->
+     
   </div>
 </div>
 

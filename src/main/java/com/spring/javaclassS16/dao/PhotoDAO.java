@@ -57,5 +57,7 @@ public interface PhotoDAO {
 	public int setPhotoUpdate(@Param("vo") PhotoVO vo);
 
 	public void deletePhotoReply(@Param("idx") int idx);
+
+	public int totRecCnt(@Param("part") String part);
   
 }

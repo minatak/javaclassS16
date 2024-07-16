@@ -23,6 +23,33 @@
       background-color: #fff;
       padding: 40px;
     }
+    .swal2-confirm {
+      background-color: white !important;
+      color: black !important;
+      border-radius: 0px !important;
+      box-shadow: none !important;
+      font-weight: bold !important;
+      font-size: 18px !important;
+      margin: 0 !important;
+      
+    }
+    .swal2-cancel {
+      background-color: white !important;
+      color: black !important;
+      border-radius: 0px !important;
+      box-shadow: none !important;
+      /* font-weight: bold !important; */
+      font-size: 18px !important;
+      margin: 0 !important;
+    }
+    .custom-swal-popup {
+      width: 350px !important;
+      padding-top: 20px !important;
+      border-radius: 0px !important;
+    }
+    .swal2-confirm:hover {
+      background-color: none !important;
+    }
     
     h2 {
       font-family: 'Pretendard' !important; 
@@ -52,10 +79,18 @@
     }
     
     .notice-content {
-      padding: 20px 0;
-      line-height: 1.6;
-      min-height: 200px;
-    }
+		  padding: 20px 0;
+		  line-height: 1.6;
+		  min-height: 200px;
+		  max-width: 100%; /* 컨텐츠의 최대 너비를 컨테이너에 맞춤 */
+		}
+		
+		.notice-content img {
+		  max-width: 100%;
+		  height: auto;
+		  display: block;
+		  margin: 10px 0;
+		}
     
     .interaction-bar {
       padding: 20px 0;
@@ -155,7 +190,7 @@
 		
 		.comment-input-container {
 		  position: relative;
-		  margin-bottom: 20px;
+		  margin-bottom: 40px;
 		}
 		
 		.comment-input {
@@ -176,118 +211,42 @@
 		  border: none;
 		  padding: 8px 16px;
 		  font-weight: 600;
-		  /* border-radius: 4px; */
+		  margin-bottom: 20px; /* 버튼 아래 여백 추가 */
 		}
-    
-	  .swal2-confirm {
-      background-color: white !important;
-      color: black !important;
-      border-radius: 0px !important;
-      box-shadow: none !important;
-      font-weight: bold !important;
-      font-size: 18px !important;
-      margin: 0 !important;
-      
-    }
-    .swal2-cancel {
-      background-color: white !important;
-      color: black !important;
-      border-radius: 0px !important;
-      box-shadow: none !important;
-      /* font-weight: bold !important; */
-      font-size: 18px !important;
-      margin: 0 !important;
-    }
-    .custom-swal-popup {
-      width: 350px !important;
-      padding-top: 20px !important;
-      border-radius: 0px !important;
-    }
-    .swal2-confirm:hover {
-      background-color: none !important;
-    }
+		
+    .reply-form {
+	    margin-top: 10px;
+	    padding-left: 20px;
+	    border-left: 2px solid #e4e6eb;
+	    display: none;
+	  }
+	  .reply-btn {
+	    cursor: pointer;
+	    color: #84a98c;
+	    margin-left: 10px;
+	  }
+	  .reply-btn:hover {
+	    text-decoration: underline;
+	  }
+	  .comment.reply {
+		  margin-left: 20px;
+		  border-left: 2px solid #e4e6eb;
+		  padding-left: 15px;
+		  margin-top: 10px;
+		}
+	  .delete-btn {
+		  cursor: pointer;
+		  color: #dc3545;
+		  margin-left: 10px;
+		}
+		
+		.delete-btn:hover {
+		  text-decoration: underline;
+		}
+	  
   </style>
   <script>
     'use strict';
-    
-    function noticeDelete() {
-      showConfirm("현재 공지사항을 삭제하시겠습니까?", function() {
-        location.href = "noticeDelete?idx=${vo.idx}";
-      });
-    }
-    
-    function toggleLike() {
-      $.ajax({
-        url: "${ctp}/notice/noticeToggleLike",
-        type: "post",
-        data: {idx: ${vo.idx}},
-        success: function(res) {
-          if(res === "liked") {
-            $("#likeButton").addClass("active");
-            location.reload();
-          } else if(res === "unliked") {
-            $("#likeButton").removeClass("active");
-            location.reload();
-          } else {
-            showAlert("좋아요 처리 중 오류가 발생했습니다.");
-          }
-        },
-        error: function() {
-          showAlert("서버 통신 오류");
-        }
-      });
-    }
-    
-    function submitComment() {
-      let content = $("#commentContent").val();
-      if(content.trim() == "") {
-        showAlert("댓글을 입력하세요");
-        return false;
-      }
-      let query = {
-        noticeIdx: ${vo.idx},
-        content: content
-      }
-      
-      $.ajax({
-        url: "${ctp}/notice/noticeReplyInput",
-        type: "post",
-        data: query,
-        success: function(res) {
-          if(res != "0") {
-            showAlert("댓글이 입력되었습니다.", function() {
-              location.reload();
-            });
-          }
-          else showAlert("댓글 입력에 실패했습니다.");
-        },
-        error: function() {
-          showAlert("전송 오류!");
-        }
-      });
-    }
-    
-    function deleteComment(idx) {
-      showConfirm("이 댓글을 삭제하시겠습니까?", function() {
-        $.ajax({
-          url: "${ctp}/notice/noticeReplyDelete",
-          type: "POST",
-          data: {idx: idx},
-          success: function(res) {
-            if (res === "1") {
-              showAlert("댓글이 삭제되었습니다.", function() {
-                location.reload();
-              });
-            } else {
-              showAlert("댓글 삭제에 실패했습니다.");
-            }
-          },
-          error: function() {
-            showAlert("전송오류!");
-          }
-        });
-      });
-    }
     
 
     // 커스텀 알럿
@@ -314,31 +273,123 @@
   	}
     
     function showConfirm(message, confirmCallback, cancelCallback) {
-    	  Swal.fire({
-    	    html: message,
-    	    showCancelButton: true,
-    	    cancelButtonText: '취소',
-    	    confirmButtonText: '확인',
-    	    customClass: {
-    	      cancelButton: 'swal2-cancel',
-    	      confirmButton: 'swal2-confirm',
-    	      popup: 'custom-swal-popup',
-    	      htmlContainer: 'custom-swal-text'
-    	    },
-    	    scrollbarPadding: false,
-    	    allowOutsideClick: false,
-    	    heightAuto: false,
-    	    didOpen: () => {
-    	      document.body.style.paddingRight = '0px';
-    	    }
-    	  }).then((result) => {
-    	    if (result.isConfirmed && confirmCallback) {
-    	      confirmCallback();
-    	    } else if (result.isDismissed && cancelCallback) {
-    	      cancelCallback();
-    	    }
-    	  });
-    	}
+  	  Swal.fire({
+  	    html: message,
+  	    showCancelButton: true,
+  	    cancelButtonText: '취소',
+  	    confirmButtonText: '확인',
+  	    customClass: {
+  	      cancelButton: 'swal2-cancel',
+  	      confirmButton: 'swal2-confirm',
+  	      popup: 'custom-swal-popup',
+  	      htmlContainer: 'custom-swal-text'
+  	    },
+  	    scrollbarPadding: false,
+  	    allowOutsideClick: false,
+  	    heightAuto: false,
+  	    didOpen: () => {
+  	      document.body.style.paddingRight = '0px';
+  	    }
+  	  }).then((result) => {
+  	    if (result.isConfirmed && confirmCallback) {
+  	      confirmCallback();
+  	    } else if (result.isDismissed && cancelCallback) {
+  	      cancelCallback();
+  	    }
+  	  });
+  	}
+    
+    function noticeDelete() {
+      showConfirm("현재 공지사항을 삭제하시겠습니까?", function() {
+        location.href = "noticeDelete?idx=${vo.idx}";
+      });
+    }
+    
+   /*  function showReplyForm(idx) {
+    	let replyForm = document.getElementById('replyForm' + idx);
+    	
+    	replyForm.style.display = 'block';
+    } */
+    
+    function toggleReplyForm(idx) {
+      let replyForm = document.getElementById('replyForm' + idx);
+      let replyBtn = document.getElementById('replyBtn' + idx);
+      
+      if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+        replyForm.style.display = 'block';
+        replyBtn.innerText = '닫기';
+        $(replyForm).slideDown(300);
+      } else {
+        replyBtn.innerText = '답글 달기';
+        $(replyForm).slideUp(300);
+      }
+    }
+
+    function submitComment(parentIdx) {
+  	  let contentElement;
+  	  if (parentIdx == 0) {
+  	    contentElement = document.getElementById("commentContent");
+  	  } else {
+  	    contentElement = document.getElementById("replyContent" + parentIdx);
+  	  }
+  	  
+  	  if (!contentElement) {
+  	    showAlert("댓글 입력 필드를 찾을 수 없습니다.");
+  	    return false;
+  	  }
+  	  
+  	  let content = contentElement.value.trim();
+  	  
+  	  if(content == "") {
+  	    showAlert("댓글을 입력하세요");
+  	    return false;
+  	  }
+  	  
+  	  let query = {
+  	    noticeIdx: ${vo.idx},
+  	    memberIdx: ${sIdx},
+  	    content: content,
+  	    parentIdx: parentIdx == 0 ? null : parentIdx
+  	  }
+  	  
+  	  $.ajax({
+  	    url: "${ctp}/notice/noticeReplyInput",
+  	    type: "post",
+  	    data: query,
+  	    success: function(res) {
+  	      if(res != "0") {
+  	        showAlert("댓글이 입력되었습니다.", function() {
+  	          location.reload();
+  	        });
+  	      }
+  	      else showAlert("댓글 입력에 실패했습니다.");
+  	    },
+  	    error: function() {
+  	      showAlert("전송 오류!");
+  	    }
+  	  });
+  	}
+
+
+  	function toggleLike() {
+  	  $.ajax({
+  	    url: "${ctp}/notice/noticeToggleLike",
+  	    type: "post",
+  	    data: {idx: ${vo.idx}},
+  	    success: function(res) {
+  	      if(res === "liked") {
+  	        $("#likeButton").removeClass('far').addClass('fas active');
+  	      } else if(res === "unliked") {
+  	        $("#likeButton").removeClass('fas active').addClass('far');
+  	      }
+          location.reload();
+  	    },
+  	    error: function() {
+  	      showAlert("좋아요 처리 중 오류가 발생했습니다.");
+  	    }
+  	  });
+  	}
+
   </script>
 </head>
 <body>
@@ -364,7 +415,7 @@
 		          </c:otherwise>
 		        </c:choose>
 		      </span> | 
-		      <span>&nbsp;&nbsp;<i class="far fa-thumbs-up"></i> ${vo.likeCount}</span> | 
+		      <span>&nbsp;&nbsp;<i class="far fa-thumbs-up"></i> ${vo.goodCount}</span> | 
 		      <span>&nbsp;&nbsp;<i class="far fa-eye"></i> ${vo.viewCount}</span> | 
 		      <span>&nbsp;&nbsp;<i class="far fa-comment"></i> ${fn:length(replyVos)}</span>
 		      <c:if test="${vo.createdAt != vo.updatedAt}">
@@ -378,37 +429,67 @@
 		  </div>
 		</div>
 	  
-	  <div class="notice-content" style="margin=0;">
-	    ${vo.content}
+	  <div class="notice-content">
+		  ${fn:replace(vo.content, 'width:', 'max-width:')}
 	  </div>
 	  
 	  <div class="interaction-bar">
 	    <i id="likeButton" class="interaction-icon fa-heart ${isLiked ? 'fas active' : 'far'}" onclick="toggleLike()"></i>
-	    <span>${vo.likeCount}</span>
+	    <span>${vo.goodCount}</span>
 	  </div>
 	  
 	  <div class="comment-section">
 		  <h4>댓글 ${fn:length(replyVos)}개</h4>
-		  <div>
-	    	<textarea id="commentContent" class="comment-input" placeholder="댓글을 입력하세요..." style="padding-bottom: 40px;"></textarea>
+		  <div class="comment-input-container">
+		    <textarea id="commentContent" name="content" class="comment-input" placeholder="댓글을 입력하세요..." style="padding-bottom: 40px;"></textarea>
 		    <div class="text-right">
-		    <button class="btn-comment" onclick="submitComment()">등록</button>		  
+		      <button class="btn-comment" onclick="submitComment(0)">등록</button>    
 		    </div>
 		  </div>
 		    
-	    <!-- 댓글 리스트 -->
-	    <c:forEach var="replyVo" items="${replyVos}">
-	      <div class="comment">
-	        <span class="comment-author">${replyVo.name}</span>
-	        <span>${fn:replace(replyVo.content, newLine, "<br/>")}</span>
-	        <div class="notice-meta">
-	          <fmt:parseDate value="${replyVo.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedReplyDate" type="both" />
-	          <fmt:formatDate value="${parsedReplyDate}" pattern="yyyy.MM.dd" var="formattedReplyDate" />
-	          <span>${formattedReplyDate}</span>
-	        </div>
-	      </div>
-	    </c:forEach>
-	  </div>
+		  <!-- 댓글 리스트 -->
+		  <c:forEach var="replyVo" items="${replyVos}">
+		    <c:if test="${replyVo.parentIdx == null}">
+		      <div class="comment">
+		        <span class="comment-author">${replyVo.name}</span>
+		        <span>${fn:replace(replyVo.content, newLine, "<br/>")}</span>
+		        <div class="notice-meta">
+		          <fmt:parseDate value="${replyVo.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedReplyDate" type="both" />
+		          <fmt:formatDate value="${parsedReplyDate}" pattern="yyyy.MM.dd" var="formattedReplyDate" />
+		          <span>${formattedReplyDate}</span>
+		          <span id="replyBtn${replyVo.idx}" class="reply-btn" onclick="toggleReplyForm(${replyVo.idx})">답글 달기</span>
+		          <c:if test="${replyVo.memberIdx == sIdx}">
+		            <span class="delete-btn" onclick="deleteComment(${replyVo.idx})">삭제</span>
+		          </c:if>
+		        </div>
+		        <div id="replyForm${replyVo.idx}" class="reply-form" style="display: none;">
+		          <textarea id="replyContent${replyVo.idx}" name="replyContent${replyVo.idx}" class="comment-input" placeholder="답글을 입력하세요..." >@${replyVo.name} </textarea>
+		          <div class="text-right">
+		            <button class="btn-comment" onclick="submitComment(${replyVo.idx})">답글 등록</button>    
+		          </div>
+		        </div>
+		        
+		        <!-- 대댓글 표시 -->
+		        <c:forEach var="childReply" items="${replyVos}">
+		          <c:if test="${childReply.parentIdx == replyVo.idx}">
+		            <div class="comment reply" style="margin-left: 20px; border-left: 2px solid #e4e6eb; padding-left: 15px;">
+		              <span class="comment-author">${childReply.name}</span>
+		              <span>${fn:replace(childReply.content, newLine, "<br/>")}</span>
+		              <div class="notice-meta">
+		                <fmt:parseDate value="${childReply.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedChildReplyDate" type="both" />
+		                <fmt:formatDate value="${parsedChildReplyDate}" pattern="yyyy.MM.dd" var="formattedChildReplyDate" />
+		                <span>${formattedChildReplyDate}</span>
+		                <c:if test="${childReply.memberIdx == sIdx}">
+		                  <span class="delete-btn" onclick="deleteComment(${childReply.idx})">삭제</span>
+		                </c:if>
+		              </div>
+		            </div>
+		          </c:if>
+		        </c:forEach>
+		      </div>
+		    </c:if>
+		  </c:forEach>
+		</div>
 	  
 	  <!-- 이전글/다음글 섹션 -->
 	  <div class="navigation-links">

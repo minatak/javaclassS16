@@ -4,16 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.javaclassS16.dao.NoticeDAO;
+import com.spring.javaclassS16.dao.PhotoDAO;
 import com.spring.javaclassS16.vo.PageVO;
 
 @Service
 public class PageProcess {
 
 	@Autowired
-	NoticeDAO boardDAO;
+	PhotoDAO photoDAO;
 	
-//	@Autowired
-//	PdsDAO pdsDAO;
+	@Autowired
+	NoticeDAO noticeDAO;
 
 	public PageVO totRecCnt(int pag, int pageSize, String section, String part, String searchString) {
 		PageVO pageVO = new PageVO();
@@ -21,14 +22,14 @@ public class PageProcess {
 		int totRecCnt = 0;
 		String search = "";
 		
-		if(section.equals("board")) {
-			if(part.equals(""))	totRecCnt = boardDAO.totRecCnt();
+		if(section.equals("notice")) {
+			if(part.equals(""))	totRecCnt = noticeDAO.totRecCnt();
 			else {
 				search = part;
-				totRecCnt = boardDAO.totRecCntSearch(search, searchString);
+				totRecCnt = noticeDAO.totRecCntSearch(search, searchString);
 			}
 		}
-//		else if(section.equals("pds")) totRecCnt = pdsDAO.totRecCnt(part);
+		else if(section.equals("photo")) totRecCnt = photoDAO.totRecCnt(part);
 		
 		int totPage = (totRecCnt % pageSize) == 0 ? (totRecCnt / pageSize) : (totRecCnt / pageSize) + 1;
 		int startIndexNo = (pag - 1) * pageSize;
