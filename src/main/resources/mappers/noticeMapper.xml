@@ -53,8 +53,10 @@
     </select>
     
     <select id="getNoticeReply" resultType="com.spring.javaclassS16.vo.NoticeReplyVO">
-        SELECT * FROM noticeReply WHERE noticeIdx = #{idx} ORDER BY created_at
-    </select>
+		    SELECT nr.*, m.name AS name FROM noticeReply nr
+		    JOIN member m ON nr.memberIdx = m.idx WHERE nr.noticeIdx = #{idx}
+		    ORDER BY nr.createdAt
+		</select>
     
     <select id="totRecCntSearch" resultType="int">
         SELECT COUNT(*) FROM notice WHERE ${search} LIKE CONCAT("%",#{searchString},"%") AND familyCode = #{familyCode}
@@ -62,6 +64,10 @@
     
     <select id="getNoticeSearchList" resultType="com.spring.javaclassS16.vo.NoticeVO">
         SELECT * FROM notice WHERE ${search} LIKE CONCAT("%",#{searchString},"%") AND familyCode = #{familyCode} ORDER BY idx DESC LIMIT #{startIndexNo},#{pageSize}
+    </select>
+
+    <select id="getReadStatus" resultType="com.spring.javaclassS16.vo.NoticeReadStatusVO">
+    	select * from noticeReadStatus where noticeIdx = #{idx} and readerIdx = #{memberIdx}
     </select>
     
     

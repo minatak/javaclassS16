@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.javaclassS16.vo.NoticeReadStatusVO;
 import com.spring.javaclassS16.vo.NoticeReplyVO;
 import com.spring.javaclassS16.vo.NoticeVO;
 
@@ -30,7 +31,7 @@ public interface NoticeDAO {
 
 	public int setNoticeReplyInput(@Param("replyVO") NoticeReplyVO replyVO);
 
-	public List<NoticeReplyVO> getNoticeReply(@Param("idx") int idx, @Param("familyCode") String familyCode);
+	public List<NoticeReplyVO> getNoticeReply(@Param("idx") int idx);
 
 	public void setReplyOrderUpdate(@Param("noticeIdx") int noticeIdx, @Param("re_order") int re_order);
 
@@ -39,5 +40,7 @@ public interface NoticeDAO {
 	public List<NoticeVO> getNoticeSearchList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("search") String search, @Param("searchString") String searchString);
 
 	public void setNoticeRead(@Param("idx") int idx, @Param("memberIdx") int memberIdx);
+
+	public NoticeReadStatusVO getReadStatus(@Param("idx") int idx, @Param("memberIdx") int memberIdx);
 	
 }

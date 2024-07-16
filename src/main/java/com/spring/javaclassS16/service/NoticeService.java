@@ -3,6 +3,7 @@ package com.spring.javaclassS16.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.spring.javaclassS16.vo.NoticeReadStatusVO;
 import com.spring.javaclassS16.vo.NoticeReplyVO;
 import com.spring.javaclassS16.vo.NoticeVO;
 
@@ -32,12 +33,14 @@ public interface NoticeService {
 
 	public int setNoticeReplyInput(NoticeReplyVO replyVO);
 
-	public List<NoticeReplyVO> getNoticeReply(int idx, String familyCode);
+	public List<NoticeReplyVO> getNoticeReply(int idx);
 
 	public void setReplyOrderUpdate(int noticeIdx, int re_order);
 
 	public List<NoticeVO> getNoticeSearchList(int startIndexNo, int pageSize, String search, String searchString);
 
 	public void setNoticeRead(int idx, int memberIdx);
+
+	public NoticeReadStatusVO getReadStatus(int idx, int memberIdx);
 
 }

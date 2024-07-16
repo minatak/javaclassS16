@@ -23,7 +23,7 @@ import com.spring.javaclassS16.vo.PageVO;
 
 @Controller
 @RequestMapping("/notice")
-public class NoticeController {
+public class NoticeController2 {
 	
 	@Autowired
 	NoticeService noticeService;

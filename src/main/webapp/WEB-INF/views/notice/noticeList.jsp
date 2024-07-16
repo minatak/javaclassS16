@@ -20,12 +20,13 @@
       background-color: white;
       padding: 40px;
       margin: 30px auto;
-    }
+    } 
     .home-icon { 
       font-size: 24px; 
       color: #e4e6eb; 
     }
     h2 {
+    	font-family: 'Pretendard' !important;
       color: #333;
       margin-bottom: 30px;
       font-weight: 700;
@@ -83,6 +84,10 @@
       background-color: #007bff;
       color: white;
     }
+    .badge-important {
+      background-color: #eb4444;	
+      color: white;
+    }
     .searchContainer {
       display: flex;
       justify-content: center;
@@ -123,12 +128,8 @@
       let pageSize = $("#pageSize").val();
       location.href = "noticeList?pageSize="+pageSize;
     }
+
     
-    function modalCheck(idx, memberIdx, title) {
-      $("#myModal #modalMemberIdx").text(memberIdx);
-      $("#myModal #modalTitle").text(title);
-      $("#myModal #modalIdx").text(idx);
-    }
   </script>
 </head>
 <body>
@@ -172,14 +173,14 @@
         <div class="notice-item ${vo.pinned ? 'pinned' : ''}">
           <div class="notice-number">
             <c:if test="${vo.pinned}"><i class="fa-solid fa-thumbtack pinned-icon"></i></c:if>
-            <c:if test="${vo.important}"><i class="fa-solid fa-exclamation important-icon"></i></c:if>
-            <c:if test="${!vo.pinned && !vo.important}">${st.count}</c:if>
+            <c:if test="${!vo.read}"><span class="badge badge-unread ml-1">안읽음</span></c:if>
+            <c:if test="${vo.important}"><span class="badge badge-important ml-1">중요</span></c:if>
+            <c:if test="${!vo.pinned}">${st.count}</c:if>
           </div>
           <div class="notice-title">
             <a href="noticeContent?idx=${vo.idx}&pag=${pageVO.pag}&pageSize=${pageVO.pageSize}" class="text-dark">
               ${vo.title}
               <c:if test="${vo.hour_diff <= 24}"><span class="badge badge-new ml-1">N</span></c:if>
-              <c:if test="${!vo.read}"><span class="badge badge-unread ml-1">읽지 않음</span></c:if>
             </a>
           </div>
           <div class="notice-date">

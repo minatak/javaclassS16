@@ -8,7 +8,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>공지사항 상세보기 | HomeLink</title>
+  <title>${vo.title} | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
    <style>
      body {
@@ -75,24 +75,6 @@
       margin-top: 40px;
     }
     
-    .comment-input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccd0d5;
-      border-radius: 4px;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-    
-    .btn-comment {
-      background-color: #84a98c;
-      color: #ffffff;
-      border: none;
-      padding: 8px 16px;
-      font-weight: 600;
-      border-radius: 4px;
-    }
-    
     .comment {
       padding: 15px 0;
       border-top: 1px solid #e4e6eb;
@@ -140,6 +122,63 @@
     .btn-list:hover {
       background-color: #f8f8f8;
     }
+    .btn-edit {
+      width: 60px;
+      /* margin: 40px auto 0; */
+      padding: 10px;
+      background-color: #fff;
+      color: #333; 
+      border: 1px solid #ccc;
+      text-decoration: none;
+    }
+ 
+    .btn-edit:hover {
+      background-color: #f8f8f8;
+    }
+    .action-buttons .btn {
+		  margin-left: 10px;
+		}
+		
+		.notice-meta {
+		  font-size: 14px;
+		  color: #666;
+		  margin-bottom: 10px;
+		}
+		
+		.notice-meta span {
+		  margin-right: 10px;
+		}
+		
+		.notice-meta i {
+		  margin-right: 3px;
+		}
+		
+		.comment-input-container {
+		  position: relative;
+		  margin-bottom: 20px;
+		}
+		
+		.comment-input {
+		  width: 100%;
+		  padding: 12px;
+		  border: 1px solid #ccd0d5;
+		  border-radius: 4px;
+		  font-size: 14px;
+		  resize: vertical;
+		  min-height: 100px;
+		}
+		
+		.btn-comment {
+		  bottom: 10px;
+		  right: 10px;
+		  background-color: #84a98c;
+		  color: #ffffff;
+		  border: none;
+		  padding: 8px 16px;
+		  font-weight: 600;
+		  /* border-radius: 4px; */
+		}
+    
 	  .swal2-confirm {
       background-color: white !important;
       color: black !important;
@@ -306,74 +345,87 @@
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
 
-<div class="noticeContainer">
-  <h2>공지사항</h2>
-  
-  <div class="notice-info">
-    <h3>${vo.title}</h3>
-    <div class="notice-meta">
-		  <span>${vo.memberName}</span> | 
-		  <span>
-		    <fmt:parseDate value="${vo.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDate" type="both" />
-		    <c:choose>
-		      <c:when test="${vo.hour_diff < 24}">
-		        <fmt:formatDate value="${parsedDate}" pattern="yyyy.MM.dd HH:mm"/>
-		      </c:when>
-		      <c:otherwise>
-		        <fmt:formatDate value="${parsedDate}" pattern="yyyy.MM.dd"/>
-		      </c:otherwise>
-		    </c:choose>
-		  </span>
-		  <c:if test="${vo.createdAt != vo.updatedAt}">
-		    <span class="edited-mark">| 수정됨</span>
-		  </c:if>
+	<div class="noticeContainer">
+	  <h2>공지사항</h2>
+	  
+	  <div class="notice-info">
+		  <h3>${vo.title}</h3>
+		  <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+		    <div class="notice-meta">
+		      <span>${vo.memberName}</span> | 
+		      <span>&nbsp;
+		        <fmt:parseDate value="${vo.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDate" type="both" />
+		        <c:choose>
+		          <c:when test="${vo.hour_diff < 24}">
+		            <fmt:formatDate value="${parsedDate}" pattern="yyyy.MM.dd HH:mm"/>
+		          </c:when>
+		          <c:otherwise>
+		            <fmt:formatDate value="${parsedDate}" pattern="yyyy.MM.dd"/>
+		          </c:otherwise>
+		        </c:choose>
+		      </span> | 
+		      <span>&nbsp;&nbsp;<i class="far fa-thumbs-up"></i> ${vo.likeCount}</span> | 
+		      <span>&nbsp;&nbsp;<i class="far fa-eye"></i> ${vo.viewCount}</span> | 
+		      <span>&nbsp;&nbsp;<i class="far fa-comment"></i> ${fn:length(replyVos)}</span>
+		      <c:if test="${vo.createdAt != vo.updatedAt}">
+		        <span class="edited-mark">| 수정됨</span>
+		      </c:if>
+		    </div>
+		    <div class="action-buttons">
+		      <a href="noticeUpdate?idx=${vo.idx}" class="btn btn-sm btn-edit">수정</a>
+		      <a href="javascript:noticeDelete()" class="btn btn-sm btn-edit">삭제</a>
+		    </div>
+		  </div>
 		</div>
-  </div>
-  
-  <div class="notice-content">
-    ${fn:replace(vo.content, newLine, "<br/>")}
-  </div>
-  
-  <div class="interaction-bar">
-    <i id="likeButton" class="interaction-icon fa-heart ${isLiked ? 'fas active' : 'far'}" onclick="toggleLike()"></i>
-    <span>${vo.likeCount}</span>
-  </div>
-  
-  <div class="comment-section">
-    <h4>댓글 ${fn:length(replyVos)}개</h4>
-    <textarea id="commentContent" class="comment-input" placeholder="댓글을 입력하세요..."></textarea>
-    <button class="btn-comment" onclick="submitComment()">등록</button>
-    
-    <!-- 댓글 리스트 -->
-    <c:forEach var="replyVo" items="${replyVos}">
-      <div class="comment">
-        <span class="comment-author">${replyVo.name}</span>
-        <span>${fn:replace(replyVo.content, newLine, "<br/>")}</span>
-        <div class="notice-meta">
-          <fmt:parseDate value="${replyVo.WDate}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedReplyDate" type="both" />
-          <fmt:formatDate value="${parsedReplyDate}" pattern="yyyy.MM.dd" var="formattedReplyDate" />
-          <span>${formattedReplyDate}</span>
-        </div>
-      </div>
-    </c:forEach>
-  </div>
-  
-  <!-- 이전글/다음글 섹션 -->
-  <div class="navigation-links">
-    <c:if test="${!empty nextVo.title}">
-      <a href="noticeContent?idx=${nextVo.idx}">
-        <span class="navigation-icon">&#9650;</span> 다음글: ${nextVo.title}
-      </a>
-    </c:if>
-    <c:if test="${!empty preVo.title}">
-      <a href="noticeContent?idx=${preVo.idx}">
-        <span class="navigation-icon">&#9660;</span> 이전글: ${preVo.title}
-      </a>
-    </c:if>
-  </div>
+	  
+	  <div class="notice-content" style="margin=0;">
+	    ${vo.content}
+	  </div>
+	  
+	  <div class="interaction-bar">
+	    <i id="likeButton" class="interaction-icon fa-heart ${isLiked ? 'fas active' : 'far'}" onclick="toggleLike()"></i>
+	    <span>${vo.likeCount}</span>
+	  </div>
+	  
+	  <div class="comment-section">
+		  <h4>댓글 ${fn:length(replyVos)}개</h4>
+		  <div>
+	    	<textarea id="commentContent" class="comment-input" placeholder="댓글을 입력하세요..." style="padding-bottom: 40px;"></textarea>
+		    <div class="text-right">
+		    <button class="btn-comment" onclick="submitComment()">등록</button>		  
+		    </div>
+		  </div>
+		    
+	    <!-- 댓글 리스트 -->
+	    <c:forEach var="replyVo" items="${replyVos}">
+	      <div class="comment">
+	        <span class="comment-author">${replyVo.name}</span>
+	        <span>${fn:replace(replyVo.content, newLine, "<br/>")}</span>
+	        <div class="notice-meta">
+	          <fmt:parseDate value="${replyVo.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedReplyDate" type="both" />
+	          <fmt:formatDate value="${parsedReplyDate}" pattern="yyyy.MM.dd" var="formattedReplyDate" />
+	          <span>${formattedReplyDate}</span>
+	        </div>
+	      </div>
+	    </c:forEach>
+	  </div>
+	  
+	  <!-- 이전글/다음글 섹션 -->
+	  <div class="navigation-links">
+	    <c:if test="${!empty nextVo.title}">
+	      <a href="noticeContent?idx=${nextVo.idx}">
+	        <span class="navigation-icon">&#9650;</span> 다음글: ${nextVo.title}
+	      </a>
+	    </c:if>
+	    <c:if test="${!empty preVo.title}">
+	      <a href="noticeContent?idx=${preVo.idx}">
+	        <span class="navigation-icon">&#9660;</span> 이전글: ${preVo.title}
+	      </a>
+	    </c:if>
+	  </div>
 
-  <a href="noticeList" class="btn-list">목록</a>
-</div>
+	  <a href="noticeList" class="btn-list mt-3">목록</a>
+	</div>
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

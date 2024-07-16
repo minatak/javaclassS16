@@ -16,6 +16,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.spring.javaclassS16.dao.NoticeDAO;
+import com.spring.javaclassS16.vo.NoticeReadStatusVO;
 import com.spring.javaclassS16.vo.NoticeReplyVO;
 import com.spring.javaclassS16.vo.NoticeVO;
 
@@ -179,8 +180,8 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public List<NoticeReplyVO> getNoticeReply(int idx, String familyCode) {
-		return noticeDAO.getNoticeReply(idx, familyCode);
+	public List<NoticeReplyVO> getNoticeReply(int idx) {
+		return noticeDAO.getNoticeReply(idx);
 	}
 
 	@Override
@@ -196,6 +197,11 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public void setNoticeRead(int idx, int memberIdx) {
 		noticeDAO.setNoticeRead(idx, memberIdx);
+	}
+
+	@Override
+	public NoticeReadStatusVO getReadStatus(int idx, int memberIdx) {
+		return noticeDAO.getReadStatus(idx, memberIdx);
 	}
 	
 }

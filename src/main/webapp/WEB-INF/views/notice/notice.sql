@@ -50,10 +50,12 @@ CREATE TABLE noticeReply (
   noticeIdx INT NOT NULL,                /* 해당 공지사항 번호 */
   memberIdx INT NOT NULL,        				 /* 댓글 작성자 IDX */
   content TEXT NOT NULL,                 /* 댓글 내용 */
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,  /* 댓글 작성 시간 */
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,  /* 댓글 작성 시간 */
   parentIdx INT,                         /* 부모 댓글 번호 (대댓글인 경우) */
   PRIMARY KEY (idx),
   FOREIGN KEY (noticeIdx) REFERENCES notice(idx),
   FOREIGN KEY (memberIdx) REFERENCES member(idx),
   FOREIGN KEY (parentIdx) REFERENCES noticeReply(idx)
 );
+
+insert into noticeReply values (default,'14','19', '넵 알겠습니당',default,default);
