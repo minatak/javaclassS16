@@ -16,7 +16,7 @@ public interface NoticeDAO {
 
     public NoticeVO getNoticeContent(@Param("idx") int idx);
 
-    public int totRecCnt();
+    public int totRecCnt(@Param("familyCode") String familyCode);
 
     public ArrayList<NoticeVO> getNoticeList(@Param("familyCode") String familyCode, @Param("memberIdx") int memberIdx, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
 

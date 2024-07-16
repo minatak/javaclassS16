@@ -37,7 +37,7 @@ public class NoticeController {
 	public String noticeListGet(Model model, HttpSession session,
 	        @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 	        @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-	    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", "", "");
+	    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", "", "", session);
 	    String familyCode = (String) session.getAttribute("sFamCode");
 	    int memberIdx = (int) session.getAttribute("sIdx");
 	
@@ -46,8 +46,6 @@ public class NoticeController {
 	    model.addAttribute("vos", vos);
 	    model.addAttribute("pageVO", pageVO);
 	
-	    System.out.println("pageVO : " + pageVO);
-	    
 	    return "notice/noticeList";
 	}
 	
@@ -63,7 +61,7 @@ public class NoticeController {
 		int res = noticeService.setNoticeInput(vo);
 		
 		if(res != 0) return "redirect:/message/noticeInputOk";
-		else  return "redirect:/message/noticeInputNo";
+		else return "redirect:/message/noticeInputNo";
 	}
 	
 	@RequestMapping(value = "/noticeContent", method = RequestMethod.GET)
@@ -119,7 +117,6 @@ public class NoticeController {
 	public String noticeUpdateGet(int idx, Model model, HttpSession session,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-		String familyCode = (String) session.getAttribute("sFamCode");
 		NoticeVO vo = noticeService.getNoticeContent(idx);
 		
 		if(vo.getContent().indexOf("src=\"/") != -1) noticeService.imgBackup(vo.getContent());
@@ -136,8 +133,6 @@ public class NoticeController {
 			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
 		String familyCode = (String) session.getAttribute("sFamCode");
 		vo.setFamilyCode(familyCode);
-		
-		System.out.println("vo : " + vo);
 		
 		NoticeVO origVo = noticeService.getNoticeContent(vo.getIdx());
 		
@@ -205,17 +200,16 @@ public class NoticeController {
   @RequestMapping(value = "/noticeToggleLike", method = RequestMethod.POST)
   public String noticeToggleLike(@RequestParam int idx, HttpSession session) {
       int memberIdx = (int) session.getAttribute("sIdx");
-      System.out.println("idx : " + idx);
       
       return noticeService.toggleNoticeLike(idx, memberIdx);
   }
 	
 	@RequestMapping(value = "/noticeSearch")
-	public String noticeSearchGet(Model model, String search,
+	public String noticeSearchGet(Model model, HttpSession session, String search,
 			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-		PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", search, searchString);
+		PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", search, searchString, session);
 		
 		List<NoticeVO> vos = noticeService.getNoticeSearchList(pageVO.getStartIndexNo(), pageSize, search, searchString);
 	

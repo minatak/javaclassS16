@@ -159,6 +159,60 @@
       color: #e4e6eb;
       margin-right: 5px;
     }
+    
+    
+    .pagination {
+		  display: inline-block;
+		  padding-left: 0;
+		  margin: 20px 0;
+		  border-radius: 4px;
+		}
+		.pagination > li {
+		  display: inline;
+		}
+		.pagination > li > a,
+		.pagination > li > span {
+		  position: relative;
+		  float: left;
+		  padding: 6px 12px;
+		  margin-left: -1px;
+		  line-height: 1.42857143;
+		  color: #84a98c;
+		  text-decoration: none;
+		  background-color: #fff;
+		  border: 1px solid #ddd;
+		}
+		.pagination > li:first-child > a,
+		.pagination > li:first-child > span {
+		  margin-left: 0;
+		  border-top-left-radius: 4px;
+		  border-bottom-left-radius: 4px;
+		}
+		.pagination > li:last-child > a,
+		.pagination > li:last-child > span {
+		  border-top-right-radius: 4px;
+		  border-bottom-right-radius: 4px;
+		}
+		.pagination > li > a:hover,
+		.pagination > li > span:hover,
+		.pagination > li > a:focus,
+		.pagination > li > span:focus {
+		  color: #2a6496;
+		  background-color: #eee;
+		  border-color: #ddd;
+		}
+		.pagination > .active > a,
+		.pagination > .active > span,
+		.pagination > .active > a:hover,
+		.pagination > .active > span:hover,
+		.pagination > .active > a:focus,
+		.pagination > .active > span:focus {
+		  z-index: 2;
+		  color: #fff;
+		  cursor: default;
+		  background-color: #84a98c;
+		  border-color: #84a98c;
+		}
   </style>
   
   <script>
@@ -233,43 +287,10 @@
 		      </div>
 		    </div> 
 		  </c:forEach>
-		</div>
+		</div> 
     
-    <!-- 페이지네이션 -->
-  <%--   <div class="d-flex justify-content-center my-4">
-      <ul class="pagination">
-        <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link" href="noticeList?pag=1&pageSize=${pageVO.pageSize}">처음</a></li></c:if>
-        <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link" href="noticeList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전</a></li></c:if>
-        <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
-          <c:if test="${i <= pageVO.totPage && i == pageVO.pag}"><li class="page-item active"><a class="page-link" href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
-          <c:if test="${i <= pageVO.totPage && i != pageVO.pag}"><li class="page-item"><a class="page-link" href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
-        </c:forEach>
-        <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link" href="noticeList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음</a></li></c:if>
-        <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link" href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막</a></li></c:if>
-      </ul>
-    </div>  --%>
-    
-    
-    <div class="d-flex justify-content-center my-4">
-		  <ul class="pagination">
-		    <c:if test="${pageVO.pag > 1}">
-		      <li class="page-item"><a class="page-link" href="noticeList?pag=1&pageSize=${pageVO.pageSize}">처음</a></li>
-		      <li class="page-item"><a class="page-link" href="noticeList?pag=${pageVO.pag-1}&pageSize=${pageVO.pageSize}">이전</a></li>
-		    </c:if>
-		    <c:forEach var="i" begin="${pageVO.pag > 2 ? pageVO.pag-2 : 1}" end="${pageVO.pag+2 > pageVO.totPage ? pageVO.totPage : pageVO.pag+2}" varStatus="st">
-		      <li class="page-item ${i == pageVO.pag ? 'active' : ''}">
-		        <a class="page-link" href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a>
-		      </li>
-		    </c:forEach>
-		    <c:if test="${pageVO.pag < pageVO.totPage}">
-		      <li class="page-item"><a class="page-link" href="noticeList?pag=${pageVO.pag+1}&pageSize=${pageVO.pageSize}">다음</a></li>
-		      <li class="page-item"><a class="page-link" href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막</a></li>
-		    </c:if>
-		  </ul>
-		</div>
-    
-    <!-- 블록페이지 시작 -->
-		<div class="text-center">
+    <!-- 블록페이지 시작  
+		<div class="d-flex justify-content-center my-4">
 		  <ul class="pagination justify-content-center">
 			  <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=1&pageSize=${pageVO.pageSize}">첫페이지</a></li></c:if>
 			  <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전블록</a></li></c:if>
@@ -279,6 +300,33 @@
 			  </c:forEach>
 			  <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음블록</a></li></c:if>
 			  <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막페이지</a></li></c:if>
+		  </ul>
+		</div>
+		블록페이지 끝 -->
+		
+		<!-- 블록페이지 시작 -->
+		<div class="d-flex justify-content-center my-4">
+		  <ul class="pagination">
+		    <c:if test="${pageVO.pag > 1}">
+		      <li><a href="noticeList?pag=1&pageSize=${pageVO.pageSize}">처음</a></li>
+		    </c:if>
+		    <c:if test="${pageVO.curBlock > 0}">
+		      <li><a href="noticeList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">&laquo;</a></li>
+		    </c:if>
+		    <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
+		      <c:if test="${i <= pageVO.totPage && i == pageVO.pag}">
+		        <li class="active"><a href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li>
+		      </c:if>
+		      <c:if test="${i <= pageVO.totPage && i != pageVO.pag}">
+		        <li><a href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li>
+		      </c:if>
+		    </c:forEach>
+		    <c:if test="${pageVO.curBlock < pageVO.lastBlock}">
+		      <li><a href="noticeList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">&raquo;</a></li>
+		    </c:if>
+		    <c:if test="${pageVO.pag < pageVO.totPage}">
+		      <li><a href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">끝</a></li>
+		    </c:if>
 		  </ul>
 		</div>
 		<!-- 블록페이지 끝 -->

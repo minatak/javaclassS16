@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS16.dao.LocationDAO">
+  
+  <select id="getFamilyLocations" resultType="com.spring.javaclassS16.vo.LocationVO">
+    SELECT l.* 
+    FROM location l
+    JOIN member m ON l.memberIdx = m.idx
+    WHERE m.familyCode = #{familyCode}
+  </select>
+  
+  <select id="getCurrentLocation" resultType="com.spring.javaclassS16.vo.LocationVO">
+    SELECT * 
+    FROM location 
+    WHERE memberIdx = #{memberIdx}
+  </select>
+  
+  <select id="getLocationHistory" resultType="com.spring.javaclassS16.vo.LocationVO">
+    SELECT * 
+    FROM location 
+    WHERE memberIdx = #{memberIdx} 
+    AND DATE(updateTime) = #{date}
+    ORDER BY updateTime DESC
+  </select>
+  
+  <select id="getSavedPlaces" resultType="com.spring.javaclassS16.vo.SavedPlaceVO">
+    SELECT * 
+    FROM savedPlace 
+    WHERE memberIdx = #{memberIdx} 
+    AND familyCode = #{familyCode}
+  </select>
+  
+  
+  <insert id="setSavePlace">
+    INSERT INTO savedPlace (memberIdx, familyCode, placeName, latitude, longitude, address)
+    VALUES (#{vo.memberIdx}, #{vo.familyCode}, #{vo.placeName}, #{vo.latitude}, #{vo.longitude}, #{vo.address})
+  </insert>
+  
+  <insert id="setInsertLocation">
+	    INSERT INTO location (memberIdx, latitude, longitude, updateTime, address)
+	    VALUES (#{vo.memberIdx}, #{vo.latitude}, #{vo.longitude}, now(), #{vo.address})
+	</insert>
+  
+  
+  <update id="setUpdateLocation">
+    UPDATE location 
+    SET latitude = #{vo.latitude}, 
+        longitude = #{vo.longitude}, 
+        updateTime = CURRENT_TIMESTAMP, 
+        address = #{vo.address}
+    WHERE memberIdx = #{vo.memberIdx}
+  </update>
+  
+  
+  <delete id="setDeletePlace">
+    DELETE FROM savedPlace 
+    WHERE idx = #{placeIdx} 
+    AND memberIdx = #{memberIdx} 
+    AND familyCode = #{familyCode}
+  </delete>
+  
+</mapper>

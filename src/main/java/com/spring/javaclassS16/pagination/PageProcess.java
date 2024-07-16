@@ -1,5 +1,7 @@
 package com.spring.javaclassS16.pagination;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +18,16 @@ public class PageProcess {
 	@Autowired
 	NoticeDAO noticeDAO;
 
-	public PageVO totRecCnt(int pag, int pageSize, String section, String part, String searchString) {
+	public PageVO totRecCnt(int pag, int pageSize, String section, String part, String searchString, HttpSession session) {
 		PageVO pageVO = new PageVO();
+		
+		String familyCode = (String) session.getAttribute("sFamCode");
 		
 		int totRecCnt = 0;
 		String search = "";
 		
 		if(section.equals("notice")) {
-			if(part.equals(""))	totRecCnt = noticeDAO.totRecCnt();
+			if(part.equals(""))	totRecCnt = noticeDAO.totRecCnt(familyCode);
 			else {
 				search = part;
 				totRecCnt = noticeDAO.totRecCntSearch(search, searchString);

@@ -75,7 +75,7 @@
     <a href="${ctp}/calendar/calendarMain" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-calendar fa-fw w3-margin-right"></i>일정 관리</a>
     <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tasks fa-fw w3-margin-right"></i>가사 분담</a>
     <a href="${ctp}/notice/noticeList" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullhorn fa-fw w3-margin-right"></i>공지사항</a>
-    <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa-solid fa-location-dot fa-fw w3-margin-right"></i>위치 공유</a>
+    <a href="${ctp}/location/locationMain" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa-solid fa-location-dot fa-fw w3-margin-right"></i>위치 공유</a>
     <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-poll fa-fw w3-margin-right"></i>가족 투표</a>
     <a href="${ctp}/photo/photoList" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-photo fa-fw w3-margin-right"></i>앨범</a>
   </div>
