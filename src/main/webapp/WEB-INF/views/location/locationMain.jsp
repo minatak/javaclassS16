@@ -276,7 +276,7 @@
 		        <div class="family-member" onclick="showMemberLocation(${member.idx})">
 		            <img src="${ctp}/data/member/${member.photo}" alt="${member.name}" class="member-photo">
 		            <div class="member-name">${member.name}</div>
-		            <div class="member-status">${not empty member.updateTime ? '위치 공유 중' : '위치 미공유'}</div> 
+		            <%-- <div class="member-status">${not empty member.updateTime ? '위치 공유 중' : '위치 미공유'}</div>  --%>
 		        </div>
 		    </c:forEach>
 		</div>

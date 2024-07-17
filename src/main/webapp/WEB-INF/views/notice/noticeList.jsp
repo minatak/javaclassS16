@@ -231,8 +231,8 @@
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
 <div class="container">
   <div class="noticeContainer">
-    <div style="display: flex; align-items: center; gap: 20px;" class="mb-5">
-      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-house"></i></a>
+    <div style="display: flex; align-items: center; gap: 20px;" class="mb-5"> 
+      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
       <h2>공지사항</h2>
     </div>
     

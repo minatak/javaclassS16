@@ -32,6 +32,7 @@
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
               <li><a class="dropdown-item" href="${ctp}/member/memberInfo"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;내 정보</a></li>
               <li><a class="dropdown-item" href="${ctp}/member/memberFamCode"><i class="fa-solid fa-circle-nodes"></i>&nbsp;&nbsp;가족코드</a></li>
+              <li><a class="dropdown-item" href="${ctp}/member/memberFamCode"><i class="fa-solid fa-circle-nodes"></i>&nbsp;&nbsp;연결된 가족</a></li>
               <li><a class="dropdown-item" href="${ctp}/member/memberLogout"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;로그아웃</a></li>
             </ul>
           </li>

@@ -133,10 +133,6 @@
 		  align-items: center;
 		  margin-bottom: 20px;
 		}
-    .search-bar {
-		  display: flex;
-		  /* gap: 5px; */
-		}
 		.action-buttons {
 		  display: flex;
 		  gap: 10px;

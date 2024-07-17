@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS16.dao.VoteDAO">
+    
+	<select id="getVoteList" resultType="com.spring.javaclassS16.vo.VoteVO">
+		select * from vote where familyCode = #{familyCode} order by endTime limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getVoteContent" resultType="com.spring.javaclassS16.vo.VoteVO">
+    SELECT * FROM vote WHERE idx = #{idx} AND familyCode = #{familyCode}
+  </select>
+  
+  <select id="getVoteOptions" resultType="com.spring.javaclassS16.vo.VoteOptionVO">
+    SELECT * FROM voteOption WHERE voteIdx = #{idx}
+  </select>
+  
+  <select id="hasVoted" resultType="boolean">
+    SELECT EXISTS(SELECT 1 FROM voteParticipation WHERE voteIdx = #{idx} AND memberIdx = #{memberIdx})
+  </select>
+  
+  <select id="getVoteOptionsWithResults" resultType="com.spring.javaclassS16.vo.VoteOptionVO">
+    SELECT vo.*, COUNT(vp.idx) as voteCount
+    FROM voteOption vo
+    LEFT JOIN voteParticipation vp ON vo.idx = vp.optionIdx
+    WHERE vo.voteIdx = #{idx}
+    GROUP BY vo.idx
+  </select>
+  
+  <select id="getVoteParticipants" resultType="com.spring.javaclassS16.vo.MemberVO">
+    SELECT m.*
+    FROM member m
+    INNER JOIN voteParticipation vp ON m.idx = vp.memberIdx
+    WHERE vp.voteIdx = #{idx}
+  </select>
+
+  <select id="getNonParticipants" resultType="com.spring.javaclassS16.vo.MemberVO">
+    SELECT m.*
+    FROM member m
+    WHERE m.familyCode = #{familyCode}
+    AND m.idx NOT IN (
+      SELECT vp.memberIdx
+      FROM voteParticipation vp
+      WHERE vp.voteIdx = #{idx}
+    )
+  </select>
+	
+
+	
+	<insert id="setVoteInput" useGeneratedKeys="true" keyProperty="idx"> <!-- 이걸 써줘야 됨 -->
+		INSERT INTO vote VALUES (default, #{vo.memberIdx}, #{vo.name}, #{vo.familyCode}, #{vo.title}, #{vo.description}, #{vo.part}, default, #{vo.endTime}, #{vo.anonymous}, default, #{vo.multipleChoice});
+	</insert>
+	
+	<insert id="setVoteOption">
+  	INSERT INTO voteOption (voteIdx, optionText) VALUES (#{idx}, #{option})
+  </insert>
+
+	<insert id="setDoVote">
+    INSERT INTO voteParticipation (voteIdx, memberIdx, optionIdx)
+    VALUES 
+    <foreach collection="optionIdx" item="option" separator=",">
+      (#{voteIdx}, #{memberIdx}, #{option})
+    </foreach>
+	</insert>
+
+
+</mapper>

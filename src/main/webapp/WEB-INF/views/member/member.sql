@@ -12,7 +12,7 @@ CREATE TABLE member (
 	familyCode    varchar(20),                           /* 가족 코드 */
 	startDate     DATETIME DEFAULT NOW(),               /* 최초 가입일 */
 	level         INT DEFAULT 2,                        /* 회원 등급 (관리자:0, 프리미엄회원:1, 일반회원:2) */
-	userDel       CHAR(2) DEFAULT 'NO',                 /* 회원 탈퇴신청여부(NO:현재 활동중, OK:탈퇴신청중) */
+	userDel       CHAR(2) DEFAULT 'NO',                 /* 회원 탈퇴신청여부(NO:현재 활동중, OK:탈퇴신청중) */  
 	PRIMARY KEY (idx),
 	UNIQUE (mid),
 	FOREIGN KEY (familyCode) REFERENCES family(code)   /* 가족 코드 외래키 설정 */

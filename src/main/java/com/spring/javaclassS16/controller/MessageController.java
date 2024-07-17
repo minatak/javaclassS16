@@ -84,6 +84,10 @@ public class MessageController {
 			model.addAttribute("msg", "공지사항 수정에 실패했어요");
 			model.addAttribute("url", "/notice/noticeContent?idx="+idx);
 		}
+		else if(msgFlag.equals("voteInputOk")) {
+			model.addAttribute("msg", "투표가 등록되었습니다");
+			model.addAttribute("url", "/vote/voteList");
+		}
 		
 		
 		return "include/message";
