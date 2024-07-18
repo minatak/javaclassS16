@@ -122,6 +122,7 @@ public class VoteController {
 	  model.addAttribute("voteOptions", voteOptions);
 	  model.addAttribute("hasVoted", hasVoted);
 	  model.addAttribute("isEnded", isEnded);
+	  model.addAttribute("nonParticipants", nonParticipants);
 	
 	  return "vote/voteContent";
   }
