@@ -80,99 +80,50 @@ public class VoteController {
     else return "redirect:/message/voteInputNo";
   }
   
-  /*
+  
   @RequestMapping(value = "/voteContent", method = RequestMethod.GET)
   public String voteContentGet(Model model, HttpSession session,
-    @RequestParam(name="idx", defaultValue = "0", required = false) int idx) {
-    String familyCode = (String) session.getAttribute("sFamCode");
-    int memberIdx = (int) session.getAttribute("sIdx");
-
-    VoteVO voteVO = voteService.getVoteContent(idx, familyCode);
-    
-    List<VoteOptionVO> voteOptions = voteService.getVoteOptions(idx);
-    boolean hasVoted = voteService.hasVoted(idx, memberIdx);
-
-    // 현재 날짜 구하기
-    LocalDate currentDate = LocalDate.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
-
-    // 남은 일수 계산
-    if (voteVO.getEndTime() != null) {
+		@RequestParam(name="idx", defaultValue = "0", required = false) int idx) {
+	  String familyCode = (String) session.getAttribute("sFamCode");
+	  int memberIdx = (int) session.getAttribute("sIdx");
+	
+	  VoteVO voteVO = voteService.getVoteContent(idx, familyCode);
+	  
+	  List<VoteOptionVO> voteOptions = voteService.getVoteOptionsWithResults(idx);
+	  boolean hasVoted = voteService.hasVoted(idx, memberIdx);
+	
+	  // 현재 날짜 구하기
+	  LocalDate currentDate = LocalDate.now();
+	  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+	
+	  // 남은 일수 계산
+	  if (voteVO.getEndTime() != null) {
       LocalDate endDate = LocalDate.parse(voteVO.getEndTime(), formatter);
       long daysLeft = ChronoUnit.DAYS.between(currentDate, endDate);
       voteVO.setDaysLeft((int) daysLeft);
-    }
-
-    boolean isEnded = false;
-    
-    // 투표가 종료되었는지 확인
-    if (voteVO.getEndTime() != null && !voteVO.getEndTime().isEmpty()) {
+	  }
+	
+	  boolean isEnded = false;
+	  
+	  // 투표가 종료되었는지 확인
+	  if (voteVO.getEndTime() != null && !voteVO.getEndTime().isEmpty()) {
       LocalDateTime endDateTime = LocalDateTime.parse(voteVO.getEndTime(), formatter);
       isEnded = LocalDateTime.now().isAfter(endDateTime);
-
-      if (isEnded) {
-        // 투표 결과 조회 (voteCount 포함된 voteOptions)
-        voteOptions = voteService.getVoteOptionsWithResults(idx);
-      }
-    }
-
-    model.addAttribute("vo", voteVO);
-    model.addAttribute("voteOptions", voteOptions);
-    model.addAttribute("hasVoted", hasVoted);
-    model.addAttribute("isEnded", isEnded);
-
-    return "vote/voteContent";
-  }
-	*/
-  @RequestMapping(value = "/voteContent", method = RequestMethod.GET)
-  public String voteContentGet(Model model, HttpSession session,
-    @RequestParam(name="idx", defaultValue = "0", required = false) int idx) {
-    String familyCode = (String) session.getAttribute("sFamCode");
-    int memberIdx = (int) session.getAttribute("sIdx");
-
-    VoteVO voteVO = voteService.getVoteContent(idx, familyCode);
-    
-    List<VoteOptionVO> voteOptions = voteService.getVoteOptions(idx);
-    boolean hasVoted = voteService.hasVoted(idx, memberIdx);
-
-    // 현재 날짜 구하기
-    LocalDate currentDate = LocalDate.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
-
-    // 남은 일수 계산
-    if (voteVO.getEndTime() != null) {
-      LocalDate endDate = LocalDate.parse(voteVO.getEndTime(), formatter);
-      long daysLeft = ChronoUnit.DAYS.between(currentDate, endDate);
-      voteVO.setDaysLeft((int) daysLeft);
-    }
-
-    boolean isEnded = false;
-    
-    // 투표가 종료되었는지 확인
-    if (voteVO.getEndTime() != null && !voteVO.getEndTime().isEmpty()) {
-      LocalDateTime endDateTime = LocalDateTime.parse(voteVO.getEndTime(), formatter);
-      isEnded = LocalDateTime.now().isAfter(endDateTime);
-
-      if (isEnded) {
-        // 투표 결과 조회 (voteCount 포함된 voteOptions)
-        voteOptions = voteService.getVoteOptionsWithResults(idx);
-      }
-    }
-
-    // 투표 참여자 정보 가져오기
-    List<MemberVO> participants = voteService.getVoteParticipants(idx);
-
-    // 미참여 가족 정보 가져오기
-    List<MemberVO> nonParticipants = voteService.getNonParticipants(idx, familyCode);
-
-    model.addAttribute("vo", voteVO);
-    model.addAttribute("voteOptions", voteOptions);
-    model.addAttribute("hasVoted", hasVoted);
-    model.addAttribute("isEnded", isEnded);
-    model.addAttribute("participants", participants);
-    model.addAttribute("nonParticipants", nonParticipants);
-
-    return "vote/voteContent";
+	  }
+	
+	  // 퍼센트 계산 코드
+	  int totalVotes = voteOptions.stream().mapToInt(VoteOptionVO::getVoteCount).sum();
+	  for (VoteOptionVO option : voteOptions) {
+      double percent = totalVotes > 0 ? (double) option.getVoteCount() / totalVotes * 100 : 0;
+      option.setVotePercent(Math.round(percent * 10.0) / 10.0);  // 소수점 첫째자리까지 반올림
+	  }
+	
+	  model.addAttribute("vo", voteVO);
+	  model.addAttribute("voteOptions", voteOptions);
+	  model.addAttribute("hasVoted", hasVoted);
+	  model.addAttribute("isEnded", isEnded);
+	
+	  return "vote/voteContent";
   }
 
   @ResponseBody
@@ -185,6 +136,15 @@ public class VoteController {
       
       return res + "";
   }
+  
+  @ResponseBody
+  @RequestMapping(value = "/endVote", method = RequestMethod.POST)
+  public int endVote(@RequestParam("voteIdx") int voteIdx) {
+	  int res = voteService.setEndVote(voteIdx);
+	  return res;
+  }
+  
+  
 //  
 //  @ResponseBody
 //  @RequestMapping(value = "/voteUpdate", method = RequestMethod.POST)

@@ -27,4 +27,6 @@ public interface VoteService {
 
 	public List<MemberVO> getNonParticipants(int idx, String familyCode);
 
+	public int setEndVote(int voteIdx);
+
 }

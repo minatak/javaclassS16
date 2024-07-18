@@ -18,14 +18,20 @@
     SELECT EXISTS(SELECT 1 FROM voteParticipation WHERE voteIdx = #{idx} AND memberIdx = #{memberIdx})
   </select>
   
-  <select id="getVoteOptionsWithResults" resultType="com.spring.javaclassS16.vo.VoteOptionVO">
-    SELECT vo.*, COUNT(vp.idx) as voteCount
+	<select id="getVoteOptionsWithResults" resultType="com.spring.javaclassS16.vo.VoteOptionVO">
+    SELECT vo.*, 
+          (SELECT COUNT(*) FROM voteParticipation WHERE optionIdx = vo.idx) as voteCount
     FROM voteOption vo
-    LEFT JOIN voteParticipation vp ON vo.idx = vp.optionIdx
     WHERE vo.voteIdx = #{idx}
-    GROUP BY vo.idx
-  </select>
-  
+	</select>
+	
+	<select id="getVotersForOption" resultType="com.spring.javaclassS16.vo.MemberVO">
+    SELECT m.* 
+    FROM member m
+    JOIN voteParticipation vp ON m.idx = vp.memberIdx
+    WHERE vp.voteIdx = #{voteIdx} AND vp.optionIdx = #{optionIdx}
+	</select>
+	
   <select id="getVoteParticipants" resultType="com.spring.javaclassS16.vo.MemberVO">
     SELECT m.*
     FROM member m
@@ -51,16 +57,38 @@
 	</insert>
 	
 	<insert id="setVoteOption">
-  	INSERT INTO voteOption (voteIdx, optionText) VALUES (#{idx}, #{option})
+      INSERT INTO voteOption (voteIdx, optionText, voteCount) VALUES (#{idx}, #{option}, 0)
   </insert>
 
-	<insert id="setDoVote">
-    INSERT INTO voteParticipation (voteIdx, memberIdx, optionIdx)
-    VALUES 
-    <foreach collection="optionIdx" item="option" separator=",">
-      (#{voteIdx}, #{memberIdx}, #{option})
-    </foreach>
+	<insert id="insertVoteParticipation">
+	  INSERT INTO voteParticipation (voteIdx, memberIdx, optionIdx)
+	  VALUES 
+	  <foreach collection="optionIdx" item="option" separator=",">
+   		(#{voteIdx}, #{memberIdx}, #{option})
+	  </foreach>
 	</insert>
+	
+	<update id="updateVoteOptionCount">
+	  UPDATE voteOption
+	  SET voteCount = voteCount + 1
+	  WHERE idx IN
+	  <foreach collection="optionIdx" item="option" open="(" separator="," close=")">
+	  	#{option}
+	  </foreach>
+	</update>
+  
+  <update id="setEndVote">
+    UPDATE vote SET status = 'CLOSED', endTime = NOW() WHERE idx = #{voteIdx}
+	</update>
+  
+  <delete id="cancelVote">
+	  DELETE FROM voteParticipation
+	  WHERE voteIdx = #{voteIdx} AND memberIdx = #{memberIdx};
+	  
+	  UPDATE voteOption
+	  SET voteCount = voteCount - 1
+	  WHERE idx IN (SELECT optionIdx FROM voteParticipation WHERE voteIdx = #{voteIdx} AND memberIdx = #{memberIdx})
+ </delete>
 
 
 </mapper>

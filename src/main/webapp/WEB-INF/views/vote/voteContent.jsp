@@ -72,7 +72,8 @@
       padding: 20px 0;
     }
     
-    .vote-info h3 {
+    h3 {
+    	font-family: 'Pretendard' !important;
       font-size: 18px;
       font-weight: 700;
       margin-bottom: 10px;
@@ -273,6 +274,7 @@
     .non-voters {
       margin-top: 20px;
     }
+    h4 {font-family: 'Pretendard' !important;}
     
     #chart_div {
       width: 100%;
@@ -382,6 +384,29 @@
       }
     });
 
+    function voteEnd() {
+  	  showConfirm("정말로 투표를 종료하시겠습니까?", function() {
+  	    $.ajax({
+  	      url: "${ctp}/vote/endVote",
+  	      type: "post",
+  	      data: {voteIdx: ${vo.idx}},
+  	      success: function(res) {
+  	        if(res != 0) {
+  	          showAlert("투표가 종료되었습니다.", function() {
+  	            location.reload();
+  	          });
+  	        }
+  	        else {
+  	          showAlert("투표 종료에 실패했습니다.");
+  	        }
+  	      },
+  	      error: function() {
+  	        showAlert("서버 오류가 발생했습니다.");
+  	      }
+  	    });
+  	  });
+  	}
+    
     function drawChart() {
       var data = google.visualization.arrayToDataTable([
         ['Option', 'Votes'],
@@ -398,6 +423,13 @@
       var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
       chart.draw(data, options);
     }
+
+    // 페이지 로드 완료 시 실행할 함수 설정
+    google.charts.setOnLoadCallback(function() {
+      if (isEnded || '${vo.status}' === 'CLOSED') {
+        drawChart();
+      }
+    });
   </script>
 </head>
 <body>
@@ -415,37 +447,41 @@
 	  <div class="vote-meta">
 	    <span>작성자: ${vo.name}</span> | 
 	    <span>작성일: ${vo.createdAt}</span><br>
-	    <span>마감일: ${vo.endTime}</span>
-	    <c:choose>
-	      <c:when test="${vo.status == 'CLOSED'}">
-	        <span class="vote-status"> (종료됨)</span>
-	      </c:when>
-	      <c:when test="${vo.daysLeft > 1}">
-	        <span> (${vo.daysLeft}일 남음)</span>
-	      </c:when>
-	      <c:when test="${vo.daysLeft == 1}">
-	        <span> (내일 마감)</span>
-	      </c:when>
-	      <c:when test="${vo.daysLeft == 0}">
-	        <span> (오늘 마감)</span>
-	      </c:when>
-	      <c:otherwise>
-	        <span> (${-vo.daysLeft}시간 ${-vo.minutesLeft}분 남음)</span>
-	      </c:otherwise>
-	    </c:choose>
+	    <c:if test="${!empty vo.endTime}">
+	    	<span>마감일: ${vo.endTime}</span>	   	
+	   	</c:if>
+      <c:if test="${vo.status == 'CLOSED'}">
+        <span class="vote-status"> (종료됨)</span>
+      </c:if>
+	    <c:if test="${vo.status != 'CLOSED'}">
+		    <c:choose>
+		      <c:when test="${vo.daysLeft > 1}">
+		        <span> (${vo.daysLeft}일 남음)</span>
+		      </c:when>
+		      <c:when test="${vo.daysLeft == 1}">
+		        <span> (내일 마감)</span>
+		      </c:when>
+		      <c:when test="${vo.daysLeft == 0}">
+		        <span> (오늘 마감)</span>
+		      </c:when>
+		      <c:otherwise>
+		        <span> (${-vo.daysLeft}시간 ${-vo.minutesLeft}분 남음)</span>
+		      </c:otherwise>
+		    </c:choose>
+	    </c:if>
 	    <c:if test="${vo.multipleChoice}">
 	      <span> | 복수 선택 가능</span>
 	    </c:if>
 	  </div>
-	  <c:if test="${vo.memberIdx == sIdx && !hasVoted}">
 	    <div class="action-buttons">
-	      <a href="javascript:voteUpdate(${vo.idx})" class="btn btn-sm btn-edit">수정</a>
+			  <c:if test="${vo.memberIdx == sIdx && !hasVoted}">
+	  	    <a href="javascript:voteUpdate(${vo.idx})" class="btn btn-sm btn-edit">수정</a>
+			  </c:if>
 	      <a href="javascript:voteDelete(${vo.idx})" class="btn btn-sm btn-edit">삭제</a>
 	    </div>
-	  </c:if>
 	</div>
   
-  <div class="vote-content">
+   <div class="vote-content">
     ${fn:replace(vo.description, newLine, "<br/>")}
   </div>
   
@@ -454,22 +490,22 @@
       <h3>투표 결과</h3>
       <div id="chart_div"></div>
       <c:forEach var="option" items="${voteOptions}">
-        <div class="vote-option">
-          <div class="vote-bar">
-            <div class="vote-progress" style="width: ${option.votePercent}%;"></div>
-          </div>
-          <span class="vote-text">${option.optionText}</span>
-          <span class="vote-percent">${option.votePercent}% (${option.voteCount}표)</span>
-        </div>
-        <c:if test="${!vo.anonymous}">
-          <div class="voter-info">
-            <c:forEach var="voter" items="${option.voters}">
-              <img src="${voter.photo}" alt="${voter.name}" class="voter-photo">
-              <span>${voter.name}</span>
-            </c:forEach>
-          </div>
-        </c:if>
-      </c:forEach>
+			  <div class="vote-option">
+			    <div class="vote-bar">
+			      <div class="vote-progress" style="width: ${option.votePercent}%;"></div>
+			    </div>
+			    <span class="vote-text">${option.optionText}</span>
+			    <span class="vote-percent">${option.votePercent}% (${option.voteCount}표)</span>
+			  </div>
+			  <c:if test="${!vo.anonymous}">
+			    <div class="voter-info">
+			      <c:forEach var="voter" items="${option.voters}">
+			        <img src="${voter.photo}" alt="${voter.name}" class="voter-photo">
+			        <span>${voter.name}</span>
+			      </c:forEach>
+			    </div>
+			  </c:if>
+			</c:forEach>
     </c:when>
     <c:otherwise>
       <div class="vote-options">
@@ -483,13 +519,21 @@
                   <span>(${option.voteCount}명)</span>
                 </c:if>
               </label>
+              <c:if test="${!vo.anonymous && option.voteCount > 0}">
+                <div class="voter-info">
+                  <c:forEach var="voter" items="${option.voters}">
+                    <img src="${ctp}/member/${voter.photo}" alt="${voter.name}" class="voter-photo">
+                    <span>${voter.name}</span>
+                  </c:forEach>
+                </div>
+              </c:if>
             </div>
           </c:forEach>
           <div class="text-center">
             <button type="button" onclick="fCheck()" class="btn-vote mr-3" ${hasVoted || vo.status == 'CLOSED' ? 'disabled' : ''}>
-              ${hasVoted ? '이미 투표하셨습니다' : '투표하기'}
+              ${hasVoted ? '이미 투표하셨습니다.' : '투표하기'}
             </button>
-            <c:if test="${vo.memberIdx == sIdx && !hasVoted}">
+            <c:if test="${vo.memberIdx == sIdx && vo.status != 'CLOSED'}">
               <input type="button" value="투표 종료" class="btn-vote" onclick="voteEnd()" />
             </c:if>
           </div>
@@ -500,9 +544,9 @@
   
   <div class="non-voters">
     <h4>미참여 가족</h4>
-    <c:forEach var="nonVoter" items="${nonVoters}">
-      <img src="${nonVoter.photo}" alt="${nonVoter.name}" class="voter-photo">
-      <span>${nonVoter.name}</span>
+    <c:forEach var="vo" items="${nonParticipants}">
+      <img src="${ctp}/member/${vo.photo}" alt="${vo.name}" class="voter-photo">
+      <span>${vo.name}</span>
     </c:forEach>
   </div>
   

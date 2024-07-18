@@ -25,17 +25,20 @@ drop table voteOption;
 drop table voteParticipation;
 
 CREATE TABLE voteOption (
-	idx INT NOT NULL AUTO_INCREMENT,              /* 투표 옵션 고유 번호 */
+	idx INT NOT NULL AUTO_INCREMENT,              
 	voteIdx INT NOT NULL,                         /* 연관된 투표의 idx */
 	optionText VARCHAR(255) NOT NULL,             /* 투표 옵션 내용 */
+	voteCount INT DEFAULT 0,                      /* 해당 옵션에 대한 투표 수 */
 	PRIMARY KEY (idx),                             
 	FOREIGN KEY (voteIdx) REFERENCES vote(idx)    /* vote 테이블과 연결 */
-);          
+);   
 
 INSERT INTO voteOption VALUES (default, 1, '제주도');
 INSERT INTO voteOption VALUES (default, 1, '강원도');
 INSERT INTO voteOption VALUES (default, 1, '부산');
                                                   
+ALTER TABLE voteOption ADD COLUMN voteCount INT DEFAULT 0;
+
 CREATE TABLE voteParticipation (
 	idx INT NOT NULL AUTO_INCREMENT,              /* 투표 참여 기록 고유 번호 */
 	voteIdx INT NOT NULL,                         /* 참여한 투표의 idx */

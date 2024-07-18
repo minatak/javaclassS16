@@ -51,13 +51,25 @@ public class VoteServiceImpl implements VoteService {
 	}
 
 	@Override
-	public List<VoteOptionVO> getVoteOptionsWithResults(int idx) {
-		return voteDAO.getVoteOptionsWithResults(idx);
+	public List<VoteOptionVO> getVoteOptionsWithResults(int voteIdx) {
+    List<VoteOptionVO> options = voteDAO.getVoteOptionsWithResults(voteIdx);
+    for (VoteOptionVO option : options) {
+      option.setVoters(voteDAO.getVotersForOption(voteIdx, option.getIdx()));
+    }
+    return options;
 	}
 
 	@Override
-	public int setDoVote(int voteIdx, int memberIdx, List<Integer> optionIdx) {
-		return voteDAO.setDoVote(voteIdx, memberIdx, optionIdx);
+  @Transactional
+  public int setDoVote(int voteIdx, int memberIdx, List<Integer> optionIdx) {
+	  int insertResult = voteDAO.insertVoteParticipation(voteIdx, memberIdx, optionIdx);
+	  int updateResult = voteDAO.updateVoteOptionCount(optionIdx);
+	  
+	  if (insertResult > 0 && updateResult > 0) {
+      return 1;  // 성공
+	  } else {
+	  	return 0;  // 실패
+	  }
 	}
 
 	@Override
@@ -68,6 +80,11 @@ public class VoteServiceImpl implements VoteService {
 	@Override
 	public List<MemberVO> getNonParticipants(int idx, String familyCode) {
 		return voteDAO.getNonParticipants(idx, familyCode);
+	}
+
+	@Override
+	public int setEndVote(int voteIdx) {
+		return voteDAO.setEndVote(voteIdx);
 	}
 
 	
