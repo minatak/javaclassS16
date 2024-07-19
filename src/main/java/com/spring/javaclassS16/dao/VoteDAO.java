@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.javaclassS16.vo.MemberVO;
 import com.spring.javaclassS16.vo.VoteOptionVO;
+import com.spring.javaclassS16.vo.VoteReplyVO;
 import com.spring.javaclassS16.vo.VoteVO;
 
 public interface VoteDAO {
@@ -38,6 +39,14 @@ public interface VoteDAO {
   public int insertVoteParticipation(@Param("voteIdx") int voteIdx, @Param("memberIdx") int memberIdx, @Param("optionIdx") List<Integer> optionIdx);
   
   public int updateVoteOptionCount(@Param("optionIdx") List<Integer> optionIdx);
+
+	public void closeExpiredVotes();
+
+	public void setCancelVote(@Param("voteIdx") int voteIdx, @Param("memberIdx") int memberIdx);
+
+	public int setVoteReplyInput(@Param("replyVO")VoteReplyVO replyVO);
+
+	public List<VoteReplyVO> getVoteReply(@Param("idx") int idx);
 
 	
 	

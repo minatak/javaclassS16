@@ -10,6 +10,7 @@
   <meta charset="UTF-8">
   <title>${vo.title} | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <style>
     body {
       font-family: 'Pretendard' !important;
@@ -17,11 +18,11 @@
       color: #333333;
     }
     .header {margin-bottom: 30px;}
-	  .home-icon { 
-	    font-size: 24px; 
-	    color: #cecece; 
-	  }
-	  .home-icon:hover {color: #c6c6c6;}
+    .home-icon { 
+      font-size: 24px; 
+      color: #cecece; 
+    }
+    .home-icon:hover {color: #c6c6c6;}
     .voteContainer {
       max-width: 900px;
       margin: 40px auto;
@@ -29,130 +30,112 @@
       padding: 40px;
     }
     
-    .swal2-confirm {
+    .swal2-confirm, .swal2-cancel {
       background-color: white !important;
       color: black !important;
       border-radius: 0px !important;
       box-shadow: none !important;
-      font-weight: bold !important;
       font-size: 18px !important;
       margin: 0 !important;
-      
     }
-    .swal2-cancel {
-      background-color: white !important;
-      color: black !important;
-      border-radius: 0px !important;
-      box-shadow: none !important;
-      font-size: 18px !important;
-      margin: 0 !important;
+    .swal2-confirm {
+      font-weight: bold !important;
     }
     .custom-swal-popup {
       width: 350px !important;
       padding-top: 20px !important;
       border-radius: 0px !important;
     }
-    .swal2-confirm:hover {
-      background-color: none !important;
-    }
     
-    
-    h2 {
-      font-family: 'Pretendard' !important; 
+    h2, h3 {
+      font-family: 'Pretendard' !important;
       color: #333;
-      font-size: 24px;
       font-weight: 700 !important;
+    }
+    h2 {
+      font-size: 24px;
       text-align: center;
       margin-bottom: 40px;
     }
-    
+    h4 {
+      font-family: 'Pretendard' !important;
+      font-weight: 600 !important;    
+    }
     .vote-info {
       margin-bottom: 20px;
       border-bottom: 1px solid #e4e6eb;
       padding: 20px 0;
     }
     
-    h3 {
-    	font-family: 'Pretendard' !important;
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    
     .vote-meta {
       font-size: 14px;
       color: #666;
+      margin-bottom: 10px;
     }
     
     .vote-options {
-	    margin-top: 30px;
-	  }
-	  
-	  .vote-option {
-	    margin-bottom: 15px;
-	  }
-	  
-	  .vote-option input[type="radio"],
-	  .vote-option input[type="checkbox"] {
-	    display: none;
-	  }
-	  
-	  .vote-option label {
-	    display: block;
-	    background-color: #f0f0f0;
-	    border: 2px solid #e0e0e0;
-	    border-radius: 8px;
-	    padding: 15px 20px;
-	    cursor: pointer;
-	    transition: all 0.3s ease;
-	  }
-	  
-	  .vote-option input[type="radio"]:checked + label,
-	  .vote-option input[type="checkbox"]:checked + label {
-	    background-color: #a7c4ad;
-	    border-color: #84a98c;
-	    color: #ffffff;
-	    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	  }
-	  
-	  .vote-option label:hover {
-	    background-color: #e8e8e8;
-	  }
-	  
-	  .btn-vote {
-	    background-color: #84a98c;
-	    color: #ffffff;
-	    border: none;
-	    padding: 12px 25px;
-	    font-weight: 600;
-	    margin-top: 25px;
-	    border-radius: 8px;
-	    transition: background-color 0.3s ease;
-	  }
-	  
-	  .btn-vote:hover {
-	    background-color: #6b8e72;
-	  }
-	  
-	  .btn-vote:disabled {
-	    background-color: #cccccc;
-	    cursor: not-allowed;
-	  }
-	  
-	  .vote-info {
-	    background-color: #f9f9f9;
-	    border-radius: 8px;
-	    padding: 20px;
-	    margin-bottom: 30px;
-	  }
-	  
-	  .vote-content {
-	    background-color: #ffffff;
-	    border: 1px solid #e4e6eb;
-	    border-radius: 8px;
-	    padding: 25px;
-	    margin-bottom: 30px;
-	  }
+      margin-top: 30px;
+    }
+    
+    .vote-option {
+      position: relative;
+     /*  margin-bottom: 15px; */
+    }
+    
+    .vote-option input[type="radio"],
+    .vote-option input[type="checkbox"] {
+      display: none;
+    }
+    
+    .vote-option label {
+      display: block;
+      background-color: #f0f0f0;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .vote-option input[type="radio"]:checked + label,
+    .vote-option input[type="checkbox"]:checked + label {
+      background-color: #a7c4ad;
+      border-color: #84a98c;
+      color: #ffffff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .vote-option label:hover {
+      background-color: #e8e8e8;
+    }
+    
+    .btn-vote {
+      background-color: #84a98c;
+      color: #ffffff;
+      border: none;
+      padding: 12px 25px;
+      font-weight: 600;
+      margin-top: 25px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .btn-vote:hover {
+      background-color: #6b8e72;
+    }
+    
+    .btn-vote:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .vote-content {
+      background-color: #ffffff;
+      border: 1px solid #e4e6eb;
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 30px;
+    }
     .btn-list {
       display: block;
       width: 100px;
@@ -169,66 +152,55 @@
       background-color: #f8f8f8;
     }
     .action-buttons {
-	    margin-top: 15px;
-	    display: flex;
-	    gap: 10px;
-	  }
-	
-	  .btn-action {
-	    padding: 8px 15px;
-	    border-radius: 6px;
-	    font-weight: 600;
-	    text-decoration: none;
-	    transition: all 0.3s ease;
-	  }
-	
-	  .btn-edit {
-	    background-color: #e0e0e0;
-	    color: #333;
-	    border: 1px solid #ccc;
-	  }
-	
-	  .btn-edit:hover {
-	    background-color: #d0d0d0;
-	  }
-	
-	  .btn-delete {
-	    background-color: #ff6b6b;
-	    color: white;
-	    border: 1px solid #ff5252;
-	  }
-	
-	  .btn-delete:hover {
-	    background-color: #ff5252;
-	  }
-	
-	  .btn-end-vote {
-	    background-color: #4a69bd;
-	    color: white;
-	    border: 1px solid #3c55a5;
-	    font-weight: 700;
-	    padding: 10px 18px;
-	  }
-	
-	  .btn-end-vote:hover {
-	    background-color: #3c55a5;
-	  }
-    
-
- 		.vote-meta {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 10px;
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+  
+    .btn-action {
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+  
+    .btn-edit, .btn-delete {
+      background-color: #e0e0e0;
+      color: #333;
+      border: 1px solid #ccc;
+    }
+  
+    .btn-edit:hover, .btn-delete:hover {
+      background-color: #d0d0d0;
+    }
+  
+    /*.btn-end-vote {
+      background-color: #4a69bd;
+      color: white;
+      border: 1px solid #3c55a5;
+      font-weight: 700;
+      padding: 10px 18px;
+    } */
+    .btn-end-vote {
+      background-color: #84a98c;
+      color: #ffffff;
+      border: none;
+      padding: 12px 25px;
+      font-weight: 600;
+      margin-top: 25px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+  
+    .btn-end-vote:hover {
+      background-color: #3c55a5;
     }
     
     .vote-status {
       font-weight: bold;
       color: #ff6b6b;
-    }
-    
-    .vote-option {
-      position: relative;
-      margin-bottom: 15px;
     }
     
     .vote-bar {
@@ -240,7 +212,7 @@
     
     .vote-progress {
       height: 100%;
-      background-color: #84a98c;
+      background-color: #a7c4ad;
     }
     
     .vote-text {
@@ -259,6 +231,12 @@
       color: #333;
     }
     
+    #chart_div {
+      width: 100%;
+      height: 400px;
+      margin-top: 20px;
+    }
+    
     .voter-info {
       margin-top: 5px;
       font-size: 12px;
@@ -271,106 +249,296 @@
       margin-right: 5px;
     }
     
-    .non-voters {
+    .participants-section {
+      display: flex;
+      justify-content: space-between;
       margin-top: 20px;
     }
-    h4 {font-family: 'Pretendard' !important;}
     
-    #chart_div {
-      width: 100%;
-      height: 400px;
-      margin-top: 20px;
+    .non-voters, .participants {
+      width: 48%;
     }
+    
+    .vote-comment-divider {
+      border-top: 1px solid #e4e6eb;
+      margin: 30px 0;
+    }
+    
+    .comment-section {
+      margin-top: 40px;
+    }
+    
+    .comment {
+      padding: 15px 0;
+      border-top: 1px solid #e4e6eb;
+    }
+    
+    .comment-author {
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    
+    .comment-input-container {
+      position: relative;
+      margin-bottom: 40px;
+    }
+    
+    .comment-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccd0d5;
+      border-radius: 4px;
+      font-size: 14px;
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .btn-comment {
+      bottom: 10px;
+      right: 10px;
+      background-color: #84a98c;
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      
+    }
+    
+    .reply-form {
+      margin-top: 10px;
+      padding-left: 20px;
+      border-left: 2px solid #e4e6eb;
+      display: none;
+    }
+    .reply-btn {
+      cursor: pointer;
+      color: #84a98c;
+      margin-left: 10px;
+    }
+    .reply-btn:hover {
+      text-decoration: underline;
+    }
+    .comment.reply {
+      margin-left: 20px;
+      border-left: 2px solid #e4e6eb;
+      padding-left: 15px;
+      margin-top: 10px;
+    }
+    .delete-btn {
+      cursor: pointer;
+      color: #dc3545;
+      margin-left: 10px;
+    } 
+    
+    .delete-btn:hover {
+      text-decoration: underline;
+    }
+    .vote-info {
+		  background-color: #f8f9fa;
+		  border-radius: 10px;
+		  padding: 25px;
+		  margin-bottom: 30px;
+		  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+		}
+		
+		.vote-title {
+		  font-size: 28px;
+		  color: #333;
+		  margin-bottom: 20px;
+		  border-bottom: 2px solid #84a98c;
+		  padding-bottom: 10px;
+		}
+		
+		.vote-meta-container {
+		  display: flex;
+		  justify-content: space-between;
+		  margin-bottom: 20px;
+		}
+		
+		.vote-meta-left, .vote-meta-right {
+		  flex: 1;
+		}
+		
+		.vote-meta-left p, .vote-meta-right p {
+		  margin-bottom: 10px;
+		  color: #555;
+		}
+		
+		.vote-meta-left i, .vote-meta-right i {
+		  width: 20px;
+		  color: #84a98c;
+		  margin-right: 5px;
+		}
+		
+		.vote-status {
+		  font-weight: bold;
+		  padding: 5px 10px;
+		  border-radius: 15px;
+		}
+		
+		.vote-status.active {
+		  background-color: #d4edda;
+		  color: #155724;
+		}
+		
+		.vote-status.ended {
+		  background-color: #f8d7da;
+		  color: #721c24;
+		}
+		
+		.vote-type {
+		  background-color: #e2e3e5;
+		  color: #383d41;
+		  padding: 5px 10px;
+		  border-radius: 15px;
+		  display: inline-block;
+		  margin-right: 10px;
+		}
+		
+		.vote-type.anonymous {
+		  background-color: #fff3cd;
+		  color: #856404;
+		}
+		
+		.vote-actions {
+		  margin-top: 5px;
+		  display: flex;
+		  justify-content: flex-end;
+		  gap: 10px;
+		}
+		
+		.btn {
+		  padding: 8px 15px;
+		  border-radius: 5px;
+		  font-weight: 600;
+		  transition: all 0.3s ease;
+		}
+		
+		.btn-end-vote, .btn-edit, .btn-delete {
+		  background-color: #84a98c;
+		  color: #ffffff;
+		  border: none;
+		  padding: 10px 20px;
+		  font-weight: 600;
+		  margin-top: 25px;
+		  border-radius: 8px;
+		  /* transition: background-color 0.3s ease; */
+		}
+		.btn-edit {
+		  background-color: #ffc107;
+		  color: #212529;
+		}
+		.btn-edit:hover {
+		  background-color: #ffc107;
+		  color: #212529;
+		}
+		
+		.btn-delete {
+		  background-color: #dc3545;
+		  color: white;
+		}
+		.btn-delete:hover {
+		  background-color: #dc3545;
+		  color: white;
+		}
+		.btn-end-vote:hover {
+		  background-color: #6b8e72;
+		  color: white;
+		}
+		
+		/* .btn-end-vote:hover, .btn-edit:hover, .btn-delete:hover {
+		  opacity: 0.8;
+		} */
+
   </style>
   <script>
-    
-  	'use strict';
+    'use strict';
     
     // 커스텀 알럿
     function showAlert(message, callback) {
-  	  Swal.fire({
-  	    html: message,
-  	    confirmButtonText: '확인',
-  	    customClass: {
-  	      confirmButton: 'swal2-confirm',
-  	      popup: 'custom-swal-popup',
-  	      htmlContainer: 'custom-swal-text'
-  	    },
-  	    scrollbarPadding: false,
-  	    allowOutsideClick: false,
-  	    heightAuto: false,
-  	    didOpen: () => {
-  	      document.body.style.paddingRight = '0px';
-  	    }
-  	  }).then((result) => {
-  	    if (result.isConfirmed && callback) {
-  	      callback();
-  	    }
-  	  });
-  	}
+      Swal.fire({
+        html: message,
+        confirmButtonText: '확인',
+        customClass: {
+          confirmButton: 'swal2-confirm',
+          popup: 'custom-swal-popup',
+          htmlContainer: 'custom-swal-text'
+        },
+        scrollbarPadding: false,
+        allowOutsideClick: false,
+        heightAuto: false,
+        didOpen: () => {
+          document.body.style.paddingRight = '0px';
+        }
+      }).then((result) => {
+        if (result.isConfirmed && callback) {
+          callback();
+        }
+      });
+    }
     
     function showConfirm(message, confirmCallback, cancelCallback) {
-  	  Swal.fire({
-  	    html: message,
-  	    showCancelButton: true,
-  	    cancelButtonText: '취소',
-  	    confirmButtonText: '확인',
-  	    customClass: {
-  	      cancelButton: 'swal2-cancel',
-  	      confirmButton: 'swal2-confirm',
-  	      popup: 'custom-swal-popup',
-  	      htmlContainer: 'custom-swal-text'
-  	    },
-  	    scrollbarPadding: false,
-  	    allowOutsideClick: false,
-  	    heightAuto: false,
-  	    didOpen: () => {
-  	      document.body.style.paddingRight = '0px';
-  	    }
-  	  }).then((result) => {
-  	    if (result.isConfirmed && confirmCallback) {
-  	      confirmCallback();
-  	    } else if (result.isDismissed && cancelCallback) {
-  	      cancelCallback();
-  	    }
-  	  });
-  	}
-    
+      Swal.fire({
+        html: message,
+        showCancelButton: true,
+        cancelButtonText: '취소',
+        confirmButtonText: '확인',
+        customClass: {
+          cancelButton: 'swal2-cancel',
+          confirmButton: 'swal2-confirm',
+          popup: 'custom-swal-popup',
+          htmlContainer: 'custom-swal-text'
+        },
+        scrollbarPadding: false,
+        allowOutsideClick: false,
+        heightAuto: false,
+        didOpen: () => {
+          document.body.style.paddingRight = '0px';
+        }
+      }).then((result) => {
+        if (result.isConfirmed && confirmCallback) {
+          confirmCallback();
+        } else if (result.isDismissed && cancelCallback) {
+          cancelCallback();
+        }
+      });
+    }
     
     function fCheck() {
-  	  let selectedOptions = document.querySelectorAll('input[name="voteOption"]:checked');
-  	  if (selectedOptions.length === 0) {
-  	    showAlert("투표 옵션을 선택해주세요.");
-  	    return false;
-  	  }
-  	  
-  	  let formData = new FormData();
-  	  formData.append('voteIdx', ${vo.idx});
-  	  selectedOptions.forEach(option => {
-  	    formData.append('optionIdx[]', option.value);
-  	  });
+      let selectedOptions = document.querySelectorAll('input[name="voteOption"]:checked');
+      if (selectedOptions.length === 0) {
+        showAlert("투표 옵션을 선택해주세요.");
+        return false;
+      }
+      
+      let formData = new FormData();
+      formData.append('voteIdx', ${vo.idx});
+      selectedOptions.forEach(option => {
+        formData.append('optionIdx[]', option.value);
+      });
 
-  	  $.ajax({
-  	    url: "${ctp}/vote/doVote",
-  	    type: "post",
-  	    data: formData,
-  	    processData: false,
-  	    contentType: false,
-  	    success: function(res) {
-  	      if(res != "0") {
-  	        showAlert("투표가 완료되었습니다", function() {
-  	          location.reload();
-  	        });
-  	      }
-  	      else showAlert("투표에 실패했습니다.");
-  	    },
-  	    error: function() {
-  	      showAlert("전송 오류!");
-  	    }
-  	  });
-  	}
+      $.ajax({
+        url: "${ctp}/vote/doVote",
+        type: "post",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(res) {
+          if(res != "0") {
+            showAlert("투표가 완료되었습니다", function() {
+              location.reload();
+            });
+          }
+          else showAlert("투표에 실패했습니다.");
+        },
+        error: function() {
+          showAlert("전송 오류!");
+        }
+      });
+    }
     
- 		// JSP에서 JavaScript 변수 설정
+    // JSP에서 JavaScript 변수 설정
     var isEnded = ${isEnded};
     
     // Google Charts 로드
@@ -385,39 +553,54 @@
     });
 
     function voteEnd() {
-  	  showConfirm("정말로 투표를 종료하시겠습니까?", function() {
-  	    $.ajax({
-  	      url: "${ctp}/vote/endVote",
-  	      type: "post",
-  	      data: {voteIdx: ${vo.idx}},
-  	      success: function(res) {
-  	        if(res != 0) {
-  	          showAlert("투표가 종료되었습니다.", function() {
-  	            location.reload();
-  	          });
-  	        }
-  	        else {
-  	          showAlert("투표 종료에 실패했습니다.");
-  	        }
-  	      },
-  	      error: function() {
-  	        showAlert("서버 오류가 발생했습니다.");
-  	      }
-  	    });
-  	  });
-  	}
+      showConfirm("정말로 투표를 종료하시겠습니까?", function() {
+        $.ajax({
+          url: "${ctp}/vote/endVote",
+          type: "post",
+          data: {voteIdx: ${vo.idx}},
+          success: function(res) {
+            if(res != 0) {
+              showAlert("투표가 종료되었습니다.", function() {
+                location.reload();
+              });
+            }
+            else {
+              showAlert("투표 종료에 실패했습니다.");
+            }
+          },
+          error: function() {
+            showAlert("서버 오류가 발생했습니다.");
+          }
+        });
+      });
+    }
     
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
     function drawChart() {
-      var data = google.visualization.arrayToDataTable([
-        ['Option', 'Votes'],
+      var rawData = [
         <c:forEach var="option" items="${voteOptions}">
           ['${option.optionText}', ${option.voteCount}],
         </c:forEach>
-      ]);
+      ];
+      
+      // 투표 수에 따라 데이터 정렬 (내림차순)
+      rawData.sort((a, b) => b[1] - a[1]);
+      
+      var chartData = [['Option', 'Votes']];
+      for (var i = 0; i < rawData.length; i++) {
+        chartData.push(rawData[i]);
+      }
+      var data = google.visualization.arrayToDataTable(chartData);
 
-      var options = {
-        title: '투표 결과',
+			/* var colors = ['#84a98c', '#a7c4ad', '#cad2c5', '#52796f', '#354f52']; */
+			var colors = ['#84a98c', '#a7c4ad', '#cad2c5', '#52796f', '#354f52', '#6b9080', '#8fb3a5', '#c2d3c9', '#446a5d', '#2f3e46'];
+     
+			var options = {
+        title: '',
         pieHole: 0.4,
+        colors: colors.slice(0, rawData.length) // 데이터 개수만큼 색상 사용
       };
 
       var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
@@ -430,6 +613,67 @@
         drawChart();
       }
     });
+    
+    
+    function toggleReplyForm(idx) {
+        let replyForm = document.getElementById('replyForm' + idx);
+        let replyBtn = document.getElementById('replyBtn' + idx);
+        
+        if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+          replyForm.style.display = 'block';
+          replyBtn.innerText = '닫기';
+          $(replyForm).slideDown(300);
+        } else {
+          replyBtn.innerText = '답글 달기';
+          $(replyForm).slideUp(300);
+        }
+      }
+
+      function submitComment(parentIdx) {
+    	  let contentElement;
+    	  if (parentIdx == 0) {
+    	    contentElement = document.getElementById("commentContent");
+    	  } else {
+    	    contentElement = document.getElementById("replyContent" + parentIdx);
+    	  }
+    	  
+    	  if (!contentElement) {
+    	    showAlert("댓글 입력 필드를 찾을 수 없습니다.");
+    	    return false;
+    	  }
+    	  
+    	  let content = contentElement.value.trim();
+    	  
+    	  if(content == "") {
+    	    showAlert("댓글을 입력하세요");
+    	    return false;
+    	  }
+    	  
+    	  let query = {
+    	    voteIdx: ${vo.idx},
+    	    memberIdx: ${sIdx},
+    	    content: content,
+    	    parentIdx: parentIdx == 0 ? null : parentIdx
+    	  }
+    	  
+    	  $.ajax({
+    	    url: "${ctp}/vote/voteReplyInput",
+    	    type: "post",
+    	    data: query,
+    	    success: function(res) {
+    	      if(res != "0") {
+    	        showAlert("댓글이 입력되었습니다.", function() {
+    	          location.reload();
+    	        });
+    	      }
+    	      else showAlert("댓글 입력에 실패했습니다.");
+    	    },
+    	    error: function() {
+    	      showAlert("전송 오류!");
+    	    }
+    	  });
+    	}
+
   </script>
 </head>
 <body>
@@ -443,113 +687,183 @@
   </div>
   
   <div class="vote-info">
-	  <h3>${vo.title}</h3>
-	  <div class="vote-meta">
-	    <span>작성자: ${vo.name}</span> | 
-	    <span>작성일: ${vo.createdAt}</span><br>
-	    <c:if test="${!empty vo.endTime}">
-	    	<span>마감일: ${vo.endTime}</span>	   	
-	   	</c:if>
-      <c:if test="${vo.status == 'CLOSED'}">
-        <span class="vote-status"> (종료됨)</span>
-      </c:if>
-	    <c:if test="${vo.status != 'CLOSED'}">
-		    <c:choose>
-		      <c:when test="${vo.daysLeft > 1}">
-		        <span> (${vo.daysLeft}일 남음)</span>
-		      </c:when>
-		      <c:when test="${vo.daysLeft == 1}">
-		        <span> (내일 마감)</span>
-		      </c:when>
-		      <c:when test="${vo.daysLeft == 0}">
-		        <span> (오늘 마감)</span>
-		      </c:when>
-		      <c:otherwise>
-		        <span> (${-vo.daysLeft}시간 ${-vo.minutesLeft}분 남음)</span>
-		      </c:otherwise>
-		    </c:choose>
-	    </c:if>
-	    <c:if test="${vo.multipleChoice}">
-	      <span> | 복수 선택 가능</span>
-	    </c:if>
-	  </div>
-	    <div class="action-buttons">
-			  <c:if test="${vo.memberIdx == sIdx && !hasVoted}">
-	  	    <a href="javascript:voteUpdate(${vo.idx})" class="btn btn-sm btn-edit">수정</a>
-			  </c:if>
-	      <a href="javascript:voteDelete(${vo.idx})" class="btn btn-sm btn-edit">삭제</a>
+	  <h2 class="vote-title">${vo.title}</h2>
+	  <div class="vote-meta-container">
+	    <div class="vote-meta-left">
+	      <p><i class="fas fa-user"></i> 작성자: ${vo.name}</p>
+	      <p><i class="far fa-calendar-alt"></i> 작성일: ${fn:substring(vo.createdAt, 0, 11)}</p>
+	      <c:if test="${!empty vo.endTime}">
+		      <c:if test="${fn:substring(vo.createdAt, 0, 10) == fn:substring(vo.endTime, 0, 10)}">
+		        <p><i class="fas fa-hourglass-end"></i> 마감일: ${fn:substring(vo.endTime, 0, 16)}</p>
+		      </c:if>	        
+		      <c:if test="${fn:substring(vo.createdAt, 0, 10) != fn:substring(vo.endTime, 0, 10)}">
+		        <p><i class="fas fa-hourglass-end"></i> 마감일: ${fn:substring(vo.endTime, 0, 11)}</p>
+		      </c:if>	        
+	      </c:if>
 	    </div>
+	    <div class="vote-meta-right">
+      	<c:if test="${!empty statusStr}">
+		      <p class="vote-status ${statusStr == '종료됨' ? 'ended' : 'active'}"><i class="fas fa-circle"></i> ${statusStr}</p>
+      	</c:if>
+      	<c:if test="${empty statusStr}">
+		      <p class="vote-status ${statusStr == '종료됨' ? 'ended' : 'active'}"><i class="fas fa-circle"></i> 진행중</p>
+      	</c:if>
+	      <c:if test="${vo.multipleChoice}">
+	        <p class="vote-type"><i class="fas fa-check-double"></i> 복수 선택 가능 </p>
+	      </c:if>
+	      <c:if test="${vo.anonymous}">
+	        <p class="vote-type anonymous"><i class="fas fa-user-secret"></i> 익명 투표 </p>
+	      </c:if>
+	    </div>
+	  </div>
+	  <div class="vote-actions">
+	    <c:if test="${vo.memberIdx == sIdx}">
+	      <button class="btn btn-end-vote" onclick="voteEnd()">투표 종료</button>
+	    </c:if>
+	    <c:if test="${vo.memberIdx == sIdx && !hasVoted}">
+	      <a href="javascript:voteUpdate(${vo.idx})" class="btn btn-edit"><i class="fas fa-edit"></i> 수정</a>
+	    </c:if>
+	    <a href="javascript:voteDelete(${vo.idx})" class="btn btn-delete"><i class="fas fa-trash-alt"></i> 삭제</a>
+	  </div>
 	</div>
   
-   <div class="vote-content">
+  <div class="vote-content">
     ${fn:replace(vo.description, newLine, "<br/>")}
   </div>
   
-  <c:choose>
-    <c:when test="${vo.status == 'CLOSED' || isEnded}">
-      <h3>투표 결과</h3>
-      <div id="chart_div"></div>
-      <c:forEach var="option" items="${voteOptions}">
-			  <div class="vote-option">
-			    <div class="vote-bar">
-			      <div class="vote-progress" style="width: ${option.votePercent}%;"></div>
-			    </div>
-			    <span class="vote-text">${option.optionText}</span>
-			    <span class="vote-percent">${option.votePercent}% (${option.voteCount}표)</span>
-			  </div>
-			  <c:if test="${!vo.anonymous}">
-			    <div class="voter-info">
-			      <c:forEach var="voter" items="${option.voters}">
-			        <img src="${voter.photo}" alt="${voter.name}" class="voter-photo">
-			        <span>${voter.name}</span>
-			      </c:forEach>
-			    </div>
-			  </c:if>
-			</c:forEach>
-    </c:when>
-    <c:otherwise>
-      <div class="vote-options">
-        <form onsubmit="return submitVote();">
-          <c:forEach var="option" items="${voteOptions}">
-            <div class="vote-option">
-              <input type="${vo.multipleChoice ? 'checkbox' : 'radio'}" name="voteOption" id="option${option.idx}" value="${option.idx}" ${hasVoted || vo.status == 'CLOSED' ? 'disabled' : ''}>
-              <label for="option${option.idx}">
-                ${option.optionText}
-                <c:if test="${!vo.anonymous && option.voteCount > 0}">
-                  <span>(${option.voteCount}명)</span>
-                </c:if>
-              </label>
-              <c:if test="${!vo.anonymous && option.voteCount > 0}">
-                <div class="voter-info">
-                  <c:forEach var="voter" items="${option.voters}">
-                    <img src="${ctp}/member/${voter.photo}" alt="${voter.name}" class="voter-photo">
-                    <span>${voter.name}</span>
-                  </c:forEach>
-                </div>
+  <c:if test="${vo.status != 'CLOSED' && !isEnded}">
+    <div class="vote-options">
+      <form>
+        <c:forEach var="option" items="${voteOptions}">
+          <div class="vote-option">
+            <input type="${vo.multipleChoice ? 'checkbox' : 'radio'}" name="voteOption" id="option${option.idx}" value="${option.idx}" ${hasVoted ? 'disabled' : ''}>
+            <label for="option${option.idx}">
+              ${option.optionText}
+              <c:if test="${!vo.anonymous && option.voteCount > 0 && hasVoted}">
+                <span>(${option.voteCount}명)</span>
               </c:if>
-            </div>
-          </c:forEach>
-          <div class="text-center">
-            <button type="button" onclick="fCheck()" class="btn-vote mr-3" ${hasVoted || vo.status == 'CLOSED' ? 'disabled' : ''}>
-              ${hasVoted ? '이미 투표하셨습니다.' : '투표하기'}
-            </button>
-            <c:if test="${vo.memberIdx == sIdx && vo.status != 'CLOSED'}">
-              <input type="button" value="투표 종료" class="btn-vote" onclick="voteEnd()" />
+            </label>
+            <c:if test="${!vo.anonymous && option.voteCount > 0 && hasVoted}">
+              <div class="voter-info mb-2">
+                <c:forEach var="voter" items="${option.voters}">
+                  <img src="${ctp}/member/${voter.photo}" alt="${voter.name}" class="voter-photo">
+                  <span>${voter.name}</span>
+                </c:forEach>
+              </div>
             </c:if>
           </div>
-        </form>
-      </div>
-    </c:otherwise>
-  </c:choose>
+        </c:forEach>
+        
+        <div class="text-center">
+          <c:if test="${!hasVoted}"><input type="button" onclick="fCheck()" class="btn-vote mr-3" value="투표하기" /></c:if>
+          <c:if test="${hasVoted}"><input type="button" onclick="reVote()" class="btn-vote mr-3" value="다시 투표하기" /></c:if>
+        </div>
+      </form>
+    </div>
+  </c:if>
+
+  <c:if test="${vo.status == 'CLOSED' || isEnded}">
+    <h3>투표 결과</h3>
+    <div id="chart_div"></div>
+    <div class="vote-options">
+      <c:forEach var="option" items="${voteOptions}">
+        <div class="vote-option mt-3">
+          <div class="vote-bar">
+            <div class="vote-progress" style="width: ${option.votePercent}%;"></div>
+          </div>
+          <span class="vote-text">${option.optionText}</span>
+          <span class="vote-percent">${option.votePercent}% (${option.voteCount}표)</span>
+        </div>
+        <c:if test="${!vo.anonymous}">
+          <div class="voter-info">
+            <c:forEach var="voter" items="${option.voters}">
+              <img src="${ctp}/member/${voter.photo}" alt="${voter.name}" class="voter-photo">
+              <span>${voter.name}</span>
+            </c:forEach>
+          </div>
+        </c:if>
+      </c:forEach>
+    </div>
+  </c:if>
+
+  <hr class="mt-5"/>
   
-  <div class="non-voters">
-    <h4>미참여 가족</h4>
-    <c:forEach var="vo" items="${nonParticipants}">
-      <img src="${ctp}/member/${vo.photo}" alt="${vo.name}" class="voter-photo">
-      <span>${vo.name}</span>
+  <div class="participants-section mt-4">
+    <c:if test="${!empty nonParticipants}">
+      <div class="non-voters">
+        <h4>미참여 가족</h4>
+        <c:forEach var="vo" items="${nonParticipants}">
+          <img src="${ctp}/member/${vo.photo}" alt="${vo.name}" class="voter-photo">
+          <span>${vo.name}</span>&nbsp;
+        </c:forEach>
+      </div>
+    </c:if>
+    <c:if test="${!empty participants}">
+      <div class="participants">
+        <h4>참여한 가족</h4>
+        <c:forEach var="vo" items="${participants}">
+          <img src="${ctp}/member/${vo.photo}" alt="${vo.name}" class="voter-photo">
+          <span>${vo.name}</span>&nbsp;
+        </c:forEach>
+      </div>
+    </c:if>
+  </div>
+
+  <div class="vote-comment-divider"></div>
+
+  <div class="comment-section">
+    <h4>댓글 ${fn:length(replyVos)}개</h4>
+    <div class="comment-input-container">
+      <textarea id="commentContent" name="content" class="comment-input" placeholder="댓글을 입력하세요..." style="padding-bottom: 40px;"></textarea>
+      <div class="text-right">
+        <button class="btn-comment" onclick="submitComment(0)">등록</button>    
+      </div>
+    </div>
+      
+    <!-- 댓글 리스트 -->
+    <c:forEach var="replyVo" items="${replyVos}">
+      <c:if test="${replyVo.parentIdx == null}">
+        <div class="comment">
+          <span class="comment-author">${replyVo.name}</span>
+          <span>${fn:replace(replyVo.content, newLine, "<br/>")}</span>
+          <div class="notice-meta">
+            <fmt:parseDate value="${replyVo.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedReplyDate" type="both" />
+            <fmt:formatDate value="${parsedReplyDate}" pattern="yyyy.MM.dd HH:mm" var="formattedReplyDate" />
+            <span>${formattedReplyDate}</span>
+            <span id="replyBtn${replyVo.idx}" class="reply-btn" onclick="toggleReplyForm(${replyVo.idx})">답글 달기</span>
+            <c:if test="${replyVo.memberIdx == sIdx}">
+              <span class="delete-btn" onclick="deleteComment(${replyVo.idx})">삭제</span>
+            </c:if>
+          </div>
+          <div id="replyForm${replyVo.idx}" class="reply-form" style="display: none;">
+            <textarea id="replyContent${replyVo.idx}" name="replyContent${replyVo.idx}" class="comment-input" placeholder="답글을 입력하세요..." >@${replyVo.name} </textarea>
+            <div class="text-right">
+              <button class="btn-comment" onclick="submitComment(${replyVo.idx})">답글 등록</button>    
+            </div>
+          </div>
+          
+          <!-- 대댓글 표시 -->
+          <c:forEach var="childReply" items="${replyVos}">
+            <c:if test="${childReply.parentIdx == replyVo.idx}">
+              <div class="comment reply">
+                <span class="comment-author">${childReply.name}</span>
+                <span>${fn:replace(childReply.content, newLine, "<br/>")}</span>
+                <div class="notice-meta">
+                  <fmt:parseDate value="${childReply.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedChildReplyDate" type="both" />
+                  <fmt:formatDate value="${parsedChildReplyDate}" pattern="yyyy.MM.dd HH:mm" var="formattedChildReplyDate" />
+                  <span>${formattedChildReplyDate}</span>
+                  <c:if test="${childReply.memberIdx == sIdx}">
+                    <span class="delete-btn" onclick="deleteComment(${childReply.idx})">삭제</span>
+                  </c:if>
+                </div>
+              </div>
+            </c:if>
+          </c:forEach>
+        </div>
+      </c:if>
     </c:forEach>
   </div>
-  
+
   <a href="${ctp}/vote/voteList" class="btn-list">목록으로</a>
 </div>
 

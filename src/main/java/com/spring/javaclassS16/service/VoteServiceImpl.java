@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.spring.javaclassS16.dao.VoteDAO;
 import com.spring.javaclassS16.vo.MemberVO;
 import com.spring.javaclassS16.vo.VoteOptionVO;
+import com.spring.javaclassS16.vo.VoteReplyVO;
 import com.spring.javaclassS16.vo.VoteVO;
 
 @Service
@@ -85,6 +86,26 @@ public class VoteServiceImpl implements VoteService {
 	@Override
 	public int setEndVote(int voteIdx) {
 		return voteDAO.setEndVote(voteIdx);
+	}
+
+	@Override
+	public void closeExpiredVotes() {
+		voteDAO.closeExpiredVotes();
+	}
+
+	@Override
+	public void setCancelVote(int voteIdx, int memberIdx) {
+		voteDAO.setCancelVote(voteIdx, memberIdx);
+	}
+
+	@Override
+	public int setVoteReplyInput(VoteReplyVO replyVO) {
+		return voteDAO.setVoteReplyInput(replyVO);
+	}
+
+	@Override
+	public List<VoteReplyVO> getVoteReply(int idx) {
+		return voteDAO.getVoteReply(idx);
 	}
 
 	

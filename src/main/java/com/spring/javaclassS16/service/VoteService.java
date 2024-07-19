@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.spring.javaclassS16.vo.MemberVO;
+import com.spring.javaclassS16.vo.NoticeReplyVO;
 import com.spring.javaclassS16.vo.VoteOptionVO;
+import com.spring.javaclassS16.vo.VoteReplyVO;
 import com.spring.javaclassS16.vo.VoteVO;
 
 public interface VoteService {
@@ -28,5 +30,13 @@ public interface VoteService {
 	public List<MemberVO> getNonParticipants(int idx, String familyCode);
 
 	public int setEndVote(int voteIdx);
+
+	public void closeExpiredVotes();
+
+	public void setCancelVote(int voteIdx, int memberIdx);
+
+	public int setVoteReplyInput(VoteReplyVO replyVO);
+
+	public List<VoteReplyVO> getVoteReply(int idx);
 
 }

@@ -24,6 +24,7 @@
       font-size: 24px; 
       color: #cecece; 
     }
+    .home-icon:hover {color: #c6c6c6;}
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);

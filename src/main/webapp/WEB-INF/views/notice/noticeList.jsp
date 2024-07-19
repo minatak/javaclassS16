@@ -23,8 +23,9 @@
     } 
     .home-icon { 
       font-size: 24px; 
-      color: #e4e6eb; 
+      color: #cecece; 
     }
+    .home-icon:hover {color: #c6c6c6;}
     h2 {
     	font-family: 'Pretendard' !important;
       color: #333;
@@ -152,6 +153,17 @@
       background-color: #e4e6eb;
       color: black;
     }
+    
+    
+    select {
+      background-color: white;
+      border: 1px solid #dbdbdb;
+      padding: 8px;
+      font-size: 14px;
+    }
+    
+    
+    
     .pinned {
       background-color: #f0f8ff;
     }
@@ -250,7 +262,15 @@
         </form>
       </div>
     </div>
-    
+    <div class="search-bar">
+	    <select name="choice" id="choice" onchange="noticeSearch()">
+	      <option value="최신순" ${choice == '최신순' ? 'selected' : ''}>최신순</option>
+	      <option value="추천순" ${choice == '추천순' ? 'selected' : ''}>추천순</option>
+	      <option value="조회순" ${choice == '조회순' ? 'selected' : ''}>조회순</option>
+	      <option value="댓글순" ${choice == '댓글순' ? 'selected' : ''}>댓글순</option>
+	      <option value="오래된순" ${choice == '오래된순' ? 'selected' : ''}>오래된순</option>
+	    </select>
+	  </div>		
     <div class="d-flex justify-content-between mb-3">
       <select name="pageSize" id="pageSize" onchange="pageSizeCheck()" class="form-control" style="width: auto;">
         <option ${pageVO.pageSize==5  ? "selected" : ""}>5</option>

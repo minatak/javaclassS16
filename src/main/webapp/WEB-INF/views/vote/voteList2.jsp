@@ -14,7 +14,7 @@
       background-color: #ffffff;
     }
     .voteContainer {
-      max-width: 900px;
+      max-width: 1000px;
       background-color: white;
       padding: 40px;
       margin: 30px auto;
@@ -42,14 +42,16 @@
 		  cursor: pointer;
 		  overflow: hidden;
 		  box-sizing: border-box;
-		  background-color: #f0f5f1;
+		  background-color: #fff; 
 		}
 		
 		.vote-card:hover {
-		  transform: scale(1.03);
-		  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		  /* transform: scale(1.03);
+		  box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
+		  
+		  transform: scale(1.02); /* 마우스 올리면 커지는 정도 */
+		  box-shadow: 0 3px 6px rgba(0,0,0,0.07); 
 		}
-		
 		.vote-icon-container {
 		  height: 35%;
 		  display: flex;
@@ -57,6 +59,7 @@
 		  justify-content: center;
 		  align-items: center;
 		  padding: 5px 0;
+		  background-color: #f0f5f1;
 		}
 		
 		.vote-icon {
@@ -73,6 +76,7 @@
 		
 		.vote-content {
 		  height: 55%;
+		  background-color:#fff;
 		  padding: 5px 0;
 		  display: flex;
 		  flex-direction: column;
@@ -96,6 +100,13 @@
 		  background-color: #6c757d;
 		}
 		
+		.vote-card h5 {
+		  margin: 5px 0;
+		  font-size: 16px;
+		  font-weight: bold;
+		  color: #333;
+		  overflow: hidden;
+		}
 		.vote-card h5 {
 		  margin: 5px 0;
 		  font-size: 16px;
@@ -156,13 +167,20 @@
     .vote-list-item {
       border: 1px solid #ddd;
       padding: 15px;
-      margin-bottom: 10px;
-      transition: background-color 0.3s ease;
+      margin-bottom: 15px;
+      /* transition: background-color 0.3s ease; */
+		  transition: transform 0.3s ease, box-shadow 0.3s ease;
+		  cursor: pointer;
+		  overflow: hidden;
       cursor: pointer;
+      border-radius: 8px;
     }
     .vote-list-item:hover {
-      background-color: #f8f9fa;
+      background-color: #f8f9fa; 
+		  transform: scale(1.01); /* 마우스 올리면 커지는 정도 */
+		  box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
     }
+    
     .hidden {
       display: none;
     }

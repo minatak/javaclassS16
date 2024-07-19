@@ -21,8 +21,9 @@
     } 
     .home-icon { 
       font-size: 24px; 
-      color: #e4e6eb; 
+      color: #cecece; 
     }
+    .home-icon:hover {color: #c6c6c6;}
     h2 {
       font-family: 'Pretendard' !important;
       color: #333;

@@ -49,6 +49,10 @@
       WHERE vp.voteIdx = #{idx}
     )
   </select>
+  
+  <select id="getVoteReply" resultType="com.spring.javaclassS16.vo.VoteReplyVO">
+    SELECT * FROM voteReply WHERE voteIdx = #{idx} ORDER BY createdAt;
+  </select>
 	
 
 	
@@ -68,6 +72,23 @@
 	  </foreach>
 	</insert>
 	
+  <insert id="setVoteReplyInput">
+	  INSERT INTO voteReply 
+	  (voteIdx, memberIdx, name, content, parentIdx)
+	  VALUES (#{replyVO.voteIdx}, #{replyVO.memberIdx}, #{replyVO.name}, #{replyVO.content}, 
+	    <choose>
+	      <when test="replyVO.parentIdx != null and replyVO.parentIdx != 0">
+	        #{replyVO.parentIdx}
+	      </when>
+	      <otherwise>
+	        NULL
+	      </otherwise>
+	    </choose>
+	  )
+	</insert>
+	
+	
+	
 	<update id="updateVoteOptionCount">
 	  UPDATE voteOption
 	  SET voteCount = voteCount + 1
@@ -81,7 +102,14 @@
     UPDATE vote SET status = 'CLOSED', endTime = NOW() WHERE idx = #{voteIdx}
 	</update>
   
-  <delete id="cancelVote">
+   <update id="closeExpiredVotes">
+    UPDATE vote SET status = 'CLOSED'
+    WHERE <![CDATA[endTime < NOW()]]> AND status = 'ACTIVE'
+  </update>
+  
+  
+  
+  <delete id="setCancelVote">
 	  DELETE FROM voteParticipation
 	  WHERE voteIdx = #{voteIdx} AND memberIdx = #{memberIdx};
 	  

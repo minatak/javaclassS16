@@ -56,6 +56,7 @@ CREATE TABLE voteReply (
   idx INT NOT NULL AUTO_INCREMENT,      
   voteIdx INT NOT NULL,                	 /* 해당 투표 번호 */
   memberIdx INT NOT NULL,        				 /* 댓글 작성자 IDX */
+  name varchar(20) NOT NULL,        		 /* 댓글 작성자 이름 */
   content TEXT NOT NULL,                 /* 댓글 내용 */
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,  /* 댓글 작성 시간 */
   parentIdx INT,                         /* 부모 댓글 번호 (대댓글인 경우) */

@@ -16,7 +16,11 @@
       background-color: #ffffff;
       color: #333333;
     }
-    
+    .home-icon { 
+      font-size: 24px; 
+      color: #cecece; 
+    }
+    .home-icon:hover {color: #c6c6c6;}
     .noticeContainer {
       max-width: 900px;
       margin: 40px auto;
@@ -397,6 +401,8 @@
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
 
 	<div class="noticeContainer">
+	  
+	  <a href="${ctp}/notice/noticeList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
 	  <h2>공지사항</h2>
 	  
 	  <div class="notice-info">

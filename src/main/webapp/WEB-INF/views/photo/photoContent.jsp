@@ -20,6 +20,7 @@
       font-size: 24px; 
       color: #cecece; 
     }
+    .home-icon:hover {color: #c6c6c6;}
     .bodyContainer {
       max-width: 900px;
       margin: 0 auto;
@@ -400,31 +401,31 @@
   	}
     
     function showConfirm(message, confirmCallback, cancelCallback) {
-    	  Swal.fire({
-    	    html: message,
-    	    showCancelButton: true,
-    	    cancelButtonText: '취소',
-    	    confirmButtonText: '확인',
-    	    customClass: {
-    	      cancelButton: 'swal2-cancel',
-    	      confirmButton: 'swal2-confirm',
-    	      popup: 'custom-swal-popup',
-    	      htmlContainer: 'custom-swal-text'
-    	    },
-    	    scrollbarPadding: false,
-    	    allowOutsideClick: false,
-    	    heightAuto: false,
-    	    didOpen: () => {
-    	      document.body.style.paddingRight = '0px';
-    	    }
-    	  }).then((result) => {
-    	    if (result.isConfirmed && confirmCallback) {
-    	      confirmCallback();
-    	    } else if (result.isDismissed && cancelCallback) {
-    	      cancelCallback();
-    	    }
-    	  });
-    	}
+  	  Swal.fire({
+  	    html: message,
+  	    showCancelButton: true,
+  	    cancelButtonText: '취소',
+  	    confirmButtonText: '확인',
+  	    customClass: {
+  	      cancelButton: 'swal2-cancel',
+  	      confirmButton: 'swal2-confirm',
+  	      popup: 'custom-swal-popup',
+  	      htmlContainer: 'custom-swal-text'
+  	    },
+  	    scrollbarPadding: false,
+  	    allowOutsideClick: false,
+  	    heightAuto: false,
+  	    didOpen: () => {
+  	      document.body.style.paddingRight = '0px';
+  	    }
+  	  }).then((result) => {
+  	    if (result.isConfirmed && confirmCallback) {
+  	      confirmCallback();
+  	    } else if (result.isDismissed && cancelCallback) {
+  	      cancelCallback();
+  	    }
+  	  });
+  	}
 
     
     function showLikesModal() {
