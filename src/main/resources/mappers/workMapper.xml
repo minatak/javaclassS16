@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS16.dao.WorkDAO">
+  
+  <select id="getWorkList" resultType="java.util.Map">
+    SELECT 
+      idx, category, task, description, familyCode, startDate, endDate, rotationPeriod, 
+      memberIdx, memberName, completionDate, status,
+      DATEDIFF(endDate, CURDATE()) AS daysLeft
+    FROM housework
+    WHERE familyCode = #{familyCode}
+    <if test="category != null and category != ''">
+      AND category = #{category}
+    </if>
+    <if test="status != null and status != ''">
+      AND status = #{status}
+    </if>
+    <if test="memberFilter != null and memberFilter != ''">
+      AND memberIdx = #{memberFilter}
+    </if>
+    ORDER BY status ASC,
+    <choose>
+      <when test="sortBy == 'dueDate'">endDate ASC</when>
+      <when test="sortBy == 'category'">category ASC</when>
+      <otherwise>idx DESC</otherwise>
+    </choose>
+    LIMIT #{startIndexNo}, #{pageSize}
+  </select>
+  
+  <select id="getMyWorkList" resultType="java.util.Map">
+    SELECT 
+      idx, category, task, description, familyCode, startDate, endDate, rotationPeriod, 
+      memberIdx, memberName, completionDate, status,
+      DATEDIFF(endDate, CURDATE()) AS daysLeft
+    FROM housework
+    WHERE familyCode = #{familyCode} AND memberIdx = #{memberIdx}
+    ORDER BY status ASC, idx DESC 
+    LIMIT #{startIndexNo}, #{pageSize}
+  </select>
+  
+  <select id="totRecCnt" resultType="int">
+    SELECT COUNT(*)
+    FROM housework
+    WHERE familyCode = #{familyCode}
+  </select>
+  
+  <select id="totRecCntSearch" resultType="int">
+    SELECT COUNT(*)
+    FROM housework
+    WHERE familyCode = #{familyCode}
+    <if test="search == 'category'">
+      AND category LIKE CONCAT('%', #{searchString}, '%')
+    </if>
+    <if test="search == 'task'">
+      AND task LIKE CONCAT('%', #{searchString}, '%')
+    </if>
+    <if test="search == 'status'">
+      AND status LIKE CONCAT('%', #{searchString}, '%')
+    </if>
+    <if test="search == 'memberName'">
+      AND memberName LIKE CONCAT('%', #{searchString}, '%')
+    </if>
+  </select>
+
+  <select id="getFamilyMemberProgress" resultType="java.util.Map">
+    SELECT 
+      memberIdx,
+      memberName,
+      COUNT(*) AS totalTasks,
+      SUM(CASE WHEN status = '완료' THEN 1 ELSE 0 END) AS completedTasks,
+      CASE 
+        WHEN COUNT(*) > 0 THEN 
+          (SUM(CASE WHEN status = '완료' THEN 1 ELSE 0 END) * 100.0 / COUNT(*))
+        ELSE 0 
+      END AS progressPercentage
+    FROM housework
+    WHERE familyCode = #{familyCode}
+    GROUP BY memberIdx, memberName
+  </select>
+  
+  <select id="getDashboardData" resultType="java.util.Map">
+    SELECT 
+      COUNT(*) AS totalTasks,
+      SUM(CASE WHEN status = '완료' THEN 1 ELSE 0 END) AS completedTasks,
+      SUM(CASE WHEN status = '진행중' THEN 1 ELSE 0 END) AS ongoingTasks,
+      SUM(CASE WHEN DATE(endDate) = CURDATE() THEN 1 ELSE 0 END) AS todayTasks
+    FROM housework
+    WHERE familyCode = #{familyCode}
+  </select>
+    
+  <select id="getTaskDetails" resultType="java.util.Map">
+    SELECT 
+      idx, category, task, description, familyCode, startDate, endDate, rotationPeriod,
+      memberIdx, memberName, status,
+      DATEDIFF(endDate, CURDATE()) AS daysLeft
+    FROM housework
+    WHERE idx = #{houseworkIdx}
+  </select>
+
+
+  <insert id="addNewTask" parameterType="java.util.Map">
+    INSERT INTO housework (category, task, description, familyCode, startDate, endDate, rotationPeriod, memberIdx, memberName)
+    VALUES (
+      #{category},
+      #{task},
+      #{description},
+      #{familyCode},
+      #{startDate},
+      #{endDate},
+      #{rotationPeriod},
+      #{memberIdx},
+      #{memberName}
+    )
+  </insert>
+
+
+  <update id="updateTaskStatus">
+    UPDATE housework
+    SET status = #{newStatus}, memberIdx = #{memberId}, memberName = (SELECT name FROM member WHERE idx = #{memberId})
+    WHERE idx = #{houseworkIdx}
+  </update>
+  
+  <update id="setCompleteTask" parameterType="int">
+    UPDATE housework
+    SET status = '완료', completionDate = CURDATE()
+    WHERE idx = #{houseworkIdx}
+  </update>
+  
+</mapper>

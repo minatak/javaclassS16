@@ -59,5 +59,7 @@ public interface PhotoDAO {
 	public void deletePhotoReply(@Param("idx") int idx);
 
 	public int totRecCnt(@Param("part") String part);
+
+	public int totRecCntSearch(@Param("search") String search, @Param("searchString") String searchString);
   
 }

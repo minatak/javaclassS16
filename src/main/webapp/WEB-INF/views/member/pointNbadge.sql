@@ -1,3 +1,4 @@
+/* 이 DB는 보류....... */
 
 CREATE TABLE member ( -- 멤버 테이블 수정할것..
   idx int(11) NOT NULL AUTO_INCREMENT,
