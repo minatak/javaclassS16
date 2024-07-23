@@ -63,20 +63,23 @@
   </select>
 
   <select id="getFamilyMemberProgress" resultType="java.util.Map">
-    SELECT 
-      memberIdx,
-      memberName,
-      COUNT(*) AS totalTasks,
-      SUM(CASE WHEN status = '완료' THEN 1 ELSE 0 END) AS completedTasks,
-      CASE 
-        WHEN COUNT(*) > 0 THEN 
-          (SUM(CASE WHEN status = '완료' THEN 1 ELSE 0 END) * 100.0 / COUNT(*))
-        ELSE 0 
-      END AS progressPercentage
-    FROM housework
-    WHERE familyCode = #{familyCode}
-    GROUP BY memberIdx, memberName
-  </select>
+	  SELECT 
+	    m.idx AS memberIdx,
+	    m.name AS memberName,
+	    m.relationship,
+	    COALESCE(COUNT(h.idx), 0) AS totalTasks,
+	    COALESCE(SUM(CASE WHEN h.status = '완료' THEN 1 ELSE 0 END), 0) AS completedTasks,
+	    CASE 
+	      WHEN COUNT(h.idx) > 0 THEN 
+	        (SUM(CASE WHEN h.status = '완료' THEN 1 ELSE 0 END) * 100.0 / COUNT(h.idx))
+	      ELSE 0 
+	    END AS progressPercentage
+	  FROM member m
+	  LEFT JOIN housework h ON m.idx = h.memberIdx AND h.familyCode = #{familyCode}
+	  WHERE m.familyCode = #{familyCode}
+	  GROUP BY m.idx, m.name, m.relationship
+	  ORDER BY m.idx
+	</select>
   
   <select id="getDashboardData" resultType="java.util.Map">
     SELECT 

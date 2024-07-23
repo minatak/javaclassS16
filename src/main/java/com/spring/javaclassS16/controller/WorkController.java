@@ -97,7 +97,11 @@ public class WorkController {
   public String workInputPost(WorkVO vo) {
 	  String memberName = membreService.getMemberNameByIdx(vo.getMemberIdx());
   	vo.setMemberName(memberName);
-
+  	System.out.println("1.vo : " + vo);
+  	
+  	if(vo.getEndDate().trim().length() < 10) vo.setEndDate(null); 
+  	System.out.println("2.vo : " + vo);
+  	
   	int res = workService.setWorkInput(vo);
 		
 		if(res != 0) return "redirect:/message/workInputOk";
@@ -107,7 +111,6 @@ public class WorkController {
   @ResponseBody
   @RequestMapping(value = "/getTaskDetails", method = RequestMethod.GET)
   public WorkVO getTaskDetails(@RequestParam int idx) {
-
   	return workService.getTaskDetails(idx);
   }
   

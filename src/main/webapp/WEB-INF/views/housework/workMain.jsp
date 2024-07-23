@@ -232,7 +232,7 @@
     
     .switch-label {
       margin-left: 10px;
-      font-size: 14px;
+      font-size: 16px;
     }
     
     .top-controls {
@@ -335,6 +335,7 @@
 		
     #taskTitle {
 		  margin: 0;
+		  margin-top: 10px;
 		  font-size: 18px;
 		  font-weight: 700;
 		  color: #33c47;
@@ -549,6 +550,7 @@
 		  font-weight: 700;
 		  color: #333;
 		  margin-bottom: 0;
+		  margin-top: 10px;
 		}
 		
 		.task-status {
@@ -690,8 +692,8 @@
   	  Swal.fire({
   	    html: message,
   	    showCancelButton: true,
-  	    cancelButtonText: '취소',
-  	    confirmButtonText: '확인',
+  	    cancelButtonText: '아니요',
+  	    confirmButtonText: '네',
   	    customClass: {
   	      cancelButton: 'swal2-cancel',
   	      confirmButton: 'swal2-confirm',
@@ -770,13 +772,25 @@
         });
         return false;
       }
+      if(task.trim() === "") {
+        showAlert("할 일의 이름을 입력해주세요.", function() {
+          addTaskForm.task.focus();
+        });
+        return false;
+      }
+      if(task.length > 20) {
+  	    showAlert("할 일의 이름은 20자 미만으로 적어주세요", function() {
+          addTaskForm.task.focus();
+  	    });
+  	    return false;
+  	  }
       if(memberIdx === "") {
         showAlert("담당자를 선택해주세요.", function() {
           addTaskForm.memberIdx.focus();
         });
         return false;
       }
-      if(date === "") {
+     /*  if(date === "") {
         showAlert("마감일을 선택해주세요.", function() {
           addTaskForm.date.focus();
         });
@@ -787,7 +801,7 @@
           addTaskForm.time.focus();
         });
         return false;
-      }
+      } */
       if(!noRepeat && (rotationPeriod.trim() === "" || isNaN(rotationPeriod) || parseInt(rotationPeriod) < 0)) {
         showAlert("올바른 반복 주기를 입력해주세요.", function() {
           addTaskForm.rotationPeriod.focus();
@@ -832,13 +846,24 @@
   	    type: 'GET',
   	    data: { idx: idx },   
   	    success: function(vo) {
+  	    	// 모달 내용 초기화
+  	      $('#taskTitle').text('');
+  	      $('#taskCategory').text('');
+  	      $('#taskDescription').text('');
+  	      $('#taskMemberName').text('');
+  	      $('#taskStatus').text('');
+  	      $('#taskStartDate').text('');
+  	      $('#taskEndDate').text('');
+  	      $('#taskTimeLeftContainer').hide();
+  	      $('#taskTimeLeft').text('');
+  	      $('#taskRotationPeriod').text('');
+
+  	      // 새 데이터로 모달 업데이트
   	      $('#taskTitle').text(vo.task);
   	      $('#taskCategory').text(vo.category);
   	      $('#taskDescription').text(vo.description || '설명 없음');
   	      $('#taskMemberName').text(vo.memberName);
   	      $('#taskStatus').text(vo.status);
-  	      $('#taskStartDate').text(vo.startDate);
-  	      $('#taskEndDate').text(vo.endDate);
   	      
   	 			// status에 따라 클래스 추가
   	      if (vo.status === '진행중') {
@@ -850,32 +875,43 @@
   	 			// 날짜와 시간 분리
   	      let startDate = vo.startDate.substring(0, 10);
   	      let startTime = vo.startDate.substring(11, 16);
-  	      let endDate = vo.endDate.substring(0, 10);
-  	      let endTime = vo.endDate.substring(11, 16);
-
-  	      $('#taskStartDate').text(startDate + ' ' + startTime);
-  	      $('#taskEndDate').text(endDate + ' ' + endTime);
-
-  	      // 남은 시간 계산 및 표시
-  	      let now = new Date();
-  	      let end = new Date(vo.endDate);
-  	      let timeDiff = end - now;
-
-  	      if (timeDiff > 0) {
-  	        let daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-  	        let hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  	        let minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-
-  	        if (daysLeft > 0) {
-  	          $('#taskTimeLeft').text(daysLeft + '일 ' + hoursLeft + '시간 ' + minutesLeft + '분');
-  	        } else if (hoursLeft > 0) {
-  	          $('#taskTimeLeft').text(hoursLeft + '시간 ' + minutesLeft + '분');
-  	        } else {
-  	          $('#taskTimeLeft').text(minutesLeft + '분');
-  	        }
-  	      } else {
-  	        $('#taskTimeLeft').text('마감 시간 초과');
-  	      }
+	  	    if (vo.endDate) {
+	  	      let endDate = vo.endDate.substring(0, 10);
+	  	      let endTime = vo.endDate.substring(11, 16);
+	  	      $('#taskStartDate').text(startDate + ' ' + startTime);
+	  	      $('#taskEndDate').text(endDate + ' ' + endTime);
+	  	    } else {
+	  	      $('#taskStartDate').text(startDate + ' ' + startTime);
+	  	      $('#taskEndDate').text('(마감일 없음)');
+	  	    }
+	
+	  	    // 상태가 '진행중'일 때만 남은 시간 표시
+	  	    if (vo.status === '진행중' && vo.endDate) {
+	  	      $('#taskTimeLeftContainer').show();
+	  	      
+	  	      // 남은 시간 계산 및 표시
+	  	      let now = new Date();
+	  	      let end = new Date(vo.endDate);
+	  	      let timeDiff = end - now;
+	  	      if (timeDiff > 0) {
+	  	        let daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+	  	        let hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	  	        let minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+	  	        if (daysLeft > 0) {
+	  	          $('#taskTimeLeft').text(daysLeft + '일 ' + hoursLeft + '시간 ' + minutesLeft + '분');
+	  	        } else if (hoursLeft > 0) {
+	  	          $('#taskTimeLeft').text(hoursLeft + '시간 ' + minutesLeft + '분');
+	  	        } else {
+	  	          $('#taskTimeLeft').text(minutesLeft + '분');
+	  	        }
+	  	        $('#taskTimeLeft').css('color', ''); // 기본 색상으로 설정
+	  	      } else {
+	  	        $('#taskTimeLeft').text('마감됨');
+	  	        $('#taskTimeLeft').css('color', 'red'); // 빨간색으로 설정
+	  	      }
+	  	    } else {
+	  	      $('#taskTimeLeftContainer').hide();
+	  	    }
   	      
 	  	 		// 로테이션 주기 표시
 	  	    $('#taskRotationPeriod').text(vo.rotationPeriod == 0 ? '반복 없음' : vo.rotationPeriod + '일');
@@ -892,12 +928,20 @@
 		  	  $('#taskButtons').html(buttonsHtml);
 	
 	  	    $('#taskDetailModal').modal('show');
-  	    },
-  	    error: function(xhr, status, error) {
-  	      console.error("Error fetching task details:", error);
-  	      showAlert('할 일 세부 정보를 불러오는데 실패했습니다.');
-  	    }
-  	  });
+	  	  	
+	  	    // 이벤트 리스너 제거 및 재설정
+	        $('#taskDetailModal').off('hidden.bs.modal');
+	        $('#taskDetailModal').on('hidden.bs.modal', function (e) {
+	          if ($(e.target).attr('id') === 'taskDetailModal') {
+	            $('#editTaskModal').modal('hide');
+	          }
+	        });
+	      },
+	      error: function(xhr, status, error) {
+	        console.error("Error fetching task details:", error);
+	        showAlert('할 일 세부 정보를 불러오는데 실패했습니다.');
+	      }
+	    });
   	}
 
     function workDelete(idx) {
@@ -905,11 +949,8 @@
 		    location.href = "workDelete?idx="+idx;
 		  });
 		}
-    
+
     function editTask(idx) {
-
-  	  $('#taskDetailModal').modal('hide');
-
   	  $.ajax({
   	    url: '${ctp}/housework/getTaskDetails',
   	    type: 'GET',
@@ -932,17 +973,16 @@
 
   	      $('#editTaskRotationPeriod').val(vo.rotationPeriod);
 
-  	 			// status에 따라 라디오 버튼 선택
-	  	    if (vo.status === '완료') {
-	  	      document.getElementById('editTaskStatusComplete').checked = true;
-	  	    } else {
-	  	      document.getElementById('editTaskStatusIncomplete').checked = true;
-	  	    }
+  	      // status에 따라 라디오 버튼 선택
+  	      if (vo.status === '완료') {
+  	        document.getElementById('editTaskStatusComplete').checked = true;
+  	      } else {
+  	        document.getElementById('editTaskStatusIncomplete').checked = true;
+  	      }
   	      
-  	      $('#taskDetailModal').on('hidden.bs.modal', function (e) {
-  	        $('#editTaskModal').modal('show');
-  	        $(this).off('hidden.bs.modal');
-  	      });
+  	      // 모달 전환
+  	      $('#taskDetailModal').modal('hide');
+  	      $('#editTaskModal').modal('show');
   	    },
   	    error: function(xhr, status, error) {
   	      console.error("Error fetching task details for edit:", xhr.responseText);
@@ -950,6 +990,29 @@
   	    }
   	  });
   	}
+
+  	$(document).ready(function() {
+  	  $('#taskDetailModal').on('hidden.bs.modal', function (e) {
+  	    if ($('#editTaskModal').hasClass('show')) {
+  	      $('body').addClass('modal-open');
+  	    }
+  	  });
+
+  	  $('#editTaskModal').on('hidden.bs.modal', function (e) {
+  	    if ($('#taskDetailModal').hasClass('show')) {
+  	      $('body').addClass('modal-open');
+  	    }
+  	  });
+
+  	  // 모달 전환 시 페이드 효과 추가
+  	  $('.modal').on('show.bs.modal', function (e) {
+  	    $(this).fadeIn('fast');
+  	  });
+
+  	  $('.modal').on('hide.bs.modal', function (e) {
+  	    $(this).fadeOut('fast');
+  	  });
+  	});
   	
     function updateTask() {
   	  let category = $('#editTaskCategory').val();
@@ -969,9 +1032,15 @@
   	    });
   	    return false;
   	  }
-  	  if(task.trim() === "") {
-  	    showAlert("할 일의 내용을 입력해주세요.", function() {
-  	      $('#editTaskName').focus();
+  		if(task.trim() === "") {
+        showAlert("할 일의 이름을 입력해주세요.", function() {
+  	    	$('#editTaskName').focus();
+        });
+        return false;
+      }
+      if(task.length >= 20) {
+  	    showAlert("할 일의 이름은 20자 미만으로 적어주세요", function() {
+  	    	$('#editTaskName').focus();
   	    });
   	    return false;
   	  }
@@ -1066,13 +1135,8 @@
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
-<p><br/></p> 
 <div class="container">
   <div class="workContainer">
-    <%-- <div class="mb-5"> 
-      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
-      <font size="5" class="mb-4 header">우리 집 가사 관리</font>
-    </div> --%>
     <div class="header">
 	    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
 	    <font size="5" class="mb-4 h2">우리 집 가사 관리</font>
@@ -1184,35 +1248,47 @@
     </div>
 
     <!-- 할 일 목록 -->
-    <div class="row" id="taskList">
+		<div class="row" id="taskList">
 		  <c:forEach var="task" items="${vos}" varStatus="status">
 		    <div class="col-md-4 mb-4 task-item">
-		      <div class="card task-card ${task.status == '완료' ? 'task-completed' : ''}">
-				    <div class="card-body">
-				      <div class="d-flex justify-content-between align-items-center mb-3">
-				        <i class="fas ${task.category == '청소' ? 'fa-broom' : 
-							                 task.category == '설거지' ? 'fa-sink' : 
-							                 task.category == '빨래' ? 'fa-tshirt' : 
-							                 task.category == '요리' ? 'fa-utensils' : 
-							                 task.category == '정리정돈' ? 'fa-box' : 
-							                 task.category == '쓰레기' ? 'fa-trash' : 
-							                 'fa-tasks'} task-icon"></i>
-				        <span class="task-status ${task.status == '진행중' ? 'task-status-ongoing' : 'task-status-completed'}">
-				          ${task.status} 
-				        </span>
-				      </div>
-              <h5 class="card-title">${task.category} - ${task.task}</h5>
-              <p class="card-text">${fn:substring(task.description, 0, 50)}${fn:length(task.description) > 50 ? '...' : ''}</p>
-              <p class="card-text"><p class="card-text"><small class="text-muted">담당: ${task.memberName}</small></p>
-              <p class="card-text"><small class="text-muted">마감일: ${fn:substring(task.endDate, 0, 10)}</small></p>
-              <p class="card-text"><small class="text-muted">남은 일수: ${task.daysLeft}일</small></p>
-              <button class="btn btn-sm btn-view-details" onclick="viewTaskDetails(${task.idx})">자세히 보기</button>
-            </div>
-          </div>
-        </div>
-      </c:forEach>
-    </div>
-  </div>
+		      <div class="card task-card ${task.status == '완료' ? 'task-completed' : ''} h-100">
+		        <div class="card-body d-flex flex-column">
+		          <div class="d-flex justify-content-between align-items-center mb-3">
+		            <i class="fas ${task.category == '청소' ? 'fa-broom' : 
+		                           task.category == '설거지' ? 'fa-sink' : 
+		                           task.category == '빨래' ? 'fa-tshirt' : 
+		                           task.category == '요리' ? 'fa-utensils' : 
+		                           task.category == '정리정돈' ? 'fa-box' : 
+		                           task.category == '쓰레기' ? 'fa-trash' : 
+		                           'fa-tasks'} task-icon"></i>
+		            <span class="task-status ${task.status == '진행중' ? 'task-status-ongoing' : 'task-status-completed'}">
+		              ${task.status} 
+		            </span>
+		          </div>
+		          <h5 class="card-title">${task.category} - ${task.task}</h5>
+		          <p class="card-text">${fn:substring(task.description, 0, 50)}${fn:length(task.description) > 50 ? '...' : ''}</p>
+		          <p class="card-text"><small class="text-muted">담당: ${task.memberName}</small></p>
+		          <div class="mt-auto">
+		            <c:if test="${!empty task.endDate}">
+		              <p class="card-text mb-0"><small class="text-muted">마감일: ${fn:substring(task.endDate, 0, 10)}</small></p>
+		              <p class="card-text mb-0"><small class="text-muted">
+		                <c:choose>
+		                  <c:when test="${task.daysLeft != 0}">남은 일수: ${task.daysLeft}일</c:when>
+		                  <c:otherwise>&nbsp;</c:otherwise>
+		                </c:choose>
+		              </small></p>
+		            </c:if>
+		            <c:if test="${empty task.endDate}">
+		              <p class="card-text mb-0"><small class="text-muted">마감일 없음</small></p>
+		              <p class="card-text mb-0"><small class="text-muted">&nbsp;</small></p>
+		            </c:if>
+		            <button class="btn btn-sm btn-view-details mt-2" onclick="viewTaskDetails(${task.idx})">자세히 보기</button>
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		  </c:forEach>
+		</div>
 	
 	<!-- 블록페이지 시작 -->
 	<div class="d-flex justify-content-center my-4">
@@ -1242,6 +1318,7 @@
 	<!-- 블록페이지 끝 -->
 
   <!-- 할 일 등록 모달 -->
+  <!-- <div class="modal" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true"> -->
   <div class="modal" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered" role="document">
 	    <div class="modal-content">
@@ -1274,7 +1351,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="taskCategory">카테고리</label>
+              <label for="taskCategory">카테고리 *</label>
               <select class="form-control" id="category" name="category" required>
                 <option value="">선택</option>
                 <option value="청소">청소</option>
@@ -1287,7 +1364,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="taskName">할 일 이름</label>
+              <label for="taskName">할 일 이름 *</label>
               <input type="text" class="form-control" id="task" name="task" required>
             </div>
             <div class="form-group">
@@ -1295,7 +1372,7 @@
               <textarea class="form-control" id="description" name="description" rows="3"></textarea>
             </div>
             <div class="form-group">
-					    <label for="memberIdx">담당자</label>
+					    <label for="memberIdx">담당자 *</label>
 					    <select class="form-control" id="memberIdx" name="memberIdx" required>
 					      <c:forEach var="member" items="${familyMembers}">
 					        <option value="${member.memberIdx}">${member.memberName}</option>
@@ -1304,20 +1381,20 @@
 					  </div>
             <div class="form-group">
 					    <label for="endDate">마감일</label>
-					    <input type="date" class="form-control" id="date" name="date" required>
+					    <input type="date" class="form-control" id="date" name="date">
 					  </div>
 					  <div class="form-group">
 					    <label for="endTime">마감 시간</label>
-					    <input type="time" class="form-control" id="time" name="time" required>
-					  </div>
-					  <div class="form-group">
-					    <label>
-					      <input type="checkbox" id="noRepeat" name="noRepeat"> 반복 없음
-					    </label>
+					    <input type="time" class="form-control" id="time" name="time">
 					  </div>
 					  <div class="form-group" id="rotationPeriodGroup">
 					    <label for="taskRotationPeriod">반복 주기 (일)</label>
 					    <input type="number" class="form-control" id="rotationPeriod" name="rotationPeriod" required>
+					  </div>
+					  <div class="form-group" style="margin-top:0px;">
+					    <label>
+					      <input type="checkbox" id="noRepeat" name="noRepeat"> 반복 없음
+					    </label>
 					  </div>
   					<input type="hidden" name="endDate" id="endDate" >
   					<input type="hidden" name="familyCode" value="${sFamCode}">
@@ -1332,7 +1409,8 @@
 	</div>
   
 	<!-- 세부 정보 모달 -->
-	<div class="modal" id="taskDetailModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailModalLabel" aria-hidden="true">
+	<div class="modal" id="taskDetailModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailModalLabel" aria-hidden="true" data-keyboard="false">
+	<!-- <div class="modal" id="taskDetailModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailModalLabel" aria-hidden="true"> -->
 	  <div class="modal-dialog modal-dialog-centered" role="document">
 	    <div class="modal-content">
 	      <div class="task-detail-container">
@@ -1347,7 +1425,9 @@
 	          <p><i class="fas fa-tag"></i> <span id="taskCategory"></span></p>
 	          <p><i class="fas fa-user"></i> <span id="taskMemberName"></span></p>
 	          <p><i class="fas fa-calendar-alt"></i> <span id="taskStartDate"></span> ~ <span id="taskEndDate"></span></p>
-	          <p><i class="fas fa-hourglass-half"></i> 남은 시간: <span id="taskTimeLeft"></span></p>
+	          <p id="taskTimeLeftContainer" style="display: none;">
+				    	<i class="fas fa-hourglass-half"></i> 남은 시간: <span id="taskTimeLeft"></span>
+					  </p>
 	          <p><i class="fas fa-redo"></i> 반복 주기: <span id="taskRotationPeriod"></span></p>
 	        </div>
 	        <div class="task-detail-description mt-4">
@@ -1364,6 +1444,7 @@
 	</div>
 
   <!-- 할 일 수정 모달 -->
+  <!-- <div class="modal" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true"> -->
   <div class="modal" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered" role="document">
 	    <div class="modal-content">
@@ -1419,11 +1500,11 @@
             <div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="editTaskStatus" id="editTaskStatusIncomplete" value="진행중" required>
-                <label class="form-check-label" for="editTaskStatusIncomplete" style="margin-bottom:0px">진행중</label>
+                <label class="form-check-label" for="editTaskStatusIncomplete" style="margin-bottom:0px; font-weight: 400;">진행중</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="editTaskStatus" id="editTaskStatusComplete" value="완료" required>
-                <label class="form-check-label" for="editTaskStatusComplete" style="margin-bottom:0px">완료</label>
+                <label class="form-check-label" for="editTaskStatusComplete" style="margin-bottom:0px; font-weight: 400;">완료</label>
               </div>
             </div>
           </div>
