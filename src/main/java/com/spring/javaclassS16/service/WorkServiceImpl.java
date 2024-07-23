@@ -16,21 +16,12 @@ public class WorkServiceImpl implements WorkService {
 	@Autowired
 	WorkDAO workDAO;
 
-//	@Override
-//	public List<Map<String, Object>> getWorkList(String familyCode, String choice, int startIndexNo, int pageSize) {
-//		return workDAO.getWorkList(familyCode, choice, startIndexNo, pageSize);
-//	}
-//	@Override
-//	public List<Map<String, Object>> getWorkList(Map<String, Object> params) {
-//		return workDAO.getWorkList(params);
-//	}
 	@Override
 	public List<Map<String, Object>> getWorkList(String familyCode, String category, String status, 
 	    String memberFilter, String sortBy, int startIndexNo, int pageSize, int memberIdx) {
 		return workDAO.getWorkList(familyCode, category, status, memberFilter, sortBy, startIndexNo, pageSize, memberIdx);
 	}
 	
-
 	@Override
 	public Map<String, Integer> getDashboardData(String familyCode) {
 		return workDAO.getDashboardData(familyCode);
@@ -52,25 +43,9 @@ public class WorkServiceImpl implements WorkService {
 	}
 
 	@Override
-	public boolean addTask(WorkVO workVO) {
-		return workDAO.addTask(workVO);
+	public WorkVO getTaskDetails(int idx) {
+		return workDAO.getTaskDetails(idx);
 	}
-
-	@Override
-	public boolean updateTaskStatus(int houseworkIdx, String newStatus, int memberIdx) {
-		return workDAO.updateTaskStatus(houseworkIdx, newStatus, memberIdx);
-	}
-
-	@Override
-	public Map<String, Object> getTaskDetails(int houseworkIdx) {
-		return workDAO.getTaskDetails(houseworkIdx);
-	}
-
-	@Override
-	public boolean addNewTask(Map<String, Object> taskData, String familyCode) {
-		return workDAO.addNewTask(taskData, familyCode);
-	}
-
 
 	@Override
 	public List<Map<String, Object>> getMyWorkList(String familyCode, int memberIdx, int startIndexNo, int pageSize) {
@@ -84,6 +59,21 @@ public class WorkServiceImpl implements WorkService {
 	}
 
 
+	@Override
+	public int setWorkInput(WorkVO vo) {
+		return workDAO.setWorkInput(vo);
+	}
+
+
+	@Override
+	public int setWorkUpdate(WorkVO vo) {
+		return workDAO.setWorkUpdate(vo);
+	}
+
+	@Override
+	public int setWorkDelete(int idx) {
+		return workDAO.setWorkDelete(idx);
+	}
 
 	
 }

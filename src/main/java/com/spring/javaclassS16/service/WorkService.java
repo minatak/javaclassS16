@@ -19,17 +19,17 @@ public interface WorkService {
 
 	public List<Map<String, Object>> getFamilyMemberProgress(String familyCode);
 
-	public boolean addTask(WorkVO workVO);
-
-	public boolean updateTaskStatus(int houseworkIdx, String newStatus, int memberIdx);
-
-	public Map<String, Object> getTaskDetails(int houseworkIdx);
-
-	public boolean addNewTask(Map<String, Object> taskData, String familyCode);
+	public WorkVO getTaskDetails(int idx);
 
 	public List<Map<String, Object>> getMyWorkList(String familyCode, int memberIdx, int startIndexNo, int pageSize);
 
 	public boolean setCompleteTask(int houseworkIdx);
+
+	public int setWorkInput(WorkVO vo);
+
+	public int setWorkUpdate(WorkVO vo);
+
+	public int setWorkDelete(int idx);
 
 
 

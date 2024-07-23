@@ -6,50 +6,63 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>가사 분담 목록 | HomeLink</title>
-  <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가사 분담 | HomeLink</title>
+  <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
   <style>
+    * {font-family: 'Pretendard';}
+    
     body {
-      font-family: 'Pretendard', sans-serif;
+    	font-family: 'Pretendard' !important;
       background-color: #ffffff;
     }
+    .header {
+    	/* font-weight:600 !important; */
+    	margin-bottom: 50px;
+    }
+    .header .h2 {
+    	font-family: 'pretendard' !important;
+      font-weight: 600;
+      font-size: 24px;
+      color: #33c47;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .card-title-header {
+      font-weight: 500;
+      font-size: 22px;
+      color: #33c47;
+      text-align: center;
+    }
     .workContainer {
-      max-width: 1000px;
+      max-width: 900px;
       background-color: white;
       padding: 40px;
-      margin: 30px auto;
+      /* margin: 30px auto; */
+      margin: 0px auto;
     }
+    
     .home-icon {
       font-size: 24px;
       color: #cecece;
     }
+    
     .home-icon:hover {
       color: #c6c6c6;
     }
-    h2, h3 {
-      color: #333;
+    
+    h2, h3, h4 {
+    	font-family: 'Pretendard' !important;
+      color: #33c47;
       margin-bottom: 30px;
       font-weight: 700;
     }
-    .work-card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-      width: 230px;
-      height: 300px;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      overflow: hidden;
-      box-sizing: border-box;
-      background-color: #fff;
+    h5 {
+    	font-family: 'Pretendard' !important;
+      color: #33c47;
+      margin-bottom: 30px;
     }
-    .work-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 3px 6px rgba(0,0,0,0.07);
-    }
+    
     .work-icon-container {
       height: 35%;
       display: flex;
@@ -59,16 +72,25 @@
       padding: 5px 0;
       background-color: #f0f5f1;
     }
+    
+    .custom-swal-popup {
+      width: 350px !important;
+      padding-top: 20px !important;
+      border-radius: 0px !important;
+    }
+    
     .work-icon {
       font-size: 36px;
       color: #b8c9bc;
     }
+    
     .days-left {
       margin-top: 5px;
       font-size: 14px;
       color: #84a98c;
       font-weight: bold;
     }
+    
     .work-content {
       height: 55%;
       background-color:#fff;
@@ -77,6 +99,7 @@
       flex-direction: column;
       justify-content: space-between;
     }
+    
     .work-status {
       font-size: 12px;
       padding: 2px 5px;
@@ -85,30 +108,15 @@
       display: inline-block;
       margin-bottom: 5px;
     }
+    
     .work-status-ongoing {
       background-color: #84a98c;
     }
+    
     .work-status-completed {
-      background-color: #6c757d;
+      background-color: #afb0af;
     }
-    .work-card h5 {
-      margin: 5px 0;
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
-      overflow: hidden;
-    }
-    .work-card p {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 5px;
-      line-height: 1.4;
-      overflow: hidden;
-    }
-    .work-card small {
-      font-size: 12px;
-      color: #777;
-    }
+    
     .btn {
       background-color: #84a98c;
       color: white;
@@ -120,89 +128,76 @@
       font-weight: 600;
       font-size: 14px;
     }
+    
     .btn:hover {
       color: white;
       background-color: #6b8e76;
     }
-    .hidden {
-      display: none;
-    }
+    
     .progress {
       height: 10px;
       border-radius: 5px;
     }
+    
     .progress-bar {
       background-color: #84a98c;
     }
+    
     .task-card {
       height: 100%;
     }
+    
     .task-icon {
       font-size: 2rem;
       color: #84a98c;
     }
-    .task-status {
-      font-size: 0.8rem;
-      padding: 3px 8px;
-      border-radius: 20px;
-    }
-    .task-status-ongoing {
-      background-color: #ffd166;
-      color: #333;
-    }
-    .task-status-completed {
-      background-color: #06d6a0;
-      color: white;
-    }
+    
     .filters {
       background-color: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+     /*  padding: 15px; */
+      /* border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
     }
     
-     .modal-content {
-      border-radius: 15px;
-    }
+    .modal-content {
+		  border-radius: 10px;
+		  overflow: hidden;
+		}
+    
     .modal-header {
       background-color: #84a98c;
-      color: white;
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
+      color: white !important;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
     }
+    
     .modal-body {
       padding: 20px;
     }
+    
     .modal-footer {
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
     }
+    
     .form-control:focus {
       border-color: #84a98c; 
       box-shadow: 0 0 0 0.2rem rgba(132, 169, 140, 0.25);
     }
-    .btn-primary {
-      background-color: #84a98c;
-      border-color: #84a98c;
-    }
-    .btn-primary:hover {
-      background-color: #6b8e76;
-      border-color: #6b8e76;
-    }
-    .task-template {
-      margin-bottom: 10px;
-    }
-      .switch {
+    
+    .switch {
       position: relative;
       display: inline-block;
       width: 50px;
       height: 24px;
     }
+    
     .switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
+    
     .slider {
       position: absolute;
       cursor: pointer;
@@ -214,6 +209,7 @@
       transition: .4s;
       border-radius: 24px;
     }
+    
     .slider:before {
       position: absolute;
       content: "";
@@ -225,82 +221,601 @@
       transition: .4s;
       border-radius: 50%;
     }
+    
     input:checked + .slider {
       background-color: #84a98c;
     }
+    
     input:checked + .slider:before {
       transform: translateX(26px);
     }
+    
     .switch-label {
       margin-left: 10px;
       font-size: 14px;
     }
+    
     .top-controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
     }
+    
+    .task-detail-container {
+      padding: 20px;
+    }
+    
+    .task-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .task-detail-info p {
+      margin-bottom: 10px;
+    }
+    
+    .task-detail-info i {
+      width: 20px;
+      color: #84a98c;
+      margin-right: 10px;
+    }
+    
+    .task-detail-description {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    
+    .task-status {
+      font-size: 13px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      /* font-weight: bold; */
+      background-color: #84a98c;	
+      color: white;
+    }
+    
+    .task-status-ongoing {
+      background-color: #84a98c;	
+      color: white;
+    }
+    
+    .task-status-completed {
+      background-color: #afb0af;
+      color: white;
+    }
+    
+    .task-status-ongoing-modal {
+      background-color: #84a98c;	
+      color: white;
+    }
+    
+    .task-status-completed-modal {
+      background-color: #afb0af;
+      color: white;
+    }
+    
+    .task-completed .task-icon,
+    .task-completed .btn-outline-primary {
+      color: #afb0af;
+    }
+    
+    /* 모달 창 디자인 부분 */
+		.task-status-ongoing-modal,
+		.task-status-completed-modal {
+		  font-size: 14px;
+		  padding: 5px 15px;
+		  border-radius: 20px;
+		  font-weight: 500;
+		  text-align: center;
+		  margin: 10px 0;
+		  display: inline-block;
+		}
+		
+		.task-status-ongoing-modal {
+		  background-color: #84a98c;
+		  color: white;
+		}
+		
+		.task-status-completed-modal {
+		  background-color: #afb0af;
+		  color: white;
+		}
+		
+		.task-status-ongoing-modal:before,
+		.task-status-completed-modal:before {
+		  content: "상태: ";
+		  font-weight: 400;
+		  margin-right: 5px;
+		}
+		
+    #taskTitle {
+		  margin: 0;
+		  font-size: 18px;
+		  font-weight: 700;
+		  color: #33c47;
+		}
+		
+		
+		.task-detail-info p {
+		  margin-bottom: 8px;
+		  color: #555;
+		}
+		
+		.task-detail-info i {
+		  width: 20px;
+		  color: #84a98c;
+		  margin-right: 10px;
+		}
+		
+		.task-detail-description h5 {
+		  font-size: 16px;
+		  font-weight: 500;
+		  color: #33c47;
+		  margin-bottom: 10px;
+		}
+		
+		.task-detail-description p {
+		  color: #555;
+		}
+    
+    .btn-edit,
+		.btn-delete,
+		.btn-complete,
+		.btn-close {
+		  border-radius: 20px;
+		  padding: 5px 15px;
+		  font-size: 14px;
+		  margin-right: 10px;
+		  background-color: #84a98c;
+		}
+    .btn-edit:hover,
+		.btn-delete:hover,
+		.btn-complete:hover {
+		  background-color: #5d9469;
+		}
+		.btn-close {
+		  background-color: #5d625e;
+		  color: white;
+		}
+		.btn-close:hover {
+		  background-color: #595b59;
+		}
+		
+		/* .modal-header {
+		  background-color: #84a98c;
+		  color: white;
+		  border-top-left-radius: 15px;
+		  border-top-right-radius: 15px;
+		}
+		
+		.modal-header .modal-title {
+		  color: white;
+		} */
+
+		
+		
+		
+		
+		.pagination {
+		  display: inline-block;
+		  padding-left: 0;
+		  margin: 20px 0;
+		  border-radius: 4px;
+		}
+		
+		.pagination > li {
+		  display: inline;
+		}
+		
+		.pagination > li > a,
+		.pagination > li > span {
+		  position: relative;
+		  float: left;
+		  padding: 6px 12px;
+		  margin-left: -1px;
+		  line-height: 1.42857143;
+		  color: #84a98c;
+		  text-decoration: none;
+		  background-color: #fff;
+		  border: 1px solid #ddd;
+		}
+		
+		.pagination > li:first-child > a,
+		.pagination > li:first-child > span {
+		  margin-left: 0;
+		  border-top-left-radius: 4px;
+		  border-bottom-left-radius: 4px;
+		}
+		
+		.pagination > li:last-child > a,
+		.pagination > li:last-child > span {
+		  border-top-right-radius: 4px;
+		  border-bottom-right-radius: 4px;
+		}
+		
+		.pagination > li > a:hover,
+		.pagination > li > span:hover,
+		.pagination > li > a:focus,
+		.pagination > li > span:focus {
+		  color: #2a6496;
+		  background-color: #eee;
+		  border-color: #ddd;
+		}
+		
+		.pagination > .active > a,
+		.pagination > .active > span,
+		.pagination > .active > a:hover,
+		.pagination > .active > span:hover,
+		.pagination > .active > a:focus,
+		.pagination > .active > span:focus {
+		  z-index: 2;
+		  color: #fff;
+		  cursor: default;
+		  background-color: #84a98c;
+		  border-color: #84a98c;
+		}
+    .task-completed .card {
+      background-color: #f8f9fa;
+    }
+    .task-completed .btn {
+      background-color: #afb0af;
+    }
+    
+    .swal2-confirm {
+      background-color: white !important;
+      color: black !important;
+      border-radius: 0px !important;
+      box-shadow: none !important;
+      font-weight: bold !important;
+      font-size: 18px !important;
+      margin: 0 !important;
+      
+    }
+    .swal2-cancel {
+      background-color: white !important;
+      color: black !important;
+      border-radius: 0px !important;
+      box-shadow: none !important;
+      /* font-weight: bold !important; */
+      font-size: 18px !important;
+      margin: 0 !important;
+    }
+    .custom-swal-popup {
+      width: 350px !important;
+      padding-top: 20px !important;
+      border-radius: 0px !important;
+    }
+    .swal2-confirm:hover {
+      background-color: none !important;
+    }
+		
+		.form-group label {
+		  font-weight: 500;
+		  color: #33c47;
+		  margin-bottom: 5px;
+		}
+		.form-control:focus {
+		  border-color: #84a98c; 
+		  box-shadow: 0 0 0 0.2rem rgba(132, 169, 140, 0.25);
+		}
+		.modalBtn {
+		  border-radius: 20px;
+		  padding: 5px 15px;
+		  font-size: 14px;
+		  margin-right: 10px;
+		}
+		
+
+		/* 수정한 모달 */
+		.modal-content {
+		  border-radius: 10px;
+		  border: none;
+		  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+		}
+		
+		.task-detail-container, .task-form-container {
+		  padding: 30px;
+		  position: relative;
+		}
+		
+		.close {
+		  position: absolute;
+		  top: 20px;
+		  right: 20px;
+		  font-size: 24px;
+		  color: #84a98c;
+		  opacity: 0.7;
+		  transition: opacity 0.2s;
+		}
+		
+		.close:hover {
+		  opacity: 1;
+		}
+		
+		.task-header {
+		  display: flex;
+		  justify-content: space-between;
+		  align-items: center;
+		  margin-bottom: 20px;
+		}
+		
+		#taskTitle {
+		  font-size: 24px;
+		  font-weight: 700;
+		  color: #333;
+		  margin-bottom: 0;
+		}
+		
+		.task-status {
+		  font-size: 14px;
+		  padding: 5px 15px;
+		  border-radius: 20px;
+		  font-weight: 500;
+		  display: inline-block;
+		}
+		
+		.task-detail-info p {
+		  margin-bottom: 10px;
+		  color: #555;
+		  font-size: 16px;
+		}
+		
+		.task-detail-info i {
+		  width: 20px;
+		  color: #84a98c;
+		  margin-right: 10px;
+		}
+		
+		.task-detail-description h5 {
+		  font-size: 18px;
+		  font-weight: 600;
+		  color: #333;
+		  margin-bottom: 10px;
+		}
+		
+		.task-detail-description p {
+		  color: #555;
+		  font-size: 16px;
+		}
+		
+		.task-actions {
+		  display: flex;
+		  justify-content: flex-end;
+		  margin-top: 30px;
+		}
+		
+		.modalBtn {
+		  border-radius: 10px;
+		  padding: 8px 20px;
+		  font-size: 14px;
+		  margin-left: 10px;
+		  border: none;
+		  transition: background-color 0.2s;
+		}
+		
+		.modalBtn.btn-primary {
+		  background-color: #84a98c;
+		  color: white;
+		  padding: 8px 20px;
+		  margin-left: 0px;
+		}
+		
+		.modalBtn.btn-primary:hover {
+		  background-color: #5d9469;
+		}
+		
+		.modalBtn.btn-secondary {
+		  background-color: #6c757d;
+		  color: white;
+		}
+		
+		.modalBtn.btn-secondary:hover {
+		  background-color: #5a6268;
+		}
+		
+		.modalBtn.btn-close {
+		  background-color: #6c757d;
+		  color: white;
+		}
+		
+		.modalBtn.btn-close:hover {
+		  background-color: #5a6268;
+		}
+		
+		/* .form-group {
+		  margin-bottom: 20px;
+		} */
+		
+		.form-group label {
+		  font-weight: 600;
+		  color: #333;
+		  margin-bottom: 5px;
+		}
+		
+		/* .form-control {
+		  border-radius: 10px;
+		  border: 1px solid #ced4da;
+		  padding: 10px 15px;
+		} */
+		/* 
+		.form-control:focus {
+		  border-color: #84a98c;
+		  box-shadow: 0 0 0 0.2rem rgba(132, 169, 140, 0.25);
+		} */
+		/* 
+		.form-check-input {
+		  margin-top: 0.3rem;
+		} */
+		
+		.modal-title {
+		  font-size: 24px;
+		  font-weight: 700;
+		  color: #333;
+		}
+		
+		
   </style>
   <script>
     'use strict';
 
+ 		// 커스텀 알럿
+    function showAlert(message, callback) {
+  	  Swal.fire({
+  	    html: message,
+  	    confirmButtonText: '확인',
+  	    customClass: {
+  	      confirmButton: 'swal2-confirm',
+  	      popup: 'custom-swal-popup',
+  	      htmlContainer: 'custom-swal-text'
+  	    },
+  	    scrollbarPadding: false,
+  	    allowOutsideClick: false,
+  	    heightAuto: false,
+  	    didOpen: () => {
+  	      document.body.style.paddingRight = '0px';
+  	    }
+  	  }).then((result) => {
+  	    if (result.isConfirmed && callback) {
+  	      callback();
+  	    }
+  	  });
+  	}
+    
+    function showConfirm(message, confirmCallback, cancelCallback) {
+  	  Swal.fire({
+  	    html: message,
+  	    showCancelButton: true,
+  	    cancelButtonText: '취소',
+  	    confirmButtonText: '확인',
+  	    customClass: {
+  	      cancelButton: 'swal2-cancel',
+  	      confirmButton: 'swal2-confirm',
+  	      popup: 'custom-swal-popup',
+  	      htmlContainer: 'custom-swal-text'
+  	    },
+  	    scrollbarPadding: false,
+  	    allowOutsideClick: false,
+  	    heightAuto: false,
+  	    didOpen: () => {
+  	      document.body.style.paddingRight = '0px';
+  	    }
+  	  }).then((result) => {
+  	    if (result.isConfirmed && confirmCallback) {
+  	      confirmCallback();
+  	    } else if (result.isDismissed && cancelCallback) {
+  	      cancelCallback();
+  	    }
+  	  });
+  	}
+    
+    
+ 		// 페이지 로드 시 실행되는 함수
+    document.addEventListener('DOMContentLoaded', function() {
+      // 오늘 날짜 구하기
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, '0');
+      let mm = String(today.getMonth() + 1).padStart(2, '0');
+      let yyyy = today.getFullYear();
+      today = yyyy + '-' + mm + '-' + dd;
+
+      // 마감일 최소값 설정
+      document.getElementById('date').min = today;
+
+      // 마감 시간 현재 시간으로 설정
+      let now = new Date();
+      document.getElementById('time').value = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+      // 반복 없음 체크박스 이벤트 리스너
+      document.getElementById('noRepeat').addEventListener('change', function() {
+        let rotationPeriodGroup = document.getElementById('rotationPeriodGroup');
+        let rotationPeriodInput = document.getElementById('rotationPeriod');
+        
+        if(this.checked) {
+          rotationPeriodGroup.style.display = 'none';
+          rotationPeriodInput.required = false;
+          rotationPeriodInput.value = "0";
+        } else {
+          rotationPeriodGroup.style.display = 'block';
+          rotationPeriodInput.required = true;
+          rotationPeriodInput.value = "";
+        }
+      });
+    });
+
     function addNewTask() {
-      var taskData = {
-        category: $('#taskCategory').val(),
-        task: $('#taskName').val(),
-        description: $('#taskDescription').val(),
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: $('#taskDueDate').val(),
-        endTime: $('#taskDueTime').val(),
-        rotationPeriod: 7
-      };
-
-      $.ajax({
-        url: '${ctp}/housework/addTask',
-        type: 'POST',
-        data: JSON.stringify(taskData),
-        contentType: 'application/json',
-        success: function(response) {
-          if(response.success) {
-            alert('새로운 할 일이 등록되었습니다.');
-            location.reload();
-          } else {
-            alert('할 일 등록에 실패했습니다.');
-          }
-        },
-        error: function() {
-          alert('서버 오류가 발생했습니다.');
-        }
-      });
+      let category = addTaskForm.category.value;
+      let task = addTaskForm.task.value;
+      let description = addTaskForm.description.value;
+      let memberIdx = addTaskForm.memberIdx.value;
+      let date = addTaskForm.date.value;
+      let time = addTaskForm.time.value;
+      let rotationPeriod = addTaskForm.rotationPeriod.value;
+      let noRepeat = addTaskForm.noRepeat.checked;
+      
+      // 유효성 검사
+      if(category.trim() === "") {
+        showAlert("카테고리를 선택해주세요.", function() {
+        	addTaskForm.category.focus();
+        });
+        return false;
+      }
+      if(task.trim() === "") {
+        showAlert("할 일의 내용을 입력해주세요.", function() {
+          addTaskForm.task.focus();
+        });
+        return false;
+      }
+      if(memberIdx === "") {
+        showAlert("담당자를 선택해주세요.", function() {
+          addTaskForm.memberIdx.focus();
+        });
+        return false;
+      }
+      if(date === "") {
+        showAlert("마감일을 선택해주세요.", function() {
+          addTaskForm.date.focus();
+        });
+        return false;
+      }
+      if(time === "") {
+        showAlert("마감 시간을 선택해주세요.", function() {
+          addTaskForm.time.focus();
+        });
+        return false;
+      }
+      if(!noRepeat && (rotationPeriod.trim() === "" || isNaN(rotationPeriod) || parseInt(rotationPeriod) < 0)) {
+        showAlert("올바른 반복 주기를 입력해주세요.", function() {
+          addTaskForm.rotationPeriod.focus();
+        });
+        return false;
+      }
+      
+      // 현재 시간과 마감일 비교
+      let now = new Date();
+      let endDateTime = new Date(date + 'T' + time);
+      if (endDateTime < now) {
+        showAlert("과거의 날짜/시간은 마감일로 설정할 수 없습니다.", function() {
+          addTaskForm.date.focus();
+        });
+        return false;
+      }
+      
+      if(noRepeat) {
+      	addTaskForm.rotationPeriod.value = "0"; // ""으로 해야할지 0으로 해야할지 고민됨.. null or 0
+      }
+      
+      addTaskForm.endDate.value = date + ' ' + time;
+      
+      addTaskForm.submit();
     }
-
-    function updateTaskStatus(houseworkIdx, newStatus) {
-      var memberId = ${sMid};
-
-      $.ajax({
-        url: '${ctp}/housework/updateTaskStatus',
-        type: 'POST',
-        data: JSON.stringify({
-          taskId: houseworkIdx,
-          newStatus: newStatus,
-          memberId: memberId
-        }),
-        contentType: 'application/json',
-        success: function(response) {
-          if(response.success) {
-            alert('작업 상태가 업데이트되었습니다.');
-            location.reload();
-          } else {
-            alert('작업 상태 업데이트에 실패했습니다.');
-          }
-        },
-        error: function() {
-          alert('서버 오류가 발생했습니다.');
-        }
-      });
-    }
-
+    
+    
+    // 셀렉트한걸로 필터링 및 정렬
     function getFilteredTasks() {
       let category = $("#categoryFilter").val();
       let status = $("#statusFilter").val();
@@ -310,117 +825,224 @@
       location.href = "${ctp}/housework/workMain?category="+category+"&status="+status+"&memberFilter="+memberFilter+"&sortBy="+sortBy;
     }
     
+    
     function viewTaskDetails(idx) {
-        $.ajax({
-          url: '${ctp}/housework/getTaskDetails',
-          type: 'GET',
-          data: { houseworkIdx: idx },   
-          success: function(response) {
-            $('#taskTitle').text(response.task);
-            $('#taskCategory').text(response.category);
-            $('#taskDescription').text(response.description || '설명 없음');
-            $('#taskMemberName').text(response.memberName);
-            $('#taskStatus').text(response.status);
-            $('#taskStartDate').text(formatDate(response.startDate));
-            $('#taskEndDate').text(formatDate(response.endDate));
-            $('#taskDaysLeft').text(response.daysLeft);
-            $('#taskRotationPeriod').text(response.rotationPeriod);
+  	  $.ajax({
+  	    url: '${ctp}/housework/getTaskDetails',
+  	    type: 'GET',
+  	    data: { idx: idx },   
+  	    success: function(vo) {
+  	      $('#taskTitle').text(vo.task);
+  	      $('#taskCategory').text(vo.category);
+  	      $('#taskDescription').text(vo.description || '설명 없음');
+  	      $('#taskMemberName').text(vo.memberName);
+  	      $('#taskStatus').text(vo.status);
+  	      $('#taskStartDate').text(vo.startDate);
+  	      $('#taskEndDate').text(vo.endDate);
+  	      
+  	 			// status에 따라 클래스 추가
+  	      if (vo.status === '진행중') {
+  	        $('#taskStatus').removeClass('task-status-completed-modal').addClass('task-status task-status-ongoing-modal');
+  	      } else {
+  	        $('#taskStatus').removeClass('task-status-ongoing-modal').addClass('task-status task-status-completed-modal');
+  	      }
+  	      
+  	 			// 날짜와 시간 분리
+  	      let startDate = vo.startDate.substring(0, 10);
+  	      let startTime = vo.startDate.substring(11, 16);
+  	      let endDate = vo.endDate.substring(0, 10);
+  	      let endTime = vo.endDate.substring(11, 16);
 
-            var buttonsHtml = '';
-            if (response.currentUserId === response.memberIdx) {
-              buttonsHtml += `
-                <button type="button" class="btn btn-primary" onclick="editTask(${response.idx})">수정</button>
-                <button type="button" class="btn btn-danger" onclick="deleteTask(${response.idx})">삭제</button>
-                <button type="button" class="btn btn-success" onclick="completeTask(${response.idx})">완료</button>
-              `;
-            }
-            $('#taskButtons').html(buttonsHtml);
+  	      $('#taskStartDate').text(startDate + ' ' + startTime);
+  	      $('#taskEndDate').text(endDate + ' ' + endTime);
 
-            $('#taskDetailModal').modal('show');
-          },
-          error: function(xhr, status, error) {
-            console.error("Error fetching task details:", error);
-            alert('할 일 세부 정보를 불러오는데 실패했습니다.');
-          }
-        });
-      }
+  	      // 남은 시간 계산 및 표시
+  	      let now = new Date();
+  	      let end = new Date(vo.endDate);
+  	      let timeDiff = end - now;
 
-      function formatDate(dateString) {
-        var date = new Date(parseInt(dateString));
-        return date.getFullYear() + '-' + 
-               ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
-               ('0' + date.getDate()).slice(-2);
-      }
+  	      if (timeDiff > 0) {
+  	        let daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+  	        let hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  	        let minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
 
-      function editTask(idx) {
-        $.ajax({
-          url: '${ctp}/housework/getTaskDetails',
-          type: 'GET',
-          data: { houseworkIdx: idx },   
-          success: function(response) {
-            $('#editTaskIdx').val(response.idx);
-            $('#editTaskCategory').val(response.category);
-            $('#editTaskName').val(response.task);
-            $('#editTaskDescription').val(response.description);
-            $('#editTaskAssignee').val(response.memberIdx);
-            $('#editTaskDueDate').val(formatDate(response.endDate));
-            $('#editTaskDueTime').val(response.endTime);
-            
-            $('#editTaskModal').modal('show');
-          },
-          error: function(xhr, status, error) {
-            console.error("Error fetching task details for edit:", error);
-            alert('할 일 정보를 불러오는데 실패했습니다.');
-          }
-        });
-      }
+  	        if (daysLeft > 0) {
+  	          $('#taskTimeLeft').text(daysLeft + '일 ' + hoursLeft + '시간 ' + minutesLeft + '분');
+  	        } else if (hoursLeft > 0) {
+  	          $('#taskTimeLeft').text(hoursLeft + '시간 ' + minutesLeft + '분');
+  	        } else {
+  	          $('#taskTimeLeft').text(minutesLeft + '분');
+  	        }
+  	      } else {
+  	        $('#taskTimeLeft').text('마감 시간 초과');
+  	      }
+  	      
+	  	 		// 로테이션 주기 표시
+	  	    $('#taskRotationPeriod').text(vo.rotationPeriod == 0 ? '반복 없음' : vo.rotationPeriod + '일');
+	
+	  	    var buttonsHtml = '';
+			  	if (vo.memberIdx == ${sIdx}) {
+			  	  buttonsHtml += '<button type="button" class="modalBtn btn-primary" onclick="editTask(' + vo.idx + ')">수정</button>';
+			  	  buttonsHtml += '<button type="button" class="modalBtn btn-primary" onclick="workDelete(' + vo.idx + ')">삭제</button>';
+				  	
+			  	  if (vo.status == '진행중') {
+				  	  buttonsHtml += '<button type="button" class="modalBtn btn-primary" onclick="completeTask(' + vo.idx + ')">완료</button>';
+				  	}
+			  	}
+		  	  $('#taskButtons').html(buttonsHtml);
+	
+	  	    $('#taskDetailModal').modal('show');
+  	    },
+  	    error: function(xhr, status, error) {
+  	      console.error("Error fetching task details:", error);
+  	      showAlert('할 일 세부 정보를 불러오는데 실패했습니다.');
+  	    }
+  	  });
+  	}
 
-      function updateTask() {
-        var taskData = {
-          idx: $('#editTaskIdx').val(),
-          category: $('#editTaskCategory').val(),
-          task: $('#editTaskName').val(),
-          description: $('#editTaskDescription').val(),
-          memberIdx: $('#editTaskAssignee').val(),
-          endDate: $('#editTaskDueDate').val(),
-          endTime: $('#editTaskDueTime').val()
-        };
+    function workDelete(idx) {
+		  showConfirm("현재 할 일을 삭제하시겠습니까?", function() {
+		    location.href = "workDelete?idx="+idx;
+		  });
+		}
+    
+    function editTask(idx) {
 
-        $.ajax({
-          url: '${ctp}/housework/updateTask',
-          type: 'POST',
-          data: JSON.stringify(taskData),
-          contentType: 'application/json',
-          success: function(response) {
-            if(response.success) {
-              alert('할 일이 수정되었습니다.');
-              $('#editTaskModal').modal('hide');
-              location.reload();
-            } else {
-              alert('할 일 수정에 실패했습니다.');
-            }
-          },
-          error: function() {
-            alert('서버 오류가 발생했습니다.');
-          }
-        });
-      }
+  	  $('#taskDetailModal').modal('hide');
+
+  	  $.ajax({
+  	    url: '${ctp}/housework/getTaskDetails',
+  	    type: 'GET',
+  	    data: { idx: idx },
+  	    success: function(vo) {
+  	      $('#editTaskIdx').val(vo.idx);
+  	      $('#editTaskCategory').val(vo.category);
+  	      $('#editTaskName').val(vo.task);
+  	      $('#editTaskDescription').val(vo.description);
+  	      $('#editTaskAssignee').val(vo.memberIdx);
+
+  	      // 날짜와 시간 분리
+  	      let startDate = vo.startDate.substring(0, 10);
+  	      let startTime = vo.startDate.substring(11, 16);
+  	      let endDate = vo.endDate.substring(0, 10);
+  	      let endTime = vo.endDate.substring(11, 16);
+
+  	      $('#editTaskDueDate').val(endDate);
+  	      $('#editTaskDueTime').val(endTime);
+
+  	      $('#editTaskRotationPeriod').val(vo.rotationPeriod);
+
+  	 			// status에 따라 라디오 버튼 선택
+	  	    if (vo.status === '완료') {
+	  	      document.getElementById('editTaskStatusComplete').checked = true;
+	  	    } else {
+	  	      document.getElementById('editTaskStatusIncomplete').checked = true;
+	  	    }
+  	      
+  	      $('#taskDetailModal').on('hidden.bs.modal', function (e) {
+  	        $('#editTaskModal').modal('show');
+  	        $(this).off('hidden.bs.modal');
+  	      });
+  	    },
+  	    error: function(xhr, status, error) {
+  	      console.error("Error fetching task details for edit:", xhr.responseText);
+  	      showAlert('할 일 정보를 불러오는데 실패했습니다.');
+  	    }
+  	  });
+  	}
+  	
+    function updateTask() {
+  	  let category = $('#editTaskCategory').val();
+  	  let task = $('#editTaskName').val();
+  	  let description = $('#editTaskDescription').val();
+  	  let memberIdx = $('#editTaskAssignee').val();
+  	  let date = $('#editTaskDueDate').val();
+  	  let time = $('#editTaskDueTime').val();
+  	  let rotationPeriod = $('#editTaskRotationPeriod').val();
+  	  
+  		let status = document.querySelector('input[name="editTaskStatus"]:checked').value;
+  	  
+  	  // 유효성 검사
+  	  if(category.trim() === "") {
+  	    showAlert("카테고리를 선택해주세요.", function() {
+  	      $('#editTaskCategory').focus();
+  	    });
+  	    return false;
+  	  }
+  	  if(task.trim() === "") {
+  	    showAlert("할 일의 내용을 입력해주세요.", function() {
+  	      $('#editTaskName').focus();
+  	    });
+  	    return false;
+  	  }
+  	  if(memberIdx === "") {
+  	    showAlert("담당자를 선택해주세요.", function() {
+  	      $('#editTaskAssignee').focus();
+  	    });
+  	    return false;
+  	  }
+  	  if(date === "") {
+  	    showAlert("마감일을 선택해주세요.", function() {
+  	      $('#editTaskDueDate').focus();
+  	    });
+  	    return false;
+  	  }
+  	  if(time === "") {
+  	    showAlert("마감 시간을 선택해주세요.", function() {
+  	      $('#editTaskDueTime').focus();
+  	    });
+  	    return false;
+  	  }
+  	  if(rotationPeriod.trim() === "" || isNaN(rotationPeriod) || parseInt(rotationPeriod) < 0) {
+  	    showAlert("올바른 반복 주기를 입력해주세요.", function() {
+  	      $('#editTaskRotationPeriod').focus();
+  	    });
+  	    return false;
+  	  }
+  	  
+  	  // 현재 시간과 마감일 비교
+  	  let now = new Date();
+  	  let endDateTime = new Date(date + 'T' + time);
+  	  if (endDateTime < now) {
+  	    showAlert("과거의 날짜/시간은 마감일로 설정할 수 없습니다.", function() {
+  	      $('#editTaskDueDate').focus();
+  	    });
+  	    return false;
+  	  }
+  	  
+  	  // form에 값 설정
+  	  $('#editTaskIdxHidden').val($('#editTaskIdx').val());
+		  $('#editTaskCategoryHidden').val(category);
+		  $('#editTaskNameHidden').val(task);
+		  $('#editTaskDescriptionHidden').val(description);
+		  $('#editTaskAssigneeHidden').val(memberIdx);
+		  $('#editTaskEndDateHidden').val(date + ' ' + time);
+		  $('#editTaskRotationPeriodHidden').val(rotationPeriod);
+		  $('#editTaskStatusHidden').val(status);
+		  
+  	  document.editTaskForm.submit();
+  	}
 
     function completeTask(idx) {
-      $.ajax({
-        url: '${ctp}/housework/complete',
-        type: 'POST',
-        data: { houseworkIdx: idx },
-        success: function(response) {
-          alert('할 일이 완료되었습니다.');
-          $('#taskDetailModal').modal('hide');
-          // 필요한 경우 페이지 새로고침 또는 목록 갱신
-          location.reload();
-        },
-        error: function(xhr, status, error) {
-          console.error("Error completing task:", error);
-          alert('할 일 완료 처리에 실패했습니다.');
-        }
+    	
+      showConfirm("해당 집안일을 완료하셨나요?", function() {
+        
+        $.ajax({
+            url: '${ctp}/housework/complete',
+            type: 'POST',
+            data: { houseworkIdx: idx },
+            success: function(response) {
+              showAlert("할 일이 완료되었습니다.", function() {
+	              $('#taskDetailModal').modal('hide');
+	              // 필요한 경우 페이지 새로고침 또는 목록 갱신
+	              location.reload();
+              });
+            },
+            error: function(xhr, status, error) {
+              console.error("Error completing task:", error);
+              showAlert('할 일 완료 처리에 실패했습니다.');
+            }
+          });
       });
     }
 
@@ -428,9 +1050,9 @@
       var template = $('#taskTemplate').val();
       if (template) {
         var [category, name, description] = template.split('|');
-        $('#taskCategory').val(category);
-        $('#taskName').val(name);
-        $('#taskDescription').val(description);
+        $('#category').val(category);
+        $('#task').val(name);
+        $('#description').val(description);
       }
     }
 
@@ -444,13 +1066,17 @@
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
-<p><br/></p>
+<p><br/></p> 
 <div class="container">
   <div class="workContainer">
-    <div style="display: flex; align-items: center; gap: 20px;" class="mb-5"> 
-      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
-      <h2 class="mb-4">우리 집 가사 관리</h2>
-    </div>
+    <%-- <div class="mb-5"> 
+      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+      <font size="5" class="mb-4 header">우리 집 가사 관리</font>
+    </div> --%>
+    <div class="header">
+	    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+	    <font size="5" class="mb-4 h2">우리 집 가사 관리</font>
+	  </div>
 
     <!-- 대시보드 섹션 -->
     <div class="row mb-4">
@@ -497,7 +1123,7 @@
         </label>
         <span class="switch-label">내가 하는 일만 보기</span>
       </div>
-      <button class="btn btn-primary" data-toggle="modal" data-target="#addTaskModal">
+      <button class="btn" data-toggle="modal" data-target="#addTaskModal">
         <i class="fas fa-plus"></i> 새로운 할 일 등록
       </button>
     </div>
@@ -505,7 +1131,7 @@
     <!-- 가족 구성원별 진행률 섹션 -->
     <div class="card mb-4">
       <div class="card-body">
-        <h3 class="card-title">가족 구성원별 진행률</h3>
+        <h3 class="card-title-header mb-1">가족 구성원별 진행률</h3>
         <c:forEach var="member" items="${familyMembers}">
           <div class="mb-3">
             <div class="d-flex justify-content-between align-items-center mb-1">
@@ -559,75 +1185,79 @@
 
     <!-- 할 일 목록 -->
     <div class="row" id="taskList">
-      <c:forEach var="task" items="${vos}" varStatus="status">
-        <div class="col-md-4 mb-4 task-item">
-          <div class="card task-card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <i class="fas fa-tasks task-icon"></i>
-                <span class="task-status ${task.status == '진행중' ? 'task-status-ongoing' : 'task-status-completed'}">
-                  ${task.status} 
-                </span>
-              </div>
+		  <c:forEach var="task" items="${vos}" varStatus="status">
+		    <div class="col-md-4 mb-4 task-item">
+		      <div class="card task-card ${task.status == '완료' ? 'task-completed' : ''}">
+				    <div class="card-body">
+				      <div class="d-flex justify-content-between align-items-center mb-3">
+				        <i class="fas ${task.category == '청소' ? 'fa-broom' : 
+							                 task.category == '설거지' ? 'fa-sink' : 
+							                 task.category == '빨래' ? 'fa-tshirt' : 
+							                 task.category == '요리' ? 'fa-utensils' : 
+							                 task.category == '정리정돈' ? 'fa-box' : 
+							                 task.category == '쓰레기' ? 'fa-trash' : 
+							                 'fa-tasks'} task-icon"></i>
+				        <span class="task-status ${task.status == '진행중' ? 'task-status-ongoing' : 'task-status-completed'}">
+				          ${task.status} 
+				        </span>
+				      </div>
               <h5 class="card-title">${task.category} - ${task.task}</h5>
               <p class="card-text">${fn:substring(task.description, 0, 50)}${fn:length(task.description) > 50 ? '...' : ''}</p>
               <p class="card-text"><p class="card-text"><small class="text-muted">담당: ${task.memberName}</small></p>
               <p class="card-text"><small class="text-muted">마감일: ${fn:substring(task.endDate, 0, 10)}</small></p>
               <p class="card-text"><small class="text-muted">남은 일수: ${task.daysLeft}일</small></p>
-              <button class="btn btn-sm btn-outline-primary" onclick="viewTaskDetails(${task.idx})">자세히 보기</button>
+              <button class="btn btn-sm btn-view-details" onclick="viewTaskDetails(${task.idx})">자세히 보기</button>
             </div>
           </div>
         </div>
       </c:forEach>
     </div>
   </div>
-
-  <!-- 블록페이지 시작 -->
-  <div class="d-flex justify-content-center my-4">
-    <ul class="pagination">
-      <c:if test="${pageVO.pag > 1}">
-        <li><a href="workMain?pag=1&pageSize=${pageVO.pageSize}">처음</a></li>
-      </c:if>
-      <c:if test="${pageVO.curBlock > 0}">
-        <li><a href="workMain?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">&laquo;</a></li>
-      </c:if>
-      <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
-        <c:if test="${i <= pageVO.totPage && i == pageVO.pag}">
-          <li class="active"><a href="workMain?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li>
-        </c:if>
-        <c:if test="${i <= pageVO.totPage && i != pageVO.pag}">
-          <li><a href="workMain?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li>
-        </c:if>
-      </c:forEach>
-      <c:if test="${pageVO.curBlock < pageVO.lastBlock}">
-        <li><a href="workMain?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">&raquo;</a></li>
-      </c:if>
-      <c:if test="${pageVO.pag < pageVO.totPage}">
-        <li><a href="workMain?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">끝</a></li>
-      </c:if>
-    </ul>
-  </div>
-  <!-- 블록페이지 끝 -->
+	
+	<!-- 블록페이지 시작 -->
+	<div class="d-flex justify-content-center my-4">
+	  <ul class="pagination">
+	    <c:if test="${pageVO.pag > 1}">
+	      <li><a href="workMain?pag=1&pageSize=${pageVO.pageSize}&category=${param.category}&status=${param.status}&memberFilter=${param.memberFilter}&sortBy=${param.sortBy}&flag=${param.flag}">처음</a></li>
+	    </c:if>
+	    <c:if test="${pageVO.curBlock > 0}">
+	      <li><a href="workMain?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}&category=${param.category}&status=${param.status}&memberFilter=${param.memberFilter}&sortBy=${param.sortBy}&flag=${param.flag}">&laquo;</a></li>
+	    </c:if>
+	    <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
+	      <c:if test="${i <= pageVO.totPage && i == pageVO.pag}">
+	        <li class="active"><a href="workMain?pag=${i}&pageSize=${pageVO.pageSize}&category=${param.category}&status=${param.status}&memberFilter=${param.memberFilter}&sortBy=${param.sortBy}&flag=${param.flag}">${i}</a></li>
+	      </c:if>
+	      <c:if test="${i <= pageVO.totPage && i != pageVO.pag}">
+	        <li><a href="workMain?pag=${i}&pageSize=${pageVO.pageSize}&category=${param.category}&status=${param.status}&memberFilter=${param.memberFilter}&sortBy=${param.sortBy}&flag=${param.flag}">${i}</a></li>
+	      </c:if>
+	    </c:forEach>
+	    <c:if test="${pageVO.curBlock < pageVO.lastBlock}">
+	      <li><a href="workMain?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}&category=${param.category}&status=${param.status}&memberFilter=${param.memberFilter}&sortBy=${param.sortBy}&flag=${param.flag}">&raquo;</a></li>
+	    </c:if>
+	    <c:if test="${pageVO.pag < pageVO.totPage}">
+	      <li><a href="workMain?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}&category=${param.category}&status=${param.status}&memberFilter=${param.memberFilter}&sortBy=${param.sortBy}&flag=${param.flag}">끝</a></li>
+	    </c:if>
+	  </ul>
+	</div>
+	<!-- 블록페이지 끝 -->
 
   <!-- 할 일 등록 모달 -->
-  <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addTaskModalLabel">새로운 할 일 등록</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="addTaskForm">
+  <div class="modal" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="task-form-container">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	        <h4 class="modal-title mb-4">새로운 할 일 등록</h4>
+	        <form id="addTaskForm" method="post" action="${ctp}/housework/workInput">
             <div class="form-group">
               <label for="taskTemplate">템플릿 선택</label>
               <select class="form-control" id="taskTemplate" onchange="selectTemplate()">
                 <option value="">직접 입력</option>
                 <option value="청소|거실 청소|거실 바닥 청소 및 정리정돈">거실 청소</option>
                 <option value="청소|방 청소|방 바닥 청소 및 정리정돈">방 청소</option>
-                <option value="빨래|빨래 세탁|세탁기에 빨래 넣고 돌리기, 건조기 사용">빨래 세탁</option>
+                <option value="빨래|빨래 세탁|세탁기에 빨래 넣고 돌리기">빨래 세탁</option>
                 <option value="빨래|빨래 건조|세탁기에 있는 빨래 건조기에 넣거나 널기">빨래 건조</option>
                 <option value="설거지|식후 설거지|식사 후 그릇 씻기 및 정리">식후 설거지</option>
                 <option value="청소|욕실 청소|욕실 바닥 및 변기 청소">욕실 청소</option>
@@ -645,7 +1275,8 @@
             </div>
             <div class="form-group">
               <label for="taskCategory">카테고리</label>
-              <select class="form-control" id="taskCategory" required>
+              <select class="form-control" id="category" name="category" required>
+                <option value="">선택</option>
                 <option value="청소">청소</option>
                 <option value="설거지">설거지</option>
                 <option value="빨래">빨래</option>
@@ -657,128 +1288,166 @@
             </div>
             <div class="form-group">
               <label for="taskName">할 일 이름</label>
-              <input type="text" class="form-control" id="taskName" required>
+              <input type="text" class="form-control" id="task" name="task" required>
             </div>
             <div class="form-group">
               <label for="taskDescription">설명</label>
-              <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+              <textarea class="form-control" id="description" name="description" rows="3"></textarea>
             </div>
             <div class="form-group">
-              <label for="taskAssignee">담당자</label>
-              <select class="form-control" id="taskAssignee" required>
-                <c:forEach var="member" items="${familyMembers}">
-                  <option value="${member.memberId}">${member.memberName}</option>
-                </c:forEach>
-              </select>
-            </div>
+					    <label for="memberIdx">담당자</label>
+					    <select class="form-control" id="memberIdx" name="memberIdx" required>
+					      <c:forEach var="member" items="${familyMembers}">
+					        <option value="${member.memberIdx}">${member.memberName}</option>
+					      </c:forEach>
+					    </select>
+					  </div>
             <div class="form-group">
-              <label for="taskDueDate">마감일</label>
-              <input type="date" class="form-control" id="taskDueDate" required>
-            </div>
-            <div class="form-group">
-              <label for="taskDueTime">마감 시간</label>
-              <input type="time" class="form-control" id="taskDueTime" required>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary" onclick="addNewTask()">등록</button>
-        </div>
-      </div>
-    </div>
-  </div>
+					    <label for="endDate">마감일</label>
+					    <input type="date" class="form-control" id="date" name="date" required>
+					  </div>
+					  <div class="form-group">
+					    <label for="endTime">마감 시간</label>
+					    <input type="time" class="form-control" id="time" name="time" required>
+					  </div>
+					  <div class="form-group">
+					    <label>
+					      <input type="checkbox" id="noRepeat" name="noRepeat"> 반복 없음
+					    </label>
+					  </div>
+					  <div class="form-group" id="rotationPeriodGroup">
+					    <label for="taskRotationPeriod">반복 주기 (일)</label>
+					    <input type="number" class="form-control" id="rotationPeriod" name="rotationPeriod" required>
+					  </div>
+  					<input type="hidden" name="endDate" id="endDate" >
+  					<input type="hidden" name="familyCode" value="${sFamCode}">
+			      <div class="task-actions mt-4">
+	            <button type="button" class="modalBtn btn-secondary" data-dismiss="modal">취소</button>
+	            <button type="button" class="modalBtn btn-primary" onclick="addNewTask()">등록</button>
+	          </div>
+	        </form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
   
-<!-- 세부 정보 모달 -->
-  <div class="modal fade" id="taskDetailModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="taskDetailModalLabel">할 일 세부 정보</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h4 id="taskTitle"></h4>
-          <p><strong>카테고리:</strong> <span id="taskCategory"></span></p>
-          <p><strong>설명:</strong> <span id="taskDescription"></span></p>
-          <p><strong>담당자:</strong> <span id="taskMemberName"></span></p>
-          <p><strong>상태:</strong> <span id="taskStatus"></span></p>
-          <p><strong>시작일:</strong> <span id="taskStartDate"></span></p>
-          <p><strong>마감일:</strong> <span id="taskEndDate"></span></p>
-          <p><strong>남은 일수:</strong> <span id="taskDaysLeft"></span>일</p>
-          <p><strong>로테이션 주기:</strong> <span id="taskRotationPeriod"></span>일</p>
-        </div>
-        <div class="modal-footer">
-          <span id="taskButtons"></span>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        </div>
-      </div>
-    </div>
-  </div>
+	<!-- 세부 정보 모달 -->
+	<div class="modal" id="taskDetailModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="task-detail-container">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	        <div class="task-header">
+	          <h4 id="taskTitle" class="mb-3"></h4>
+	          <span id="taskStatus" class="task-status mb-3 mr-3"></span>
+	        </div>
+	        <div class="task-detail-info">
+	          <p><i class="fas fa-tag"></i> <span id="taskCategory"></span></p>
+	          <p><i class="fas fa-user"></i> <span id="taskMemberName"></span></p>
+	          <p><i class="fas fa-calendar-alt"></i> <span id="taskStartDate"></span> ~ <span id="taskEndDate"></span></p>
+	          <p><i class="fas fa-hourglass-half"></i> 남은 시간: <span id="taskTimeLeft"></span></p>
+	          <p><i class="fas fa-redo"></i> 반복 주기: <span id="taskRotationPeriod"></span></p>
+	        </div>
+	        <div class="task-detail-description mt-4">
+	          <h5>설명</h5>
+	          <p id="taskDescription"></p>
+	        </div>
+	        <div class="task-actions mt-4">
+	          <span id="taskButtons"></span>
+	          <button type="button" class="modalBtn btn-close" data-dismiss="modal">닫기</button>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
   <!-- 할 일 수정 모달 -->
-  <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editTaskModalLabel">할 일 수정</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="editTaskForm">
-            <input type="hidden" id="editTaskIdx">
-            <div class="form-group">
-              <label for="editTaskCategory">카테고리</label>
-              <select class="form-control" id="editTaskCategory" required>
-                <option value="청소">청소</option>
-                <option value="설거지">설거지</option>
-                <option value="빨래">빨래</option>
-                <option value="요리">요리</option>
-                <option value="정리정돈">정리정돈</option>
-                <option value="쓰레기 처리">쓰레기 처리</option>
-                <option value="기타">기타</option>
-              </select>
+  <div class="modal" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="task-form-container">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	        <h4 class="modal-title mb-4">할 일 수정</h4>
+	        <form name="editTaskForm" method="post" action="${ctp}/housework/workUpdate">
+          <input type="hidden" id="editTaskIdx">
+          <div class="form-group">
+            <label for="editTaskCategory">카테고리</label>
+            <select class="form-control" id="editTaskCategory" required>
+              <option value="청소">청소</option>
+              <option value="설거지">설거지</option>
+              <option value="빨래">빨래</option>
+              <option value="요리">요리</option>
+              <option value="정리정돈">정리정돈</option>
+              <option value="쓰레기 처리">쓰레기 처리</option>
+              <option value="기타">기타</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editTaskName">할 일 이름</label>
+            <input type="text" class="form-control" id="editTaskName" required>
+          </div>
+          <div class="form-group">
+            <label for="editTaskDescription">설명</label>
+            <textarea class="form-control" id="editTaskDescription" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="editTaskAssignee">담당자</label>
+            <select class="form-control" id="editTaskAssignee" required>
+              <c:forEach var="member" items="${familyMembers}">
+                <option value="${member.memberIdx}">${member.memberName}</option>
+              </c:forEach>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editTaskDueDate">마감일</label>
+            <input type="date" class="form-control" id="editTaskDueDate" required>
+          </div>
+          <div class="form-group">
+            <label for="editTaskDueTime">마감 시간</label>
+            <input type="time" class="form-control" id="editTaskDueTime" required>
+          </div>
+          <div class="form-group">
+            <label for="editTaskRotationPeriod">반복 주기 (일)</label>
+            <input type="number" class="form-control" id="editTaskRotationPeriod" required>
+          </div>
+          <div class="form-group">
+            <label>완료 여부</label>
+            <div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="editTaskStatus" id="editTaskStatusIncomplete" value="진행중" required>
+                <label class="form-check-label" for="editTaskStatusIncomplete" style="margin-bottom:0px">진행중</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="editTaskStatus" id="editTaskStatusComplete" value="완료" required>
+                <label class="form-check-label" for="editTaskStatusComplete" style="margin-bottom:0px">완료</label>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="editTaskName">할 일 이름</label>
-              <input type="text" class="form-control" id="editTaskName" required>
-            </div>
-            <div class="form-group">
-              <label for="editTaskDescription">설명</label>
-              <textarea class="form-control" id="editTaskDescription" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-              <label for="editTaskAssignee">담당자</label>
-              <select class="form-control" id="editTaskAssignee" required>
-                <c:forEach var="member" items="${familyMembers}">
-                  <option value="${member.memberId}">${member.memberName}</option>
-                </c:forEach>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="editTaskDueDate">마감일</label>
-              <input type="date" class="form-control" id="editTaskDueDate" required>
-            </div>
-            <div class="form-group">
-              <label for="editTaskDueTime">마감 시간</label>
-              <input type="time" class="form-control" id="editTaskDueTime" required>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary" onclick="updateTask()">수정</button>
-        </div>
-      </div>
-    </div>
-  </div>
+          </div>
+          <input type="hidden" name="familyCode" value="${sFamCode}">
+			    <input type="hidden" id="editTaskIdxHidden" name="idx">
+				  <input type="hidden" id="editTaskCategoryHidden" name="category">
+				  <input type="hidden" id="editTaskNameHidden" name="task">
+				  <input type="hidden" id="editTaskDescriptionHidden" name="description">
+				  <input type="hidden" id="editTaskAssigneeHidden" name="memberIdx">
+				  <input type="hidden" id="editTaskEndDateHidden" name="endDate">
+				  <input type="hidden" id="editTaskRotationPeriodHidden" name="rotationPeriod">
+				  <input type="hidden" id="editTaskStatusHidden" name="status">
+	        <div class="task-actions mt-4">
+	            <button type="button" class="modalBtn btn-secondary" data-dismiss="modal">취소</button>
+	            <button type="button" class="modalBtn btn-primary" onclick="updateTask()">수정</button>
+	          </div>
+	        </form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
   
 </div>
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
-</html>
+</html>	

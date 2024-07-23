@@ -143,6 +143,11 @@ public class MemberServiceImpl implements MemberService {
 	public List<MemberVO> getFamilyMembersByFamCode(String familyCode) {
 		return memberDAO.getFamilyMembersByFamCode(familyCode);
 	}
+
+	@Override
+	public String getMemberNameByIdx(int idx) {
+		return memberDAO.getMemberNameByIdx(idx);
+	}
   
 	
 }

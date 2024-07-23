@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javaclassS16.pagination.PageProcess;
+import com.spring.javaclassS16.service.MemberService;
 import com.spring.javaclassS16.service.WorkService;
+import com.spring.javaclassS16.vo.MemberVO;
 import com.spring.javaclassS16.vo.PageVO;
+import com.spring.javaclassS16.vo.WorkVO;
 
 @Controller
 @RequestMapping("/housework")
@@ -29,6 +32,9 @@ public class WorkController {
   
   @Autowired
   WorkService workService;
+  
+  @Autowired
+  MemberService membreService;
   
   @Autowired
   PageProcess pageProcess;
@@ -87,28 +93,48 @@ public class WorkController {
     return "housework/workMain";
   }
   
-  @ResponseBody
-  @RequestMapping(value = "/updateTaskStatus", method = RequestMethod.POST)
-  public Map<String, Object> updateTaskStatus(@RequestBody Map<String, Object> map) {
-    int taskId = (int) map.get("taskId");
-    String newStatus = (String) map.get("newStatus");
-    int memberId = (int) map.get("memberId");
-    
-    boolean success = workService.updateTaskStatus(taskId, newStatus, memberId);
-    
-    Map<String, Object> response = new HashMap<>();
-    response.put("success", success);
-    return response;
+  @RequestMapping(value = "/workInput", method = RequestMethod.POST)
+  public String workInputPost(WorkVO vo) {
+	  String memberName = membreService.getMemberNameByIdx(vo.getMemberIdx());
+  	vo.setMemberName(memberName);
+
+  	int res = workService.setWorkInput(vo);
+		
+		if(res != 0) return "redirect:/message/workInputOk";
+		else return "redirect:/message/workInputNo";
   }
- 
+  
   @ResponseBody
   @RequestMapping(value = "/getTaskDetails", method = RequestMethod.GET)
-  public Map<String, Object> getTaskDetails(@RequestParam int houseworkIdx, HttpSession session) {
-    Map<String, Object> taskDetails = workService.getTaskDetails(houseworkIdx);
-    String currentUserId = (String) session.getAttribute("sMid");  // 세션에서 현재 사용자 ID 가져오기
-    taskDetails.put("currentUserId", currentUserId);
-    return taskDetails;
+  public WorkVO getTaskDetails(@RequestParam int idx) {
+
+  	return workService.getTaskDetails(idx);
   }
+  
+  @RequestMapping(value = "/workUpdate", method = RequestMethod.POST)
+  public String workUpdatePost(WorkVO vo) {
+      String memberName = membreService.getMemberNameByIdx(vo.getMemberIdx());
+      vo.setMemberName(memberName);
+
+      System.out.println("vo : " + vo);
+      
+      int res = workService.setWorkUpdate(vo);
+      
+      if(res != 0) return "redirect:/message/workUpdateOk";
+      else return "redirect:/message/workUpdateNo";
+  }
+  
+
+	@RequestMapping(value = "/workDelete", method = RequestMethod.GET)
+	public String noticeDeleteGet(int idx, HttpSession session,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+
+		int res = workService.setWorkDelete(idx);
+
+		if(res != 0) return "redirect:/message/workDeleteOk";
+    else return "redirect:/message/workDeleteNo";
+	}
   
   @ResponseBody
   @RequestMapping(value = "/complete", method = RequestMethod.POST)
@@ -119,20 +145,7 @@ public class WorkController {
     return response;
   }
 
-  @ResponseBody
-  @RequestMapping(value = "/addTask", method = RequestMethod.POST)
-  public Map<String, Object> addTask(@RequestBody Map<String, Object> taskData, HttpSession session) {
-    Map<String, Object> response = new HashMap<>();
-    try {
-      String familyCode = (String) session.getAttribute("sFamCode");
-      boolean added = workService.addNewTask(taskData, familyCode);
-      response.put("success", added);
-    } catch (Exception e) {
-      response.put("success", false);
-      response.put("error", "Error adding new task");
-    }
-    return response;
-  }
 
+  
   
 }

@@ -36,5 +36,7 @@ public interface MemberDAO {
 
 	public List<MemberVO> getFamilyMembersByFamCode(@Param("familyCode") String familyCode);
 
+	public String getMemberNameByIdx(@Param("idx") int idx);
+
 
 }

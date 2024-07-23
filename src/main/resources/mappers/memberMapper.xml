@@ -21,6 +21,10 @@
 	<select id="getFamilyMembersByFamCode" resultType="com.spring.javaclassS16.vo.MemberVO">
 		select * from member where familyCode = #{familyCode};
 	</select>
+
+	<select id="getMemberNameByIdx" resultType="String">
+		select name from member where idx = #{idx};
+	</select>
     
 	
 	

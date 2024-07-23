@@ -24,13 +24,7 @@ public interface WorkDAO {
 
 	public List<Map<String, Object>> getFamilyMemberProgress(@Param("familyCode") String familyCode);
 
-	public boolean addTask(@Param("workVO") WorkVO workVO);
-
-	public boolean updateTaskStatus(@Param("houseworkIdx") int houseworkIdx, @Param("newStatus") String newStatus, @Param("memberIdx") int memberIdx);
-
-	public Map<String, Object> getTaskDetails(@Param("houseworkIdx") int houseworkIdx);
-
-	public boolean addNewTask(@Param("taskData") Map<String, Object> taskData, @Param("familyCode") String familyCode);
+	public WorkVO getTaskDetails(@Param("idx") int idx);
 
 	public int totRecCnt(@Param("familyCode") String familyCode);
 
@@ -39,4 +33,10 @@ public interface WorkDAO {
 	public List<Map<String, Object>> getMyWorkList(@Param("familyCode") String familyCode, @Param("memberIdx") int memberIdx, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
 
 	public boolean setCompleteTask(@Param("houseworkIdx") int houseworkIdx);
+
+	public int setWorkInput(@Param("vo") WorkVO vo);
+
+	public int setWorkUpdate(@Param("vo") WorkVO vo);
+
+	public int setWorkDelete(@Param("idx") int idx);
 }

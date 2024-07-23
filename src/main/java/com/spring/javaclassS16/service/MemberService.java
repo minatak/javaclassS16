@@ -40,4 +40,6 @@ public interface MemberService {
 
 	public List<MemberVO> getFamilyMembersByFamCode(String familyCode);
 
+	public String getMemberNameByIdx(int idx);
+
 }

@@ -278,8 +278,6 @@ public class MemberController {
 		// 카카오 로그인한 회원인 경우에는 우리 회원인지를 조사한다. 
 		MemberVO vo = memberService.getMemberNameEmailCheck(name, email);
 		
-		System.out.println("vo : " + vo);
-		
 		if(vo != null && vo.getUserDel().equals("NO")) {
 			int age = memberService.calculateAge(vo.getBirthday());
 

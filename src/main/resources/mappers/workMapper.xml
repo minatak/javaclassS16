@@ -88,42 +88,35 @@
     WHERE familyCode = #{familyCode}
   </select>
     
-  <select id="getTaskDetails" resultType="java.util.Map">
-    SELECT 
-      idx, category, task, description, familyCode, startDate, endDate, rotationPeriod,
-      memberIdx, memberName, status,
-      DATEDIFF(endDate, CURDATE()) AS daysLeft
+  <select id="getTaskDetails" resultType="com.spring.javaclassS16.vo.WorkVO">
+    SELECT *, DATEDIFF(endDate, CURDATE()) AS daysLeft
     FROM housework
-    WHERE idx = #{houseworkIdx}
+    WHERE idx = #{idx}
   </select>
 
 
-  <insert id="addNewTask" parameterType="java.util.Map">
-    INSERT INTO housework (category, task, description, familyCode, startDate, endDate, rotationPeriod, memberIdx, memberName)
-    VALUES (
-      #{category},
-      #{task},
-      #{description},
-      #{familyCode},
-      #{startDate},
-      #{endDate},
-      #{rotationPeriod},
-      #{memberIdx},
-      #{memberName}
-    )
+  <insert id="setWorkInput" >
+    INSERT INTO housework (category, task, description, familyCode, endDate, rotationPeriod, memberIdx, memberName)
+    VALUES (#{vo.category}, #{vo.task}, #{vo.description}, #{vo.familyCode}, #{vo.endDate}, #{vo.rotationPeriod}, #{vo.memberIdx}, #{vo.memberName})
   </insert>
 
 
-  <update id="updateTaskStatus">
+  <update id="setCompleteTask" parameterType="int">
     UPDATE housework
-    SET status = #{newStatus}, memberIdx = #{memberId}, memberName = (SELECT name FROM member WHERE idx = #{memberId})
+    SET status = '완료', completionDate = now()
     WHERE idx = #{houseworkIdx}
   </update>
   
-  <update id="setCompleteTask" parameterType="int">
-    UPDATE housework
-    SET status = '완료', completionDate = CURDATE()
-    WHERE idx = #{houseworkIdx}
-  </update>
+  <update id="setWorkUpdate">
+    UPDATE housework SET category = #{vo.category}, task = #{vo.task}, description = #{vo.description},
+    memberIdx = #{vo.memberIdx}, memberName = #{vo.memberName}, endDate = #{vo.endDate}, rotationPeriod = #{vo.rotationPeriod}, status = #{vo.status}
+    WHERE idx = #{vo.idx}
+	</update>
+	
+	
+	
+	<delete id="setWorkDelete">
+		delete from housework where idx = #{idx};
+	</delete>
   
 </mapper>

@@ -88,6 +88,34 @@ public class MessageController {
 			model.addAttribute("msg", "투표가 등록되었습니다");
 			model.addAttribute("url", "/vote/voteList");
 		}
+		else if(msgFlag.equals("voteInputNo")) {
+			model.addAttribute("msg", "투표 등록에 실패했어요");
+			model.addAttribute("url", "/vote/voteInput");
+		}
+		else if(msgFlag.equals("workInputOk")) {
+			model.addAttribute("msg", "할 일이 등록되었습니다");
+			model.addAttribute("url", "/housework/workMain");
+		}
+		else if(msgFlag.equals("workInputNo")) {
+			model.addAttribute("msg", "할 일 등록에 실패했어요");
+			model.addAttribute("url", "/housework/workMain");
+		}
+		else if(msgFlag.equals("workUpdateOk")) {
+			model.addAttribute("msg", "할 일이 수정되었습니다");
+			model.addAttribute("url", "/housework/workMain");
+		}
+		else if(msgFlag.equals("workUpdateNo")) {
+			model.addAttribute("msg", "할 일 수정에 실패했어요");
+			model.addAttribute("url", "/housework/workMain");
+		}
+		else if(msgFlag.equals("workDeleteOk")) {
+			model.addAttribute("msg", "할 일이 삭제되었습니다");
+			model.addAttribute("url", "/housework/workMain");
+		}
+		else if(msgFlag.equals("workDeleteNo")) {
+			model.addAttribute("msg", "할 일 삭제에 실패했습니다");
+			model.addAttribute("url", "/housework/workMain");
+		}
 		
 		
 		return "include/message";

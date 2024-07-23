@@ -16,4 +16,7 @@ public class WorkVO {
   private String memberName;      // 구성원 이름
   private String completionDate;  // 완료일
   private String status;          // 상태
+  
+  private String daysLeft;          // 마감일까지 남은 일
+  
 }
