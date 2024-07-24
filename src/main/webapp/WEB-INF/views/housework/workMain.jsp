@@ -9,659 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>가사 분담 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
-  <style>
-    * {font-family: 'Pretendard';}
-    
-    body {
-    	font-family: 'Pretendard' !important;
-      background-color: #ffffff;
-    }
-    .header {
-    	/* font-weight:600 !important; */
-    	margin-bottom: 50px;
-    }
-    .header .h2 {
-    	font-family: 'pretendard' !important;
-      font-weight: 600;
-      font-size: 24px;
-      color: #33c47;
-      text-align: center;
-      margin-bottom: 50px;
-    }
-    .card-title-header {
-      font-weight: 500;
-      font-size: 22px;
-      color: #33c47;
-      text-align: center;
-    }
-    .workContainer {
-      max-width: 900px;
-      background-color: white;
-      padding: 40px;
-      /* margin: 30px auto; */
-      margin: 0px auto;
-    }
-    
-    .home-icon {
-      font-size: 24px;
-      color: #cecece;
-    }
-    
-    .home-icon:hover {
-      color: #c6c6c6;
-    }
-    
-    h2, h3, h4 {
-    	font-family: 'Pretendard' !important;
-      color: #33c47;
-      margin-bottom: 30px;
-      font-weight: 700;
-    }
-    h5 {
-    	font-family: 'Pretendard' !important;
-      color: #33c47;
-      margin-bottom: 30px;
-    }
-    
-    .work-icon-container {
-      height: 35%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 5px 0;
-      background-color: #f0f5f1;
-    }
-    
-    .custom-swal-popup {
-      width: 350px !important;
-      padding-top: 20px !important;
-      border-radius: 0px !important;
-    }
-    
-    .work-icon {
-      font-size: 36px;
-      color: #b8c9bc;
-    }
-    
-    .days-left {
-      margin-top: 5px;
-      font-size: 14px;
-      color: #84a98c;
-      font-weight: bold;
-    }
-    
-    .work-content {
-      height: 55%;
-      background-color:#fff;
-      padding: 5px 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    
-    .work-status {
-      font-size: 12px;
-      padding: 2px 5px;
-      border-radius: 3px;
-      color: white;
-      display: inline-block;
-      margin-bottom: 5px;
-    }
-    
-    .work-status-ongoing {
-      background-color: #84a98c;
-    }
-    
-    .work-status-completed {
-      background-color: #afb0af;
-    }
-    
-    .btn {
-      background-color: #84a98c;
-      color: white;
-      border: none;
-      border-radius: 0px;
-      padding: 8px 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    
-    .btn:hover {
-      color: white;
-      background-color: #6b8e76;
-    }
-    
-    .progress {
-      height: 10px;
-      border-radius: 5px;
-    }
-    
-    .progress-bar {
-      background-color: #84a98c;
-    }
-    
-    .task-card {
-      height: 100%;
-    }
-    
-    .task-icon {
-      font-size: 2rem;
-      color: #84a98c;
-    }
-    
-    .filters {
-      background-color: white;
-     /*  padding: 15px; */
-      /* border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
-    }
-    
-    .modal-content {
-		  border-radius: 10px;
-		  overflow: hidden;
-		}
-    
-    .modal-header {
-      background-color: #84a98c;
-      color: white !important;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-    }
-    
-    .modal-body {
-      padding: 20px;
-    }
-    
-    .modal-footer {
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
-    }
-    
-    .form-control:focus {
-      border-color: #84a98c; 
-      box-shadow: 0 0 0 0.2rem rgba(132, 169, 140, 0.25);
-    }
-    
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-    }
-    
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 24px;
-    }
-    
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 16px;
-      width: 16px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    
-    input:checked + .slider {
-      background-color: #84a98c;
-    }
-    
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-    
-    .switch-label {
-      margin-left: 10px;
-      font-size: 16px;
-    }
-    
-    .top-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    
-    .task-detail-container {
-      padding: 20px;
-    }
-    
-    .task-detail-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    
-    .task-detail-info p {
-      margin-bottom: 10px;
-    }
-    
-    .task-detail-info i {
-      width: 20px;
-      color: #84a98c;
-      margin-right: 10px;
-    }
-    
-    .task-detail-description {
-      background-color: #f8f9fa;
-      padding: 15px;
-      border-radius: 5px;
-    }
-    
-    .task-status {
-      font-size: 13px;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-      /* font-weight: bold; */
-      background-color: #84a98c;	
-      color: white;
-    }
-    
-    .task-status-ongoing {
-      background-color: #84a98c;	
-      color: white;
-    }
-    
-    .task-status-completed {
-      background-color: #afb0af;
-      color: white;
-    }
-    
-    .task-status-ongoing-modal {
-      background-color: #84a98c;	
-      color: white;
-    }
-    
-    .task-status-completed-modal {
-      background-color: #afb0af;
-      color: white;
-    }
-    
-    .task-completed .task-icon,
-    .task-completed .btn-outline-primary {
-      color: #afb0af;
-    }
-    
-    /* 모달 창 디자인 부분 */
-		.task-status-ongoing-modal,
-		.task-status-completed-modal {
-		  font-size: 14px;
-		  padding: 5px 15px;
-		  border-radius: 20px;
-		  font-weight: 500;
-		  text-align: center;
-		  margin: 10px 0;
-		  display: inline-block;
-		}
-		
-		.task-status-ongoing-modal {
-		  background-color: #84a98c;
-		  color: white;
-		}
-		
-		.task-status-completed-modal {
-		  background-color: #afb0af;
-		  color: white;
-		}
-		
-		.task-status-ongoing-modal:before,
-		.task-status-completed-modal:before {
-		  content: "상태: ";
-		  font-weight: 400;
-		  margin-right: 5px;
-		}
-		
-    #taskTitle {
-		  margin: 0;
-		  margin-top: 10px;
-		  font-size: 18px;
-		  font-weight: 700;
-		  color: #33c47;
-		}
-		
-		
-		.task-detail-info p {
-		  margin-bottom: 8px;
-		  color: #555;
-		}
-		
-		.task-detail-info i {
-		  width: 20px;
-		  color: #84a98c;
-		  margin-right: 10px;
-		}
-		
-		.task-detail-description h5 {
-		  font-size: 16px;
-		  font-weight: 500;
-		  color: #33c47;
-		  margin-bottom: 10px;
-		}
-		
-		.task-detail-description p {
-		  color: #555;
-		}
-    
-    .btn-edit,
-		.btn-delete,
-		.btn-complete,
-		.btn-close {
-		  border-radius: 20px;
-		  padding: 5px 15px;
-		  font-size: 14px;
-		  margin-right: 10px;
-		  background-color: #84a98c;
-		}
-    .btn-edit:hover,
-		.btn-delete:hover,
-		.btn-complete:hover {
-		  background-color: #5d9469;
-		}
-		.btn-close {
-		  background-color: #5d625e;
-		  color: white;
-		}
-		.btn-close:hover {
-		  background-color: #595b59;
-		}
-		
-		/* .modal-header {
-		  background-color: #84a98c;
-		  color: white;
-		  border-top-left-radius: 15px;
-		  border-top-right-radius: 15px;
-		}
-		
-		.modal-header .modal-title {
-		  color: white;
-		} */
-
-		
-		
-		
-		
-		.pagination {
-		  display: inline-block;
-		  padding-left: 0;
-		  margin: 20px 0;
-		  border-radius: 4px;
-		}
-		
-		.pagination > li {
-		  display: inline;
-		}
-		
-		.pagination > li > a,
-		.pagination > li > span {
-		  position: relative;
-		  float: left;
-		  padding: 6px 12px;
-		  margin-left: -1px;
-		  line-height: 1.42857143;
-		  color: #84a98c;
-		  text-decoration: none;
-		  background-color: #fff;
-		  border: 1px solid #ddd;
-		}
-		
-		.pagination > li:first-child > a,
-		.pagination > li:first-child > span {
-		  margin-left: 0;
-		  border-top-left-radius: 4px;
-		  border-bottom-left-radius: 4px;
-		}
-		
-		.pagination > li:last-child > a,
-		.pagination > li:last-child > span {
-		  border-top-right-radius: 4px;
-		  border-bottom-right-radius: 4px;
-		}
-		
-		.pagination > li > a:hover,
-		.pagination > li > span:hover,
-		.pagination > li > a:focus,
-		.pagination > li > span:focus {
-		  color: #2a6496;
-		  background-color: #eee;
-		  border-color: #ddd;
-		}
-		
-		.pagination > .active > a,
-		.pagination > .active > span,
-		.pagination > .active > a:hover,
-		.pagination > .active > span:hover,
-		.pagination > .active > a:focus,
-		.pagination > .active > span:focus {
-		  z-index: 2;
-		  color: #fff;
-		  cursor: default;
-		  background-color: #84a98c;
-		  border-color: #84a98c;
-		}
-    .task-completed .card {
-      background-color: #f8f9fa;
-    }
-    .task-completed .btn {
-      background-color: #afb0af;
-    }
-    
-    .swal2-confirm {
-      background-color: white !important;
-      color: black !important;
-      border-radius: 0px !important;
-      box-shadow: none !important;
-      font-weight: bold !important;
-      font-size: 18px !important;
-      margin: 0 !important;
-      
-    }
-    .swal2-cancel {
-      background-color: white !important;
-      color: black !important;
-      border-radius: 0px !important;
-      box-shadow: none !important;
-      /* font-weight: bold !important; */
-      font-size: 18px !important;
-      margin: 0 !important;
-    }
-    .custom-swal-popup {
-      width: 350px !important;
-      padding-top: 20px !important;
-      border-radius: 0px !important;
-    }
-    .swal2-confirm:hover {
-      background-color: none !important;
-    }
-		
-		.form-group label {
-		  font-weight: 500;
-		  color: #33c47;
-		  margin-bottom: 5px;
-		}
-		.form-control:focus {
-		  border-color: #84a98c; 
-		  box-shadow: 0 0 0 0.2rem rgba(132, 169, 140, 0.25);
-		}
-		.modalBtn {
-		  border-radius: 20px;
-		  padding: 5px 15px;
-		  font-size: 14px;
-		  margin-right: 10px;
-		}
-		
-
-		/* 수정한 모달 */
-		.modal-content {
-		  border-radius: 10px;
-		  border: none;
-		  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-		}
-		
-		.task-detail-container, .task-form-container {
-		  padding: 30px;
-		  position: relative;
-		}
-		
-		.close {
-		  position: absolute;
-		  top: 20px;
-		  right: 20px;
-		  font-size: 24px;
-		  color: #84a98c;
-		  opacity: 0.7;
-		  transition: opacity 0.2s;
-		}
-		
-		.close:hover {
-		  opacity: 1;
-		}
-		
-		.task-header {
-		  display: flex;
-		  justify-content: space-between;
-		  align-items: center;
-		  margin-bottom: 20px;
-		}
-		
-		#taskTitle {
-		  font-size: 24px;
-		  font-weight: 700;
-		  color: #333;
-		  margin-bottom: 0;
-		  margin-top: 10px;
-		}
-		
-		.task-status {
-		  font-size: 14px;
-		  padding: 5px 15px;
-		  border-radius: 20px;
-		  font-weight: 500;
-		  display: inline-block;
-		}
-		
-		.task-detail-info p {
-		  margin-bottom: 10px;
-		  color: #555;
-		  font-size: 16px;
-		}
-		
-		.task-detail-info i {
-		  width: 20px;
-		  color: #84a98c;
-		  margin-right: 10px;
-		}
-		
-		.task-detail-description h5 {
-		  font-size: 18px;
-		  font-weight: 600;
-		  color: #333;
-		  margin-bottom: 10px;
-		}
-		
-		.task-detail-description p {
-		  color: #555;
-		  font-size: 16px;
-		}
-		
-		.task-actions {
-		  display: flex;
-		  justify-content: flex-end;
-		  margin-top: 30px;
-		}
-		
-		.modalBtn {
-		  border-radius: 10px;
-		  padding: 8px 20px;
-		  font-size: 14px;
-		  margin-left: 10px;
-		  border: none;
-		  transition: background-color 0.2s;
-		}
-		
-		.modalBtn.btn-primary {
-		  background-color: #84a98c;
-		  color: white;
-		  padding: 8px 20px;
-		  margin-left: 0px;
-		}
-		
-		.modalBtn.btn-primary:hover {
-		  background-color: #5d9469;
-		}
-		
-		.modalBtn.btn-secondary {
-		  background-color: #6c757d;
-		  color: white;
-		}
-		
-		.modalBtn.btn-secondary:hover {
-		  background-color: #5a6268;
-		}
-		
-		.modalBtn.btn-close {
-		  background-color: #6c757d;
-		  color: white;
-		}
-		
-		.modalBtn.btn-close:hover {
-		  background-color: #5a6268;
-		}
-		
-		/* .form-group {
-		  margin-bottom: 20px;
-		} */
-		
-		.form-group label {
-		  font-weight: 600;
-		  color: #333;
-		  margin-bottom: 5px;
-		}
-		
-		/* .form-control {
-		  border-radius: 10px;
-		  border: 1px solid #ced4da;
-		  padding: 10px 15px;
-		} */
-		/* 
-		.form-control:focus {
-		  border-color: #84a98c;
-		  box-shadow: 0 0 0 0.2rem rgba(132, 169, 140, 0.25);
-		} */
-		/* 
-		.form-check-input {
-		  margin-top: 0.3rem;
-		} */
-		
-		.modal-title {
-		  font-size: 24px;
-		  font-weight: 700;
-		  color: #333;
-		}
-		
-		
-  </style>
+  <link href="${ctp}/css/housework.css?after" rel="stylesheet" /> 
   <script>
     'use strict';
 
@@ -732,6 +80,48 @@
       let now = new Date();
       document.getElementById('time').value = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
 
+   		
+      // 등록 모달의 마감일 없음 체크박스 이벤트 리스너
+      document.getElementById('noDueDate').addEventListener('change', function() {
+        let dueDateGroup = document.getElementById('dueDateGroup');
+        let dueTimeGroup = document.getElementById('dueTimeGroup');
+        let dateInput = document.getElementById('date');
+        let timeInput = document.getElementById('time');
+        
+        if(this.checked) {
+          dueDateGroup.style.display = 'none';
+          dueTimeGroup.style.display = 'none';
+          dateInput.required = false;
+          timeInput.required = false;
+        } else {
+          dueDateGroup.style.display = 'block';
+          dueTimeGroup.style.display = 'block';
+          dateInput.required = true;
+          timeInput.required = true;
+        }
+      });
+
+      // 수정 모달의 마감일 없음 체크박스 이벤트 리스너
+      document.getElementById('editNoDueDate').addEventListener('change', function() {
+        let editDueDateGroup = document.getElementById('editDueDateGroup');
+        let editDueTimeGroup = document.getElementById('editDueTimeGroup');
+        let editDateInput = document.getElementById('editTaskDueDate');
+        let editTimeInput = document.getElementById('editTaskDueTime');
+        
+        if(this.checked) {
+          editDueDateGroup.style.display = 'none';
+          editDueTimeGroup.style.display = 'none';
+          editDateInput.required = false;
+          editTimeInput.required = false;
+        } else {
+          editDueDateGroup.style.display = 'block';
+          editDueTimeGroup.style.display = 'block';
+          editDateInput.required = true;
+          editTimeInput.required = true;
+        }
+      });
+      
+      
       // 반복 없음 체크박스 이벤트 리스너
       document.getElementById('noRepeat').addEventListener('change', function() {
         let rotationPeriodGroup = document.getElementById('rotationPeriodGroup');
@@ -747,6 +137,8 @@
           rotationPeriodInput.value = "";
         }
       });
+      
+      
     });
 
     function addNewTask() {
@@ -758,6 +150,7 @@
       let time = addTaskForm.time.value;
       let rotationPeriod = addTaskForm.rotationPeriod.value;
       let noRepeat = addTaskForm.noRepeat.checked;
+      let noDueDate = addTaskForm.noDueDate.checked;
       
       // 유효성 검사
       if(category.trim() === "") {
@@ -779,7 +172,7 @@
         return false;
       }
       if(task.length > 20) {
-  	    showAlert("할 일의 이름은 20자 미만으로 적어주세요", function() {
+  	    showAlert("할 일의 이름은 20자 이하로 적어주세요", function() {
           addTaskForm.task.focus();
   	    });
   	    return false;
@@ -790,34 +183,38 @@
         });
         return false;
       }
-     /*  if(date === "") {
-        showAlert("마감일을 선택해주세요.", function() {
-          addTaskForm.date.focus();
-        });
-        return false;
-      }
-      if(time === "") {
-        showAlert("마감 시간을 선택해주세요.", function() {
-          addTaskForm.time.focus();
-        });
-        return false;
-      } */
       if(!noRepeat && (rotationPeriod.trim() === "" || isNaN(rotationPeriod) || parseInt(rotationPeriod) < 0)) {
         showAlert("올바른 반복 주기를 입력해주세요.", function() {
           addTaskForm.rotationPeriod.focus();
         });
         return false;
       }
-      
-      // 현재 시간과 마감일 비교
-      let now = new Date();
-      let endDateTime = new Date(date + 'T' + time);
-      if (endDateTime < now) {
-        showAlert("과거의 날짜/시간은 마감일로 설정할 수 없습니다.", function() {
-          addTaskForm.date.focus();
-        });
-        return false;
-      }
+      if(!noDueDate) {
+  	    if(date === "") {
+  	      showAlert("마감일을 선택해주세요.", function() {
+  	        addTaskForm.date.focus();
+  	      });
+  	      return false;
+  	    }
+  	    if(time === "") {
+  	      showAlert("마감 시간을 선택해주세요.", function() {
+  	        addTaskForm.time.focus();
+  	      });
+  	      return false;
+  	    }
+  	    // 현재 시간과 마감일 비교
+  	    let now = new Date();
+  	    let endDateTime = new Date(date + 'T' + time);
+  	    if (endDateTime < now) {
+  	      showAlert("과거의 날짜/시간은 마감일로 설정할 수 없습니다.", function() {
+  	        addTaskForm.date.focus();
+  	      });
+  	      return false;
+  	    }
+  	    addTaskForm.endDate.value = date + ' ' + time;
+  	  } else {
+  	    addTaskForm.endDate.value = null;
+  	  }
       
       if(noRepeat) {
       	addTaskForm.rotationPeriod.value = "0"; // ""으로 해야할지 0으로 해야할지 고민됨.. null or 0
@@ -906,7 +303,7 @@
 	  	        }
 	  	        $('#taskTimeLeft').css('color', ''); // 기본 색상으로 설정
 	  	      } else {
-	  	        $('#taskTimeLeft').text('마감됨');
+	  	        $('#taskTimeLeft').text('시간 초과');
 	  	        $('#taskTimeLeft').css('color', 'red'); // 빨간색으로 설정
 	  	      }
 	  	    } else {
@@ -965,12 +362,20 @@
   	      // 날짜와 시간 분리
   	      let startDate = vo.startDate.substring(0, 10);
   	      let startTime = vo.startDate.substring(11, 16);
-  	      let endDate = vo.endDate.substring(0, 10);
-  	      let endTime = vo.endDate.substring(11, 16);
+  	      $('#editTaskDueDate').val(startDate);
+  	      $('#editTaskDueTime').val(startTime);
 
-  	      $('#editTaskDueDate').val(endDate);
-  	      $('#editTaskDueTime').val(endTime);
-
+  	      if (vo.endDate) {
+  	        let endDate = vo.endDate.substring(0, 10);
+  	        let endTime = vo.endDate.substring(11, 16);
+  	        $('#editTaskDueDate').val(endDate);
+  	        $('#editTaskDueTime').val(endTime);
+  	      } else {
+  	        // endDate가 null인 경우, 시작 날짜와 시간을 사용
+  	        $('#editTaskDueDate').val(startDate);
+  	        $('#editTaskDueTime').val(startTime);
+  	      }
+  	      
   	      $('#editTaskRotationPeriod').val(vo.rotationPeriod);
 
   	      // status에 따라 라디오 버튼 선택
@@ -1022,6 +427,7 @@
   	  let date = $('#editTaskDueDate').val();
   	  let time = $('#editTaskDueTime').val();
   	  let rotationPeriod = $('#editTaskRotationPeriod').val();
+  		let noDueDate = document.getElementById('editNoDueDate').checked;
   	  
   		let status = document.querySelector('input[name="editTaskStatus"]:checked').value;
   	  
@@ -1039,7 +445,7 @@
         return false;
       }
       if(task.length >= 20) {
-  	    showAlert("할 일의 이름은 20자 미만으로 적어주세요", function() {
+  	    showAlert("할 일의 이름은 20자 이하로 적어주세요", function() {
   	    	$('#editTaskName').focus();
   	    });
   	    return false;
@@ -1050,33 +456,37 @@
   	    });
   	    return false;
   	  }
-  	  if(date === "") {
-  	    showAlert("마감일을 선택해주세요.", function() {
-  	      $('#editTaskDueDate').focus();
-  	    });
-  	    return false;
-  	  }
-  	  if(time === "") {
-  	    showAlert("마감 시간을 선택해주세요.", function() {
-  	      $('#editTaskDueTime').focus();
-  	    });
-  	    return false;
-  	  }
   	  if(rotationPeriod.trim() === "" || isNaN(rotationPeriod) || parseInt(rotationPeriod) < 0) {
   	    showAlert("올바른 반복 주기를 입력해주세요.", function() {
   	      $('#editTaskRotationPeriod').focus();
   	    });
   	    return false;
   	  }
-  	  
-  	  // 현재 시간과 마감일 비교
-  	  let now = new Date();
-  	  let endDateTime = new Date(date + 'T' + time);
-  	  if (endDateTime < now) {
-  	    showAlert("과거의 날짜/시간은 마감일로 설정할 수 없습니다.", function() {
-  	      $('#editTaskDueDate').focus();
-  	    });
-  	    return false;
+  		if(!noDueDate) {
+  	    if(date === "") {
+  	      showAlert("마감일을 선택해주세요.", function() {
+  	        $('#editTaskDueDate').focus();
+  	      });
+  	      return false;
+  	    }
+  	    if(time === "") {
+  	      showAlert("마감 시간을 선택해주세요.", function() {
+  	        $('#editTaskDueTime').focus();
+  	      });
+  	      return false;
+  	    }
+  	    // 현재 시간과 마감일 비교
+  	    let now = new Date();
+  	    let endDateTime = new Date(date + 'T' + time);
+  	    if (endDateTime < now) {
+  	      showAlert("과거의 날짜/시간은 마감일로 설정할 수 없습니다.", function() {
+  	        $('#editTaskDueDate').focus();
+  	      });
+  	      return false;
+  	    }
+  	    $('#editTaskEndDateHidden').val(date + ' ' + time);
+  	  } else {
+  	    $('#editTaskEndDateHidden').val(null);
   	  }
   	  
   	  // form에 값 설정
@@ -1085,7 +495,7 @@
 		  $('#editTaskNameHidden').val(task);
 		  $('#editTaskDescriptionHidden').val(description);
 		  $('#editTaskAssigneeHidden').val(memberIdx);
-		  $('#editTaskEndDateHidden').val(date + ' ' + time);
+		  /* $('#editTaskEndDateHidden').val(date + ' ' + time); */
 		  $('#editTaskRotationPeriodHidden').val(rotationPeriod);
 		  $('#editTaskStatusHidden').val(status);
 		  
@@ -1260,21 +670,21 @@
 		                           task.category == '요리' ? 'fa-utensils' : 
 		                           task.category == '정리정돈' ? 'fa-box' : 
 		                           task.category == '쓰레기' ? 'fa-trash' : 
-		                           'fa-tasks'} task-icon"></i>
+		                           'fa-tasks'} task-icon" ${task.status == '완료' ? '' : 'style="color: #b8c9bc;"'}></i>
 		            <span class="task-status ${task.status == '진행중' ? 'task-status-ongoing' : 'task-status-completed'}">
 		              ${task.status} 
 		            </span>
 		          </div>
 		          <h5 class="card-title">${task.category} - ${task.task}</h5>
-		          <p class="card-text">${fn:substring(task.description, 0, 50)}${fn:length(task.description) > 50 ? '...' : ''}</p>
+		          <p class="card-text">${fn:substring(task.description, 0, 50)}${fn:length(task.description) > 30 ? '...' : ''}</p>
 		          <p class="card-text"><small class="text-muted">담당: ${task.memberName}</small></p>
 		          <div class="mt-auto">
 		            <c:if test="${!empty task.endDate}">
 		              <p class="card-text mb-0"><small class="text-muted">마감일: ${fn:substring(task.endDate, 0, 10)}</small></p>
 		              <p class="card-text mb-0"><small class="text-muted">
 		                <c:choose>
-		                  <c:when test="${task.daysLeft != 0}">남은 일수: ${task.daysLeft}일</c:when>
-		                  <c:otherwise>&nbsp;</c:otherwise>
+		                  <c:when test="${task.daysLeft >= 0}">남은 일수: ${task.daysLeft}일</c:when>
+		                  <c:otherwise>남은 일수: 0일</c:otherwise>
 		                </c:choose>
 		              </small></p>
 		            </c:if>
@@ -1316,6 +726,8 @@
 	  </ul>
 	</div>
 	<!-- 블록페이지 끝 -->
+
+</div>
 
   <!-- 할 일 등록 모달 -->
   <!-- <div class="modal" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true"> -->
@@ -1380,13 +792,18 @@
 					    </select>
 					  </div>
             <div class="form-group">
-					    <label for="endDate">마감일</label>
-					    <input type="date" class="form-control" id="date" name="date">
-					  </div>
-					  <div class="form-group">
-					    <label for="endTime">마감 시간</label>
-					    <input type="time" class="form-control" id="time" name="time">
-					  </div>
+	            <label>
+	              <input type="checkbox" id="noDueDate" name="noDueDate"> 마감일 없음
+	            </label>
+	          </div>
+	          <div class="form-group" id="dueDateGroup">
+	            <label for="endDate">마감일</label>
+	            <input type="date" class="form-control" id="date" name="date">
+	          </div>
+	          <div class="form-group" id="dueTimeGroup">
+	            <label for="endTime">마감 시간</label>
+	            <input type="time" class="form-control" id="time" name="time">
+	          </div>
 					  <div class="form-group" id="rotationPeriodGroup">
 					    <label for="taskRotationPeriod">반복 주기 (일)</label>
 					    <input type="number" class="form-control" id="rotationPeriod" name="rotationPeriod" required>
@@ -1484,12 +901,17 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="editTaskDueDate">마감일</label>
-            <input type="date" class="form-control" id="editTaskDueDate" required>
+            <label>
+            	<input type="checkbox" id="editNoDueDate" name="editNoDueDate"> 마감일 없음
+            </label>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="editDueDateGroup">
+            <label for="editTaskDueDate">마감일</label>
+            <input type="date" class="form-control" id="editTaskDueDate">
+          </div>
+          <div class="form-group" id="editDueTimeGroup">
             <label for="editTaskDueTime">마감 시간</label>
-            <input type="time" class="form-control" id="editTaskDueTime" required>
+            <input type="time" class="form-control" id="editTaskDueTime">
           </div>
           <div class="form-group">
             <label for="editTaskRotationPeriod">반복 주기 (일)</label>
