@@ -125,60 +125,66 @@
       </div>
     </div>
   </div>
-  
-   <div class="row">
-      <div class="col-md-4 mb-4">
-        <div class="card text-center">
-          <div class="card-body">
-            <i class="fas fa-calendar service-icon mb-3"></i>
-            <h4>일정 관리</h4>
-            <a href="${ctp}/calendar/calendarMain" class="btn btn-custom mt-3">바로가기</a>
-          </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="family-schedule">
+        <h4 class="border-bottom pb-2">추억 앨범 0개</h4>
+        <p>작성된 앨범이 없습니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="serviceCard">
+        <i class="fa fa-calendar fa-2x"></i>
+        <h4 class="mt-2">일정 관리</h4>
+        <div class="icon-container">
+          <i class="fa-solid fa-arrow-right" style="color:#35ae5f"></i>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card text-center">
-          <div class="card-body">
-            <i class="fas fa-tasks service-icon mb-3"></i>
-            <h4>가사 분담</h4>
-            <a href="${ctp}/housework/workMain" class="btn btn-custom mt-3">바로가기</a>
-          </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="serviceCard">
+        <i class="fa fa-tasks fa-2x"></i>
+        <h4 class="mt-2">가사 분담</h4>
+        <div class="icon-container">
+          <i class="fa-solid fa-arrow-right" style="color:#35ae5f"></i>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card text-center">
-          <div class="card-body">
-            <i class="fas fa-bullhorn service-icon mb-3"></i>
-            <h4>공지사항</h4>
-            <a href="${ctp}/notice/noticeList" class="btn btn-custom mt-3">바로가기</a>
-          </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="serviceCard">
+        <i class="fa fa-bullhorn fa-2x"></i>
+        <h4 class="mt-2">공지사항</h4>
+        <div class="icon-container">
+          <i class="fa-solid fa-arrow-right" style="color:#35ae5f"></i>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card text-center">
-          <div class="card-body">
-            <i class="fas fa-users service-icon mb-3"></i>
-            <h4>가족 회의</h4>
-            <a href="${ctp}/familyMeeting/meetingList" class="btn btn-custom mt-3">바로가기</a>
-          </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="serviceCard">
+        <i class="fa fa-location-dot fa-2x"></i>
+        <h4 class="mt-2">위치 공유</h4>
+        <div class="icon-container">
+          <i class="fa-solid fa-arrow-right" style="color:#35ae5f"></i>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card text-center">
-          <div class="card-body">
-            <i class="fas fa-poll service-icon mb-3"></i>
-            <h4>가족 투표</h4>
-            <a href="${ctp}/vote/voteList" class="btn btn-custom mt-3">바로가기</a>
-          </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="serviceCard">
+        <i class="fa fa-poll fa-2x"></i>
+        <h4 class="mt-2">가족 투표</h4>
+        <div class="icon-container">
+          <i class="fa-solid fa-arrow-right" style="color:#35ae5f"></i>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card text-center">
-          <div class="card-body">
-            <i class="fas fa-images service-icon mb-3"></i>
-            <h4>앨범</h4>
-            <a href="${ctp}/photo/photoList" class="btn btn-custom mt-3">바로가기</a>
-          </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="serviceCard">
+        <i class="fa fa-photo fa-2x"></i>
+        <h4 class="mt-2">앨범</h4>
+        <div class="icon-container">
+          <i class="fa-solid fa-arrow-right" style="color:#35ae5f"></i>
         </div>
       </div>
     </div>

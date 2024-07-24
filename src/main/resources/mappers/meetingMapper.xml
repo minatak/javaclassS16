@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS16.dao.MeetingDAO">
+    
+	<select id="getMeetingList" resultType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+	  SELECT * FROM familyMeeting
+	  WHERE familyCode = #{familyCode}
+	  <if test="statusFilter != null and statusFilter != ''">
+	   	AND status = #{statusFilter}
+	  </if>
+	  <choose>
+	    <when test="sortBy == 'date'">
+	     	ORDER BY meetingDate
+	    </when>
+	    <when test="sortBy == 'status'">
+	       ORDER BY status
+	    </when>
+	    <otherwise>
+	       ORDER BY createdAt DESC
+	    </otherwise>
+	  </choose>
+	  LIMIT #{startIndexNo}, #{pageSize}
+	</select>
+	
+	<select id="getTotalMeetingsCount" resultType="int">
+  	SELECT COUNT(*) FROM familyMeeting WHERE familyCode = #{familyCode}
+	</select>
+	
+	<select id="getCompletedMeetingsCount" resultType="int">
+    SELECT COUNT(*) FROM familyMeeting WHERE familyCode = #{familyCode} AND status = '완료'
+	</select>
+	
+	<select id="getUpcomingMeetingsCount" resultType="int">
+    SELECT COUNT(*) FROM familyMeeting WHERE familyCode = #{familyCode} AND status = '예정'
+	</select>
+	
+	<select id="getThisMonthMeetingsCount" resultType="int">
+    SELECT COUNT(*) FROM familyMeeting 
+    WHERE familyCode = #{familyCode} 
+    AND YEAR(meetingDate) = YEAR(CURDATE()) 
+    AND MONTH(meetingDate) = MONTH(CURDATE())
+	</select>
+	
+	<select id="getMeetingContent" resultType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+    SELECT * FROM familyMeeting WHERE familyCode = #{familyCode} AND idx = #{idx}
+	</select>
+	
+	<select id="getMeetingTopics" resultType="com.spring.javaclassS16.vo.MeetingTopicVO">
+    SELECT mt.* FROM meetingTopic mt
+    JOIN meetingTopicLink mtl ON mt.idx = mtl.topicIdx
+    WHERE mtl.meetingIdx = #{meetingIdx}
+    ORDER BY mtl.discussionOrder
+	</select>
+	
+	<insert id="setTopicInput" parameterType="com.spring.javaclassS16.vo.MeetingTopicVO">
+    INSERT INTO meetingTopic (familyCode, title, description, priority, memberIdx, memberName)
+    VALUES (#{topicVO.familyCode}, #{topicVO.title}, #{topicVO.description}, #{topicVO.priority}, #{topicVO.memberIdx}, #{topicVO.memberName})
+	</insert>
+	
+	<update id="setMeetingMinutes" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+    UPDATE familyMeeting
+    SET status = '완료', decisions = #{familyMeetingVO.decisions}, actionItems = #{familyMeetingVO.actionItems}, notes = #{familyMeetingVO.notes}
+    WHERE idx = #{familyMeetingVO.idx} AND familyCode = #{familyMeetingVO.familyCode}
+	</update>
+	
+	<insert id="setMeetingInput" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+	  INSERT INTO familyMeeting (familyCode, title, description, meetingDate, facilitatorIdx, recorderIdx, attendees, createdBy)
+	  VALUES (#{familyMeetingVO.familyCode}, #{familyMeetingVO.title}, #{familyMeetingVO.description}, #{familyMeetingVO.meetingDate}, 
+    #{familyMeetingVO.facilitatorIdx}, #{familyMeetingVO.recorderIdx}, #{familyMeetingVO.attendees}, #{familyMeetingVO.createdBy})
+	</insert>
+
+</mapper>
