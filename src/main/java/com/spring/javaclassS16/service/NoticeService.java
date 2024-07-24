@@ -52,5 +52,7 @@ public interface NoticeService {
 	public boolean getNoticeLike(int idx, int memberIdx);
 
 	public List<MemberVO> getNoticeLikers(int idx);
+
+	public List<NoticeVO> getRecentNotices(String familyCode);
 	
 }

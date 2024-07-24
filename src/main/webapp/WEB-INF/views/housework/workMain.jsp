@@ -566,7 +566,12 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">완료한 일</h5>
-            <h2 class="card-text">${dashboardData.completedTasks}</h2>
+            <c:if test="${!empty dashboardData.completedTasks}">
+	            <h2 class="card-text">${dashboardData.completedTasks}</h2>
+            </c:if>
+            <c:if test="${empty dashboardData.completedTasks}">
+	            <h2 class="card-text">0</h2>
+            </c:if>
           </div>
         </div>
       </div>
@@ -574,7 +579,12 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">진행 중인 일</h5>
-            <h2 class="card-text">${dashboardData.ongoingTasks}</h2>
+            <c:if test="${!empty dashboardData.ongoingTasks}">
+	            <h2 class="card-text">${dashboardData.ongoingTasks}</h2>
+            </c:if>
+            <c:if test="${empty dashboardData.ongoingTasks}">
+	            <h2 class="card-text">0</h2>
+            </c:if>
           </div>
         </div>
       </div>
@@ -582,7 +592,12 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">오늘의 할 일</h5>
-            <h2 class="card-text">${dashboardData.todayTasks}</h2>
+            <c:if test="${!empty dashboardData.todayTasks}">
+	            <h2 class="card-text">${dashboardData.todayTasks}</h2>
+            </c:if>
+            <c:if test="${empty dashboardData.todayTasks}">
+	            <h2 class="card-text">0</h2>
+            </c:if>
           </div>
         </div>
       </div>

@@ -26,5 +26,7 @@ public interface MeetingService {
     public int setMeetingMinutes(FamilyMeetingVO familyMeetingVO);
     
     public int setMeetingInput(FamilyMeetingVO familyMeetingVO);
+
+		public List<FamilyMeetingVO> getUpcomingMeetings(String familyCode);
     
 }

@@ -96,6 +96,13 @@
     FROM housework
     WHERE idx = #{idx}
   </select>
+  
+  <select id="getTodayHouseworks" resultType="com.spring.javaclassS16.vo.WorkVO">
+    SELECT * FROM housework 
+    WHERE DATE(endDate) = CURDATE() 
+    AND familyCode = #{familyCode}
+    ORDER BY idx
+  </select>
 
 
   <insert id="setWorkInput" >

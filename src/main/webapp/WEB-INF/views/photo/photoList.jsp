@@ -15,6 +15,16 @@
       background-color: #fafafa;
       color: #262626;
     }
+    .header {
+			margin-bottom: 50px;
+		}
+		.header .h2 {
+			font-family: 'pretendard' !important;
+		  font-weight: 600;
+		  font-size: 24px;
+		  color: #333c47;
+		  text-align: center;
+		}
     .photoContainer {
       max-width: 900px;
       margin: 0 auto;
@@ -205,10 +215,10 @@
 <div class="photoContainer">
 	<div class="searchItems">
 	  <div class="top-bar">
-	    <div style="display: flex; align-items: center; gap: 20px;">
-	      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
-	      <h2>앨범</h2>
-	    </div>
+	    <div class="header">
+		    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+		    <font size="5" class="h2">가족 앨범</font>
+			</div>
 	  </div>
 	  <hr/>
 	  <div class="searchContainer">

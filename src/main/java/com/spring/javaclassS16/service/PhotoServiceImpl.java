@@ -364,4 +364,9 @@ public class PhotoServiceImpl implements PhotoService {
 		photoDAO.deletePhotoReply(idx);
 	}
 
+	@Override
+	public List<PhotoVO> getRecentPhotos(String familyCode) {
+		return photoDAO.getRecentPhotos(familyCode);
+	}
+
 }

@@ -31,6 +31,8 @@ public interface WorkService {
 
 	public int setWorkDelete(int idx);
 
+	public List<WorkVO> getTodayHouseworks(String familyCode);
+
 
 
 

@@ -404,7 +404,11 @@
 	  
 	  <a href="${ctp}/notice/noticeList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
 	  <h2>공지사항</h2>
-	  
+	 <%--  <div class="header">
+		    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+		    <font size="5" class="mb-4 h2">공지사항</font>
+			</div>
+	   --%>
 	  <div class="notice-info">
 		  <h3>${vo.title}</h3>
 		  <div style="display: flex; justify-content: space-between; align-items: flex-end;">

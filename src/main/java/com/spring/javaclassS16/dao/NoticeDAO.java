@@ -62,4 +62,6 @@ public interface NoticeDAO {
 
 		public void increaseNoticeLikeCount(@Param("idx") int idx);
 
+		public List<NoticeVO> getRecentNotices(@Param("familyCode") String familyCode);
+
 }

@@ -84,6 +84,14 @@
     SELECT * FROM noticeReply WHERE idx = #{idx}
   </select>
   
+  <select id="getRecentNotices" resultType="com.spring.javaclassS16.vo.NoticeVO">
+    SELECT * FROM notice 
+    WHERE familyCode = #{familyCode}
+    ORDER BY createdAt DESC 
+    LIMIT 5
+  </select>
+  
+  
   <!-- INSERT queries -->
   <insert id="setNoticeInput">
     INSERT INTO notice 

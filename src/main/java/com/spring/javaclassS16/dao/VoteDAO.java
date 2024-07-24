@@ -48,6 +48,8 @@ public interface VoteDAO {
 
 	public List<VoteReplyVO> getVoteReply(@Param("idx") int idx);
 
+	public List<VoteVO> getActiveVotes(@Param("familyCode") String familyCode);
+
 	
 	
 }

@@ -62,4 +62,6 @@ public interface PhotoService {
 
 	public void deletePhotoReply(int idx);
 
+	public List<PhotoVO> getRecentPhotos(String familyCode);
+
 }

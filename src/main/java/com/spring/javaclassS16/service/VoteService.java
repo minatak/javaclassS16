@@ -39,4 +39,6 @@ public interface VoteService {
 
 	public List<VoteReplyVO> getVoteReply(int idx);
 
+	public List<VoteVO> getActiveVotes(String familyCode);
+
 }

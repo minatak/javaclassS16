@@ -108,6 +108,11 @@ public class VoteServiceImpl implements VoteService {
 		return voteDAO.getVoteReply(idx);
 	}
 
+	@Override
+	public List<VoteVO> getActiveVotes(String familyCode) {
+		return voteDAO.getActiveVotes(familyCode);
+	}
+
 	
 	
 }

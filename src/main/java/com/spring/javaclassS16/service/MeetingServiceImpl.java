@@ -66,6 +66,11 @@ public class MeetingServiceImpl implements MeetingService {
 	public int setMeetingInput(FamilyMeetingVO familyMeetingVO) {
 		return meetingDAO.setMeetingInput(familyMeetingVO);
 	}
+
+	@Override
+	public List<FamilyMeetingVO> getUpcomingMeetings(String familyCode) {
+		return meetingDAO.getUpcomingMeetings(familyCode);
+	}
 	
 	
 	

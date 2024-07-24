@@ -39,4 +39,6 @@ public interface WorkDAO {
 	public int setWorkUpdate(@Param("vo") WorkVO vo);
 
 	public int setWorkDelete(@Param("idx") int idx);
+
+	public List<WorkVO> getTodayHouseworks(@Param("familyCode") String familyCode);
 }

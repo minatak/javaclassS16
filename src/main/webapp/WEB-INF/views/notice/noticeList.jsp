@@ -15,6 +15,17 @@
       font-family: 'Pretendard' !important;
       background-color: #ffffff;
     }
+    .header {
+			margin-bottom: 50px;
+		}
+		.header .h2 {
+			font-family: 'pretendard' !important;
+		  font-weight: 600;
+		  font-size: 24px;
+		  color: #333c47;
+		  text-align: center;
+		  margin-bottom: 50px;
+		}
     .noticeContainer {
       max-width: 900px;
       background-color: white;
@@ -243,10 +254,10 @@
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
 <div class="container">
   <div class="noticeContainer">
-    <div style="display: flex; align-items: center; gap: 20px;" class="mb-5"> 
-      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
-      <h2>공지사항</h2>
-    </div>
+    <div class="header">
+	    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+	    <font size="5" class="mb-4 h2">공지사항</font>
+		</div>
     
     <div class="searchContainer">
       <div class="search-bar">

@@ -234,5 +234,10 @@ public class NoticeServiceImpl implements NoticeService {
 	public List<MemberVO> getNoticeLikers(int idx) {
 		return noticeDAO.getNoticeLikers(idx);
 	}
+
+	@Override
+	public List<NoticeVO> getRecentNotices(String familyCode) {
+		return noticeDAO.getRecentNotices(familyCode);
+	}
 	
 }

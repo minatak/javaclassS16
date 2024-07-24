@@ -52,6 +52,15 @@
     ORDER BY mtl.discussionOrder
 	</select>
 	
+	<select id="getUpcomingMeetings" resultType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+    SELECT * FROM familyMeeting 
+    WHERE meetingDate > NOW() 
+    AND familyCode = #{familyCode}
+    ORDER BY meetingDate ASC 
+    LIMIT 3
+  </select>
+	
+	
 	<insert id="setTopicInput" parameterType="com.spring.javaclassS16.vo.MeetingTopicVO">
     INSERT INTO meetingTopic (familyCode, title, description, priority, memberIdx, memberName)
     VALUES (#{topicVO.familyCode}, #{topicVO.title}, #{topicVO.description}, #{topicVO.priority}, #{topicVO.memberIdx}, #{topicVO.memberName})

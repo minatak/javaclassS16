@@ -75,5 +75,10 @@ public class WorkServiceImpl implements WorkService {
 		return workDAO.setWorkDelete(idx);
 	}
 
+	@Override
+	public List<WorkVO> getTodayHouseworks(String familyCode) {
+		return workDAO.getTodayHouseworks(familyCode);
+	}
+
 	
 }

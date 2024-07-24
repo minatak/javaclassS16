@@ -80,32 +80,39 @@
 	    WHERE pl.photoIdx = #{photoIdx}
 	    ORDER BY pl.idx DESC
 		</select>
+		
+		<select id="getRecentPhotos" resultType="com.spring.javaclassS16.vo.PhotoVO">
+	    SELECT * FROM photo 
+	    WHERE familyCode = #{familyCode}
+	    ORDER BY pDate DESC 
+	    LIMIT 4
+	  </select>
     
     
     <insert id="setPhotoInput" parameterType="com.spring.javaclassS16.vo.PhotoVO">
-        INSERT INTO photo (memberIdx, name, familyCode, description, content, photoCount, thumbnail, pDate)
-        VALUES (#{vo.memberIdx}, #{vo.name}, #{vo.familyCode}, #{vo.description}, #{vo.content}, #{vo.photoCount}, #{vo.thumbnail}, NOW())
+      INSERT INTO photo (memberIdx, name, familyCode, description, content, photoCount, thumbnail, pDate)
+      VALUES (#{vo.memberIdx}, #{vo.name}, #{vo.familyCode}, #{vo.description}, #{vo.content}, #{vo.photoCount}, #{vo.thumbnail}, NOW())
     </insert>
     
     <insert id="addPhotoLike">
-        INSERT INTO photoLikes (photoIdx, memberIdx) VALUES (#{idx}, #{memberIdx})
+      INSERT INTO photoLikes (photoIdx, memberIdx) VALUES (#{idx}, #{memberIdx})
     </insert>
     
     <insert id="setPhotoReplyInput">
-		    INSERT INTO photoReply (photoIdx, mid, name, content, parentIdx)
-		    VALUES (#{vo.photoIdx}, #{vo.mid}, #{vo.name}, #{vo.content}, #{vo.parentIdx})
+	    INSERT INTO photoReply (photoIdx, mid, name, content, parentIdx)
+	    VALUES (#{vo.photoIdx}, #{vo.mid}, #{vo.name}, #{vo.content}, #{vo.parentIdx})
 		</insert>
     
     <update id="setPhotoReadNumPlus">
-        UPDATE photo SET readNum = readNum + 1 WHERE idx = #{idx}
+      UPDATE photo SET readNum = readNum + 1 WHERE idx = #{idx}
     </update>
     
     <update id="increasePhotoLikeCount">
-        UPDATE photo SET goodCount = goodCount + 1 WHERE idx = #{idx}
+      UPDATE photo SET goodCount = goodCount + 1 WHERE idx = #{idx}
     </update>
     
     <update id="decreasePhotoLikeCount">
-        UPDATE photo SET goodCount = goodCount - 1 WHERE idx = #{idx}
+      UPDATE photo SET goodCount = goodCount - 1 WHERE idx = #{idx}
     </update>
     
     <update id="setPhotoUpdate">
@@ -114,19 +121,19 @@
     
     
      <delete id="removePhotoLike">
-        DELETE FROM photoLikes WHERE photoIdx = #{idx} AND memberIdx = #{memberIdx}
+      DELETE FROM photoLikes WHERE photoIdx = #{idx} AND memberIdx = #{memberIdx}
     </delete>
     
     <delete id="setPhotoReplyDelete">
-		    DELETE FROM photoReply WHERE idx = #{idx} 
+    	DELETE FROM photoReply WHERE idx = #{idx} 
 		</delete>
     
     <delete id="setPhotoReplyDeleteByParentIdx">
-		    DELETE FROM photoReply WHERE parentIdx = #{idx}
+	    DELETE FROM photoReply WHERE parentIdx = #{idx}
 		</delete>
     
     <delete id="setPhotoDelete">
-		    DELETE FROM photo WHERE idx = #{idx}
+	    DELETE FROM photo WHERE idx = #{idx}
 		</delete>
     
     <delete id="deletePhotoReply">

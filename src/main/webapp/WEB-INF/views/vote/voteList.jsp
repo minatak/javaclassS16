@@ -13,6 +13,17 @@
       font-family: 'Pretendard' !important;
       background-color: #ffffff;
     }
+    .header {
+			margin-bottom: 50px;
+		}
+		.header .h2 {
+			font-family: 'pretendard' !important;
+		  font-weight: 600;
+		  font-size: 24px;
+		  color: #333c47;
+		  text-align: center;
+		  margin-bottom: 50px;
+		}
     .voteContainer {
       max-width: 1000px;
       background-color: white;
@@ -193,10 +204,12 @@
 <p><br/></p>
 <div class="container">
   <div class="voteContainer">
-    <div style="display: flex; align-items: center; gap: 20px;" class="mb-5"> 
-      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
-      <h2>가족 투표</h2>
-    </div>
+    <div class="header">
+	    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+	    <font size="5" class="mb-4 h2">가족 투표</font>
+	  </div>
+    
+    
     <div class="d-flex justify-content-between mb-3">
       <div class="search-bar">
         <select name="choice" id="choice" onchange="photoSearch()">

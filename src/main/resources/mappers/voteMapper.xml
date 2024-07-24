@@ -54,6 +54,13 @@
     SELECT * FROM voteReply WHERE voteIdx = #{idx} ORDER BY createdAt;
   </select>
 	
+	<select id="getActiveVotes" resultType="com.spring.javaclassS16.vo.VoteVO">
+    SELECT * FROM vote 
+    WHERE status = 'ACTIVE' 
+    AND endTime > NOW() 
+    AND familyCode = #{familyCode}
+    ORDER BY createdAt DESC
+  </select>
 
 	
 	<insert id="setVoteInput" useGeneratedKeys="true" keyProperty="idx"> <!-- 이걸 써줘야 됨 -->
