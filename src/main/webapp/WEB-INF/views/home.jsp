@@ -5,88 +5,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>우리 가족의 따뜻한 공간</title>
+<title>HomeLink</title>
 <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&display=swap');
-
   body {
-    font-family: 'Pretendard' !important;
-    background-color: #faf3e0;
-    color: #5d4037;
+    font-family: 'Pretendard', sans-serif !important;
+    background-color: #ffffff;
+    color: #333c47;
   }
   
   .content {
     max-width: 900px;
     margin: 40px auto;
-    padding: 30px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(93, 64, 55, 0.1);
+    padding: 40px;
   }
   
-  h2 {
-  	font-family: 'Pretendard' !important;
-    color: #8d6e63;
-    margin-bottom: 25px;
-    font-weight: 500;
+  .header {
+    margin-bottom: 50px;
+  }
+
+  .header .h2 {
+    font-weight: 600;
+    font-size: 24px;
+    color: #333c47;
     text-align: center;
-    font-size: 2.2rem;
-  }
-  
-  .weather-banner {
-    background: linear-gradient(45deg, #a1887f, #8d6e63);
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(141, 110, 99, 0.2);
-  }
-  
-  .weather-icon {
-    width: 60px;
-    height: 60px;
-    margin-right: 20px;
+    margin-bottom: 50px;
   }
   
   .card {
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(93, 64, 55, 0.08);
+    border: 1px solid #ddd;
+    border-radius: 8px;
     margin-bottom: 30px;
-    transition: all 0.4s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
   }
   
   .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 28px rgba(93, 64, 55, 0.15);
+    transform: scale(1.02);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.07);
   }
   
   .card-header {
-    background: linear-gradient(45deg, #bcaaa4, #a1887f);
-    color: white;
-    font-weight: 500;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    padding: 18px 25px;
-    font-size: 1.2rem;
+    background-color: #f0f5f1;
+    color: #84a98c;
+    font-weight: 600;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
   }
   
   .card-body {
-    padding: 25px;
-    background-color: #fff8e1;
+    padding: 20px;
+    background-color: #fff;
   }
   
   .list-group-item {
     border: none;
-    padding: 12px 0;
-    border-bottom: 1px dashed #d7ccc8;
-    background-color: transparent;
-    transition: all 0.3s ease;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.3s ease;
   }
   
   .list-group-item:last-child {
@@ -94,57 +70,73 @@
   }
   
   .list-group-item:hover {
-    background-color: #ffecb3;
-    padding-left: 10px;
+    background-color: #f8f9fa;
   }
   
   .view-all {
-    font-size: 0.9rem;
-    color: #ffffff;
+    font-size: 14px;
+    color: #84a98c;
     text-decoration: none;
     float: right;
-    transition: all 0.3s ease;
+    transition: color 0.3s ease;
   }
   
   .view-all:hover {
+    color: #6b8e76;
     text-decoration: none;
-    color: #ffe0b2;
   }
   
   .empty-message {
     text-align: center;
-    color: #8d6e63;
-    font-size: 1rem;
-    padding: 25px 0;
+    color: #6c757d;
+    font-size: 14px;
+    padding: 20px 0;
     font-style: italic;
   }
   
+  .weather-banner {
+    background-color: #f0f5f1;
+    color: #333c47;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .weather-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+  }
+  
+  .weather-advice {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
   .photo-preview {
     width: 100%;
-    height: 180px;
+    height: 150px;
     object-fit: cover;
-    border-radius: 10px;
-    transition: all 0.4s ease;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
   }
   
   .photo-preview:hover {
     transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(93, 64, 55, 0.2);
   }
 
   a {
-    color: #6d4c41;
-    transition: all 0.3s ease;
+    color: #333c47;
+    transition: color 0.3s ease;
   }
 
   a:hover {
-    color: #4e342e;
+    color: #84a98c;
     text-decoration: none;
-  }
-
-  .weather-advice {
-    font-size: 1.1rem;
-    line-height: 1.6;
   }
 </style>
 </head>
@@ -152,8 +144,6 @@
 <%@ include file = "/WEB-INF/views/include/nav.jsp" %>
 <%@ include file = "/WEB-INF/views/include/side.jsp" %>
 <main role="main" class="content">
-  <h2>우리 가족의 아름다운 하루</h2>
-  
   <div class="weather-banner">
     <c:if test="${not empty weatherAdvice}">
       <img src="http://openweathermap.org/img/wn/${weatherIconCode}@2x.png" alt="오늘의 날씨" class="weather-icon">
@@ -182,6 +172,7 @@
       </c:if>
     </div>
   </div>
+    
     
   <div class="card">
     <div class="card-header">

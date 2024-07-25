@@ -17,7 +17,6 @@
     .header {
       margin-bottom: 50px;
     }
-    h1, h2, h3, h4, h5 {font-family: 'Pretendard' !important;}
     .header .h2 {
       font-family: 'pretendard' !important;
       font-weight: 600;
@@ -165,12 +164,6 @@
     .topic-card {
       background-color: #e9ecef;
     }
-  	.nav-pills .nav-link.active {
-      background-color: #84a98c;
-    }
-    .nav-pills .nav-link {
-      color: #333;
-    }
   </style>
   <script>
     'use strict';
@@ -188,8 +181,18 @@
     }
 
     $(document).ready(function() {
-      $("#statusFilter").change(function() {
+      $("#statusFilter, #sortBy").change(function() {
         $("#meetingFilterForm").submit();
+      });
+
+      document.getElementById('cardViewBtn').addEventListener('click', function() {
+        document.getElementById('cardView').classList.remove('hidden');
+        document.getElementById('listView').classList.add('hidden');
+      });
+
+      document.getElementById('listViewBtn').addEventListener('click', function() {
+        document.getElementById('listView').classList.remove('hidden');
+        document.getElementById('cardView').classList.add('hidden');
       });
     });
   </script>
@@ -205,7 +208,7 @@
     </div>
 
     <!-- 회의 통계 섹션 -->
-    <%-- <div class="row mb-4">
+    <div class="row mb-4">
       <div class="col-md-3">
         <div class="card stats-card">
           <div class="card-body">
@@ -239,79 +242,88 @@
         </div>
       </div>
     </div>
- --%>
-     <!-- 탭 네비게이션 -->
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="pills-meetings-tab" data-toggle="pill" href="#pills-meetings" role="tab" aria-controls="pills-meetings" aria-selected="true">회의 목록</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="pills-topics-tab" data-toggle="pill" href="#pills-topics" role="tab" aria-controls="pills-topics" aria-selected="false">제안된 안건</a>
-      </li>
-    </ul>
 
-    <!-- 탭 콘텐츠 -->
-    <div class="tab-content" id="pills-tabContent">
-      <!-- 회의 목록 탭 -->
-      <div class="tab-pane fade show active" id="pills-meetings" role="tabpanel" aria-labelledby="pills-meetings-tab">
-        <!-- 필터 및 버튼 -->
-        <div class="d-flex justify-content-between mb-3">
-          <div class="search-bar">
-            <select class="form-control" id="statusFilter" name="statusFilter">
-              <option value="">모든 상태</option>
-              <option value="예정" ${statusFilter == '예정' ? 'selected' : ''}>예정</option>
-              <option value="진행 중" ${statusFilter == '진행 중' ? 'selected' : ''}>진행 중</option>
-              <option value="완료" ${statusFilter == '완료' ? 'selected' : ''}>완료</option>
-            </select>
-          </div>
-          <div>
-            <button type="button" class="btn" onclick="addNewMeeting()">
-              <i class="fas fa-plus"></i> 새 회의 등록
-            </button>
-          </div>
-        </div>
+    <!-- 필터 및 버튼 -->
+    <div class="d-flex justify-content-between mb-3">
+      <div class="search-bar">
+        <select class="form-control" id="statusFilter" name="statusFilter">
+          <option value="">모든 상태</option>
+          <option value="예정" ${statusFilter == '예정' ? 'selected' : ''}>예정</option>
+          <option value="진행 중" ${statusFilter == '진행 중' ? 'selected' : ''}>진행 중</option>
+          <option value="완료" ${statusFilter == '완료' ? 'selected' : ''}>완료</option>
+        </select>
+      </div>
+      <div>
+        <button class="btn cardList" id="cardViewBtn">안건 보기</button>
+        <button class="btn cardList" id="listViewBtn">회의록 보기</button>
+        <button type="button" class="btn" onclick="addNewMeeting()">
+          <i class="fas fa-plus"></i> 새 회의 등록
+        </button>
+        <button type="button" class="btn" onclick="proposeTopic()">
+          <i class="fas fa-lightbulb"></i> 안건 제안하기
+        </button>
+      </div>
+    </div>
 
-        <!-- 회의 목록 -->
-        <div id="meetingList">
-          <c:forEach var="vo" items="${vos}" varStatus="status">
-            <div class="meeting-list-item" onclick="viewMeetingDetails(${vo.idx})">
-              <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-1">${vo.title}</h5>
+    <!-- 카드 뷰 -->
+   <%--  <div id="cardView">
+      <div class="row">
+        <c:forEach var="vo" items="${vos}" varStatus="status">
+          <div class="col-md-3 mb-4">
+            <div class="meeting-card" onclick="viewMeetingDetails(${vo.idx})">
+              <div>
                 <span class="meeting-status ${vo.status == '예정' ? 'meeting-status-upcoming' : 
                                              vo.status == '진행 중' ? 'meeting-status-ongoing' : 
                                              'meeting-status-completed'}">
                   ${vo.status}
                 </span>
               </div>
-              <p class="mb-1">${fn:substring(vo.description, 0, 100)}${fn:length(vo.description) > 100 ? '...' : ''}</p>
-              <small>일시: ${fn:substring(vo.meetingDate, 0, 16)}</small>
-            </div>
-          </c:forEach>
-        </div>
-      </div>
-
-      <!-- 제안된 안건 탭 -->
-      <div class="tab-pane fade" id="pills-topics" role="tabpanel" aria-labelledby="pills-topics-tab">
-        <div class="d-flex justify-content-end mb-3">
-          <button type="button" class="btn" onclick="proposeTopic()">
-            <i class="fas fa-lightbulb"></i> 안건 제안하기
-          </button>
-        </div>
-        <div class="row">
-          <c:forEach var="topic" items="${proposedTopics}" varStatus="status">
-            <div class="col-md-4 mb-4">
-              <div class="card topic-card h-100">
-                <div class="card-body">
-                  <h5 class="card-title">${topic.title}</h5>
-                  <p class="card-text">${fn:substring(topic.description, 0, 100)}${fn:length(topic.description) > 100 ? '...' : ''}</p>
-                  <p class="card-text"><small class="text-muted">제안자: ${topic.memberName}</small></p>
-                  <p class="card-text"><small class="text-muted">우선순위: ${topic.priority}</small></p>
-                </div>
+              <div class="meeting-icon-container">
+                <i class="fas fa-users meeting-icon"></i>
+              </div>
+              <div class="meeting-content">
+                <h5>${vo.title}</h5>
+                <p>${fn:substring(vo.description, 0, 50)}${fn:length(vo.description) > 50 ? '...' : ''}</p>
+                <small>일시: ${fn:substring(vo.meetingDate, 0, 16)}</small>
               </div>
             </div>
-          </c:forEach>
-        </div>
+          </div>
+        </c:forEach>
       </div>
+    </div> --%>
+
+    <!-- 리스트 뷰 -->
+    <div id="listView" class="hidden">
+      <c:forEach var="vo" items="${vos}" varStatus="status">
+        <div class="meeting-list-item" onclick="viewMeetingDetails(${vo.idx})">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-1">${vo.title}</h5>
+            <span class="meeting-status ${vo.status == '예정' ? 'meeting-status-upcoming' : 
+                                         vo.status == '진행 중' ? 'meeting-status-ongoing' : 
+                                         'meeting-status-completed'}">
+              ${vo.status}
+            </span>
+          </div>
+          <p class="mb-1">${fn:substring(vo.description, 0, 100)}${fn:length(vo.description) > 100 ? '...' : ''}</p>
+          <small>일시: ${fn:substring(vo.meetingDate, 0, 16)}</small>
+        </div>
+      </c:forEach>
+    </div>
+
+    <!-- 제안된 안건 목록 -->
+    <h3 class="mt-5 mb-3">제안된 안건</h3>
+    <div class="row">
+      <c:forEach var="topic" items="${proposedTopics}" varStatus="status">
+        <div class="col-md-4 mb-4">
+          <div class="card topic-card h-100">
+            <div class="card-body">
+              <h5 class="card-title">${topic.title}</h5>
+              <p class="card-text"><small class="text-muted">제안자: ${topic.memberName}</small></p>
+              <p class="card-text"><small class="text-muted">우선순위: ${topic.priority}</small></p>
+            </div>
+          </div>
+        </div>
+      </c:forEach>
     </div>
 
     <!-- 페이지네이션 -->

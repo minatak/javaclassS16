@@ -85,16 +85,31 @@ public class HomeController {
 //      model.addAttribute("weatherDescription", "서울의 현재 온도: " + temp + "°C, " + description);
       model.addAttribute("weatherIconCode", iconCode);
       
+//      String advice;
+//      if (temp < 10) {
+//          advice = "오늘은 추워요. 따뜻한 옷을 입고 핫팩을 챙기세요. 실내 난방에 신경 쓰고, 따뜻한 음료를 마시는 것도 좋아요.";
+//      } else if (temp > 25) {
+//          advice = "오늘은 더워요. 시원한 옷을 입고 자외선 차단제를 바르세요. 수분 섭취를 자주 하고, 실내에서는 에어컨이나 선풍기를 이용하세요.";
+//      } else {
+//          advice = "날씨가 좋아요. 가벼운 외출이나 가족과의 산책을 계획해보는 건 어떨까요? 창문을 열어 환기도 시켜주세요.";
+//      }
+//      model.addAttribute("weatherAdvice", advice);
+      
       String advice;
-      if (temp < 10) {
-          advice = "오늘은 추워요. 따뜻한 옷을 입고 핫팩을 챙기세요. 실내 난방에 신경 쓰고, 따뜻한 음료를 마시는 것도 좋아요.";
-      } else if (temp > 25) {
-          advice = "오늘은 더워요. 시원한 옷을 입고 자외선 차단제를 바르세요. 수분 섭취를 자주 하고, 실내에서는 에어컨이나 선풍기를 이용하세요.";
+      if (temp < 0) {
+          advice = "오늘은 꽤 추워요. 따뜻한 옷차림으로 가족의 온기를 나눠보세요. 따뜻한 차 한 잔과<br>영화 한 편은 어떨까요?";
+      } else if (temp < 10) {
+          advice = "쌀쌀한 날씨네요. 목도리와 장갑을 챙기세요. 오늘 저녁엔 따뜻한 국물 요리 어떠세요?<br>우리 집이 최고의 안식처가 될 거예요.";
+      } else if (temp < 18) {
+          advice = "선선한 날씨예요. 가족과 함께 공원 산책은 어떨까요? 따뜻한 음료와 함께 오늘의<br>추억을 사진으로 남겨보세요.";
+      } else if (temp < 25) {
+          advice = "날씨가 참 좋아요. 창문을 열어 상쾌한 공기를 마셔보세요.<br>가족과 함께 꽃구경이나 피크닉을 계획해보는 건 어떨까요?";
+      } else if (temp < 30) {
+          advice = "오늘은 더워요. 시원한 옷을 입고 자외선 차단제를 바르세요.<br>수분 섭취를 자주 하고, 실내에서는 에어컨이나 선풍기를 이용하세요.";
       } else {
-          advice = "날씨가 좋아요. 가벼운 외출이나 가족과의 산책을 계획해보는 건 어떨까요? 창문을 열어 환기도 시켜주세요.";
+          advice = "무더운 날씨네요. 수분 섭취 잊지 마세요. 실내에서 시원하게 보내세요.<br>가족과 함께 아이스크림 만들기는 어떨까요?";
       }
       model.addAttribute("weatherAdvice", advice);
-      
       
       // 집안일 목록
       List<WorkVO> houseworks = houseworkService.getTodayHouseworks(familyCode);
