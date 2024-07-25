@@ -14,4 +14,5 @@ public class MeetingTopicVO {
   private String memberName;
   private String createdAt;
   
+  private int replyCnt; 
 }

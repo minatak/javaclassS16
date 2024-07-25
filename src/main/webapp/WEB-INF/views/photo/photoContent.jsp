@@ -494,28 +494,6 @@
 	      });
   	}
     
-   /*  function replyDelete(idx) {
-      let ans = showConfirm("선택한 댓글을 삭제하시겠습니까?");
-      if(!ans) return false;
-      
-      $.ajax({
-        url  : "${ctp}/photo/photoReplyDelete",
-        type : "post",
-        data : {idx : idx},
-        success:function(res) {
-          if(res != "0") {
-            showAlert("댓글이 삭제되었습니다.", function() {
-	            location.reload();
-	          });
-          }
-          else showAlert("댓글 삭제에 실패했어요");
-        },
-        error : function() {
-          showAlert("전송 오류!");
-        }
-      });
-    } */
-    
     function submitReply(idx, photoIdx) {
     	  let content = $("#contentRe"+idx).val();
     	  if(content.trim() == "") {
@@ -651,7 +629,7 @@
     		      type: "POST",
     		      data: {idx: idx},
     		      success: function(res) {
-    		        if (res === "1") {
+    		        if (res == "1") {
     		          showAlert("댓글이 삭제되었습니다.", function() {
     		            location.reload();
     		          });

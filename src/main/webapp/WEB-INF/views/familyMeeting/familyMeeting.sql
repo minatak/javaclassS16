@@ -54,6 +54,43 @@ CREATE TABLE meetingTopicLink (
 	FOREIGN KEY (topicIdx) REFERENCES meetingTopic(idx)
 );
 
+CREATE TABLE meetingTopicReply (
+  idx INT NOT NULL AUTO_INCREMENT,       /* 댓글 고유 번호 */
+  topicIdx INT NOT NULL,                 /* 해당 회의 주제 번호 */
+  memberIdx INT NOT NULL,                /* 댓글 작성자 IDX */
+  memberName VARCHAR(20),                /* 댓글 작성자 이름 */
+  content TEXT NOT NULL,                 /* 댓글 내용 */
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,  /* 댓글 작성 시간 */
+  parentIdx INT,                         /* 부모 댓글 번호 (대댓글인 경우) */
+  PRIMARY KEY (idx),
+  FOREIGN KEY (topicIdx) REFERENCES meetingTopic(idx),
+  FOREIGN KEY (memberIdx) REFERENCES member(idx),
+  FOREIGN KEY (parentIdx) REFERENCES meetingTopicReply(idx)
+);
+
+INSERT INTO meetingTopicReply (topicIdx, memberIdx, memberName, content, opinion, createdAt, parentIdx) VALUES
+(1, 13, '민아', '제주도가 좋을 것 같아요. 자연도 즐기고 휴식도 취할 수 있을 것 같아요.', '찬성', '2024-04-20 10:30:00', NULL),
+(1, 19, '탁민아', '동의합니다. 제주도 좋네요!', '찬성', '2024-04-20 11:15:00', 1),
+(1, 18, '아톰', '해외여행은 어떨까요? 환율도 좋아졌고, 새로운 경험을 할 수 있을 것 같아요.', '반대', '2024-04-20 14:00:00', NULL),
+(1, 13, '민아', '해외여행도 좋지만, 이번에는 국내 여행이 더 편할 것 같아요.', '중립', '2024-04-20 15:30:00', 3),
+
+(2, 19, '탁민아', '최근 물가 상승으로 인해 예산 조정이 필요해 보입니다.', '찬성', '2024-04-21 09:00:00', NULL),
+(2, 18, '아톰', '동의합니다. 특히 식비 부분을 좀 더 늘려야 할 것 같아요.', '찬성', '2024-04-21 10:30:00', 5),
+(2, 13, '민아', '다들 어떤 부분에서 절약할 수 있을까요?', '중립', '2024-04-21 11:45:00', NULL),
+
+(3, 18, '아톰', '이번 주말에 대청소 어떠세요?', '찬성', '2024-04-22 18:00:00', NULL),
+(3, 13, '민아', '이번 주말은 좀 힘들 것 같아요. 다음 주는 어떨까요?', '반대', '2024-04-22 19:30:00', 8),
+(3, 19, '탁민아', '다음 주 토요일이 모두에게 편할 것 같아요.', '찬성', '2024-04-22 20:15:00', 9),
+
+(4, 13, '민아', '할머니께서 좋아하시는 음식 위주로 준비하면 어떨까요?', '찬성', '2024-04-23 14:00:00', NULL),
+(4, 19, '탁민아', '좋은 생각이에요. 건강식으로 준비하는 게 어떨까요?', '찬성', '2024-04-23 15:30:00', 11),
+(4, 18, '아톰', '케이크는 제가 준비할게요!', '찬성', '2024-04-23 16:45:00', NULL),
+
+(5, 19, '탁민아', '에너지 효율이 좋은 제품으로 교체하면 좋을 것 같아요.', '찬성', '2024-04-24 11:00:00', NULL),
+(5, 13, '민아', '동의해요. 하지만 가격대가 너무 높지 않았으면 좋겠어요.', '중립', '2024-04-24 12:30:00', 14),
+(5, 18, '아톰', '중고 제품은 어떨까요? 환경에도 좋고 경제적이에요.', '반대', '2024-04-24 14:00:00', NULL);
+
+
 INSERT INTO meetingTopic (familyCode, title, description, priority, status, memberIdx, memberName) VALUES
 ('HE5KMNHV', '여름 휴가 계획', '올해 여름 휴가 목적지와 일정 논의', 1, '제안됨', 13, '민아'),
 ('HE5KMNHV', '가족 예산 검토', '월간 지출 검토 및 예산 조정', 2, '승인됨', 19, '탁민아'),

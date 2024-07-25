@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.spring.javaclassS16.vo.FamilyMeetingVO;
+import com.spring.javaclassS16.vo.MeetingTopicReplyVO;
 import com.spring.javaclassS16.vo.MeetingTopicVO;
 
 public interface MeetingDAO {
@@ -29,6 +30,14 @@ public interface MeetingDAO {
     public int setMeetingInput(@Param("familyMeetingVO") FamilyMeetingVO familyMeetingVO);
 
 		public List<FamilyMeetingVO> getUpcomingMeetings(@Param("familyCode") String familyCode);
+
+		public List<MeetingTopicVO> getProposedTopics(@Param("familyCode") String familyCode);
+
+		public void linkTopicToMeeting(@Param("idx") int idx, @Param("topicIdx") Integer topicIdx);
+
+		public int insertNewTopic(@Param("familyCode") String familyCode, @Param("newTopic") String newTopic, @Param("createdBy") int createdBy);
+
+		public List<MeetingTopicReplyVO> getTopicReplies(@Param("idx") int idx);
 		
 		
 }

@@ -66,11 +66,43 @@
     LIMIT 3
   </select>
 	
+	<select id="getProposedTopics" resultType="com.spring.javaclassS16.vo.MeetingTopicVO">
+	  SELECT t.*, COUNT(r.idx) as replyCnt
+    FROM meetingTopic t
+    LEFT JOIN meetingTopicReply r ON t.idx = r.topicIdx
+    WHERE t.familyCode = #{familyCode} AND t.status = '제안됨'
+    GROUP BY t.idx
+    ORDER BY t.createdAt DESC
+	</select>
+	
+	<select id="getTopicReplies" resultType="com.spring.javaclassS16.vo.MeetingTopicReplyVO">
+    SELECT * FROM meetingTopicReply
+    WHERE topicIdx = #{idx}
+    ORDER BY createdAt ASC
+  </select>
+	
+	
 	
 	<insert id="setTopicInput" parameterType="com.spring.javaclassS16.vo.MeetingTopicVO">
     INSERT INTO meetingTopic (familyCode, title, description, priority, memberIdx, memberName)
     VALUES (#{topicVO.familyCode}, #{topicVO.title}, #{topicVO.description}, #{topicVO.priority}, #{topicVO.memberIdx}, #{topicVO.memberName})
 	</insert>
+	
+	<insert id="setMeetingInput" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO" useGeneratedKeys="true" keyProperty="idx">
+    INSERT INTO familyMeeting (familyCode, title, description, meetingDate, facilitatorIdx, facilitatorName, recorderIdx, recorderName, createdBy)
+    VALUES (#{familyCode}, #{title}, #{description}, #{meetingDate}, #{facilitatorIdx}, #{facilitatorName}, #{recorderIdx}, #{recorderName}, #{createdBy})
+  </insert>
+  
+  <insert id="linkTopicToMeeting">
+    INSERT INTO meetingTopicLink (meetingIdx, topicIdx)
+    VALUES (#{meetingIdx}, #{topicIdx})
+  </insert>
+  
+  <insert id="insertNewTopic" parameterType="String" useGeneratedKeys="true" keyProperty="idx">
+    INSERT INTO meetingTopic (familyCode, title, memberIdx, status)
+    VALUES (#{familyCode}, #{newTopic}, #{createdBy}, '제안됨')
+  </insert>
+  
 	
 	<update id="setMeetingMinutes" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
     UPDATE familyMeeting
@@ -78,10 +110,5 @@
     WHERE idx = #{familyMeetingVO.idx} AND familyCode = #{familyMeetingVO.familyCode}
 	</update>
 	
-	<insert id="setMeetingInput" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
-	  INSERT INTO familyMeeting (familyCode, title, description, meetingDate, facilitatorIdx, facilitatorName, recorderIdx, recorderName, attendees, createdBy)
-	  VALUES (#{familyMeetingVO.familyCode}, #{familyMeetingVO.title}, #{familyMeetingVO.description}, #{familyMeetingVO.meetingDate}, 
-    #{familyMeetingVO.facilitatorIdx}, #{familyMeetingVO.facilitatorName}, #{familyMeetingVO.recorderIdx}, #{familyMeetingVO.recorderName}, #{familyMeetingVO.attendees}, #{familyMeetingVO.createdBy})
-	</insert>
 
 </mapper>

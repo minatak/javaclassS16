@@ -183,22 +183,17 @@
       location.href = "${ctp}/familyMeeting/meetingInput";
     }
 
-    function proposeTopic() {
-      location.href = "${ctp}/familyMeeting/topicInput";
+    function viewProposedTopics() {
+      location.href = "${ctp}/familyMeeting/topicList";
     }
 
     $(document).ready(function() {
-  	  $("#statusFilter, #sortBy").change(function() {
-  	    // 선택된 값들을 hidden 필드에 설정
-  	    $("#hiddenStatusFilter").val($("#statusFilter").val());
-  	    $("#hiddenSortBy").val($("#sortBy").val());
-  	    
-  	    // 폼 제출
-  	    $("#meetingFilterForm").submit();
-  	  });
-  	});
-
-  	
+      $("#statusFilter, #sortBy").change(function() {
+        $("#hiddenStatusFilter").val($("#statusFilter").val());
+        $("#hiddenSortBy").val($("#sortBy").val());
+        $("#meetingFilterForm").submit();
+      });
+    });
   </script>
 </head>
 <body>
@@ -211,87 +206,51 @@
       <font size="5" class="mb-4 h2">가족 회의</font>
     </div>
 
-		<form id="meetingFilterForm" action="${ctp}/familyMeeting/meetingList" method="get">
-	    <input type="hidden" name="statusFilter" id="hiddenStatusFilter">
-	    <input type="hidden" name="sortBy" id="hiddenSortBy">
-	  </form>
+    <form id="meetingFilterForm" action="${ctp}/familyMeeting/meetingList" method="get">
+      <input type="hidden" name="statusFilter" id="hiddenStatusFilter">
+      <input type="hidden" name="sortBy" id="hiddenSortBy">
+    </form>
 
-     <!-- 탭 네비게이션 -->
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="pills-meetings-tab" data-toggle="pill" href="#pills-meetings" role="tab" aria-controls="pills-meetings" aria-selected="true">회의 목록</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="pills-topics-tab" data-toggle="pill" href="#pills-topics" role="tab" aria-controls="pills-topics" aria-selected="false">제안된 안건</a>
-      </li>
-    </ul>
-
-    <!-- 탭 콘텐츠 -->
-    <div class="tab-content" id="pills-tabContent">
-      <!-- 회의 목록 탭 -->
-      <div class="tab-pane fade show active" id="pills-meetings" role="tabpanel" aria-labelledby="pills-meetings-tab">
-        <!-- 필터 및 버튼 -->
-        <div class="d-flex justify-content-between mb-3">
-				  <div class="search-bar">
-				    <select class="form-control mr-2" id="statusFilter" name="statusFilter">
-				      <option value="">모든 상태</option>
-				      <option value="예정" ${statusFilter == '예정' ? 'selected' : ''}>예정</option>
-				      <option value="진행 중" ${statusFilter == '진행 중' ? 'selected' : ''}>진행 중</option>
-				      <option value="완료" ${statusFilter == '완료' ? 'selected' : ''}>완료</option>
-				    </select>
-				    <select class="form-control" id="sortBy" name="sortBy">
-				      <option value="date" ${sortBy == 'date' ? 'selected' : ''}>날짜순</option>
-				      <option value="status" ${sortBy == 'status' ? 'selected' : ''}>상태순</option>
-				    </select>
-				  </div>
-				  <div>
-				    <button type="button" class="btn" onclick="addNewMeeting()">
-				      <i class="fas fa-plus"></i> 새 회의 등록
-				    </button>
-				  </div>
-				</div>
-
-        <!-- 회의 목록 -->
-        <div id="meetingList">
-          <c:forEach var="vo" items="${vos}" varStatus="status">
-            <div class="meeting-list-item" onclick="viewMeetingDetails(${vo.idx})">
-              <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-1">${vo.title}</h5>
-                <span class="meeting-status ${vo.status == '예정' ? 'meeting-status-upcoming' : 
-                                             vo.status == '진행 중' ? 'meeting-status-ongoing' : 
-                                             'meeting-status-completed'}">
-                  ${vo.status}
-                </span>
-              </div>
-              <p class="mb-1">${fn:substring(vo.description, 0, 100)}${fn:length(vo.description) > 100 ? '...' : ''}</p>
-              <small>일시: ${fn:substring(vo.meetingDate, 0, 16)}</small>
-            </div>
-          </c:forEach>
-        </div>
+    <!-- 필터 및 버튼 -->
+    <div class="d-flex justify-content-between mb-3">
+      <div class="search-bar">
+        <select class="form-control mr-2" id="statusFilter" name="statusFilter">
+          <option value="">모든 상태</option>
+          <option value="예정" ${statusFilter == '예정' ? 'selected' : ''}>예정</option>
+          <%-- <option value="진행 중" ${statusFilter == '진행 중' ? 'selected' : ''}>진행 중</option> --%>
+          <option value="완료" ${statusFilter == '완료' ? 'selected' : ''}>완료</option>
+        </select>
+        <select class="form-control" id="sortBy" name="sortBy">
+          <option value="date" ${sortBy == 'date' ? 'selected' : ''}>날짜순</option>
+          <option value="status" ${sortBy == 'status' ? 'selected' : ''}>상태순</option>
+        </select>
       </div>
-
-      <!-- 제안된 안건 탭 -->
-      <div class="tab-pane fade" id="pills-topics" role="tabpanel" aria-labelledby="pills-topics-tab">
-        <div class="d-flex justify-content-end mb-3">
-          <button type="button" class="btn" onclick="proposeTopic()">
-            <i class="fas fa-lightbulb"></i> 안건 제안하기
-          </button>
-        </div>
-        <div class="row">
-          <c:forEach var="topic" items="${proposedTopics}" varStatus="status">
-            <div class="col-md-4 mb-4">
-              <div class="card topic-card h-100">
-                <div class="card-body">
-                  <h5 class="card-title">${topic.title}</h5>
-                  <p class="card-text">${fn:substring(topic.description, 0, 100)}${fn:length(topic.description) > 100 ? '...' : ''}</p>
-                  <p class="card-text"><small class="text-muted">제안자: ${topic.memberName}</small></p>
-                  <p class="card-text"><small class="text-muted">우선순위: ${topic.priority}</small></p>
-                </div>
-              </div>
-            </div>
-          </c:forEach>
-        </div>
+      <div>
+        <button type="button" class="btn" onclick="addNewMeeting()">
+          <i class="fas fa-plus"></i> 새 회의 등록
+        </button>
+        <button type="button" class="btn" onclick="viewProposedTopics()">
+          <i class="fas fa-lightbulb"></i> 제안된 안건 보기
+        </button>
       </div>
+    </div>
+
+    <!-- 회의 목록 -->
+    <div id="meetingList">
+      <c:forEach var="vo" items="${vos}" varStatus="status">
+        <div class="meeting-list-item" onclick="viewMeetingDetails(${vo.idx})">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-1">${vo.title}</h5>
+            <span class="meeting-status ${vo.status == '예정' ? 'meeting-status-upcoming' : 
+                                         vo.status == '진행 중' ? 'meeting-status-ongoing' : 
+                                         'meeting-status-completed'}">
+              ${vo.status}
+            </span>
+          </div>
+          <p class="mb-1">${fn:substring(vo.description, 0, 100)}${fn:length(vo.description) > 100 ? '...' : ''}</p>
+          <small>일시: ${fn:substring(vo.meetingDate, 0, 16)}</small>
+        </div>
+      </c:forEach>
     </div>
 
     <!-- 페이지네이션 -->

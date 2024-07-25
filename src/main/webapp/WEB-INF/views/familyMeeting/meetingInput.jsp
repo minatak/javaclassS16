@@ -107,7 +107,7 @@
       font-weight: bold;
     }
   </style>
-  <script>
+   <script>
     'use strict';
   
     function showAlert(message) {
@@ -128,46 +128,27 @@
       });
     }
     
-    let topicCount = 1;
-
-    function addTopic() {
-      const container = document.getElementById('topicsContainer');
-      topicCount++;
+    function addNewTopic() {
+      const container = document.getElementById('newTopicsContainer');
       const newTopic = document.createElement('div');
-      newTopic.className = 'topic-container';
+      newTopic.className = 'new-topic-input mt-2';
       newTopic.innerHTML = `
-        <div class="topic-input">
-          <span class="topic-number">${topicCount}</span>
-          <input type="text" name="topics[]" placeholder="안건 입력" required>
-          <button type="button" onclick="removeTopic(this)"><i class="fa-solid fa-minus"></i></button>
-        </div>
+        <input type="text" name="newTopics[]" placeholder="새로운 안건 입력">
+        <button type="button" onclick="removeNewTopic(this)"><i class="fa-solid fa-minus"></i></button>
       `;
       container.appendChild(newTopic);
     }
 
-    function removeTopic(button) {
-      const container = document.getElementById('topicsContainer');
-      if (container.children.length > 1) {
-        button.closest('.topic-container').remove();
-        topicCount--;
-        updateTopicNumbers();
-      } else {
-        showAlert('최소 1개의 안건이 필요합니다.');
-      }
-    }
-
-    function updateTopicNumbers() {
-      const topics = document.querySelectorAll('.topic-container');
-      topics.forEach((topic, index) => {
-        topic.querySelector('.topic-number').textContent = index + 1;
-      });
+    function removeNewTopic(button) {
+      button.closest('.new-topic-input').remove();
     }
   
     function fCheck() {
       let title = myform.title.value;
       let description = myform.description.value;
       let meetingDate = myform.meetingDate.value;
-      let topics = document.getElementsByName('topics[]');
+      let selectedTopics = document.querySelectorAll('input[name="selectedTopics"]:checked');
+      let newTopics = document.querySelectorAll('input[name="newTopics[]"]');
       
       if(title.trim() == "") {
         showAlert("회의 제목을 입력해주세요.");
@@ -189,18 +170,9 @@
         myform.meetingDate.focus();
         return false;
       }
-      else if(topics.length < 1) {
-        showAlert("최소 한 개 이상의 안건을 입력해주세요.");
+      else if(selectedTopics.length + newTopics.length < 1) {
+        showAlert("최소 한 개 이상의 안건을 선택하거나 작성해주세요.");
         return false;
-      }
-      else {
-        for(let i = 0; i < topics.length; i++) {
-          if(topics[i].value.trim() == "") {
-            showAlert("안건을 입력해주세요.");
-            topics[i].focus();
-            return false;
-          }
-        }
       }
 
       document.myform.submit();
@@ -229,13 +201,13 @@
       <label for="meetingDate">회의 일시</label>
       <input type="datetime-local" name="meetingDate" id="meetingDate" class="form-control" required />
     </div>
-     <div class="form-group">
-      <label>안건 선택</label>
+    <div class="form-group">
+      <label>제안된 안건 선택</label>
       <div class="row">
         <c:forEach var="topic" items="${proposedTopics}">
           <div class="col-md-6">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="topics" value="${topic.idx}" id="topic${topic.idx}">
+              <input class="form-check-input" type="checkbox" name="selectedTopics" value="${topic.idx}" id="topic${topic.idx}">
               <label class="form-check-label" for="topic${topic.idx}">
                 ${topic.title} (우선순위: ${topic.priority})
               </label>
@@ -244,7 +216,16 @@
         </c:forEach>
       </div>
     </div>
-  </form>
+    <div class="form-group">
+      <label>새로운 안건 작성</label>
+      <div id="newTopicsContainer">
+        <div class="new-topic-input">
+          <input type="text" name="newTopics[]" placeholder="새로운 안건 입력">
+          <button type="button" onclick="removeNewTopic(this)"><i class="fa-solid fa-minus"></i></button>
+        </div>
+      </div>
+      <button type="button" onclick="addNewTopic()" class="btn btn-secondary mt-2">새 안건 추가</button>
+    </div>
     <div class="form-group">
       <label for="facilitatorIdx">회의 진행자</label>
       <select name="facilitatorIdx" id="facilitatorIdx" class="form-control" required>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.javaclassS16.dao.MeetingDAO;
 import com.spring.javaclassS16.vo.FamilyMeetingVO;
+import com.spring.javaclassS16.vo.MeetingTopicReplyVO;
 import com.spring.javaclassS16.vo.MeetingTopicVO;
 
 @Service
@@ -63,13 +64,37 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public int setMeetingInput(FamilyMeetingVO familyMeetingVO) {
-		return meetingDAO.setMeetingInput(familyMeetingVO);
+	public List<FamilyMeetingVO> getUpcomingMeetings(String familyCode) {
+		return meetingDAO.getUpcomingMeetings(familyCode);
 	}
 
 	@Override
-	public List<FamilyMeetingVO> getUpcomingMeetings(String familyCode) {
-		return meetingDAO.getUpcomingMeetings(familyCode);
+	public List<MeetingTopicVO> getProposedTopics(String familyCode) {
+		return meetingDAO.getProposedTopics(familyCode);
+	}
+
+	@Override
+  public int setMeetingInput(FamilyMeetingVO familyMeetingVO, List<Integer> selectedTopicIdx, List<String> newTopics) {
+    int res = meetingDAO.setMeetingInput(familyMeetingVO);
+    if (res > 0) {
+      if (selectedTopicIdx != null) {
+        for (Integer topicIdx : selectedTopicIdx) {
+          meetingDAO.linkTopicToMeeting(familyMeetingVO.getIdx(), topicIdx);
+        }
+      }
+      if (newTopics != null) {
+        for (String newTopic : newTopics) {
+          int newTopicIdx = meetingDAO.insertNewTopic(familyMeetingVO.getFamilyCode(), newTopic, familyMeetingVO.getCreatedBy());
+          meetingDAO.linkTopicToMeeting(familyMeetingVO.getIdx(), newTopicIdx);
+        }
+      }
+    }
+    return res;
+  }
+
+	@Override
+	public List<MeetingTopicReplyVO> getTopicReplies(int idx) {
+		return meetingDAO.getTopicReplies(idx);
 	}
 	
 	

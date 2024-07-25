@@ -116,6 +116,14 @@ public class MessageController {
 			model.addAttribute("msg", "할 일 삭제에 실패했습니다");
 			model.addAttribute("url", "/housework/workMain");
 		}
+		else if(msgFlag.equals("meetingInputOk")) {
+			model.addAttribute("msg", "회의가 등록되었습니다");
+			model.addAttribute("url", "/familyMeeting/meetingList");
+		}
+		else if(msgFlag.equals("meetingInputNo")) {
+			model.addAttribute("msg", "회의 등록에 실패했어요");
+			model.addAttribute("url", "/familyMeeting/meetingInput");
+		}
 		
 		
 		return "include/message";
