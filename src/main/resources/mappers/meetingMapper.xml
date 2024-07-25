@@ -6,17 +6,23 @@
 	  SELECT * FROM familyMeeting
 	  WHERE familyCode = #{familyCode}
 	  <if test="statusFilter != null and statusFilter != ''">
-	   	AND status = #{statusFilter}
+	    AND status = #{statusFilter}
 	  </if>
 	  <choose>
 	    <when test="sortBy == 'date'">
-	     	ORDER BY meetingDate
+	      ORDER BY meetingDate
 	    </when>
 	    <when test="sortBy == 'status'">
-	       ORDER BY status
+	      ORDER BY 
+	        CASE status
+	          WHEN '진행 중' THEN '1'
+	          WHEN '예정' THEN '2'
+	          WHEN '완료' THEN '3'
+	          ELSE '4'
+	        END
 	    </when>
 	    <otherwise>
-	       ORDER BY createdAt DESC
+	      ORDER BY createdAt DESC
 	    </otherwise>
 	  </choose>
 	  LIMIT #{startIndexNo}, #{pageSize}
@@ -73,9 +79,9 @@
 	</update>
 	
 	<insert id="setMeetingInput" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
-	  INSERT INTO familyMeeting (familyCode, title, description, meetingDate, facilitatorIdx, recorderIdx, attendees, createdBy)
+	  INSERT INTO familyMeeting (familyCode, title, description, meetingDate, facilitatorIdx, facilitatorName, recorderIdx, recorderName, attendees, createdBy)
 	  VALUES (#{familyMeetingVO.familyCode}, #{familyMeetingVO.title}, #{familyMeetingVO.description}, #{familyMeetingVO.meetingDate}, 
-    #{familyMeetingVO.facilitatorIdx}, #{familyMeetingVO.recorderIdx}, #{familyMeetingVO.attendees}, #{familyMeetingVO.createdBy})
+    #{familyMeetingVO.facilitatorIdx}, #{familyMeetingVO.facilitatorName}, #{familyMeetingVO.recorderIdx}, #{familyMeetingVO.recorderName}, #{familyMeetingVO.attendees}, #{familyMeetingVO.createdBy})
 	</insert>
 
 </mapper>

@@ -29,4 +29,6 @@ public interface MeetingDAO {
     public int setMeetingInput(@Param("familyMeetingVO") FamilyMeetingVO familyMeetingVO);
 
 		public List<FamilyMeetingVO> getUpcomingMeetings(@Param("familyCode") String familyCode);
+		
+		
 }

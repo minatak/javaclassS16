@@ -9,6 +9,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>회의 상세 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
+  <style>
+    body {
+      font-family: 'Pretendard' !important;
+      background-color: #ffffff;
+    }
+    .header {
+      margin-bottom: 30px;
+    }
+    h1, h2, h3, h4, h5 {font-family: 'Pretendard' !important;}
+    .header .h2 {
+      font-family: 'pretendard' !important;
+      font-weight: 600;
+      font-size: 24px;
+      color: #333c47;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .meetingContainer {
+      max-width: 900px;
+      background-color: white;
+      padding: 40px; 
+      margin: 30px auto;
+    }
+    .home-icon { 
+      font-size: 24px; 
+      color: #cecece; 
+    }
+    .home-icon:hover {color: #c6c6c6;}
+    .btn {
+      background-color: #84a98c;
+      color: white;
+      border: none;
+      border-radius: 0px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .btn:hover {
+      color: white;
+      background-color: #6b8e76;
+    }
+    .meeting-status {
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: white;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .meeting-status-upcoming { background-color: #84a98c; }
+    .meeting-status-ongoing { background-color: #f4a261; }
+    .meeting-status-completed { background-color: #6c757d; }
+    .topic-card {
+      background-color: #f8f9fa;
+      border-left: 5px solid #84a98c;
+      margin-bottom: 15px;
+      padding: 15px;
+    }
+  </style>
   <script>
     'use strict';
     
@@ -19,15 +80,15 @@
       
       $.ajax({
         type: "POST",
-        url: "${ctp}/meeting/saveMeetingMinutes",
+        url: "${ctp}/familyMeeting/saveMeetingMinutes",
         data: {
-          meetingIdx: ${meeting.idx},
+          idx: ${meeting.idx},
           decisions: decisions,
           actionItems: actionItems,
           notes: notes
         },
         success: function(res) {
-          if(res == "1") {
+          if(res == 1) {
             alert("회의록이 성공적으로 저장되었습니다.");
             location.reload();
           }
@@ -46,36 +107,39 @@
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
 <div class="container">
-  <div class="workContainer">
+  <div class="meetingContainer">
     <div class="header">
-      <a href="${ctp}/meeting/meetingList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+      <a href="${ctp}/familyMeeting/meetingList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
       <font size="5" class="mb-4 h2">회의 상세</font>
     </div>
     
     <div class="card mb-4">
       <div class="card-body">
         <h3 class="card-title">${meeting.title}</h3>
+        <span class="meeting-status ${meeting.status == '예정' ? 'meeting-status-upcoming' : 
+                                     meeting.status == '진행 중' ? 'meeting-status-ongoing' : 
+                                     'meeting-status-completed'}">
+          ${meeting.status}
+        </span>
         <p class="card-text">${meeting.description}</p>
-        <p><strong>일시:</strong> ${meeting.meetingDate}</p>
-        <p><strong>장소:</strong> ${meeting.location}</p>
-        <p><strong>상태:</strong> ${meeting.status}</p>
+        <p><strong>일시:</strong> ${fn:substring(meeting.meetingDate, 0, 16)}</p>
         <p><strong>진행자:</strong> ${meeting.facilitatorName}</p>
-        <p><strong>기록자:</strong> ${meeting.recorderName}</p>
+        <p><strong>기록자:</strong> ${meeting.recorderName}</p> 
       </div>
     </div>
     
-    <h4>안건 목록</h4>
-    <ul class="list-group mb-4">
-      <c:forEach var="topic" items="${meetingTopics}">
-        <li class="list-group-item">
+    <h4 class="mb-3">안건 목록</h4>
+    <div class="mb-4">
+      <c:forEach var="topic" items="${topics}">
+        <div class="topic-card">
           <h5>${topic.title}</h5>
           <p>${topic.description}</p>
           <small>우선순위: ${topic.priority}</small>
-        </li>
+        </div>
       </c:forEach>
-    </ul>
+    </div>
     
-    <h4>회의록 작성</h4>
+    <h4 class="mb-3">회의록</h4>
     <form name="minutesForm">
       <div class="form-group">
         <label for="decisions">결정 사항</label>

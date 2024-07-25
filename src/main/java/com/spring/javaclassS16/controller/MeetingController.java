@@ -29,30 +29,65 @@ public class MeetingController {
   @Autowired
   PageProcess pageProcess;
   
+//  @RequestMapping(value = "/meetingList", method = RequestMethod.GET)
+//  public String meetingListGet(Model model, HttpSession session,
+//      @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+//      @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize,
+//      @RequestParam(name="statusFilter", defaultValue = "", required = false) String statusFilter,
+//      @RequestParam(name="sortBy", defaultValue = "meetingDate", required = false) String sortBy) {
+//    
+//    String familyCode = (String) session.getAttribute("sFamCode");
+//    int memberIdx = (int) session.getAttribute("sIdx");
+//    
+//    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "meeting", statusFilter, sortBy, session);
+//    
+//    ArrayList<FamilyMeetingVO> vos = meetingService.getMeetingList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize, statusFilter, sortBy);
+//    
+//    model.addAttribute("vos", vos);
+//    model.addAttribute("pageVO", pageVO);
+//    model.addAttribute("statusFilter", statusFilter);
+//    model.addAttribute("sortBy", sortBy);
+//    
+//    // 통계 데이터 추가
+////    model.addAttribute("totalMeetings", meetingService.getTotalMeetingsCount(familyCode));
+////    model.addAttribute("completedMeetings", meetingService.getCompletedMeetingsCount(familyCode));
+////    model.addAttribute("upcomingMeetings", meetingService.getUpcomingMeetingsCount(familyCode));
+////    model.addAttribute("thisMonthMeetings", meetingService.getThisMonthMeetingsCount(familyCode));
+//    
+//    return "familyMeeting/meetingList";
+//  }
+  
   @RequestMapping(value = "/meetingList", method = RequestMethod.GET)
   public String meetingListGet(Model model, HttpSession session,
       @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
       @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize,
       @RequestParam(name="statusFilter", defaultValue = "", required = false) String statusFilter,
-      @RequestParam(name="sortBy", defaultValue = "meetingDate", required = false) String sortBy) {
+      @RequestParam(name="sortBy", defaultValue = "date", required = false) String sortBy) {
     
     String familyCode = (String) session.getAttribute("sFamCode");
     int memberIdx = (int) session.getAttribute("sIdx");
     
-    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "meeting", statusFilter, sortBy, session);
+    // sortBy 파라미터 처리
+    String dbSortBy;
+    switch(sortBy) {
+      case "date":
+        dbSortBy = "meetingDate";
+        break;
+      case "status":
+        dbSortBy = "status";
+        break;
+      default:
+        dbSortBy = "createdAt";
+    }
     
-    ArrayList<FamilyMeetingVO> vos = meetingService.getMeetingList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize, statusFilter, sortBy);
+    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "meeting", statusFilter, dbSortBy, session);
+    
+    ArrayList<FamilyMeetingVO> vos = meetingService.getMeetingList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize, statusFilter, dbSortBy);
     
     model.addAttribute("vos", vos);
     model.addAttribute("pageVO", pageVO);
     model.addAttribute("statusFilter", statusFilter);
     model.addAttribute("sortBy", sortBy);
-    
-    // 통계 데이터 추가
-    model.addAttribute("totalMeetings", meetingService.getTotalMeetingsCount(familyCode));
-    model.addAttribute("completedMeetings", meetingService.getCompletedMeetingsCount(familyCode));
-    model.addAttribute("upcomingMeetings", meetingService.getUpcomingMeetingsCount(familyCode));
-    model.addAttribute("thisMonthMeetings", meetingService.getThisMonthMeetingsCount(familyCode));
     
     return "familyMeeting/meetingList";
   }
@@ -71,12 +106,12 @@ public class MeetingController {
   
   @RequestMapping(value = "/topicInput", method = RequestMethod.GET)
   public String topicInputGet() {
-    return "familyMeeting/proposeTopic";
+    return "familyMeeting/topicInput";
   }
   
   @ResponseBody
   @RequestMapping(value = "/topicInput", method = RequestMethod.POST)
-  public String topicInputPost(HttpSession session, MeetingTopicVO topicVO) {
+  public int topicInputPost(HttpSession session, MeetingTopicVO topicVO) {
     String familyCode = (String) session.getAttribute("sFamCode");
     int memberIdx = (int) session.getAttribute("sIdx");
     
@@ -85,7 +120,7 @@ public class MeetingController {
     
     int res = meetingService.setTopicInput(topicVO);
     
-    return res == 1 ? "1" : "0";
+    return res;
   }
   
   @ResponseBody

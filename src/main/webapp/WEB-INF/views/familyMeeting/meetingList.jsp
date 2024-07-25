@@ -188,10 +188,17 @@
     }
 
     $(document).ready(function() {
-      $("#statusFilter").change(function() {
-        $("#meetingFilterForm").submit();
-      });
-    });
+  	  $("#statusFilter, #sortBy").change(function() {
+  	    // 선택된 값들을 hidden 필드에 설정
+  	    $("#hiddenStatusFilter").val($("#statusFilter").val());
+  	    $("#hiddenSortBy").val($("#sortBy").val());
+  	    
+  	    // 폼 제출
+  	    $("#meetingFilterForm").submit();
+  	  });
+  	});
+
+  	
   </script>
 </head>
 <body>
@@ -204,42 +211,11 @@
       <font size="5" class="mb-4 h2">가족 회의</font>
     </div>
 
-    <!-- 회의 통계 섹션 -->
-    <%-- <div class="row mb-4">
-      <div class="col-md-3">
-        <div class="card stats-card">
-          <div class="card-body">
-            <h5 class="card-title">전체 회의</h5>
-            <h2 class="card-text">${totalMeetings}</h2>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stats-card">
-          <div class="card-body">
-            <h5 class="card-title">완료된 회의</h5>
-            <h2 class="card-text">${completedMeetings}</h2>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stats-card">
-          <div class="card-body">
-            <h5 class="card-title">예정된 회의</h5>
-            <h2 class="card-text">${upcomingMeetings}</h2>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stats-card">
-          <div class="card-body">
-            <h5 class="card-title">이번 달 회의</h5>
-            <h2 class="card-text">${thisMonthMeetings}</h2>
-          </div>
-        </div>
-      </div>
-    </div>
- --%>
+		<form id="meetingFilterForm" action="${ctp}/familyMeeting/meetingList" method="get">
+	    <input type="hidden" name="statusFilter" id="hiddenStatusFilter">
+	    <input type="hidden" name="sortBy" id="hiddenSortBy">
+	  </form>
+
      <!-- 탭 네비게이션 -->
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
@@ -256,20 +232,24 @@
       <div class="tab-pane fade show active" id="pills-meetings" role="tabpanel" aria-labelledby="pills-meetings-tab">
         <!-- 필터 및 버튼 -->
         <div class="d-flex justify-content-between mb-3">
-          <div class="search-bar">
-            <select class="form-control" id="statusFilter" name="statusFilter">
-              <option value="">모든 상태</option>
-              <option value="예정" ${statusFilter == '예정' ? 'selected' : ''}>예정</option>
-              <option value="진행 중" ${statusFilter == '진행 중' ? 'selected' : ''}>진행 중</option>
-              <option value="완료" ${statusFilter == '완료' ? 'selected' : ''}>완료</option>
-            </select>
-          </div>
-          <div>
-            <button type="button" class="btn" onclick="addNewMeeting()">
-              <i class="fas fa-plus"></i> 새 회의 등록
-            </button>
-          </div>
-        </div>
+				  <div class="search-bar">
+				    <select class="form-control mr-2" id="statusFilter" name="statusFilter">
+				      <option value="">모든 상태</option>
+				      <option value="예정" ${statusFilter == '예정' ? 'selected' : ''}>예정</option>
+				      <option value="진행 중" ${statusFilter == '진행 중' ? 'selected' : ''}>진행 중</option>
+				      <option value="완료" ${statusFilter == '완료' ? 'selected' : ''}>완료</option>
+				    </select>
+				    <select class="form-control" id="sortBy" name="sortBy">
+				      <option value="date" ${sortBy == 'date' ? 'selected' : ''}>날짜순</option>
+				      <option value="status" ${sortBy == 'status' ? 'selected' : ''}>상태순</option>
+				    </select>
+				  </div>
+				  <div>
+				    <button type="button" class="btn" onclick="addNewMeeting()">
+				      <i class="fas fa-plus"></i> 새 회의 등록
+				    </button>
+				  </div>
+				</div>
 
         <!-- 회의 목록 -->
         <div id="meetingList">

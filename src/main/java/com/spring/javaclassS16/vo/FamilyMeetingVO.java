@@ -13,7 +13,9 @@ public class FamilyMeetingVO {
   private int duration;
   private String location;
   private int facilitatorIdx;
+  private String facilitatorName;
   private int recorderIdx;
+  private String recorderName;
   private String attendees;
   private String decisions;
   private String actionItems;
