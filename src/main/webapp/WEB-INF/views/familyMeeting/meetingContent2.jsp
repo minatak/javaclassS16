@@ -133,124 +133,38 @@
 	    color: #333c47;
 	    margin-bottom: 8px;
 	  }
-	  .swal2-confirm {
-      background-color: white !important;
-      color: black !important;
-      border-radius: 0px !important;
-      box-shadow: none !important;
-      font-weight: bold !important;
-      font-size: 18px !important;
-      margin: 0 !important;
-    }
-
-    .custom-swal-popup {
-      width: 350px !important;
-      padding-top: 20px !important;
-      border-radius: 0px !important;
-    }
-
-    .swal2-confirm:hover {
-      background-color: none !important;
-    }
-    
 	</style>
   <script>
     'use strict';
     
- 		// 커스텀 알럿
-    function showAlert(message, callback) {
-  	  Swal.fire({
-  	    html: message,
-  	    confirmButtonText: '확인',
-  	    customClass: {
-  	      confirmButton: 'swal2-confirm',
-  	      popup: 'custom-swal-popup',
-  	      htmlContainer: 'custom-swal-text'
-  	    },
-  	    scrollbarPadding: false,
-  	    allowOutsideClick: false,
-  	    heightAuto: false,
-  	    didOpen: () => {
-  	      document.body.style.paddingRight = '0px';
-  	    }
-  	  }).then((result) => {
-  	    if (result.isConfirmed && callback) {
-  	      callback();
-  	    }
-  	  });
-  	}
-    
-    function showConfirm(message, confirmCallback, cancelCallback) {
-  	  Swal.fire({
-  	    html: message,
-  	    showCancelButton: true,
-  	    cancelButtonText: '아니요',
-  	    confirmButtonText: '네',
-  	    customClass: {
-  	      cancelButton: 'swal2-cancel',
-  	      confirmButton: 'swal2-confirm',
-  	      popup: 'custom-swal-popup',
-  	      htmlContainer: 'custom-swal-text'
-  	    },
-  	    scrollbarPadding: false,
-  	    allowOutsideClick: false,
-  	    heightAuto: false,
-  	    didOpen: () => {
-  	      document.body.style.paddingRight = '0px';
-  	    }
-  	  }).then((result) => {
-  	    if (result.isConfirmed && confirmCallback) {
-  	      confirmCallback();
-  	    } else if (result.isDismissed && cancelCallback) {
-  	      cancelCallback();
-  	    }
-  	  });
-  	}
-    
-    
     function saveMeetingMinutes() {
-    	showConfirm("회의 완료처리 및 회의록을 저장하시겠습니까?", function() {
-    	
-	      let decisions = $("#decisions").val();
-	      let actionItems = $("#actionItems").val();
-	      let notes = $("#notes").val();
-	      
-	      $.ajax({
-	        type: "POST",
-	        url: "${ctp}/familyMeeting/saveMeetingMinutes",
-	        data: {
-	          idx: ${meeting.idx},
-	          decisions: decisions,
-	          actionItems: actionItems,
-	          notes: notes
-	        },
-	        success: function(res) {
-	          if(res == 1) {
-	            showAlert("회의록이 성공적으로 저장되었습니다.", function() {
-	            	location.reload();
-        	    });
-	          }
-	          else {
-	            showAlert("회의록 저장에 실패했습니다. 다시 시도해주세요.", function() {
-	            	location.reload();
-        	    });
-	          }
-	        },
-	        error: function() {
-	        	showAlert("서버 오류가 발생했습니다. 나중에 다시 시도해주세요.", function() {
-            	location.reload();
-      	    });
-	        }
-	      });
-    	});  
+      let decisions = $("#decisions").val();
+      let actionItems = $("#actionItems").val();
+      let notes = $("#notes").val();
+      
+      $.ajax({
+        type: "POST",
+        url: "${ctp}/familyMeeting/saveMeetingMinutes",
+        data: {
+          idx: ${meeting.idx},
+          decisions: decisions,
+          actionItems: actionItems,
+          notes: notes
+        },
+        success: function(res) {
+          if(res == 1) {
+            alert("회의록이 성공적으로 저장되었습니다.");
+            location.reload();
+          }
+          else {
+            alert("회의록 저장에 실패했습니다. 다시 시도해주세요.");
+          }
+        },
+        error: function() {
+          alert("서버 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+        }
+      });
     }
-    
-    function meetingDelete(idx) {
-		  showConfirm("정말로 이 회의를 삭제하시겠습니까?", function() {
-		    location.href = "meetingDelete?idx="+idx;
-		  });
-		}
-    
   </script>
 </head>
 <body>
@@ -306,8 +220,8 @@
       </div>
       <div class="button-group">
 		    <button type="button" class="btn" onclick="saveMeetingMinutes()">회의록 저장</button>
-		    <a class="btn" href="${ctp}/meetingUpdate">회의 정보 수정</a>
-		    <button type="button" class="btn btn-danger" onclick="meetingDelete()">회의 삭제</button>
+		    <button type="button" class="btn" onclick="editMeeting()">회의 수정</button>
+		    <button type="button" class="btn btn-danger" onclick="deleteMeeting()">회의 삭제</button>
 		  </div>
     </form>
   </div>
