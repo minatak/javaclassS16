@@ -30,9 +30,19 @@ public interface MeetingService {
 
 		public List<FamilyMeetingVO> getUpcomingMeetings(String familyCode);
 
-		public List<MeetingTopicVO> getProposedTopics(String familyCode);
+		public List<MeetingTopicVO> getProposedTopics(String familyCode, String status);
 
 		public List<MeetingTopicReplyVO> getTopicReplies(int idx);
+
+		public String setReplyInput(MeetingTopicReplyVO replyVO);
+
+		public int setReplyDelete(int idx);
+
+		public MeetingTopicVO getTopicByIdx(int idx);
+
+		public String setTopicUpdate(MeetingTopicVO topicVO);
+
+		public int setTopicDelete(int idx);
 
 
     

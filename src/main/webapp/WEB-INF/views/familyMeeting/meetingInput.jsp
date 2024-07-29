@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>회의록 작성 | HomeLink</title>
+  <title>회의 등록 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
   <style>
     body {
@@ -186,7 +186,7 @@
 <div class="inputContainer">
   <div class="header">
     <a href="${ctp}/familyMeeting/meetingList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
-    <font size="5" class="mb-4 h2">회의록 작성</font>
+    <font size="5" class="mb-4 h2">회의 등록</font>
   </div>
   <form name="myform" method="post">
     <div class="form-group">

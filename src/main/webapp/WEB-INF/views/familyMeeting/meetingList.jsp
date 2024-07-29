@@ -131,16 +131,19 @@
       color: #333;
       border: 1px solid #dbdbdb;
     }
-    .search-bar {
-      display: flex;
-      align-items: center;
-    }
     select {
-      background-color: white;
-      border: 1px solid #dbdbdb;
-      padding: 8px;
-      font-size: 14px;
-    }
+		  background-color: white;
+		  border: 1px solid #dbdbdb;
+		  padding: 8px;
+		  font-size: 14px;
+		  width: auto; /* 내용에 맞게 너비 조절 */
+		  min-width: 120px; /* 최소 너비 설정 */
+		}
+		.search-bar {
+		  display: flex;
+		  align-items: center;
+		  /* gap: 10px; 셀렉트박스 사이의 간격 설정 */
+		}
     .meeting-list-item {
       border: 1px solid #ddd;
       padding: 15px;

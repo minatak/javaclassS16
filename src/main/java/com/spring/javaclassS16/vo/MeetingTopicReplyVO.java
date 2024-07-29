@@ -10,7 +10,7 @@ public class MeetingTopicReplyVO {
   private String memberName;
   private String content;
   private String createdAt;
-  private int parentIdx;
+//  private int parentIdx;
   
   private int replyCnt; 
 

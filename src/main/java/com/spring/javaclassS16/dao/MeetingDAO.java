@@ -31,13 +31,23 @@ public interface MeetingDAO {
 
 		public List<FamilyMeetingVO> getUpcomingMeetings(@Param("familyCode") String familyCode);
 
-		public List<MeetingTopicVO> getProposedTopics(@Param("familyCode") String familyCode);
+		public List<MeetingTopicVO> getProposedTopics(@Param("familyCode") String familyCode, @Param("status") String status);
 
 		public void linkTopicToMeeting(@Param("idx") int idx, @Param("topicIdx") Integer topicIdx);
 
 		public int insertNewTopic(@Param("familyCode") String familyCode, @Param("newTopic") String newTopic, @Param("createdBy") int createdBy);
 
 		public List<MeetingTopicReplyVO> getTopicReplies(@Param("idx") int idx);
+
+		public String setReplyInput(@Param("replyVO") MeetingTopicReplyVO replyVO);
+
+		public int setReplyDelete(@Param("idx") int idx);
+
+		public MeetingTopicVO getTopicByIdx(@Param("idx") int idx);
+
+		public String setTopicUpdate(@Param("topicVO") MeetingTopicVO topicVO);
+
+		public int setTopicDelete(@Param("idx") int idx);
 		
 		
 }

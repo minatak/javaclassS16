@@ -67,12 +67,23 @@
   </select>
 	
 	<select id="getProposedTopics" resultType="com.spring.javaclassS16.vo.MeetingTopicVO">
-	  SELECT t.*, COUNT(r.idx) as replyCnt
+    SELECT t.*, COUNT(r.idx) as replyCnt
     FROM meetingTopic t
     LEFT JOIN meetingTopicReply r ON t.idx = r.topicIdx
-    WHERE t.familyCode = #{familyCode} AND t.status = '제안됨'
+    WHERE t.familyCode = #{familyCode}
+    <if test="status != null and status != 'all'">
+        AND t.status = #{status}
+    </if>
     GROUP BY t.idx
-    ORDER BY t.createdAt DESC
+    ORDER BY 
+        CASE t.status
+            WHEN '제안됨' THEN 1
+            WHEN '승인됨' THEN 2
+            WHEN '예정' THEN 3
+            WHEN '논의중' THEN 4
+            ELSE 5
+        END,
+        t.createdAt DESC
 	</select>
 	
 	<select id="getTopicReplies" resultType="com.spring.javaclassS16.vo.MeetingTopicReplyVO">
@@ -80,6 +91,10 @@
     WHERE topicIdx = #{idx}
     ORDER BY createdAt ASC
   </select>
+  
+  <select id="getTopicByIdx" resultType="com.spring.javaclassS16.vo.MeetingTopicVO">
+    SELECT * FROM meetingTopic WHERE idx = #{idx}
+	</select>
 	
 	
 	
@@ -103,6 +118,12 @@
     VALUES (#{familyCode}, #{newTopic}, #{createdBy}, '제안됨')
   </insert>
   
+  <insert id="setReplyInput" parameterType="com.spring.javaclassS16.vo.MeetingTopicReplyVO">
+    INSERT INTO meetingTopicReply (topicIdx, memberIdx, memberName, content)
+    VALUES (#{topicIdx}, #{memberIdx}, #{memberName}, #{content})
+	</insert>
+  
+  
 	
 	<update id="setMeetingMinutes" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
     UPDATE familyMeeting
@@ -110,5 +131,20 @@
     WHERE idx = #{familyMeetingVO.idx} AND familyCode = #{familyMeetingVO.familyCode}
 	</update>
 	
+	<update id="setTopicUpdate" parameterType="com.spring.javaclassS16.vo.MeetingTopicVO">
+    UPDATE meetingTopic
+    SET title = #{title}, description = #{description}, priority = #{priority}
+    WHERE idx = #{idx}
+	</update>
+	
+	
+	
+	<delete id="setReplyDelete" parameterType="int">
+    DELETE FROM meetingTopicReply WHERE idx = #{idx}
+	</delete>
+
+	<delete id="setTopicDelete" parameterType="int">
+    DELETE FROM meetingTopic WHERE idx = #{idx}
+	</delete>
 
 </mapper>

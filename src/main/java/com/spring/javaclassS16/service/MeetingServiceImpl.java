@@ -69,8 +69,8 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public List<MeetingTopicVO> getProposedTopics(String familyCode) {
-		return meetingDAO.getProposedTopics(familyCode);
+	public List<MeetingTopicVO> getProposedTopics(String familyCode, String status) {
+		return meetingDAO.getProposedTopics(familyCode, status);
 	}
 
 	@Override
@@ -95,6 +95,31 @@ public class MeetingServiceImpl implements MeetingService {
 	@Override
 	public List<MeetingTopicReplyVO> getTopicReplies(int idx) {
 		return meetingDAO.getTopicReplies(idx);
+	}
+
+	@Override
+	public String setReplyInput(MeetingTopicReplyVO replyVO) {
+		return meetingDAO.setReplyInput(replyVO);
+	}
+
+	@Override
+	public int setReplyDelete(int idx) {
+		return meetingDAO.setReplyDelete(idx);
+	}
+
+	@Override
+	public MeetingTopicVO getTopicByIdx(int idx) {
+		return meetingDAO.getTopicByIdx(idx);
+	}
+
+	@Override
+	public String setTopicUpdate(MeetingTopicVO topicVO) {
+		return meetingDAO.setTopicUpdate(topicVO);
+	}
+
+	@Override
+	public int setTopicDelete(int idx) {
+		return meetingDAO.setTopicDelete(idx);
 	}
 	
 	

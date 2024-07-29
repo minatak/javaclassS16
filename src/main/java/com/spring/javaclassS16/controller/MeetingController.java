@@ -37,34 +37,6 @@ public class MeetingController {
   @Autowired
   PageProcess pageProcess;
   
-//  @RequestMapping(value = "/meetingList", method = RequestMethod.GET)
-//  public String meetingListGet(Model model, HttpSession session,
-//      @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-//      @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize,
-//      @RequestParam(name="statusFilter", defaultValue = "", required = false) String statusFilter,
-//      @RequestParam(name="sortBy", defaultValue = "meetingDate", required = false) String sortBy) {
-//    
-//    String familyCode = (String) session.getAttribute("sFamCode");
-//    int memberIdx = (int) session.getAttribute("sIdx");
-//    
-//    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "meeting", statusFilter, sortBy, session);
-//    
-//    ArrayList<FamilyMeetingVO> vos = meetingService.getMeetingList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize, statusFilter, sortBy);
-//    
-//    model.addAttribute("vos", vos);
-//    model.addAttribute("pageVO", pageVO);
-//    model.addAttribute("statusFilter", statusFilter);
-//    model.addAttribute("sortBy", sortBy);
-//    
-//    // 통계 데이터 추가
-////    model.addAttribute("totalMeetings", meetingService.getTotalMeetingsCount(familyCode));
-////    model.addAttribute("completedMeetings", meetingService.getCompletedMeetingsCount(familyCode));
-////    model.addAttribute("upcomingMeetings", meetingService.getUpcomingMeetingsCount(familyCode));
-////    model.addAttribute("thisMonthMeetings", meetingService.getThisMonthMeetingsCount(familyCode));
-//    
-//    return "familyMeeting/meetingList";
-//  }
-  
   @RequestMapping(value = "/meetingList", method = RequestMethod.GET)
   public String meetingListGet(Model model, HttpSession session,
       @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
@@ -101,7 +73,7 @@ public class MeetingController {
   @RequestMapping(value = "/meetingInput", method = RequestMethod.GET)
   public String meetingInputGet(Model model, HttpSession session) {
     String familyCode = (String) session.getAttribute("sFamCode");
-    List<MeetingTopicVO> proposedTopics = meetingService.getProposedTopics(familyCode);
+    List<MeetingTopicVO> proposedTopics = meetingService.getProposedTopics(familyCode, null);
     List<MemberVO> familyMembers = memberService.getFamilyMembersByFamCode(familyCode);
     
     model.addAttribute("proposedTopics", proposedTopics);
@@ -127,9 +99,15 @@ public class MeetingController {
   }
   
   @RequestMapping(value = "/topicList", method = RequestMethod.GET)
-  public String proposedTopicsGet(Model model, HttpSession session) {
+  public String proposedTopicsGet(@RequestParam(required = false) String status, Model model, HttpSession session) {
     String familyCode = (String) session.getAttribute("sFamCode");
-    List<MeetingTopicVO> proposedTopics = meetingService.getProposedTopics(familyCode);
+    
+    List<MeetingTopicVO> proposedTopics;
+    if (status == null || status.equals("all")) {
+        proposedTopics = meetingService.getProposedTopics(familyCode, null);
+    } else {
+        proposedTopics = meetingService.getProposedTopics(familyCode, status);
+    }
     
     // 각 주제에 대한 댓글 가져오기
     Map<Integer, List<MeetingTopicReplyVO>> topicReplies = new HashMap<>();
@@ -140,6 +118,7 @@ public class MeetingController {
     
     model.addAttribute("proposedTopics", proposedTopics);
     model.addAttribute("topicReplies", topicReplies);
+    model.addAttribute("currentStatus", status == null ? "all" : status);
     
     return "familyMeeting/topicList";
   }
@@ -195,22 +174,41 @@ public class MeetingController {
     return meetingService.getTopicReplies(topicIdx);
   }
   
-//  @RequestMapping(value = "/meetingInput", method = RequestMethod.GET)
-//  public String addMeetingGet() {
-//    return "familyMeeting/meetingInput";
-//  }
-//  
-//  @ResponseBody
-//  @RequestMapping(value = "/meetingInput", method = RequestMethod.POST)
-//  public int addMeetingPost(HttpSession session, FamilyMeetingVO familyMeetingVO) {
-//    String familyCode = (String) session.getAttribute("sFamCode");
-//    int memberIdx = (int) session.getAttribute("sIdx");
-//    
-//    familyMeetingVO.setFamilyCode(familyCode);
-//    familyMeetingVO.setCreatedBy(memberIdx);
-//    
-//    int res = meetingService.setMeetingInput(familyMeetingVO);
-//    
-//    return res;
-//  }
+  @ResponseBody
+  @RequestMapping(value = "/replyInput", method = RequestMethod.POST)
+  public String replyInputPost(MeetingTopicReplyVO replyVO, HttpSession session) {
+    int memberIdx = (int) session.getAttribute("sIdx");
+    String memberName = (String) session.getAttribute("sName");
+    
+    replyVO.setMemberIdx(memberIdx);
+    replyVO.setMemberName(memberName);
+    
+    return meetingService.setReplyInput(replyVO);
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/replyDelete", method = RequestMethod.POST)
+  public int replyDeletePost(@RequestParam(name="idx") int idx) {
+    return meetingService.setReplyDelete(idx);
+  }
+
+  @RequestMapping(value = "/topicUpdate", method = RequestMethod.GET)
+  public String topicUpdateGet(Model model, @RequestParam(name="idx") int idx) {
+    MeetingTopicVO topicVO = meetingService.getTopicByIdx(idx);
+    model.addAttribute("vo", topicVO);
+    return "familyMeeting/topicUpdate";
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/topicUpdate", method = RequestMethod.POST)
+  public String topicUpdatePost(MeetingTopicVO topicVO) {
+    return meetingService.setTopicUpdate(topicVO);
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/topicDelete", method = RequestMethod.POST)
+  public int topicDeletePost(@RequestParam(name="idx") int idx) {
+    return meetingService.setTopicDelete(idx);
+  }
+  
 }
