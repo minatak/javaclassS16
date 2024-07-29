@@ -12,7 +12,7 @@
   <style>
     body {
       font-family: 'pretendard' !important;
-      background-color: #f8f8f8;
+      background-color: #fff;
       color: #333;
     }
     .inputContainer {
@@ -124,15 +124,17 @@
       let content = CKEDITOR.instances.content.getData();
       
       if(title.trim() == "") {
-        showAlert("제목을 입력해주세요.");
-        myform.title.focus();
-        return false;
-      }
-      else if(content.trim() == "") {
-        showAlert("내용을 입력해주세요.");
-        CKEDITOR.instances.content.focus();
-        return false;
-      }
+    	  showAlert("제목을 입력해주세요.", function() {
+    	    myform.title.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(content.trim() == "") {
+    	  showAlert("내용을 입력해주세요.", function() {
+    	    CKEDITOR.instances.content.focus();
+    	  });
+    	  return false;
+    	}
       
       myform.submit();
     }

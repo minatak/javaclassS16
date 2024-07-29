@@ -117,35 +117,41 @@
       let rotationPeriod = myform.rotationPeriod.value;
       
       if(category.trim() == "") {
-        showAlert("대항목을 선택해주세요.");
-        myform.category.focus();
-        return false;
-      }
-      else if(task.trim() == "") {
-        showAlert("소항목을 입력해주세요.");
-        myform.task.focus();
-        return false;
-      }
-      else if(description.trim() == "") {
-        showAlert("설명을 입력해주세요.");
-        myform.description.focus();
-        return false;
-      }
-      else if(startDate.trim() == "") {
-        showAlert("시작일을 입력해주세요.");
-        myform.startDate.focus();
-        return false;
-      }
-      else if(endDate.trim() == "") {
-        showAlert("마감일을 입력해주세요.");
-        myform.endDate.focus();
-        return false;
-      }
-      else if(rotationPeriod.trim() == "") {
-        showAlert("역할 로테이션 주기를 입력해주세요.");
-        myform.rotationPeriod.focus();
-        return false;
-      }
+    	  showAlert("대항목을 선택해주세요.", function() {
+    	    myform.category.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(task.trim() == "") {
+    	  showAlert("소항목을 입력해주세요.", function() {
+    	    myform.task.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(description.trim() == "") {
+    	  showAlert("설명을 입력해주세요.", function() {
+    	    myform.description.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(startDate.trim() == "") {
+    	  showAlert("시작일을 입력해주세요.", function() {
+    	    myform.startDate.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(endDate.trim() == "") {
+    	  showAlert("마감일을 입력해주세요.", function() {
+    	    myform.endDate.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(rotationPeriod.trim() == "") {
+    	  showAlert("역할 로테이션 주기를 입력해주세요.", function() {
+    	    myform.rotationPeriod.focus();
+    	  });
+    	  return false;
+    	}
 
       myform.submit();
     }

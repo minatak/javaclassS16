@@ -245,8 +245,9 @@
         type: 'POST',
         url: '${ctp}/member/createCode',
         success: function(response) {
-          showAlert('나의 가족 코드가 생성되었습니다! 가족들에게 코드를 공유해 연결해보세요!');
-          location.reload();
+        	showAlert('나의 가족 코드가 생성되었습니다! 가족들에게 코드를 공유해 연결해보세요!', function() {
+      		  location.reload();
+      		});
         },
         error: function() {
           showAlert('가족 코드 생성 중 오류가 발생했습니다.<br/>다시 시도해주세요.');

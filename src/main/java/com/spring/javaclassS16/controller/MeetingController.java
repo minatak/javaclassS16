@@ -99,15 +99,10 @@ public class MeetingController {
   }
   
   @RequestMapping(value = "/topicList", method = RequestMethod.GET)
-  public String proposedTopicsGet(@RequestParam(required = false) String status, Model model, HttpSession session) {
+  public String proposedTopicsGet(@RequestParam(required = false, defaultValue = "all") String status, Model model, HttpSession session) {
     String familyCode = (String) session.getAttribute("sFamCode");
     
-    List<MeetingTopicVO> proposedTopics;
-    if (status == null || status.equals("all")) {
-        proposedTopics = meetingService.getProposedTopics(familyCode, null);
-    } else {
-        proposedTopics = meetingService.getProposedTopics(familyCode, status);
-    }
+    List<MeetingTopicVO> proposedTopics = meetingService.getProposedTopics(familyCode, status);
     
     // 각 주제에 대한 댓글 가져오기
     Map<Integer, List<MeetingTopicReplyVO>> topicReplies = new HashMap<>();
@@ -118,7 +113,7 @@ public class MeetingController {
     
     model.addAttribute("proposedTopics", proposedTopics);
     model.addAttribute("topicReplies", topicReplies);
-    model.addAttribute("currentStatus", status == null ? "all" : status);
+    model.addAttribute("currentStatus", status);
     
     return "familyMeeting/topicList";
   }

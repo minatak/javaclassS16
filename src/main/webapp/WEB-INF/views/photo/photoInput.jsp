@@ -11,7 +11,7 @@
    <style>
 	  body {
 	    font-family: 'pretendard' !important;
-	    background-color: #f8f8f8;
+	    background-color: #fff;
 	    color: #333;
 	  }
 	  .inputContainer {

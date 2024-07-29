@@ -11,7 +11,7 @@
   <style>
 	  body {
 	    font-family: 'pretendard' !important;
-	    background-color: #f8f8f8;
+	    background-color: #fff;
 	    color: #333;
 	  }
 	  .inputContainer {
@@ -223,39 +223,44 @@
   	  let noEndTime = document.getElementById('noEndTime');
   	  let endTime = document.getElementById('endTime');
   	  
-  	  if(title.trim() == "") {
-  	    showAlert("제목을 입력해주세요.");
-  	    myform.title.focus();
-  	    return false;
-  	  }
-  	  else if (title.trim().length > 100) {
-  	    showAlert("제목은 100자 이내로 입력해주세요.");
-  	    myform.title.focus();
-  	    return false;
-  	  } 
-  	  else if(description.trim() == "") {
-  	    showAlert("내용을 입력해주세요.");
-  	    myform.description.focus();
-  	    return false;
-  	  }
-  	  else if(options.length < 2) {
-  	    showAlert("최소 두 개 이상의 항목을 입력해주세요.");
-  	    return false;
-  	  }
-  	  else if (!noEndTime.checked && endTime.value.trim() == "") { // '종료시간 설정 안함'을 체크하지 않았고, 종료 시간이 입력되지 않았을 경우
-		    showAlert("종료 시간을 입력해주세요.");
-		    endTime.focus();
-		    return false;
-		  }
-  	  else {
-  	    for(let i = 0; i < options.length; i++) {
-  	      if(options[i].value.trim() == "") {
-  	        showAlert("투표 항목을 입력해주세요.");
-  	        options[i].focus();
-  	        return false;
-  	      }
-  	    }
-  	  }
+	  	if(title.trim() == "") {
+	  	  showAlert("제목을 입력해주세요.", function() {
+	  	    myform.title.focus();
+	  	  });
+	  	  return false;
+	  	}
+	  	else if (title.trim().length > 100) {
+	  	  showAlert("제목은 100자 이내로 입력해주세요.", function() {
+	  	    myform.title.focus();
+	  	  });
+	  	  return false;
+	  	} 
+	  	else if(description.trim() == "") {
+	  	  showAlert("내용을 입력해주세요.", function() {
+	  	    myform.description.focus();
+	  	  });
+	  	  return false;
+	  	}
+	  	else if(options.length < 2) {
+	  	  showAlert("최소 두 개 이상의 항목을 입력해주세요.");
+	  	  return false;
+	  	}
+	  	else if (!noEndTime.checked && endTime.value.trim() == "") {
+	  	  showAlert("종료 시간을 입력해주세요.", function() {
+	  	    endTime.focus();
+	  	  });
+	  	  return false;
+	  	}
+	  	else {
+	  	  for(let i = 0; i < options.length; i++) {
+	  	    if(options[i].value.trim() == "") {
+	  	      showAlert("투표 항목을 입력해주세요.", function() {
+	  	        options[i].focus();
+	  	      });
+	  	      return false;
+	  	    }
+	  	  }
+	  	}
 
   	  document.myform.submit();
   	}

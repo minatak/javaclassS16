@@ -239,35 +239,41 @@
       let regMid = /^[a-zA-Z0-9_]{4,20}$/; // 아이디는 4~20의 영문 대/소문자와 숫자와 밑줄 가능
       let regPwd = /^[a-zA-Z0-9!@#$%^*+=-_]{8,16}$/   // 비밀번호는 8~16의 영문 대/소문자와 특수문자 숫자와 밑줄 가능
       
-    	  let submitFlag = 0;		// 체크 완료를 체크하기위한 변수. 체크가 완료되면 submitFlag=1 이 된다.
-      
-       if(mid == "") {
-         showAlert("아이디를 입력하세요.");
-         document.myform.name.focus();
-         return false;
-       }
-       else if (!regMid.test(mid)) {
-         showErrorMsg("midError", "아이디는 4~20자리의 영문 대소문자와 숫자, 언더바만 사용이 가능해요");
-         document.myform.mid.focus();
-         return false;
-       }
-       else if(pwd == "") {
-         showAlert("비밀번호를 입력하세요.");
-         document.myform.pwd.focus();
-         return false;
-       }
-       else if (!regPwd.test(pwd)) {
-         showErrorMsg("pwdError", "비밀번호는 8~16자리의 영문 대소문자와 특수문자, 숫자, 밑줄만 사용이 가능해요");
-         document.myform.pwd.focus();
-         return false;
-       }
-       else if(idCheckSw == 0) {
-        showAlert("아이디 중복체크버튼을 눌러주세요");
-        document.getElementById("midBtn").focus();
-      }
-      else {
-    	  submitFlag = 1;
-      }
+  	  let submitFlag = 0;		// 체크 완료를 체크하기위한 변수. 체크가 완료되면 submitFlag=1 이 된다.
+    
+  	  if(mid == "") {
+  		  showAlert("아이디를 입력하세요.", function() {
+  		    document.myform.mid.focus();  // name을 mid로 수정했습니다.
+  		  });
+  		  return false;
+  		}
+  		else if (!regMid.test(mid)) {
+  		  showAlert("아이디는 4~20자리의 영문 대소문자와 숫자, 언더바만 사용이 가능해요", function() {
+  		    document.myform.mid.focus();
+  		  });
+  		  return false;
+  		}
+  		else if(pwd == "") {
+  		  showAlert("비밀번호를 입력하세요.", function() {
+  		    document.myform.pwd.focus();
+  		  });
+  		  return false;
+  		}
+  		else if (!regPwd.test(pwd)) {
+  		  showAlert("비밀번호는 8~16자리의 영문 대소문자와 특수문자, 숫자, 밑줄만 사용이 가능해요", function() {
+  		    document.myform.pwd.focus();
+  		  });
+  		  return false;
+  		}
+  		else if(idCheckSw == 0) {
+  		  showAlert("아이디 중복체크버튼을 눌러주세요", function() {
+  		    document.getElementById("midBtn").focus();
+  		  });
+  		  return false;  // return false를 추가했습니다.
+  		}
+  		else {
+  		  submitFlag = 1;
+  		}
        
 	    // 전송전에 파일에 관련된 사항들을 체크해준다.
 			let fName = document.getElementById("file").value;
@@ -334,11 +340,14 @@
           type : "get",
           data : {mid : mid},
           success:function(res) {
-            if(res != '0') {
-              showAlert("이미 사용중인 아이디입니다.");
-              myform.mid.focus();
-            }
-            else showAlert("사용 가능한 아이디입니다.");
+	      	  if(res != '0') {
+	      		  showAlert("이미 사용중인 아이디입니다.", function() {
+	      		    myform.mid.focus();
+	      		  });
+	      		}
+	      		else {
+	      		  showAlert("사용 가능한 아이디입니다.");
+	      		}
           },
           error : function() {
             showAlert("전송 오류!");

@@ -72,7 +72,7 @@
   </div>
   <div class="w3-bar-block mt-5 ml-2">
     <a href="${ctp}/" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-home fa-fw w3-margin-right"></i>홈</a>
-    <a href="${ctp}/notice/noticeList" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullhorn fa-fw w3-margin-right"></i>공지사항</a>
+    <a href="${ctp}/notice/noticeList" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullhorn fa-fw w3-margin-right"></i>가족소식</a>
     <a href="${ctp}/calendar/calendarMain" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-calendar fa-fw w3-margin-right"></i>일정관리</a>
     <a href="${ctp}/housework/workMain" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tasks fa-fw w3-margin-right"></i>가사분담</a>
 <%--     <a href="${ctp}/location/locationMain" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa-solid fa-location-dot fa-fw w3-margin-right"></i>위치 공유</a> --%>

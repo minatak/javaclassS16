@@ -242,33 +242,36 @@
       let regEmail =/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
 
       if(name == "") {
-        showAlert("이름을 입력하세요");
-        document.myform.name.focus();
-        return false;
-      }
-      else if(email == "") {
-        showAlert("이메일을 입력하세요");
-        document.myform.name.focus();
-        return false;
-      }
-      else if (!regName.test(name)) {
-        showErrorMsg("nameError", "이름은 한글과 영문대소문자만 사용가능합니다");
-        document.myform.name.focus();
-        return false;
-      }
-      else if (!regEmail.test(email)) {
-        showErrorMsg("emailError", "올바른 이메일 형식이 아닙니다");
-        document.myform.email.focus();
-        return false;
-      }
-      else if(emailCheckSw != 1) {
-        showAlert("이메일을 인증해주세요");
-        return false;
-      }
-      else {
-        myform.submit();
-      }
-    }
+    	  showAlert("이름을 입력하세요", function() {
+    	    document.myform.name.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(email == "") {
+    	  showAlert("이메일을 입력하세요", function() {
+    	    document.myform.email.focus();  
+    	  });
+    	  return false;
+    	}
+    	else if (!regName.test(name)) {
+    	  showAlert("이름은 한글과 영문대소문자만 사용가능합니다", function() {
+    	    document.myform.name.focus();
+    	  });
+    	  return false;
+    	}
+    	else if (!regEmail.test(email)) {
+    	  showAlert("올바른 이메일 형식이 아닙니다", function() {
+    	    document.myform.email.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(emailCheckSw != 1) {
+    	  showAlert("이메일을 인증해주세요");
+    	  return false;
+    	}
+    	else {
+    	  myform.submit();
+    	}
 
     function showErrorMsg(elementId, message) {
       document.getElementById(elementId).innerHTML = message;

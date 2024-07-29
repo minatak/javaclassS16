@@ -166,10 +166,11 @@
       let mid = $("#midSearch").val().trim();
       let email = $("#emailSearch2").val().trim();
       if(mid == "" || email == "") {
-        alert("가입시 등록한 아이디와 메일주소를 입력하세요");
-        $("#midSearch").focus();
-        return false;
-      }
+    	  showAlert("가입시 등록한 아이디와 메일주소를 입력하세요", function() {
+    	    $("#midSearch").focus();
+    	  });
+    	  return false;
+    	}
 
       $.ajax({
         url  : "${ctp}/member/memberNewPassword",
@@ -180,8 +181,11 @@
         },
         success:function(res) {
           if(res != "0") alert("새로운 비밀번호가 회원님 메일로 발송 되었습니다.\n메일주소를 확인하세요.");
-          else alert("등록하신 정보가 일치하지 않습니다.\n확인후 다시 처리하세요.");
-            location.reload();
+          else {
+        	  showAlert("등록하신 정보가 일치하지 않습니다.\n확인후 다시 처리하세요.", function() {
+        	    location.reload();
+        	  });
+        	}
         },
         error : function() {
           alert("전송오류!!")

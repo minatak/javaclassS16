@@ -11,7 +11,7 @@
   <style>
     body {
       font-family: 'pretendard' !important;
-      background-color: #f8f8f8;
+      background-color: #fff;
       color: #333;
     }
     .inputContainer {
@@ -70,41 +70,83 @@
       background-color: #f0f0f0;
     }
     .topic-container {
-      margin-bottom: 10px;
+		  margin-bottom: 10px;
+		}
+		.topic-input {
+		  display: flex;
+		  align-items: center;
+		}
+		.topic-input input {
+		  flex-grow: 1;
+		  margin-right: 10px;
+		}
+		.topic-input button {
+		  background: none;
+		  border: none;
+		  color: #cecece;
+		  cursor: pointer;
+		}
+		.add-topic {
+		  color: #84a98c;
+		  background: none;
+		  border: none;
+		  cursor: pointer;
+		  padding: 5px 0;
+		}
+		.topic-number {
+		  display: inline-flex;
+		  justify-content: center;
+		  align-items: center;
+		  width: 30px;
+		  height: 27px;
+		  background-color: #e0e0e0;
+		  color: #333;
+		  border-radius: 50%;
+		  margin-right: 10px;
+		  font-size: 14px;
+		  font-weight: bold;
+		}
+		
+	  .topic-checkbox {
+	    display: none;
+	  }
+	  .topic-label {
+	    display: block;
+	    padding: 10px;
+	    margin-bottom: 10px;
+	    border: 1px solid #e0e0e0;
+	    border-radius: 5px;
+	    cursor: pointer;
+	    transition: all 0.3s ease;
+	  }
+	  .topic-checkbox:checked + .topic-label {
+	    background-color: #84a98c;
+	    color: white;
+	  }
+	  .topic-priority {
+	    float: right;
+	    font-size: 0.9em;
+	    color: #666;
+	  }
+	  .topic-checkbox:checked + .topic-label .topic-priority {
+	    color: #e0e0e0;
+	  }
+	  .swal2-confirm {
+      background-color: white !important;
+      color: black !important;
+      border-radius: 0px !important;
+      box-shadow: none !important;
+      font-weight: bold !important;
+      font-size: 18px !important;
+      margin: 0 !important;
     }
-    .topic-input {
-      display: flex;
-      align-items: center;
+    .custom-swal-popup {
+      width: 350px !important;
+      padding-top: 20px !important;
+      border-radius: 0px !important;
     }
-    .topic-input input {
-      flex-grow: 1;
-      margin-right: 10px;
-    }
-    .topic-input button {
-      background: none;
-      border: none;
-      color: #cecece;
-      cursor: pointer;
-    }
-    .add-topic {
-      color: #84a98c;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 5px 0;
-    }
-    .topic-number {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: 30px;
-      height: 27px;
-      background-color: #e0e0e0;
-      color: #333;
-      border-radius: 50%;
-      margin-right: 10px;
-      font-size: 14px;
-      font-weight: bold;
+    .swal2-confirm:hover {
+      background-color: none !important;
     }
   </style>
    <script>
@@ -128,55 +170,119 @@
       });
     }
     
+    let topicCount = 1;
+
     function addNewTopic() {
       const container = document.getElementById('newTopicsContainer');
+      topicCount++;
       const newTopic = document.createElement('div');
-      newTopic.className = 'new-topic-input mt-2';
+      newTopic.className = 'topic-container';
       newTopic.innerHTML = `
-        <input type="text" name="newTopics[]" placeholder="새로운 안건 입력">
-        <button type="button" onclick="removeNewTopic(this)"><i class="fa-solid fa-minus"></i></button>
+        <div class="topic-input">
+          <span class="topic-number">${topicCount}</span>
+          <input type="text" name="newTopics[]" placeholder="새로운 안건 입력" required>
+          <button type="button" onclick="removeNewTopic(this)"><i class="fa-solid fa-minus"></i></button>
+        </div>
       `;
       container.appendChild(newTopic);
     }
 
     function removeNewTopic(button) {
-      button.closest('.new-topic-input').remove();
+      const container = document.getElementById('newTopicsContainer');
+     
+      button.closest('.topic-container').remove();
+      topicCount--;
+      updateTopicNumbers();
+    }
+
+    function updateTopicNumbers() {
+      const topics = document.querySelectorAll('.topic-container');
+      topics.forEach((topic, index) => {
+        topic.querySelector('.topic-number').textContent = index + 1;
+      });
     }
   
     function fCheck() {
-      let title = myform.title.value;
-      let description = myform.description.value;
-      let meetingDate = myform.meetingDate.value;
-      let selectedTopics = document.querySelectorAll('input[name="selectedTopics"]:checked');
-      let newTopics = document.querySelectorAll('input[name="newTopics[]"]');
-      
-      if(title.trim() == "") {
-        showAlert("회의 제목을 입력해주세요.");
-        myform.title.focus();
-        return false;
-      }
-      else if (title.trim().length > 100) {
-        showAlert("제목은 100자 이내로 입력해주세요.");
-        myform.title.focus();
-        return false;
-      } 
-      else if(description.trim() == "") {
-        showAlert("회의 설명을 입력해주세요.");
-        myform.description.focus();
-        return false;
-      }
-      else if(meetingDate.trim() == "") {
-        showAlert("회의 일시를 입력해주세요.");
-        myform.meetingDate.focus();
-        return false;
-      }
-      else if(selectedTopics.length + newTopics.length < 1) {
-        showAlert("최소 한 개 이상의 안건을 선택하거나 작성해주세요.");
-        return false;
-      }
-
-      document.myform.submit();
-    }
+	    let title = myform.title.value;
+	    let description = myform.description.value;
+	    let meetingDate = myform.meetingDate.value;
+	    let selectedTopics = document.querySelectorAll('input[name="selectedTopics"]:checked');
+	    let newTopics = document.querySelectorAll('input[name="newTopics[]"]');
+	    let facilitatorIdx = myform.facilitatorIdx.value;
+	    let recorderIdx = myform.recorderIdx.value;
+	    
+	    if(title.trim() == "") {
+    	  showAlert("회의 제목을 입력해주세요.", function() {
+    	    myform.title.focus();
+    	  });
+    	  return false;
+    	}
+    	else if (title.trim().length > 100) {
+    	  showAlert("제목은 100자 이내로 입력해주세요.", function() {
+    	    myform.title.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(description.trim() == "") {
+    	  showAlert("회의 설명을 입력해주세요.", function() {
+    	    myform.description.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(meetingDate.trim() == "") {
+    	  showAlert("회의 일시를 입력해주세요.", function() {
+    	    myform.meetingDate.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(selectedTopics.length == 0 && newTopics.length == 0) {
+    	  showAlert("최소 한 개 이상의 안건을 선택하거나 작성해주세요.");
+    	  return false;
+    	}
+    	else if(facilitatorIdx == "") {
+    	  showAlert("회의 진행자를 선택해주세요.", function() {
+    	    myform.facilitatorIdx.focus();
+    	  });
+    	  return false;
+    	}
+    	else if(recorderIdx == "") {
+    	  showAlert("회의 기록자를 선택해주세요.", function() {
+    	    myform.recorderIdx.focus();
+    	  });
+    	  return false;
+    	}
+	
+	    // 새로운 안건이 있는지 확인
+	    let hasNewTopic = false;
+	    newTopics.forEach(topic => {
+	      if(topic.value.trim() !== "") {
+	        hasNewTopic = true;
+	      }
+	    });
+	
+	    if(selectedTopics.length == 0 && !hasNewTopic) {
+    	  showAlert("최소 한 개 이상의 안건을 선택하거나 작성해주세요.");
+    	  return false;
+    	}
+	
+	    document.myform.submit();
+	  }
+	
+	  function addNewTopic() {
+	    const container = document.getElementById('newTopicsContainer');
+	    topicCount++;
+	    const newTopic = document.createElement('div');
+	    newTopic.className = 'topic-container';
+	    newTopic.innerHTML = `
+	      <div class="topic-input">
+	        <span class="topic-number">${topicCount}</span>
+	        <input type="text" name="newTopics[]" placeholder="새로운 안건 입력">
+	        <button type="button" onclick="removeNewTopic(this)"><i class="fa-solid fa-minus"></i></button>
+	      </div>
+	    `;
+	    container.appendChild(newTopic);
+	    updateTopicNumbers();
+	  }
   </script>
 </head>
 <body>
@@ -202,30 +308,32 @@
       <input type="datetime-local" name="meetingDate" id="meetingDate" class="form-control" required />
     </div>
     <div class="form-group">
-      <label>제안된 안건 선택</label>
-      <div class="row">
-        <c:forEach var="topic" items="${proposedTopics}">
-          <div class="col-md-6">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="selectedTopics" value="${topic.idx}" id="topic${topic.idx}">
-              <label class="form-check-label" for="topic${topic.idx}">
-                ${topic.title} (우선순위: ${topic.priority})
-              </label>
-            </div>
-          </div>
-        </c:forEach>
-      </div>
-    </div>
+		  <label>제안된 안건 선택</label>
+		  <div class="row">
+		    <c:forEach var="topic" items="${proposedTopics}">
+		      <div class="col-md-6">
+		        <input class="topic-checkbox" type="checkbox" name="selectedTopics" value="${topic.idx}" id="topic${topic.idx}">
+		        <label class="topic-label" for="topic${topic.idx}">
+		          ${topic.title}
+		          <span class="topic-priority">우선순위: ${topic.priority}</span>
+		        </label>
+		      </div>
+		    </c:forEach>
+		  </div>
+		</div>
     <div class="form-group">
-      <label>새로운 안건 작성</label>
-      <div id="newTopicsContainer">
-        <div class="new-topic-input">
-          <input type="text" name="newTopics[]" placeholder="새로운 안건 입력">
-          <button type="button" onclick="removeNewTopic(this)"><i class="fa-solid fa-minus"></i></button>
-        </div>
-      </div>
-      <button type="button" onclick="addNewTopic()" class="btn btn-secondary mt-2">새 안건 추가</button>
-    </div>
+		  <label>새로운 안건 작성</label>
+		  <div id="newTopicsContainer">
+		    <div class="topic-container">
+		      <div class="topic-input">
+		        <span class="topic-number">1</span>
+		        <input type="text" name="newTopics[]" placeholder="새로운 안건 입력" required>
+		        <button type="button" onclick="removeNewTopic(this)"><i class="fa-solid fa-minus"></i></button>
+		      </div>
+		    </div>
+		  </div>
+		  <button type="button" class="add-topic" onclick="addNewTopic()">+ 안건 추가하기</button>
+		</div>
     <div class="form-group">
       <label for="facilitatorIdx">회의 진행자</label>
       <select name="facilitatorIdx" id="facilitatorIdx" class="form-control" required>
