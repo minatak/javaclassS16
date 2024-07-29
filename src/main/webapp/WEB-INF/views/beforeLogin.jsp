@@ -112,9 +112,9 @@
 
         // 모달 표시 함수
         function showModal(serviceName) {
-            modalTitle.text(serviceName);
-            modalDescription.text(serviceInfo[serviceName]);
-            modal.css("display", "block");
+          modalTitle.text(serviceName);
+          modalDescription.text(serviceInfo[serviceName]);
+          modal.css("display", "block");
         }
 
         // 모달 닫기
