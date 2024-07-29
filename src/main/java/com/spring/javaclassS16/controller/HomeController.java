@@ -164,4 +164,12 @@ public class HomeController {
     out.flush();
     fos.close();
   }
+  
+  @RequestMapping(value = "/beforeLogin")
+  public String beforeLoginGet(){
+  	
+  	return "beforeLogin";
+  }
+  
+  
 }
