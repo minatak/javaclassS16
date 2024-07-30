@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class FamilyMeetingVO {
-	private int idx;
+  private int idx;
   private String familyCode;
   private String title;
   private String description;
