@@ -20,7 +20,7 @@ public class FamilyMeetingVO {
   private String decisions;
   private String actionItems;
   private String notes;
-  private int createdBy;
+  private int createdBy; // 회의 등록자 idx
   private String createdAt;
   
 }

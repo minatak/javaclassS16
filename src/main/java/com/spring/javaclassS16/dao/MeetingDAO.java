@@ -25,17 +25,17 @@ public interface MeetingDAO {
 
     public int setTopicInput(@Param("topicVO") MeetingTopicVO topicVO);
 
-    public int setMeetingMinutes(@Param("familyMeetingVO") FamilyMeetingVO familyMeetingVO);
+    public int setSaveMeeting(@Param("familyMeetingVO") FamilyMeetingVO familyMeetingVO);
 
-    public int setMeetingInput(@Param("familyMeetingVO") FamilyMeetingVO familyMeetingVO);
+    public int setMeetingInput(@Param("vo") FamilyMeetingVO vo);
 
 		public List<FamilyMeetingVO> getUpcomingMeetings(@Param("familyCode") String familyCode);
 
 		public List<MeetingTopicVO> getProposedTopics(@Param("familyCode") String familyCode, @Param("status") String status);
 
-		public void linkTopicToMeeting(@Param("idx") int idx, @Param("topicIdx") Integer topicIdx);
+		public void linkTopicToMeeting(@Param("meetingIdx") int meetingIdx, @Param("topicIdx") int topicIdx);
 
-		public int insertNewTopic(@Param("familyCode") String familyCode, @Param("newTopic") String newTopic, @Param("createdBy") int createdBy);
+		public int setNewTopic(@Param("familyCode") String familyCode, @Param("title") String title, @Param("description") String description, @Param("priority") int priority, @Param("memberIdx") int memberIdx, @Param("memberName") String memberName);
 
 		public List<MeetingTopicReplyVO> getTopicReplies(@Param("idx") int idx);
 
@@ -48,6 +48,25 @@ public interface MeetingDAO {
 		public String setTopicUpdate(@Param("topicVO") MeetingTopicVO topicVO);
 
 		public int setTopicDelete(@Param("idx") int idx);
+
+		public FamilyMeetingVO getMeetingLastIdx();
+
+		public MeetingTopicVO getLastTopic();
+
+		public void updateTopicStatus(@Param("topicIdx") int topicIdx);
+
+		public FamilyMeetingVO getMeetingByIdx(@Param("idx") int idx);
+
+		public List<Integer> getSelectedTopicIdx(@Param("idx") int idx);
+
+		public int setMeetingUpdate(@Param("vo") FamilyMeetingVO vo);
+
+		public void setRemoveAllTopicLinks(@Param("meetingIdx") int meetingIdx);
+
+		public int updateMeetingTopicsStatus(@Param("idx") int idx);
+
+		public int totRecCnt(@Param("familyCode") String familyCode, @Param("searchString") String searchString);
+
 		
 		
 }

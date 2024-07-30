@@ -6,70 +6,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>회의 등록 | HomeLink</title>
+  <title>회의 수정 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
   <style>
     body {
-		  font-family: 'pretendard' !important;
-		  background-color: #fff;
-		  color: #333;
-		}
-		.inputContainer {
-		  max-width: 800px;
-		  margin: 0 auto;
-		  padding: 40px 20px;
-		}
-		.header {
-		  margin-bottom: 30px;
-		}
-		.home-icon { 
-		  font-size: 24px; 
-		  color: #cecece; 
-		}
-		.home-icon:hover {color: #c6c6c6;}
-		.h2 {
-		  font-family: 'pretendard' !important;
-		  font-weight: 600;
-		  font-size: 24px;
-		  color: #333;
-		  text-align: center;
-		}
-		.form-group {
-		  margin-bottom: 30px;
-		}
-		label {
-		  font-weight: 500;
-		  margin-bottom: 5px;
-		  display: block;
-		}
-		select, input[type="text"], input[type="datetime-local"], textarea, .btn {
-		  width: 100%;
-		  padding: 10px;
-		  border: 1px solid #e0e0e0;
-		  border-radius: 0px;
-		  font-size: 14px;
-		}
-		.btn {
-		  background-color: #84a98c;
-		  color: white;
-		  border: none;
-		  cursor: pointer;
-		  transition: background-color 0.3s ease;
-		  font-weight: 600;
-		}
-		.btn:hover {
-		  background-color: #6b8c72;
-		}
-		.btn-back {
-		  background-color: #fff;
-		  color: #84a98c;
-		  border: 1px solid #84a98c;
-		}
-		.btn-back:hover {
-		  color: #84a98c;
-		  background-color: #f0f0f0;
-		}
-		.topic-container {
+      font-family: 'pretendard' !important;
+      background-color: #fff;
+      color: #333;
+    }
+    .inputContainer {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .header {
+      margin-bottom: 30px;
+    }
+    .home-icon { 
+      font-size: 24px; 
+      color: #cecece; 
+    }
+    .home-icon:hover {color: #c6c6c6;}
+    .h2 {
+      font-family: 'pretendard' !important;
+      font-weight: 600;
+      font-size: 24px;
+      color: #333;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 30px;
+    }
+    label {
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: block;
+    }
+    select, input[type="text"], input[type="datetime-local"], textarea, .btn {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 0px;
+      font-size: 14px;
+    }
+    .btn {
+      background-color: #84a98c;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+    }
+    .btn:hover {
+      background-color: #6b8c72;
+    }
+    .btn-back {
+      background-color: #fff;
+      color: #84a98c;
+      border: 1px solid #84a98c;
+    }
+    .btn-back:hover {
+      color: #84a98c;
+      background-color: #f0f0f0;
+    }
+    .topic-container {
 		  margin-bottom: 10px;
 		}
 		.topic-input {
@@ -106,76 +106,80 @@
 		  font-size: 14px;
 		  font-weight: bold;
 		}
-		.topic-checkbox {
-		  display: none;
-		}
-		.topic-label {
-		  display: block;
-		  padding: 10px;
-		  margin-bottom: 10px;
-		  border: 1px solid #e0e0e0;
-		  border-radius: 5px;
-		  cursor: pointer;
-		  transition: all 0.3s ease;
-		}
-		.topic-checkbox:checked + .topic-label {
-		  background-color: #84a98c;
-		  color: white;
-		}
-		.topic-priority {
-		  float: right;
-		  font-size: 0.9em;
-		  color: #666;
-		}
-		.topic-checkbox:checked + .topic-label .topic-priority {
-		  color: #e0e0e0;
-		}
-		.add-topic-btn {
-		  background-color: #84a98c;
-		  color: white;
-		  border: none;
-		  padding: 10px 15px;
-		  cursor: pointer;
-		  transition: background-color 0.3s ease;
-		  font-weight: 600;
-		  margin-bottom: 10px;
-		}
-		.add-topic-btn:hover {
-		  background-color: #6b8c72;
-		}
-		.topic-input input, .topic-input select {
-		  width: calc(33% - 10px);
-		  margin-right: 10px;
-		}
-		.topic-input button {
-		  width: auto;
-		}
-		.swal2-confirm {
-		  background-color: white !important;
-		  color: black !important;
-		  border-radius: 0px !important;
-		  box-shadow: none !important;
-		  font-weight: bold !important;
-		  font-size: 18px !important;
-		  margin: 0 !important;
-		}
-		.custom-swal-popup {
-		  width: 350px !important;
-		  padding-top: 20px !important;
-		  border-radius: 0px !important;
-		}
-		.swal2-confirm:hover {
-		  background-color: none !important;
-		}
-		.new-topic-header {
+		
+	  .topic-checkbox {
+	    display: none;
+	  }
+	  .topic-label {
+	    display: block;
+	    padding: 10px;
+	    margin-bottom: 10px;
+	    border: 1px solid #e0e0e0;
+	    border-radius: 5px;
+	    cursor: pointer;
+	    transition: all 0.3s ease;
+	  }
+	  .topic-checkbox:checked + .topic-label {
+	    background-color: #84a98c;
+	    color: white;
+	  }
+	  .topic-priority {
+	    float: right;
+	    font-size: 0.9em;
+	    color: #666;
+	  }
+	  .topic-checkbox:checked + .topic-label .topic-priority {
+	    color: #e0e0e0;
+	  }
+	  .add-topic-btn {
+	    background-color: #84a98c;
+	    color: white;
+	    border: none;
+	    padding: 10px 15px;
+	    cursor: pointer;
+	    transition: background-color 0.3s ease;
+	    font-weight: 600;
+	    margin-bottom: 10px;
+	  }
+	  .add-topic-btn:hover {
+	    background-color: #6b8c72;
+	  }
+	  .topic-input input, .topic-input select {
+	    width: calc(33% - 10px);
+	    margin-right: 10px;
+	  }
+	  .topic-input button {
+	    width: auto;
+	  }
+	  .swal2-confirm {
+      background-color: white !important;
+      color: black !important;
+      border-radius: 0px !important;
+      box-shadow: none !important;
+      font-weight: bold !important;
+      font-size: 18px !important;
+      margin: 0 !important;
+    }
+    .custom-swal-popup {
+      width: 350px !important;
+      padding-top: 20px !important;
+      border-radius: 0px !important;
+    }
+    .swal2-confirm:hover {
+      background-color: none !important;
+    }
+    
+    .new-topic-header {
 		  display: flex;
 		  align-items: center;
 		  margin-bottom: 10px;
 		}
+		
 		.new-topic-header label {
 		  margin-bottom: 0;
 		  margin-right: 10px;
 		}
+		
 		.toggle-topic-btn {
 		  background-color: #84a98c;
 		  color: white;
@@ -191,82 +195,12 @@
 		  justify-content: center;
 		  height: 24px;
 		}
+		
 		.toggle-topic-btn:hover {
 		  background-color: #6b8c72;
 		}
-		.proposed-topics-container {
-		  max-height: 400px;
-		  overflow-y: auto;
-		  padding: 15px;
-		  background-color: #f9f9f9;
-		  border-radius: 8px;
-		}
-		.topics-grid {
-		  display: flex;
-		  flex-wrap: wrap;
-		  gap: 10px;
-		}
-		.topic-item {
-		  flex: 0 0 calc(50% - 5px);
-		  position: relative;
-		}
-		.topic-item input[type="checkbox"] {
-		  display: none;
-		}
-		.topic-item label {
-		  display: flex;
-		  align-items: center;
-		  cursor: pointer;
-		  padding: 10px 10px 10px 40px;
-		  border: 1px solid #e0e0e0;
-		  border-radius: 5px;
-		  transition: all 0.3s ease;
-		  height: 100%;
-		}
-		.topic-item label::before {
-		  content: '';
-		  position: absolute;
-		  left: 10px;
-		  top: 50%;
-		  transform: translateY(-50%);
-		  width: 20px;
-		  height: 20px;
-		  border: 2px solid #84a98c;
-		  border-radius: 3px;
-		  transition: all 0.3s ease;
-		}
-		.topic-item input[type="checkbox"]:checked + label::before {
-		  background-color: #84a98c;
-		  border-color: #84a98c;
-		}
-		.topic-item input[type="checkbox"]:checked + label::after {
-		  content: '\2714';
-		  position: absolute;
-		  left: 14px;
-		  top: 50%;
-		  transform: translateY(-50%);
-		  color: white;
-		  font-size: 14px;
-		}
-		.topic-content {
-		  display: flex;
-		  justify-content: space-between;
-		  align-items: center;
-		  width: 100%;
-		}
-		.topic-title {
-		  text-align: left;
-		}
-		.topic-priority {
-		  font-size: 0.8em;
-		  color: #666;
-		  text-align: right;
-		}
-		.topic-item input[type="checkbox"]:checked + label {
-		  background-color: #e8f5e9;
-		}
   </style>
-   <script>
+  <script>
     'use strict';
   
     function showAlert(message) {
@@ -456,58 +390,52 @@
 <div class="inputContainer">
   <div class="header">
     <a href="${ctp}/familyMeeting/meetingList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
-    <font size="5" class="mb-4 h2">회의 등록</font>
+    <font size="5" class="mb-4 h2">회의 수정</font>
   </div>
   <form name="myform" method="post">
     <div class="form-group">
       <label for="title">회의 제목</label>
-      <input type="text" name="title" id="title" placeholder="회의 제목을 작성해 주세요." autofocus required class="form-control" />
+      <input type="text" name="title" id="title" value="${meeting.title}" placeholder="회의 제목을 작성해 주세요." autofocus required class="form-control" />
     </div>
     <div class="form-group">
       <label for="description">회의 설명</label>
-      <textarea name="description" id="description" rows="4" placeholder="회의 설명을 입력해 주세요." class="form-control" required></textarea>
+      <textarea name="description" id="description" rows="4" placeholder="회의 설명을 입력해 주세요." class="form-control" required>${meeting.description}</textarea>
     </div>
     <div class="form-group">
       <label for="meetingDate">회의 일시</label>
-      <input type="datetime-local" name="meetingDate" id="meetingDate" class="form-control" required />
+      <input type="datetime-local" name="meetingDate" id="meetingDate" value="${meeting.meetingDate}" class="form-control" required />
     </div>
     <div class="form-group">
-		  <label>제안된 안건 선택</label>
-		  <div class="proposed-topics-container">
-		    <div class="topics-grid">
-		      <c:forEach var="topic" items="${proposedTopics}" varStatus="status">
-		        <div class="topic-item mb-2">
-		          <input type="checkbox" id="topic${topic.idx}" name="selectedTopics" value="${topic.idx}">
-		          <label for="topic${topic.idx}">
-		            <div class="topic-content"> 
-		              <span class="topic-title">${topic.title}</span>
-		              <span class="topic-priority">우선순위: ${topic.priority}</span>
-		            </div>
-		          </label>
-		        </div>
-		        <c:if test="${status.count % 2 == 0 || status.last}">
-		          </div><div class="topics-grid">
-		        </c:if>
-		      </c:forEach>
-		    </div>
-		  </div>
-		</div>
-		<div class="form-group">
-		  <div class="new-topic-header">
-		    <label>새로운 안건 작성</label>
-		    <button type="button" id="toggleNewTopicsBtn" class="toggle-topic-btn" onclick="toggleNewTopics()">추가하기</button>
-		  </div>
-		  <div id="newTopicsContainer" style="display: none;">
-		    <!-- JavaScript로 동적으로 추가됨 -->
-		  </div>
-		  <button type="button" id="addMoreTopics" onclick="addNewTopic()" class="add-topic" style="display: none;">+ 안건 추가하기</button>
-		</div>
+      <label>제안된 안건 선택</label>
+      <div class="row">
+        <c:forEach var="topic" items="${proposedTopics}">
+          <div class="col-md-6">
+            <input class="topic-checkbox" type="checkbox" name="selectedTopics" value="${topic.idx}" id="topic${topic.idx}" 
+              <c:if test="${selectedTopics.contains(topic.idx)}">checked</c:if>>
+            <label class="topic-label" for="topic${topic.idx}">
+              ${topic.title}
+              <span class="topic-priority">우선순위: ${topic.priority}</span>
+            </label>
+          </div>
+        </c:forEach>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="new-topic-header">
+        <label>새로운 안건 작성</label>
+        <button type="button" id="toggleNewTopicsBtn" class="toggle-topic-btn" onclick="toggleNewTopics()">추가하기</button>
+      </div>
+      <div id="newTopicsContainer" style="display: none;">
+        <!-- JavaScript로 동적으로 추가됨 -->
+      </div>
+      <button type="button" id="addMoreTopics" onclick="addNewTopic()" class="add-topic" style="display: none;">+ 안건 추가하기</button>
+    </div>
     <div class="form-group">
       <label for="facilitatorIdx">회의 진행자</label>
       <select name="facilitatorIdx" id="facilitatorIdx" class="form-control" required>
         <option value="">회의 진행자 선택</option>
         <c:forEach var="member" items="${familyMembers}">
-          <option value="${member.idx}">${member.name}</option>
+          <option value="${member.idx}" <c:if test="${member.idx == meeting.facilitatorIdx}">selected</c:if>>${member.name}</option>
         </c:forEach>
       </select>
     </div>
@@ -516,18 +444,19 @@
       <select name="recorderIdx" id="recorderIdx" class="form-control" required>
         <option value="">회의 기록자 선택</option>
         <c:forEach var="member" items="${familyMembers}">
-          <option value="${member.idx}">${member.name}</option>
+          <option value="${member.idx}" <c:if test="${member.idx == meeting.recorderIdx}">selected</c:if>>${member.name}</option>
         </c:forEach>
       </select>
     </div>
     <div class="form-group">
-	    <label for="duration">회의 예상 시간 (분)</label>
-	    <input type="number" name="duration" id="duration" class="form-control" required min="1" />
-		</div>
+      <label for="duration">회의 예상 시간 (분)</label>
+      <input type="number" name="duration" id="duration" value="${meeting.duration}" class="form-control" required min="1" />
+    </div>
+    <input type="hidden" name="idx" value="${meeting.idx}">
     <input type="hidden" name="familyCode" value="${sFamCode}">
     <input type="hidden" name="createdBy" value="${sIdx}">
     <div class="form-group" style="margin-bottom:15px;">
-      <input type="button" value="등록하기" onclick="fCheck()" class="btn"/>
+      <input type="button" value="수정하기" onclick="fCheck()" class="btn"/>
     </div>
     <div class="form-group">
       <input type="button" value="돌아가기" onclick="location.href='${ctp}/familyMeeting/meetingList';" class="btn btn-back"/>

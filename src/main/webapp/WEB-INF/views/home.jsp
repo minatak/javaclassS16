@@ -197,7 +197,7 @@
 
   <div class="card">
     <div class="card-header">
-      <i class="fas fa-users"></i> 다가오는 가족 모임
+      <i class="fas fa-users"></i> 다가오는 가족 회의
       <a href="${ctp}/familyMeeting/meetingList" class="view-all">모두 보기 <i class="fas fa-arrow-right"></i></a>
     </div>
     <div class="card-body">
@@ -209,7 +209,7 @@
         </ul>
       </c:if>
       <c:if test="${empty meetings}">
-        <div class="empty-message">예정된 모임이 없어요. 새로운 추억을 만들어볼까요?</div>
+        <div class="empty-message">예정된 회의가 없어요.</div>
       </c:if>
     </div>
   </div>

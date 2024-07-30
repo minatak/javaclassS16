@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<% pageContext.setAttribute("newLine", "\n"); %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -208,7 +209,7 @@
   	}
     
     
-    function saveMeetingMinutes() {
+    function saveMeeting() {
     	showConfirm("회의 완료처리 및 회의록을 저장하시겠습니까?", function() {
     	
 	      let decisions = $("#decisions").val();
@@ -217,7 +218,7 @@
 	      
 	      $.ajax({
 	        type: "POST",
-	        url: "${ctp}/familyMeeting/saveMeetingMinutes",
+	        url: "${ctp}/familyMeeting/saveMeeting",
 	        data: {
 	          idx: ${meeting.idx},
 	          decisions: decisions,
@@ -236,11 +237,12 @@
         	    });
 	          }
 	        },
-	        error: function() {
-	        	showAlert("서버 오류가 발생했습니다. 나중에 다시 시도해주세요.", function() {
-            	location.reload();
-      	    });
-	        }
+	        error: function(xhr, status, error) {
+            console.error("Error details:", xhr.responseText);
+            showAlert("서버 오류가 발생했습니다. 나중에 다시 시도해주세요.", function() {
+              location.reload();
+            });
+          }
 	      });
     	});  
     }
@@ -269,11 +271,11 @@
         <span class="meeting-status meeting-status-${meeting.status == '예정' ? 'upcoming' : meeting.status == '진행 중' ? 'ongoing' : 'completed'}">
           ${meeting.status}
         </span>
-        <p class="card-text">${meeting.description}</p>
+        <p class="card-text">${fn:replace(meeting.description, newLine, "<br/>")}</p>
         <p><strong>일시:</strong> ${fn:substring(meeting.meetingDate, 0, 16)}</p>
         <p><strong>진행자:</strong> ${meeting.facilitatorName}</p>
         <p><strong>기록자:</strong> ${meeting.recorderName}</p>
-        <p><strong>참석자:</strong> ${meeting.attendees}</p>
+        <%-- <p><strong>참석자:</strong> ${meeting.attendees}</p> --%>
         <p><strong>소요 시간:</strong> ${meeting.duration}분</p>
       </div>
     </div>
@@ -305,8 +307,10 @@
         <textarea class="form-control" id="notes" name="notes" rows="3">${meeting.notes}</textarea>
       </div>
       <div class="button-group">
-		    <button type="button" class="btn" onclick="saveMeetingMinutes()">회의록 저장</button>
-		    <a class="btn" href="${ctp}/meetingUpdate">회의 정보 수정</a>
+		    <button type="button" class="btn" onclick="saveMeeting()">회의록 저장</button>
+		    <c:if test="${meeting.status != '완료'}">
+			    <a class="btn" href="${ctp}/familyMeeting/meetingUpdate?idx=${meeting.idx}">회의 정보 수정</a>
+		    </c:if>
 		    <button type="button" class="btn btn-danger" onclick="meetingDelete()">회의 삭제</button>
 		  </div>
     </form>

@@ -529,11 +529,11 @@
         <select class="form-select" onchange="filterTopics(this.value)">
           <option value="all" ${currentStatus == 'all' ? 'selected' : ''}>전체</option>
           <option value="제안됨" ${currentStatus == '제안됨' ? 'selected' : ''}>제안됨</option>
-          <option value="승인됨" ${currentStatus == '승인됨' ? 'selected' : ''}>승인됨</option>
-          <option value="예정" ${currentStatus == '예정' ? 'selected' : ''}>예정</option>
-          <option value="논의중" ${currentStatus == '논의중' ? 'selected' : ''}>논의중</option>
+          <%-- <option value="승인됨" ${currentStatus == '승인됨' ? 'selected' : ''}>승인됨</option> --%>
+          <option value="예정" ${currentStatus == '예정' ? 'selected' : ''}>예정됨</option>
+          <%-- <option value="논의중" ${currentStatus == '논의중' ? 'selected' : ''}>논의중</option> --%>
           <option value="결정됨" ${currentStatus == '결정됨' ? 'selected' : ''}>결정됨</option>
-          <option value="보류" ${currentStatus == '보류' ? 'selected' : ''}>보류</option>
+          <%-- <option value="보류" ${currentStatus == '보류' ? 'selected' : ''}>보류</option> --%>
         </select>
       </div>
       <div>

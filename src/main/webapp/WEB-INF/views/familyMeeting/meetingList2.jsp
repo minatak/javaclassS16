@@ -17,6 +17,7 @@
     .header {
       margin-bottom: 50px;
     }
+    h1, h2, h3, h4, h5 {font-family: 'Pretendard' !important;}
     .header .h2 {
       font-family: 'pretendard' !important;
       font-weight: 600;
@@ -130,16 +131,19 @@
       color: #333;
       border: 1px solid #dbdbdb;
     }
-    .search-bar {
-      display: flex;
-      align-items: center;
-    }
     select {
-      background-color: white;
-      border: 1px solid #dbdbdb;
-      padding: 8px;
-      font-size: 14px;
-    }
+		  background-color: white;
+		  border: 1px solid #dbdbdb;
+		  padding: 8px;
+		  font-size: 14px;
+		  width: auto; /* 내용에 맞게 너비 조절 */
+		  min-width: 120px; /* 최소 너비 설정 */
+		}
+		.search-bar {
+		  display: flex;
+		  align-items: center;
+		  /* gap: 10px; 셀렉트박스 사이의 간격 설정 */
+		}
     .meeting-list-item {
       border: 1px solid #ddd;
       padding: 15px;
@@ -164,6 +168,12 @@
     .topic-card {
       background-color: #e9ecef;
     }
+  	.nav-pills .nav-link.active {
+      background-color: #84a98c;
+    }
+    .nav-pills .nav-link {
+      color: #333;
+    }
   </style>
   <script>
     'use strict';
@@ -176,23 +186,15 @@
       location.href = "${ctp}/familyMeeting/meetingInput";
     }
 
-    function proposeTopic() {
-      location.href = "${ctp}/familyMeeting/topicInput";
+    function viewProposedTopics() {
+      location.href = "${ctp}/familyMeeting/topicList";
     }
 
     $(document).ready(function() {
       $("#statusFilter, #sortBy").change(function() {
+        $("#hiddenStatusFilter").val($("#statusFilter").val());
+        $("#hiddenSortBy").val($("#sortBy").val());
         $("#meetingFilterForm").submit();
-      });
-
-      document.getElementById('cardViewBtn').addEventListener('click', function() {
-        document.getElementById('cardView').classList.remove('hidden');
-        document.getElementById('listView').classList.add('hidden');
-      });
-
-      document.getElementById('listViewBtn').addEventListener('click', function() {
-        document.getElementById('listView').classList.remove('hidden');
-        document.getElementById('cardView').classList.add('hidden');
       });
     });
   </script>
@@ -207,93 +209,37 @@
       <font size="5" class="mb-4 h2">가족 회의</font>
     </div>
 
-    <!-- 회의 통계 섹션 -->
-    <div class="row mb-4">
-      <div class="col-md-3">
-        <div class="card stats-card">
-          <div class="card-body">
-            <h5 class="card-title">전체 회의</h5>
-            <h2 class="card-text">${totalMeetings}</h2>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stats-card">
-          <div class="card-body">
-            <h5 class="card-title">완료된 회의</h5>
-            <h2 class="card-text">${completedMeetings}</h2>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stats-card">
-          <div class="card-body">
-            <h5 class="card-title">예정된 회의</h5>
-            <h2 class="card-text">${upcomingMeetings}</h2>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stats-card">
-          <div class="card-body">
-            <h5 class="card-title">이번 달 회의</h5>
-            <h2 class="card-text">${thisMonthMeetings}</h2>
-          </div>
-        </div>
-      </div>
-    </div>
+    <form id="meetingFilterForm" action="${ctp}/familyMeeting/meetingList" method="get">
+      <input type="hidden" name="statusFilter" id="hiddenStatusFilter">
+      <input type="hidden" name="sortBy" id="hiddenSortBy">
+    </form>
 
     <!-- 필터 및 버튼 -->
     <div class="d-flex justify-content-between mb-3">
       <div class="search-bar">
-        <select class="form-control" id="statusFilter" name="statusFilter">
+        <select class="form-control mr-2" id="statusFilter" name="statusFilter">
           <option value="">모든 상태</option>
           <option value="예정" ${statusFilter == '예정' ? 'selected' : ''}>예정</option>
-          <option value="진행 중" ${statusFilter == '진행 중' ? 'selected' : ''}>진행 중</option>
+          <%-- <option value="진행 중" ${statusFilter == '진행 중' ? 'selected' : ''}>진행 중</option> --%>
           <option value="완료" ${statusFilter == '완료' ? 'selected' : ''}>완료</option>
+        </select>
+        <select class="form-control" id="sortBy" name="sortBy">
+          <option value="date" ${sortBy == 'date' ? 'selected' : ''}>날짜순</option>
+          <option value="status" ${sortBy == 'status' ? 'selected' : ''}>상태순</option>
         </select>
       </div>
       <div>
-        <button class="btn cardList" id="cardViewBtn">안건 보기</button>
-        <button class="btn cardList" id="listViewBtn">회의록 보기</button>
         <button type="button" class="btn" onclick="addNewMeeting()">
           <i class="fas fa-plus"></i> 새 회의 등록
         </button>
-        <button type="button" class="btn" onclick="proposeTopic()">
-          <i class="fas fa-lightbulb"></i> 안건 제안하기
+        <button type="button" class="btn" onclick="viewProposedTopics()">
+          <i class="fas fa-lightbulb"></i> 제안된 안건 보기
         </button>
       </div>
     </div>
 
-    <!-- 카드 뷰 -->
-   <%--  <div id="cardView">
-      <div class="row">
-        <c:forEach var="vo" items="${vos}" varStatus="status">
-          <div class="col-md-3 mb-4">
-            <div class="meeting-card" onclick="viewMeetingDetails(${vo.idx})">
-              <div>
-                <span class="meeting-status ${vo.status == '예정' ? 'meeting-status-upcoming' : 
-                                             vo.status == '진행 중' ? 'meeting-status-ongoing' : 
-                                             'meeting-status-completed'}">
-                  ${vo.status}
-                </span>
-              </div>
-              <div class="meeting-icon-container">
-                <i class="fas fa-users meeting-icon"></i>
-              </div>
-              <div class="meeting-content">
-                <h5>${vo.title}</h5>
-                <p>${fn:substring(vo.description, 0, 50)}${fn:length(vo.description) > 50 ? '...' : ''}</p>
-                <small>일시: ${fn:substring(vo.meetingDate, 0, 16)}</small>
-              </div>
-            </div>
-          </div>
-        </c:forEach>
-      </div>
-    </div> --%>
-
-    <!-- 리스트 뷰 -->
-    <div id="listView" class="hidden">
+    <!-- 회의 목록 -->
+    <div id="meetingList">
       <c:forEach var="vo" items="${vos}" varStatus="status">
         <div class="meeting-list-item" onclick="viewMeetingDetails(${vo.idx})">
           <div class="d-flex justify-content-between align-items-center">
@@ -310,28 +256,44 @@
       </c:forEach>
     </div>
 
-    <!-- 제안된 안건 목록 -->
-    <h3 class="mt-5 mb-3">제안된 안건</h3>
-    <div class="row">
-      <c:forEach var="topic" items="${proposedTopics}" varStatus="status">
-        <div class="col-md-4 mb-4">
-          <div class="card topic-card h-100">
-            <div class="card-body">
-              <h5 class="card-title">${topic.title}</h5>
-              <p class="card-text"><small class="text-muted">제안자: ${topic.memberName}</small></p>
-              <p class="card-text"><small class="text-muted">우선순위: ${topic.priority}</small></p>
-            </div>
-          </div>
-        </div>
-      </c:forEach>
-    </div>
-
     <!-- 페이지네이션 -->
-    <div class="d-flex justify-content-center my-4">
-      <ul class="pagination">
-        <!-- 페이지네이션 로직 -->
-      </ul>
-    </div>
+		<div class="d-flex justify-content-center my-4">
+		  <ul class="pagination justify-content-center">
+		    <c:if test="${pageVO.pag > 1}">
+		      <li class="page-item">
+		        <a class="page-link text-secondary" href="meetingList?pag=1&pageSize=${pageVO.pageSize}&statusFilter=${statusFilter}&sortBy=${sortBy}">첫페이지</a>
+		      </li>
+		    </c:if>
+		    <c:if test="${pageVO.curBlock > 0}">
+		      <li class="page-item">
+		        <a class="page-link text-secondary" href="meetingList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}&statusFilter=${statusFilter}&sortBy=${sortBy}">이전블록</a>
+		      </li>
+		    </c:if>
+		    <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
+		      <c:if test="${i <= pageVO.totPage && i == pageVO.pag}">
+		        <li class="page-item active">
+		          <a class="page-link bg-secondary border-secondary" href="meetingList?pag=${i}&pageSize=${pageVO.pageSize}&statusFilter=${statusFilter}&sortBy=${sortBy}">${i}</a>
+		        </li>
+		      </c:if>
+		      <c:if test="${i <= pageVO.totPage && i != pageVO.pag}">
+		        <li class="page-item">
+		          <a class="page-link text-secondary" href="meetingList?pag=${i}&pageSize=${pageVO.pageSize}&statusFilter=${statusFilter}&sortBy=${sortBy}">${i}</a>
+		        </li>
+		      </c:if>
+		    </c:forEach>
+		    <c:if test="${pageVO.curBlock < pageVO.lastBlock}">
+		      <li class="page-item">
+		        <a class="page-link text-secondary" href="meetingList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}&statusFilter=${statusFilter}&sortBy=${sortBy}">다음블록</a>
+		      </li>
+		    </c:if>
+		    <c:if test="${pageVO.pag < pageVO.totPage}">
+		      <li class="page-item">
+		        <a class="page-link text-secondary" href="meetingList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}&statusFilter=${statusFilter}&sortBy=${sortBy}">마지막페이지</a>
+		      </li>
+		    </c:if>
+		  </ul>
+		</div>
+    <!-- 블록페이지 끝 -->
 
   </div>
 </div>

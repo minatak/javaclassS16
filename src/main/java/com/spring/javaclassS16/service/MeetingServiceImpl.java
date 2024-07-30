@@ -59,8 +59,8 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public int setMeetingMinutes(FamilyMeetingVO familyMeetingVO) {
-		return meetingDAO.setMeetingMinutes(familyMeetingVO);
+	public int setSaveMeeting(FamilyMeetingVO familyMeetingVO) {
+		return meetingDAO.setSaveMeeting(familyMeetingVO);
 	}
 
 	@Override
@@ -72,25 +72,6 @@ public class MeetingServiceImpl implements MeetingService {
 	public List<MeetingTopicVO> getProposedTopics(String familyCode, String status) {
 		return meetingDAO.getProposedTopics(familyCode, status);
 	}
-
-	@Override
-  public int setMeetingInput(FamilyMeetingVO familyMeetingVO, List<Integer> selectedTopicIdx, List<String> newTopics) {
-    int res = meetingDAO.setMeetingInput(familyMeetingVO);
-    if (res > 0) {
-      if (selectedTopicIdx != null) {
-        for (Integer topicIdx : selectedTopicIdx) {
-          meetingDAO.linkTopicToMeeting(familyMeetingVO.getIdx(), topicIdx);
-        }
-      }
-      if (newTopics != null) {
-        for (String newTopic : newTopics) {
-          int newTopicIdx = meetingDAO.insertNewTopic(familyMeetingVO.getFamilyCode(), newTopic, familyMeetingVO.getCreatedBy());
-          meetingDAO.linkTopicToMeeting(familyMeetingVO.getIdx(), newTopicIdx);
-        }
-      }
-    }
-    return res;
-  }
 
 	@Override
 	public List<MeetingTopicReplyVO> getTopicReplies(int idx) {
@@ -120,6 +101,61 @@ public class MeetingServiceImpl implements MeetingService {
 	@Override
 	public int setTopicDelete(int idx) {
 		return meetingDAO.setTopicDelete(idx);
+	}
+
+	@Override
+	public int setMeetingInput(FamilyMeetingVO vo) {
+		return meetingDAO.setMeetingInput(vo);
+	}
+
+	@Override
+	public void linkTopicToMeeting(int meetingIdx, int topicIdx) {
+		meetingDAO.linkTopicToMeeting(meetingIdx, topicIdx);		
+	}
+
+	@Override
+	public int setNewTopic(String familyCode, String title, String description, int priority, int memberIdx, String memberName) {
+	  return meetingDAO.setNewTopic(familyCode, title, description, priority, memberIdx, memberName);
+	}
+
+	@Override
+	public FamilyMeetingVO getMeetingLastIdx() {
+		return meetingDAO.getMeetingLastIdx();
+	}
+
+	@Override
+	public MeetingTopicVO getLastTopic() {
+		return meetingDAO.getLastTopic();
+	}
+
+	@Override
+	public void updateTopicStatus(int topicIdx) {
+		meetingDAO.updateTopicStatus(topicIdx);
+	}
+
+	@Override
+	public FamilyMeetingVO getMeetingByIdx(int idx) {
+		return meetingDAO.getMeetingByIdx(idx);
+	}
+
+	@Override
+	public List<Integer> getSelectedTopicIdx(int idx) {
+		return meetingDAO.getSelectedTopicIdx(idx);
+	}
+
+	@Override
+	public int setMeetingUpdate(FamilyMeetingVO vo) {
+		return meetingDAO.setMeetingUpdate(vo);
+	}
+
+	@Override
+	public void setRemoveAllTopicLinks(int meetingIdx) {
+		meetingDAO.setRemoveAllTopicLinks(meetingIdx);
+	}
+
+	@Override
+	public int updateMeetingTopicsStatus(int idx) {
+		return meetingDAO.updateMeetingTopicsStatus(idx);
 	}
 	
 	

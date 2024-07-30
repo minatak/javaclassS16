@@ -24,9 +24,9 @@ public interface MeetingService {
     
     public int setTopicInput(MeetingTopicVO topicVO);
     
-    public int setMeetingMinutes(FamilyMeetingVO familyMeetingVO);
+    public int setSaveMeeting(FamilyMeetingVO familyMeetingVO);
     
-    public int setMeetingInput(FamilyMeetingVO familyMeetingVO, List<Integer> selectedTopicIdx, List<String> newTopics);
+    public int setMeetingInput(FamilyMeetingVO vo);
 
 		public List<FamilyMeetingVO> getUpcomingMeetings(String familyCode);
 
@@ -43,6 +43,26 @@ public interface MeetingService {
 		public String setTopicUpdate(MeetingTopicVO topicVO);
 
 		public int setTopicDelete(int idx);
+
+		public void linkTopicToMeeting(int meetingIdx, int topicIdx);
+
+		public int setNewTopic(String familyCode, String title, String description, int priority, int memberIdx, String memberName);
+
+		public FamilyMeetingVO getMeetingLastIdx();
+
+		public MeetingTopicVO getLastTopic();
+
+		public void updateTopicStatus(int topicIdx);
+
+		public FamilyMeetingVO getMeetingByIdx(int idx);
+
+		public List<Integer> getSelectedTopicIdx(int idx);
+
+		public int setMeetingUpdate(FamilyMeetingVO vo);
+
+		public void setRemoveAllTopicLinks(int meetingIdx);
+
+		public int updateMeetingTopicsStatus(int idx);
 
 
     

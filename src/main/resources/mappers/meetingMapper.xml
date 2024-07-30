@@ -98,6 +98,29 @@
     SELECT * FROM meetingTopic WHERE idx = #{idx}
 	</select>
 	
+	<select id="getMeetingLastIdx" resultType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+		select * from familyMeeting order by idx desc limit 1; 
+	</select>
+	
+	<select id="getLastTopic" resultType="com.spring.javaclassS16.vo.MeetingTopicVO">
+		select * from meetingTopic order by idx desc limit 1; 
+	</select>
+	
+	<select id="getMeetingByIdx" resultType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+	  SELECT * FROM familyMeeting WHERE idx = #{idx}
+	</select>
+	
+	<select id="getSelectedTopicIdx" resultType="int">
+	  SELECT topicIdx FROM meetingTopicLink WHERE meetingIdx = #{idx}
+	</select>
+	
+	<select id="totRecCnt" resultType="int">
+	  SELECT COUNT(*) FROM familyMeeting
+	  WHERE familyCode = #{familyCode}
+	  <if test="searchString != null and searchString != ''">
+	    AND status = #{searchString}
+	  </if>
+	</select>
 	
 	
 	<insert id="setTopicInput" parameterType="com.spring.javaclassS16.vo.MeetingTopicVO">
@@ -105,20 +128,20 @@
     VALUES (#{topicVO.familyCode}, #{topicVO.title}, #{topicVO.description}, #{topicVO.priority}, #{topicVO.memberIdx}, #{topicVO.memberName})
 	</insert>
 	
-	<insert id="setMeetingInput" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO" useGeneratedKeys="true" keyProperty="idx">
-    INSERT INTO familyMeeting (familyCode, title, description, meetingDate, facilitatorIdx, facilitatorName, recorderIdx, recorderName, createdBy)
-    VALUES (#{familyCode}, #{title}, #{description}, #{meetingDate}, #{facilitatorIdx}, #{facilitatorName}, #{recorderIdx}, #{recorderName}, #{createdBy})
-  </insert>
+	<insert id="setMeetingInput" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+    INSERT INTO familyMeeting (familyCode, title, description, meetingDate, duration, facilitatorIdx, facilitatorName, recorderIdx, recorderName, createdBy)
+    VALUES (#{vo.familyCode}, #{vo.title}, #{vo.description}, #{vo.meetingDate}, #{vo.duration}, #{vo.facilitatorIdx}, #{vo.facilitatorName}, #{vo.recorderIdx}, #{vo.recorderName}, #{vo.createdBy})
+	</insert>
   
   <insert id="linkTopicToMeeting">
     INSERT INTO meetingTopicLink (meetingIdx, topicIdx)
     VALUES (#{meetingIdx}, #{topicIdx})
   </insert>
   
-  <insert id="insertNewTopic" parameterType="String" useGeneratedKeys="true" keyProperty="idx">
-    INSERT INTO meetingTopic (familyCode, title, memberIdx, status)
-    VALUES (#{familyCode}, #{newTopic}, #{createdBy}, '제안됨')
-  </insert>
+  <insert id="setNewTopic">
+	  INSERT INTO meetingTopic (familyCode, title, description, priority, memberIdx, memberName, status)
+	  VALUES (#{familyCode}, #{title}, #{description}, #{priority}, #{memberIdx}, #{memberName}, '예정')
+	</insert>
   
   <insert id="setReplyInput" parameterType="com.spring.javaclassS16.vo.MeetingTopicReplyVO">
     INSERT INTO meetingTopicReply (topicIdx, memberIdx, memberName, content)
@@ -127,10 +150,17 @@
   
   
 	
-	<update id="setMeetingMinutes" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+	<update id="setSaveMeeting" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
     UPDATE familyMeeting
     SET status = '완료', decisions = #{familyMeetingVO.decisions}, actionItems = #{familyMeetingVO.actionItems}, notes = #{familyMeetingVO.notes}
     WHERE idx = #{familyMeetingVO.idx} AND familyCode = #{familyMeetingVO.familyCode}
+	</update>
+	
+	<update id="updateMeetingTopicsStatus" parameterType="int">
+    UPDATE meetingTopic mt
+    JOIN meetingTopicLink mtl ON mt.idx = mtl.topicIdx
+    SET mt.status = '결정됨'
+    WHERE mtl.meetingIdx = #{idx}
 	</update>
 	
 	<update id="setTopicUpdate" parameterType="com.spring.javaclassS16.vo.MeetingTopicVO">
@@ -139,6 +169,22 @@
     WHERE idx = #{idx}
 	</update>
 	
+	<update id="updateTopicStatus">
+    UPDATE meetingTopic SET status = '예정' WHERE idx = #{topicIdx}
+	</update>	
+	
+	<update id="setMeetingUpdate" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
+	  UPDATE familyMeeting
+	  SET title = #{vo.title}, 
+	      description = #{vo.description}, 
+	      meetingDate = #{vo.meetingDate}, 
+	      duration = #{vo.duration}, 
+	      facilitatorIdx = #{vo.facilitatorIdx}, 
+	      facilitatorName = #{vo.facilitatorName}, 
+	      recorderIdx = #{vo.recorderIdx}, 
+	      recorderName = #{vo.recorderName}
+	  WHERE idx = #{vo.idx}
+	</update>
 	
 	
 	<delete id="setReplyDelete" parameterType="int">
@@ -147,6 +193,10 @@
 
 	<delete id="setTopicDelete" parameterType="int">
     DELETE FROM meetingTopic WHERE idx = #{idx}
+	</delete>
+	
+	<delete id="setRemoveAllTopicLinks">
+	  DELETE FROM meetingTopicLink WHERE meetingIdx = #{meetingIdx}
 	</delete>
 
 </mapper>

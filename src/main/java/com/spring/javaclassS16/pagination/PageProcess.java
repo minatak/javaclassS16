@@ -3,9 +3,12 @@ package com.spring.javaclassS16.pagination;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.spring.javaclassS16.dao.MeetingDAO;
 import com.spring.javaclassS16.dao.NoticeDAO;
 import com.spring.javaclassS16.dao.PhotoDAO;
 import com.spring.javaclassS16.dao.WorkDAO;
+import com.spring.javaclassS16.vo.MeetingTopicReplyVO;
 import com.spring.javaclassS16.vo.PageVO;
 
 @Service
@@ -18,6 +21,9 @@ public class PageProcess {
     
     @Autowired
     WorkDAO workDAO;
+    
+    @Autowired
+    MeetingDAO meetingDAO;
     
     public PageVO totRecCnt(int pag, int pageSize, String section, String part, String searchString, HttpSession session) {
         PageVO pageVO = new PageVO();
@@ -47,6 +53,9 @@ public class PageProcess {
 	          search = part;
 	          totRecCnt = workDAO.totRecCntSearch(search, searchString);
 	        }
+        }
+        if(section.equals("meeting")) {
+          totRecCnt = meetingDAO.totRecCnt(familyCode, searchString);
         }
         
         int totPage = (totRecCnt % pageSize) == 0 ? (totRecCnt / pageSize) : (totRecCnt / pageSize) + 1;
