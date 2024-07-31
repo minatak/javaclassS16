@@ -4,17 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.spring.javaclassS16.vo.FamilyMeetingVO;
+import com.spring.javaclassS16.vo.MeetingTopicLinkVO;
 import com.spring.javaclassS16.vo.MeetingTopicReplyVO;
 import com.spring.javaclassS16.vo.MeetingTopicVO;
 
 public interface MeetingService {
     public ArrayList<FamilyMeetingVO> getMeetingList(String familyCode, int memberIdx, int startIndexNo, int pageSize, String statusFilter, String sortBy);
     
-    public int getTotalMeetingsCount(String familyCode);
-    
-    public int getCompletedMeetingsCount(String familyCode);
-    
-    public int getUpcomingMeetingsCount(String familyCode);
+//    public int getTotalMeetingsCount(String familyCode);
+//    
+//    public int getCompletedMeetingsCount(String familyCode);
+//    
+//    public int getUpcomingMeetingsCount(String familyCode);
     
     public int getThisMonthMeetingsCount(String familyCode);
     
@@ -40,7 +41,7 @@ public interface MeetingService {
 
 		public MeetingTopicVO getTopicByIdx(int idx);
 
-		public String setTopicUpdate(MeetingTopicVO topicVO);
+		public int setTopicUpdate(MeetingTopicVO topicVO);
 
 		public int setTopicDelete(int idx);
 
@@ -65,6 +66,16 @@ public interface MeetingService {
 		public int updateMeetingTopicsStatus(int idx);
 
 		public String truncateStr(String decisions, int maxLength);
+
+		public int setMeetingDelete(int idx);
+
+		public int setMeetingTopicLink(int idx);
+
+		public void setTopicReplyDelete(int idx);
+
+		public void setTopicLinkDelete(int idx);
+
+		public MeetingTopicLinkVO getLinkedTopicByIdx(int idx);
 
 
     

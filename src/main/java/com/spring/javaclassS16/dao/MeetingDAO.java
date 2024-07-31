@@ -4,18 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.spring.javaclassS16.vo.FamilyMeetingVO;
+import com.spring.javaclassS16.vo.MeetingTopicLinkVO;
 import com.spring.javaclassS16.vo.MeetingTopicReplyVO;
 import com.spring.javaclassS16.vo.MeetingTopicVO;
 
 public interface MeetingDAO {
     public ArrayList<FamilyMeetingVO> getMeetingList(@Param("familyCode") String familyCode, @Param("memberIdx") int memberIdx, 
   		@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("statusFilter") String statusFilter, @Param("sortBy") String sortBy);
-
-    public int getTotalMeetingsCount(@Param("familyCode") String familyCode);
-
-    public int getCompletedMeetingsCount(@Param("familyCode") String familyCode);
-
-    public int getUpcomingMeetingsCount(@Param("familyCode") String familyCode);
 
     public int getThisMonthMeetingsCount(@Param("familyCode") String familyCode);
 
@@ -45,7 +40,7 @@ public interface MeetingDAO {
 
 		public MeetingTopicVO getTopicByIdx(@Param("idx") int idx);
 
-		public String setTopicUpdate(@Param("topicVO") MeetingTopicVO topicVO);
+		public int setTopicUpdate(@Param("topicVO") MeetingTopicVO topicVO);
 
 		public int setTopicDelete(@Param("idx") int idx);
 
@@ -66,6 +61,16 @@ public interface MeetingDAO {
 		public int updateMeetingTopicsStatus(@Param("idx") int idx);
 
 		public int totRecCnt(@Param("familyCode") String familyCode, @Param("searchString") String searchString);
+
+		public int setMeetingDelete(@Param("idx") int idx);
+
+		public int setMeetingTopicLink(@Param("idx") int idx);
+
+		public void setTopicReplyDelete(@Param("idx") int idx);
+
+		public void setTopicLinkDelete(@Param("idx") int idx);
+
+		public MeetingTopicLinkVO getLinkedTopicByIdx(@Param("idx") int idx);
 
 		
 		

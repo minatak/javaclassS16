@@ -3,18 +3,26 @@
 <mapper namespace="com.spring.javaclassS16.dao.MeetingDAO">
     
 	<select id="getMeetingList" resultType="com.spring.javaclassS16.vo.FamilyMeetingVO">
-	  SELECT * FROM familyMeeting
-	  WHERE familyCode = #{familyCode}
+	  SELECT fm.*, 
+	         COUNT(mtl.topicIdx) AS topicCount,
+	         mf.name AS facilitatorName,
+	         mr.name AS recorderName
+	  FROM familyMeeting fm
+	  LEFT JOIN meetingTopicLink mtl ON fm.idx = mtl.meetingIdx
+	  LEFT JOIN member mf ON fm.facilitatorIdx = mf.idx
+	  LEFT JOIN member mr ON fm.recorderIdx = mr.idx
+	  WHERE fm.familyCode = #{familyCode}
 	  <if test="statusFilter != null and statusFilter != ''">
-	    AND status = #{statusFilter}
+	    AND fm.status = #{statusFilter}
 	  </if>
+	  GROUP BY fm.idx
 	  <choose>
 	    <when test="sortBy == 'date'">
-	      ORDER BY meetingDate
+	      ORDER BY fm.meetingDate
 	    </when>
 	    <when test="sortBy == 'status'">
 	      ORDER BY 
-	        CASE status
+	        CASE fm.status
 	          WHEN '진행 중' THEN '1'
 	          WHEN '예정' THEN '2'
 	          WHEN '완료' THEN '3'
@@ -22,7 +30,7 @@
 	        END
 	    </when>
 	    <otherwise>
-	      ORDER BY createdAt DESC
+	      ORDER BY fm.createdAt DESC
 	    </otherwise>
 	  </choose>
 	  LIMIT #{startIndexNo}, #{pageSize}
@@ -122,10 +130,14 @@
 	  </if>
 	</select>
 	
+	<select id="getLinkedTopicByIdx" resultType="com.spring.javaclassS16.vo.MeetingTopicLinkVO">
+		select * from meetingTopicLink where topicIdx = #{idx};
+	</select>
+	
 	
 	<insert id="setTopicInput" parameterType="com.spring.javaclassS16.vo.MeetingTopicVO">
-    INSERT INTO meetingTopic (familyCode, title, description, priority, memberIdx, memberName)
-    VALUES (#{topicVO.familyCode}, #{topicVO.title}, #{topicVO.description}, #{topicVO.priority}, #{topicVO.memberIdx}, #{topicVO.memberName})
+    INSERT INTO meetingTopic (familyCode, title, description, priority, memberIdx, memberName, status)
+    VALUES (#{topicVO.familyCode}, #{topicVO.title}, #{topicVO.description}, #{topicVO.priority}, #{topicVO.memberIdx}, #{topicVO.memberName}, '제안됨')
 	</insert>
 	
 	<insert id="setMeetingInput" parameterType="com.spring.javaclassS16.vo.FamilyMeetingVO">
@@ -163,10 +175,10 @@
     WHERE mtl.meetingIdx = #{idx}
 	</update>
 	
-	<update id="setTopicUpdate" parameterType="com.spring.javaclassS16.vo.MeetingTopicVO">
+	<update id="setTopicUpdate">
     UPDATE meetingTopic
-    SET title = #{title}, description = #{description}, priority = #{priority}
-    WHERE idx = #{idx}
+    SET title = #{topicVO.title}, description = #{topicVO.description}, priority = #{topicVO.priority}, status = #{topicVO.status}
+    WHERE idx = #{topicVO.idx}
 	</update>
 	
 	<update id="updateTopicStatus">
@@ -191,12 +203,31 @@
     DELETE FROM meetingTopicReply WHERE idx = #{idx}
 	</delete>
 
+	<!-- meetingTopicReply 삭제 -->
+	<delete id="setTopicReplyDelete" parameterType="int">
+    DELETE FROM meetingTopicReply WHERE topicIdx = #{idx}
+	</delete>
+	
+	<!-- meetingTopicLink 삭제 -->
+	<delete id="setTopicLinkDelete" parameterType="int">
+    DELETE FROM meetingTopicLink WHERE topicIdx = #{idx}
+	</delete>
+	
+	<!-- meetingTopic 삭제 -->
 	<delete id="setTopicDelete" parameterType="int">
     DELETE FROM meetingTopic WHERE idx = #{idx}
 	</delete>
 	
 	<delete id="setRemoveAllTopicLinks">
 	  DELETE FROM meetingTopicLink WHERE meetingIdx = #{meetingIdx}
+	</delete>
+
+	<delete id="setMeetingTopicLink" parameterType="int">
+	  DELETE FROM meetingTopicLink WHERE meetingIdx = #{idx};
+	</delete>
+
+	<delete id="setMeetingDelete" parameterType="int">
+	  DELETE FROM familyMeeting WHERE idx = #{idx};
 	</delete>
 
 </mapper>

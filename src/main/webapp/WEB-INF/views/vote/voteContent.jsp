@@ -325,21 +325,21 @@
       padding-left: 15px;
       margin-top: 10px;
     }
-    .delete-btn {
+   /*  .delete-btn {
       cursor: pointer;
       color: #dc3545;
       margin-left: 10px;
-    } 
+    }  */
     
-    .delete-btn:hover {
+    /* .delete-btn:hover {
       text-decoration: underline;
-    }
+    } */
     .vote-info {
-		  background-color: #f8f9fa;
+		  background-color: #fff;
 		  border-radius: 10px;
 		  padding: 25px;
 		  margin-bottom: 30px;
-		  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+		  /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
 		}
 		
 		.vote-title {

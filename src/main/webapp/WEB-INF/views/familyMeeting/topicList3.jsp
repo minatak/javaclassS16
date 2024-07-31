@@ -37,119 +37,206 @@
     }
     .home-icon:hover {color: #c6c6c6;}
     
+    /* 
+    .topic-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      width: 260px;
+      height: 380px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      overflow: hidden;
+      box-sizing: border-box;
+      background-color: #fff;
+    }
+    .topic-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.07);
+    }
+    .topic-icon-container {
+      height: 35%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 0;
+      background-color: #f0f5f1;
+    }
+    .topic-icon {
+      font-size: 36px;
+      color: #b8c9bc;
+    }
+    .topic-content {
+      height: 65%;
+      background-color:#fff;
+      padding: 10px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .topic-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .topic-status {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 20px;
+      color: white;
+      display: inline-block; 
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .topic-status-제안됨 { background-color: #84a98c; }
+    .topic-status-승인됨 { background-color: #52796f; }
+    .topic-status-예정 { background-color: #354f52; }
+    .topic-status-논의중 { background-color: #2f3e46; }
+    .topic-content {
+      height: 65%;
+      background-color:#fff;
+      padding: 15px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .topic-btn {
+      background: none;
+      border: none;
+      color: #84a98c;
+      cursor: pointer;
+      font-size: 0.9em;
+      padding: 5px 10px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .topic-btn:hover {
+      background-color: #84a98c;
+      color: white;
+    } */
     
+    
+    .topic-title {
+      margin: 10px 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      overflow: hidden;
+    }
+    .topic-description {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+      line-height: 1.5;
+      overflow: hidden;
+    }
+    .topic-info {
+      font-size: 12px;
+      color: #777;
+    }
     .btn {
-		  background-color: #84a98c;
-		  color: white;
+      background-color: #84a98c;
+      color: white;
+      border: none;
+      border-radius: 0px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .btn:hover {
+      color: white;
+      background-color: #6b8e76;
+    }
+    .cardList {
+      background-color: #fff;
+      color: #333;
+      border: 1px solid #dbdbdb;
+    }
+    .cardList:hover {
+      background-color: #d7d7d7;
+      color: #333;
+      border: 1px solid #dbdbdb;
+    }
+    .filter-buttons {
+      margin-bottom: 30px;
+    }
+    .filter-btn {
+      margin: 0 5px;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 20px;
+      background-color: #e9ecef;
+      color: #495057;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    .filter-btn.active {
+      background-color: #84a98c;
+      color: white;
+    }
+    .filter-btn:hover {
+      background-color: #6b8e76;
+      color: white;
+    }
+    .topic-list-item {
+      border: none;
+      padding: 20px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 12px;
+      background-color: #fff;
+    }
+    .topic-list-item:hover {
+      background-color: #fff; 
+    }
+    
+    
+    .topic-card {
 		  border: none;
-		  border-radius: 0px;
-		  padding: 8px 16px;
-		  cursor: pointer;
-		  transition: background-color 0.3s ease;
-		  font-weight: 600;
-		  font-size: 14px;
-		}
-		
-		.btn:hover {
-		  color: white;
-		  background-color: #6b8e76;
-		}
-		
-		.cardList {
-		  background-color: #fff;
-		  color: #333;
-		  border: 1px solid #dbdbdb;
-		}
-		
-		.cardList:hover {
-		  background-color: #d7d7d7;
-		  color: #333;
-		  border: 1px solid #dbdbdb;
-		}
-		
-		.filter-buttons {
-		  margin-bottom: 30px;
-		}
-		
-		.filter-btn {
-		  margin: 0 5px;
-		  padding: 8px 15px;
-		  border: none;
-		  border-radius: 20px;
-		  background-color: #e9ecef;
-		  color: #495057;
-		  cursor: pointer;
-		  transition: all 0.3s ease;
-		  font-weight: 600;
-		}
-		
-		.filter-btn.active {
-		  background-color: #84a98c;
-		  color: white;
-		}
-		
-		.filter-btn:hover {
-		  background-color: #6b8e76;
-		  color: white;
-		}
-		
-		.topic-list-item {
-		  border: none;
+		  border-radius: 10px;
 		  padding: 20px;
 		  margin-bottom: 20px;
-		  cursor: pointer;
-		  overflow: hidden;
-		  border-radius: 12px;
-		  background-color: #fff;
-		}
-		
-		.topic-list-item:hover {
-		  background-color: #fff;
-		}
-		
-		.topic-card {
-		  border: 1px solid #e0e0e0;
-		  border-radius: 15px;
-		  padding: 25px;
-		  margin-bottom: 20px;
 		  width: 100%;
-		  height: 380px;
+		  height: 400px;
 		  display: flex;
 		  flex-direction: column;
+		  transition: transform 0.3s ease, box-shadow 0.3s ease;
+		  cursor: pointer;
 		  overflow: hidden;
 		  box-sizing: border-box;
 		  background-color: #fff;
 		}
 		
-		/* .topic-icon-container {
-		  height: 60px;
-		  display: flex;
-		  justify-content: flex-start;
-		  align-items: center;
-		}
-		
-		.topic-icon {
-		  font-size: 30px;
-		  color: #84a98c;
+		/* .topic-card:hover {
+		  transform: translateY(-5px);
 		} */
 		
 		.topic-icon-container {
-		  height: 35%;
+		  height: 80px;
 		  display: flex;
-		  flex-direction: column;
 		  justify-content: center;
 		  align-items: center;
-		  padding: 20px 0;
 		  background-color: #fff;
+		  border-radius: 10px 10px 0 0;
 		}
 		
 		.topic-icon {
-		  font-size: 36px;
-		  color: #b8c9bc;
+		  font-size: 40px;
+		  color: #84a98c;
 		}
 		
 		.topic-content {
 		  flex-grow: 1;
+		  padding: 20px 0;
 		  display: flex;
 		  flex-direction: column;
 		  justify-content: space-between;
@@ -157,96 +244,183 @@
 		
 		.topic-status {
 		  font-size: 12px;
-		  padding: 4px 12px;
+		  padding: 4px 8px;
 		  border-radius: 20px;
+		  color: white;
 		  display: inline-block; 
-		  margin-bottom: 12px;
+		  margin-bottom: 10px;
 		  font-weight: 600;
 		}
-		/* 
+		
 		.topic-status-제안됨 { 
-		  background-color: #e8f5e9; 
-		  color: #1b5e20;
+	    background-color: #a8dadc; 
+	    color: #1d3557;
 		}
-		
 		.topic-status-예정 { 
-		  background-color: #e3f2fd; 
-		  color: #0d47a1;
+	    background-color: #f1faee; 
+	    color: #1d3557;
 		}
-		
 		.topic-status-결정됨 { 
-		  background-color: #fbe9e7; 
-		  color: #bf360c;
-		}
-		 */
-		 
-		.topic-status-제안됨 { 
-		  background-color: #84a98c; 
-		  color: #ffffff;
-		}
-		
-		.topic-status-예정 { 
-		  background-color: #8c9daa; /* #8c9daa */
-		  color: #ffffff;
-		}
-		
-		.topic-status-결정됨 { 
-		  background-color: #a294a0; /*#a294a0*/
-		  color: #ffffff;
+	    background-color: #e63946; 
+	    color: #f1faee;
 		}
 		
 		.topic-title {
-		  font-size: 18px; 
+		  font-size: 18px;
 		  font-weight: bold;
 		  color: #333;
-		  margin-bottom: 12px;
+		  margin-bottom: 10px;
 		}
 		
 		.topic-description {
 		  font-size: 14px;
 		  color: #555;
-		  margin-bottom: 12px;
-		  line-height: 1.6;
+		  margin-bottom: 10px;
+		  line-height: 1.5;
 		}
 		
 		.topic-info, .topic-comments {
 		  font-size: 12px;
 		  color: #777;
-		  margin-bottom: 6px;
+		  margin-bottom: 5px;
 		}
 		
 		.topic-actions {
 		  display: flex;
-		  justify-content: flex-start;
-		  margin-top: 15px;
+		  justify-content: space-between;
+		  margin-top: 10px;
 		}
 		
 		.topic-btn {
 		  background: none;
-		  border: 1px solid #84a98c;
+		  border: none;
 		  color: #84a98c;
 		  cursor: pointer;
-		  font-size: 0.8em;
-  		padding: 4px 8px;
+		  font-size: 0.9em;
+		  padding: 5px 10px;
 		  text-decoration: none;
-		  border-radius: 15px;
+		  border-radius: 5px;
 		  transition: background-color 0.3s, color 0.3s;
-		  margin-right: 8px;
 		}
 		
 		.topic-btn:hover {
 		  background-color: #84a98c;
 		  color: white;
 		}
-		
-		.topic-comments {
-		  cursor: pointer;
-		  transition: color 0.3s ease;
-		}
-		
-		.topic-comments:hover {
-		  color: #84a98c;
-		}
+    
+    
+    
+    
+    
+    .topic-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.topic-icon-container {
+  height: 60px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.topic-icon {
+  font-size: 30px;
+  color: #84a98c;
+}
+
+.topic-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.topic-status {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block; 
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.topic-status-제안됨 { 
+  background-color: #e8f5e9; 
+  color: #2e7d32;
+}
+.topic-status-예정 { 
+  background-color: #e3f2fd; 
+  color: #1565c0;
+}
+.topic-status-결정됨 { 
+  background-color: #fbe9e7; 
+  color: #d84315;
+}
+
+.topic-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.topic-description {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.topic-info, .topic-comments {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.topic-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 15px;
+}
+
+.topic-btn {
+  background: none;
+  border: 1px solid #84a98c;
+  color: #84a98c;
+  cursor: pointer;
+  font-size: 0.9em;
+  padding: 6px 12px;
+  text-decoration: none;
+  border-radius: 20px;
+  transition: background-color 0.3s, color 0.3s;
+  margin-right: 10px;
+}
+
+.topic-btn:hover {
+  background-color: #84a98c;
+  color: white;
+}
+    
+    
+    .topic-comments {
+  cursor: pointer;
+  transition: color 0.3s ease;
+  /* text-align:right; */
+}
+
+.topic-comments:hover {
+  color: #84a98c;
+}
     
     /* 모달 스타일 */
     .modal-content {

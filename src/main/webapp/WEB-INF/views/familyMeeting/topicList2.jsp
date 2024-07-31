@@ -287,11 +287,172 @@
       padding: 8px;
       font-size: 14px;
     }
+    
+    .modal-content {
+		  border-radius: 10px;
+		  border: none;
+		  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+		}
+		
+		.task-detail-container, .task-form-container {
+		  padding: 30px;
+		  position: relative;
+		}
+		
+		.close {
+		  position: absolute;
+		  top: 20px;
+		  right: 20px;
+		  font-size: 24px;
+		  color: #84a98c;
+		  opacity: 0.7;
+		  transition: opacity 0.2s;
+		}
+		
+		.close:hover {
+		  opacity: 1;
+		}
+		
+		.task-header {
+		  display: flex;
+		  justify-content: space-between;
+		  align-items: center;
+		  margin-bottom: 20px;
+		}
+		    
+		.modalBtn {
+		  border-radius: 10px;
+		  padding: 8px 20px;
+		  font-size: 14px;
+		  margin-left: 10px;
+		  border: none;
+		  transition: background-color 0.2s;
+		}
+		
+		.modalBtn.btn-primary {
+		  background-color: #84a98c;
+		  color: white;
+		  padding: 8px 20px;
+		  margin-left: 0px;
+		}
+		
+		.modalBtn.btn-primary:hover {
+		  background-color: #5d9469;
+		}
+		
+		.modalBtn.btn-secondary {
+		  background-color: #6c757d;
+		  color: white;
+		}
+		
+		.modalBtn.btn-secondary:hover {
+		  background-color: #5a6268;
+		}
+		
+		.modalBtn.btn-close {
+		  background-color: #6c757d;
+		  color: white;
+		}
+		
+		.modalBtn.btn-close:hover {
+		  background-color: #5a6268;
+		}
+		
+		.form-group label {
+		  font-weight: 600;
+		  color: #333;
+		  margin-bottom: 5px;
+		}
+		.modal-title {
+		  font-size: 24px;
+		  font-weight: 700;
+		  color: #333;
+		}
+		
+		
+		.swal2-confirm {
+		  background-color: white !important;
+		  color: black !important;
+		  border-radius: 0px !important;
+		  box-shadow: none !important;
+		  font-weight: bold !important;
+		  font-size: 18px !important;
+		  margin: 0 !important;
+		  
+		}
+		.swal2-cancel {
+		  background-color: white !important;
+		  color: black !important;
+		  border-radius: 0px !important;
+		  box-shadow: none !important;
+		  /* font-weight: bold !important; */
+		  font-size: 18px !important;
+		  margin: 0 !important;
+		}
+		.custom-swal-popup {
+		  width: 350px !important;
+		  padding-top: 20px !important;
+		  border-radius: 0px !important;
+		}
+		.swal2-confirm:hover {
+		  background-color: none !important;
+		}
   </style>
   <script>
   	
   	'use strict';
   
+ 		// 커스텀 알럿
+    function showAlert(message, callback) {
+  	  Swal.fire({
+  	    html: message,
+  	    confirmButtonText: '확인',
+  	    customClass: {
+  	      confirmButton: 'swal2-confirm',
+  	      popup: 'custom-swal-popup',
+  	      htmlContainer: 'custom-swal-text'
+  	    },
+  	    scrollbarPadding: false,
+  	    allowOutsideClick: false,
+  	    heightAuto: false,
+  	    didOpen: () => {
+  	      document.body.style.paddingRight = '0px';
+  	    }
+  	  }).then((result) => {
+  	    if (result.isConfirmed && callback) {
+  	      callback();
+  	    }
+  	  });
+  	}
+    
+    function showConfirm(message, confirmCallback, cancelCallback) {
+  	  Swal.fire({
+  	    html: message,
+  	    showCancelButton: true,
+  	    cancelButtonText: '아니요',
+  	    confirmButtonText: '네',
+  	    customClass: {
+  	      cancelButton: 'swal2-cancel',
+  	      confirmButton: 'swal2-confirm',
+  	      popup: 'custom-swal-popup',
+  	      htmlContainer: 'custom-swal-text'
+  	    },
+  	    scrollbarPadding: false,
+  	    allowOutsideClick: false,
+  	    heightAuto: false,
+  	    didOpen: () => {
+  	      document.body.style.paddingRight = '0px';
+  	    }
+  	  }).then((result) => {
+  	    if (result.isConfirmed && confirmCallback) {
+  	      confirmCallback();
+  	    } else if (result.isDismissed && cancelCallback) {
+  	      cancelCallback();
+  	    }
+  	  });
+  	}
+    
+  	
 	  let currentTopicIdx;
 	  let topicIdx;
 	  
@@ -512,7 +673,158 @@
 		  });
 		}
 	  
-  </script>
+		
+	  // 페이지 로드 시 실행되는 함수
+	  document.addEventListener('DOMContentLoaded', function() {
+	    // 오늘 날짜 구하기
+	    let today = new Date();
+	    let dd = String(today.getDate()).padStart(2, '0');
+	    let mm = String(today.getMonth() + 1).padStart(2, '0');
+	    let yyyy = today.getFullYear();
+	    today = yyyy + '-' + mm + '-' + dd;
+	
+	    // 안건 제안 모달의 날짜 최소값 설정
+	    document.getElementById('date').min = today;
+	  });
+	
+	  function proposeTopic() {
+	    $('#addTopicModal').modal('show');
+	  }
+	
+	  function addNewTopic() {
+	    let title = addTopicForm.title.value;
+	    let description = addTopicForm.description.value;
+	    let priority = addTopicForm.priority.value;
+	    let date = addTopicForm.date.value;
+	    
+	    // 유효성 검사
+	    if(title.trim() === "") {
+	      showAlert("안건 제목을 입력해주세요.", function() {
+	        addTopicForm.title.focus();
+	      });
+	      return false;
+	    }
+	    if(description.trim() === "") {
+	      showAlert("안건 설명을 입력해주세요.", function() {
+	        addTopicForm.description.focus();
+	      });
+	      return false;
+	    }
+	    if(priority === "") {
+	      showAlert("우선순위를 선택해주세요.", function() {
+	        addTopicForm.priority.focus();
+	      });
+	      return false;
+	    }
+	    if(date === "") {
+	      showAlert("날짜를 선택해주세요.", function() {
+	        addTopicForm.date.focus();
+	      });
+	      return false;
+	    }
+	    
+	    addTopicForm.submit();
+	  }
+	
+	  function editTopic(idx) {
+	    $.ajax({
+	      url: '${ctp}/familyMeeting/getTopicDetails',
+	      type: 'GET',
+	      data: { idx: idx },
+	      success: function(topic) {
+	        $('#editTopicIdx').val(topic.idx);
+	        $('#editTopicTitle').val(topic.title);
+	        $('#editTopicDescription').val(topic.description);
+	        $('#editTopicPriority').val(topic.priority);
+	        $('#editTopicDate').val(topic.createdAt.substring(0, 10));
+	        $('#editTopicStatus').val(topic.status);
+	        
+	        $('#editTopicModal').modal('show');
+	      },
+	      error: function(xhr, status, error) {
+	        console.error("Error fetching topic details for edit:", xhr.responseText);
+	        showAlert('안건 정보를 불러오는데 실패했습니다.');
+	      }
+	    });
+	  }
+	
+	  function updateTopic() {
+	    let idx = $('#editTopicIdx').val();
+	    let title = $('#editTopicTitle').val();
+	    let description = $('#editTopicDescription').val();
+	    let priority = $('#editTopicPriority').val();
+	    let date = $('#editTopicDate').val();
+	    let status = $('#editTopicStatus').val();
+	    
+	    // 유효성 검사
+	    if(title.trim() === "") {
+	      showAlert("안건 제목을 입력해주세요.");
+	      return false;
+	    }
+	    if(description.trim() === "") {
+	      showAlert("안건 설명을 입력해주세요.");
+	      return false;
+	    }
+	    if(priority === "") {
+	      showAlert("우선순위를 선택해주세요.");
+	      return false;
+	    }
+	    if(date === "") {
+	      showAlert("날짜를 선택해주세요.");
+	      return false;
+	    }
+	    
+	    $.ajax({
+	      url: '${ctp}/familyMeeting/updateTopic',
+	      type: 'POST',
+	      data: {
+	        idx: idx,
+	        title: title,
+	        description: description,
+	        priority: priority,
+	        createdAt: date,
+	        status: status
+	      },
+	      success: function(response) {
+	        showAlert("안건이 수정되었습니다.", function() {
+	          $('#editTopicModal').modal('hide');
+	          location.reload();
+	        });
+	      },
+	      error: function(xhr, status, error) {
+	        console.error("Error updating topic:", error);
+	        showAlert('안건 수정에 실패했습니다.');
+	      }
+	    });
+	  }
+	
+	  function deleteTopic(idx) {
+	    showConfirm("이 안건을 삭제하시겠습니까?", function() {
+	      $.ajax({
+	        url: '${ctp}/familyMeeting/deleteTopic',
+	        type: 'POST',
+	        data: { idx: idx },
+	        success: function(response) {
+	          showAlert("안건이 삭제되었습니다.", function() {
+	            location.reload();
+	          });
+	        },
+	        error: function(xhr, status, error) {
+	          console.error("Error deleting topic:", error);
+	          showAlert('안건 삭제에 실패했습니다.');
+	        }
+	      });
+	    });
+	  }
+	
+	  function filterTopics(status) {
+	    location.href = '${ctp}/familyMeeting/topicList?status=' + status;
+	  }
+	
+	  function viewMeetingList() {
+	    location.href = '${ctp}/familyMeeting/meetingList';
+	  }
+	</script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
@@ -524,16 +836,13 @@
       <font size="5" class="mb-4 h2">제안된 안건 목록</font>
     </div>
     
-	  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <select class="form-select" onchange="filterTopics(this.value)">
           <option value="all" ${currentStatus == 'all' ? 'selected' : ''}>전체</option>
           <option value="제안됨" ${currentStatus == '제안됨' ? 'selected' : ''}>제안됨</option>
-          <%-- <option value="승인됨" ${currentStatus == '승인됨' ? 'selected' : ''}>승인됨</option> --%>
           <option value="예정" ${currentStatus == '예정' ? 'selected' : ''}>예정됨</option>
-          <%-- <option value="논의중" ${currentStatus == '논의중' ? 'selected' : ''}>논의중</option> --%>
           <option value="결정됨" ${currentStatus == '결정됨' ? 'selected' : ''}>결정됨</option>
-          <%-- <option value="보류" ${currentStatus == '보류' ? 'selected' : ''}>보류</option> --%>
         </select>
       </div>
       <div>
@@ -545,8 +854,8 @@
         </button>
       </div>
     </div>
-	
-	  <div id="cardView">
+  
+    <div id="cardView">
       <div class="row">
         <c:forEach var="topic" items="${proposedTopics}">
           <div class="col-md-4 mb-4">
@@ -574,23 +883,117 @@
         </c:forEach>
       </div>
     </div>
-	
-	  
-	  <!-- 블록페이지 시작 -->
-	  <div class="d-flex justify-content-center my-4">
-	    <ul class="pagination justify-content-center">
-	      <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=1&pageSize=${pageVO.pageSize}">첫페이지</a></li></c:if>
-	      <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전블록</a></li></c:if>
-	      <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
-	        <c:if test="${i <= pageVO.totPage && i == pageVO.pag}"><li class="page-item active"><a class="page-link bg-secondary border-secondary" href="topicList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
-	        <c:if test="${i <= pageVO.totPage && i != pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
-	      </c:forEach>
-	      <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음블록</a></li></c:if>
-	      <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막페이지</a></li></c:if>
-	    </ul>
-	  </div>
-	  <!-- 블록페이지 끝 -->
     
+    <!-- 블록페이지 시작 -->
+    <div class="d-flex justify-content-center my-4">
+      <ul class="pagination justify-content-center">
+        <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=1&pageSize=${pageVO.pageSize}">첫페이지</a></li></c:if>
+        <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전블록</a></li></c:if>
+        <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
+          <c:if test="${i <= pageVO.totPage && i == pageVO.pag}"><li class="page-item active"><a class="page-link bg-secondary border-secondary" href="topicList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
+          <c:if test="${i <= pageVO.totPage && i != pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
+        </c:forEach>
+        <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음블록</a></li></c:if>
+        <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link text-secondary" href="topicList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막페이지</a></li></c:if>
+      </ul>
+    </div>
+    <!-- 블록페이지 끝 -->
+    
+  </div>
+</div>
+
+<!-- 안건 등록 모달 -->
+<div class="modal" id="addTopicModal" tabindex="-1" role="dialog" aria-labelledby="addTopicModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="task-form-container">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title mb-4">새로운 안건 제안</h4>
+        <form id="addTopicForm" method="post" action="${ctp}/familyMeeting/topicInput">
+          <div class="form-group">
+            <label for="title">안건 제목 *</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="description">안건 설명 *</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="priority">우선순위 *</label>
+            <select class="form-control" id="priority" name="priority" required>
+              <option value="">선택</option>
+              <option value="1">1 (최고 우선순위)</option>
+              <option value="2">2 (높음)</option>
+              <option value="3">3 (중간)</option>
+              <option value="4">4 (낮음)</option>
+              <option value="5">5 (매우 낮음)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="date">날짜 *</label>
+            <input type="date" class="form-control" id="date" name="date" required>
+          </div>
+          <input type="hidden" name="familyCode" value="${sFamCode}">
+          <div class="task-actions mt-4">
+            <button type="button" class="modalBtn btn-secondary" data-dismiss="modal">취소</button>
+            <button type="button" class="modalBtn btn-primary" onclick="addNewTopic()">제안</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 안건 수정 모달 -->
+<div class="modal" id="editTopicModal" tabindex="-1" role="dialog" aria-labelledby="editTopicModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="task-form-container">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title mb-4">안건 수정</h4>
+        <form name="editTopicForm" method="post">
+          <input type="hidden" id="editTopicIdx">
+          <div class="form-group">
+            <label for="editTopicTitle">안건 제목 *</label>
+            <input type="text" class="form-control" id="editTopicTitle" required>
+          </div>
+          <div class="form-group">
+            <label for="editTopicDescription">안건 설명 *</label>
+            <textarea class="form-control" id="editTopicDescription" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="editTopicPriority">우선순위 *</label>
+            <select class="form-control" id="editTopicPriority" required>
+              <option value="1">1 (최고 우선순위)</option>
+              <option value="2">2 (높음)</option>
+              <option value="3">3 (중간)</option>
+              <option value="4">4 (낮음)</option>
+              <option value="5">5 (매우 낮음)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editTopicDate">날짜 *</label>
+            <input type="date" class="form-control" id="editTopicDate" required>
+          </div>
+          <div class="form-group">
+            <label for="editTopicStatus">상태 *</label>
+            <select class="form-control" id="editTopicStatus" required>
+              <option value="제안됨">제안됨</option>
+              <option value="예정">예정</option>
+              <option value="결정됨">결정됨</option>
+            </select>
+          </div>
+          <div class="task-actions mt-4">
+            <button type="button" class="modalBtn btn-secondary" data-dismiss="modal">취소</button>
+            <button type="button" class="modalBtn btn-primary" onclick="updateTopic()">수정</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -23,4 +23,6 @@ public class FamilyMeetingVO {
   private int createdBy; // 회의 등록자 idx
   private String createdAt;
   
+  private int topicCount;
+  
 }

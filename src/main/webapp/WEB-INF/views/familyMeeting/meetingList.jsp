@@ -110,7 +110,7 @@
       background-color: #84a98c;
       color: white;
       border: none;
-      border-radius: 0px;
+      border-radius: 5px;
       padding: 8px 16px;
       cursor: pointer;
       transition: background-color 0.3s ease;
@@ -142,22 +142,7 @@
 		.search-bar {
 		  display: flex;
 		  align-items: center;
-		  /* gap: 10px; 셀렉트박스 사이의 간격 설정 */
 		}
-    .meeting-list-item {
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin-bottom: 15px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      overflow: hidden;
-      border-radius: 8px;
-    }
-    .meeting-list-item:hover {
-      background-color: #f8f9fa; 
-      transform: scale(1.01);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-    }
     .hidden {
       display: none;
     }
@@ -174,6 +159,67 @@
     .nav-pills .nav-link {
       color: #333;
     }
+    
+    .meetingList {
+		  max-width: 800px; /* 전체 너비를 줄입니다 */
+		  margin: 20px auto; /* 중앙 정렬을 위해 auto 마진 적용 */
+		  /* padding : 15px; */
+		}
+		
+		.meeting-list-item {
+		  border: 1px solid #ddd;
+		  padding: 10px 20px;
+		  margin-bottom: 15px;
+		  cursor: pointer;
+		  overflow: hidden;
+		  border-radius: 8px;
+		  background-color: #fff;
+		  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+		}
+		
+		.meeting-list-item:hover {
+		  background-color: #f8f9fa; 
+		  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+		}
+		
+		.meeting-list-item h5 {
+		  color: #333;
+		  font-weight: 600;
+		  margin-bottom: 10px;
+		}
+		
+		.meeting-list-item p {
+		  color: #4d4d4d;
+		  font-size: 15px;
+		  margin-bottom: 10px;
+		  line-height: 1.4;
+		}
+		
+		.meeting-list-item small {
+		  color: #888;
+		  font-size: 12px;
+		  display: inline-block;
+		  margin-right: 15px;
+		}
+		
+		.meeting-status {
+		  font-size: 12px;
+		  padding: 3px 8px;
+		  border-radius: 12px;
+		  color: white;
+		  font-weight: bold;
+		  float: right;
+		}
+		
+		.meeting-info {
+		  margin-top: 10px;
+		}
+		
+		.meeting-info i {
+		  margin-right: 5px;
+		  width: 16px;
+		  text-align: center;
+		}
   </style>
   <script>
     'use strict';
@@ -229,7 +275,7 @@
         </select>
       </div>
       <div>
-        <button type="button" class="btn" onclick="addNewMeeting()">
+        <button type="button" class="btn mr-1" onclick="addNewMeeting()">
           <i class="fas fa-plus"></i> 새 회의 등록
         </button>
         <button type="button" class="btn" onclick="viewProposedTopics()">
@@ -238,23 +284,28 @@
       </div>
     </div>
 
-    <!-- 회의 목록 -->
-    <div id="meetingList">
-      <c:forEach var="vo" items="${vos}" varStatus="status">
-        <div class="meeting-list-item" onclick="viewMeetingDetails(${vo.idx})">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-1">${vo.title}</h5>
-            <span class="meeting-status ${vo.status == '예정' ? 'meeting-status-upcoming' : 
-                                         vo.status == '진행 중' ? 'meeting-status-ongoing' : 
-                                         'meeting-status-completed'}">
-              ${vo.status}
-            </span>
-          </div>
-          <p class="mb-1">${fn:substring(vo.description, 0, 100)}${fn:length(vo.description) > 100 ? '...' : ''}</p>
-          <small>일시: ${fn:substring(vo.meetingDate, 0, 16)}</small>
-        </div>
-      </c:forEach>
-    </div>
+		<!-- 회의 목록 -->
+		<div id="meetingList" class="meetingList">
+		  <c:forEach var="vo" items="${vos}" varStatus="status">
+		    <div class="meeting-list-item" onclick="viewMeetingDetails(${vo.idx})">
+		      <div class="d-flex justify-content-between align-items-center">
+		        <h5 class="mb-0">${vo.title}</h5>
+		        <span class="meeting-status ${vo.status == '예정' ? 'meeting-status-upcoming' : 
+		                                     vo.status == '진행 중' ? 'meeting-status-ongoing' : 
+	                                     	'meeting-status-completed'}">
+		          ${vo.status}
+		        </span>
+		      </div>
+		      <p class="mt-2">${fn:substring(vo.description, 0, 100)}${fn:length(vo.description) > 100 ? '...' : ''}</p>
+		      <div class="meeting-info">
+		        <small><i class="fas fa-calendar-alt"></i> ${fn:substring(vo.meetingDate, 0, 16)}</small>
+		        <small><i class="fas fa-list-ul"></i> 안건 ${vo.topicCount}개</small>
+		        <small><i class="fas fa-user-tie"></i> 진행: ${vo.facilitatorName}</small>
+		        <small><i class="fas fa-pen"></i> 기록: ${vo.recorderName}</small>
+		      </div>
+		    </div>
+		  </c:forEach>
+		</div>
 
     <!-- 페이지네이션 -->
 		<div class="d-flex justify-content-center my-4">

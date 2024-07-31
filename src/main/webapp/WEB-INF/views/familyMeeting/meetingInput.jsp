@@ -387,10 +387,10 @@
     	  });
     	  return false;
     	}
-    	else if(selectedTopics.length == 0 && newTopics.length == 0) {
-    	  showAlert("최소 한 개 이상의 안건을 선택하거나 작성해주세요.");
-    	  return false;
-    	}
+    	else if (selectedTopics.length == 0 && newTopicTitles.length == 0) {
+	      showAlert("최소 한 개 이상의 안건을 선택하거나 작성해주세요.");
+	      return false;
+	    }
     	else if(facilitatorIdx == "") {
     	  showAlert("회의 진행자를 선택해주세요.", function() {
     	    myform.facilitatorIdx.focus();

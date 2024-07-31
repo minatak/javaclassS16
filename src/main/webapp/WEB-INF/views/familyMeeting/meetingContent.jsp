@@ -685,7 +685,7 @@
 		      <c:if test="${meeting.status != '완료'}">
 		        <a class="btn btn-sm btn-outline-primary" href="${ctp}/familyMeeting/meetingUpdate?idx=${meeting.idx}">수정</a>
 		      </c:if>
-		      <button type="button" class="btn btn-sm btn-outline-danger" onclick="meetingDelete()">삭제</button>
+		      <button type="button" class="btn btn-sm btn-outline-danger" onclick="meetingDelete(${meeting.idx})">삭제</button>
 		    </div>
 		  </div>
 		  <div class="card mb-4">
@@ -815,5 +815,6 @@
 	</div>
 </div>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

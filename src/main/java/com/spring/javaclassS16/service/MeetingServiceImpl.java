@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.javaclassS16.dao.MeetingDAO;
 import com.spring.javaclassS16.vo.FamilyMeetingVO;
+import com.spring.javaclassS16.vo.MeetingTopicLinkVO;
 import com.spring.javaclassS16.vo.MeetingTopicReplyVO;
 import com.spring.javaclassS16.vo.MeetingTopicVO;
 
@@ -21,21 +22,6 @@ public class MeetingServiceImpl implements MeetingService {
 	public ArrayList<FamilyMeetingVO> getMeetingList(String familyCode, int memberIdx, int startIndexNo, int pageSize,
 			String statusFilter, String sortBy) {
 		return meetingDAO.getMeetingList(familyCode, memberIdx, startIndexNo, pageSize, statusFilter, sortBy);
-	}
-
-	@Override
-	public int getTotalMeetingsCount(String familyCode) {
-		return meetingDAO.getTotalMeetingsCount(familyCode);
-	}
-
-	@Override
-	public int getCompletedMeetingsCount(String familyCode) {
-		return meetingDAO.getCompletedMeetingsCount(familyCode);
-	}
-
-	@Override
-	public int getUpcomingMeetingsCount(String familyCode) {
-		return meetingDAO.getUpcomingMeetingsCount(familyCode);
 	}
 
 	@Override
@@ -94,7 +80,7 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public String setTopicUpdate(MeetingTopicVO topicVO) {
+	public int setTopicUpdate(MeetingTopicVO topicVO) {
 		return meetingDAO.setTopicUpdate(topicVO);
 	}
 
@@ -167,8 +153,6 @@ public class MeetingServiceImpl implements MeetingService {
     // 연속된 공백 제거 및 앞뒤 공백 제거
     plainText = plainText.replaceAll("\\s+", " ").trim();
     
-//    plainText = plainText.replaceAll("<","").replaceAll("[","").replaceAll(")","").replaceAll("^","").replaceAll("]","").replaceAll("*","").replaceAll(">","");
-    
     if(plainText.length() <= 100) return str;
     
     // 글자 수 제한
@@ -177,6 +161,31 @@ public class MeetingServiceImpl implements MeetingService {
     }
     
     return plainText;
+	}
+
+	@Override
+	public int setMeetingDelete(int idx) {
+		return meetingDAO.setMeetingDelete(idx);
+	}
+
+	@Override
+	public int setMeetingTopicLink(int idx) {
+		return meetingDAO.setMeetingTopicLink(idx);
+	}
+
+	@Override
+	public void setTopicReplyDelete(int idx) {
+		meetingDAO.setTopicReplyDelete(idx);
+	}
+
+	@Override
+	public void setTopicLinkDelete(int idx) {
+		meetingDAO.setTopicLinkDelete(idx);
+	}
+
+	@Override
+	public MeetingTopicLinkVO getLinkedTopicByIdx(int idx) {
+		return meetingDAO.getLinkedTopicByIdx(idx);
 	}
 	
 	
