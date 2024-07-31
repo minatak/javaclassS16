@@ -83,17 +83,8 @@
         AND t.status = #{status}
     </if>
     GROUP BY t.idx
-    ORDER BY 
-        CASE t.status
-            WHEN '제안됨' THEN 1
-            WHEN '승인됨' THEN 2
-            WHEN '예정' THEN 3
-            WHEN '논의중' THEN 4
-            WHEN '결정됨' THEN 5
-            WHEN '보류' THEN 6
-            ELSE 7
-        END,
-        t.createdAt DESC
+    ORDER BY ${sortBy}, t.createdAt DESC
+    LIMIT #{startIndexNo}, #{pageSize}
 	</select>
 	
 	<select id="getTopicReplies" resultType="com.spring.javaclassS16.vo.MeetingTopicReplyVO">
@@ -130,8 +121,25 @@
 	  </if>
 	</select>
 	
-	<select id="getLinkedTopicByIdx" resultType="com.spring.javaclassS16.vo.MeetingTopicLinkVO">
-		select * from meetingTopicLink where topicIdx = #{idx};
+	<select id="totTopicRecCnt" resultType="int">
+	  SELECT COUNT(*) FROM meetingTopic
+	  WHERE familyCode = #{familyCode}
+	  <if test="searchString != null and searchString != '' and searchString != 'all'">
+	    AND status = #{searchString}
+	  </if>
+	</select>
+	
+	<select id="getLinkedTopicByIdx" parameterType="int" resultType="com.spring.javaclassS16.vo.MeetingTopicLinkVO">
+    SELECT * FROM meetingTopicLink WHERE topicIdx = #{idx}
+	</select>
+	
+	<select id="getAllProposedTopics" resultType="com.spring.javaclassS16.vo.MeetingTopicVO">
+    SELECT t.*, COUNT(r.idx) as replyCnt
+    FROM meetingTopic t
+    LEFT JOIN meetingTopicReply r ON t.idx = r.topicIdx
+    WHERE t.familyCode = #{familyCode} AND t.status = #{status}
+    GROUP BY t.idx
+    ORDER BY t.createdAt DESC
 	</select>
 	
 	
@@ -157,7 +165,7 @@
   
   <insert id="setReplyInput" parameterType="com.spring.javaclassS16.vo.MeetingTopicReplyVO">
     INSERT INTO meetingTopicReply (topicIdx, memberIdx, memberName, content)
-    VALUES (#{topicIdx}, #{memberIdx}, #{memberName}, #{content})
+    VALUES (#{replyVO.topicIdx}, #{replyVO.memberIdx}, #{replyVO.memberName}, #{replyVO.content})
 	</insert>
   
   

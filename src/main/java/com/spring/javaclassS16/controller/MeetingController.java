@@ -77,7 +77,7 @@ public class MeetingController {
   @RequestMapping(value = "/meetingInput", method = RequestMethod.GET)
   public String meetingInputGet(Model model, HttpSession session) {
     String familyCode = (String) session.getAttribute("sFamCode");
-    List<MeetingTopicVO> proposedTopics = meetingService.getProposedTopics(familyCode, "제안됨");
+    List<MeetingTopicVO> proposedTopics = meetingService.getAllProposedTopics(familyCode, "제안됨");
     List<MemberVO> familyMembers = memberService.getFamilyMembersByFamCode(familyCode);
     
     model.addAttribute("proposedTopics", proposedTopics);
@@ -148,7 +148,7 @@ public class MeetingController {
     String familyCode = (String) session.getAttribute("sFamCode");
     
     FamilyMeetingVO meeting = meetingService.getMeetingByIdx(idx);
-    List<MeetingTopicVO> proposedTopics = meetingService.getProposedTopics(familyCode, null);
+    List<MeetingTopicVO> proposedTopics = meetingService.getAllProposedTopics(familyCode, "제안됨");
     List<MemberVO> familyMembers = memberService.getFamilyMembersByFamCode(familyCode);
     List<Integer> selectedTopics = meetingService.getSelectedTopicIdx(idx);
     
@@ -249,12 +249,12 @@ public class MeetingController {
 	  }
     
 	  model.addAttribute("meeting", meeting);
-    model.addAttribute("topics", topics);
-    model.addAttribute("shortDecision", shortDecision);
-    model.addAttribute("shortActionItem", shortActionItem);
-    model.addAttribute("shortNote", shortNote);
-    
-    return "familyMeeting/meetingContent";
+	model.addAttribute("topics", topics);
+	model.addAttribute("shortDecision", shortDecision);
+	model.addAttribute("shortActionItem", shortActionItem);
+	model.addAttribute("shortNote", shortNote);
+	
+	return "familyMeeting/meetingContent";
   }
   
   @ResponseBody
@@ -275,7 +275,7 @@ public class MeetingController {
   // 아래에서부터 안건 제안 페이지의 백엔드 처리
   
   
-  
+  /*
   @RequestMapping(value = "/topicList", method = RequestMethod.GET)
   public String proposedTopicsGet(@RequestParam(required = false, defaultValue = "all") String status, Model model, HttpSession session) {
     String familyCode = (String) session.getAttribute("sFamCode");
@@ -295,7 +295,56 @@ public class MeetingController {
     
     return "familyMeeting/topicList";
   }
+  */
   
+  @RequestMapping(value = "/topicList", method = RequestMethod.GET)
+  public String proposedTopicsGet(
+      @RequestParam(required = false, defaultValue = "all") String status,
+      @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+      @RequestParam(name="pageSize", defaultValue = "9", required = false) int pageSize,
+      @RequestParam(name="sortBy", defaultValue = "status", required = false) String sortBy,
+      Model model, HttpSession session) {
+      
+      String familyCode = (String) session.getAttribute("sFamCode");
+      
+      // "meetingTopic" 섹션을 사용하고, status를 searchString으로 전달
+      PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "meetingTopic", "status", status, session);
+      
+      String dbSortBy;
+      switch(sortBy) {
+          case "date":
+              dbSortBy = "t.createdAt";
+              break;
+          case "status":
+              dbSortBy = "CASE t.status " +
+                         "WHEN '제안됨' THEN 1 " +
+                         "WHEN '승인됨' THEN 2 " +
+                         "WHEN '예정' THEN 3 " +
+                         "WHEN '논의중' THEN 4 " +
+                         "WHEN '결정됨' THEN 5 " +
+                         "WHEN '보류' THEN 6 " +
+                         "ELSE 7 END";
+              break;
+          default:
+              dbSortBy = "t.createdAt";
+      }
+      
+      List<MeetingTopicVO> proposedTopics = meetingService.getProposedTopics(familyCode, status, pageVO.getStartIndexNo(), pageSize, dbSortBy);
+      
+      Map<Integer, List<MeetingTopicReplyVO>> topicReplies = new HashMap<>();
+      for (MeetingTopicVO topic : proposedTopics) {
+          List<MeetingTopicReplyVO> replies = meetingService.getTopicReplies(topic.getIdx());
+          topicReplies.put(topic.getIdx(), replies);
+      }
+      
+      model.addAttribute("proposedTopics", proposedTopics);
+      model.addAttribute("topicReplies", topicReplies);
+      model.addAttribute("currentStatus", status);
+      model.addAttribute("pageVO", pageVO);
+      model.addAttribute("sortBy", sortBy);
+      
+      return "familyMeeting/topicList";
+  }
 
   @ResponseBody
   @RequestMapping(value = "/topicInput", method = RequestMethod.POST)
@@ -328,19 +377,25 @@ public class MeetingController {
     return meetingService.getTopicReplies(topicIdx);
   }
   
-  // 이 위까지 다 해결 함. (작동하는 코드)
-  
   @ResponseBody
   @RequestMapping(value = "/replyInput", method = RequestMethod.POST)
-  public String replyInputPost(@RequestBody MeetingTopicReplyVO replyVO, HttpSession session) {
-    int memberIdx = (int) session.getAttribute("sIdx");
-    String memberName = (String) session.getAttribute("sName");
-    
-    replyVO.setMemberIdx(memberIdx);
-    replyVO.setMemberName(memberName);
-    
-    String res = meetingService.setReplyInput(replyVO);
-    return res + "";
+  public String replyInputPost(@RequestParam int topicIdx, @RequestParam String content, HttpSession session) {
+      try {
+          int memberIdx = (int) session.getAttribute("sIdx");
+          String memberName = (String) session.getAttribute("sName");
+          
+          MeetingTopicReplyVO replyVO = new MeetingTopicReplyVO();
+          replyVO.setTopicIdx(topicIdx);
+          replyVO.setContent(content);
+          replyVO.setMemberIdx(memberIdx);
+          replyVO.setMemberName(memberName);
+          
+          int res = meetingService.setReplyInput(replyVO);
+          return res + "";
+      } catch (Exception e) {
+          e.printStackTrace();
+          return "0";
+      }
   }
 
   @ResponseBody
@@ -351,24 +406,21 @@ public class MeetingController {
 
   @ResponseBody
   @RequestMapping(value = "/deleteTopic", method = RequestMethod.POST)
-  public int topicDeletePost(@RequestParam(name="idx") int idx) {
-  	
-  	MeetingTopicLinkVO vo = meetingService.getLinkedTopicByIdx(idx);
-  	
-  	if(vo != null) {
-  		return -1;
-  	}
-  	
-    // 연결된 meetingTopicReply 삭제
-    meetingService.setTopicReplyDelete(idx);
-    
-    // 연결된 meetingTopicLink 삭제
-    meetingService.setTopicLinkDelete(idx);
-    
-    // meetingTopic 삭제
-    return meetingService.setTopicDelete(idx);
+  public String topicDeletePost(@RequestParam(name="idx") int idx) {
+      List<MeetingTopicLinkVO> linkedTopics = meetingService.getLinkedTopicByIdx(idx);
+      
+      if(!linkedTopics.isEmpty()) {
+          return "-1"; // 회의와 연결된 안건은 삭제 불가
+      }
+      
+      // 연결된 meetingTopicReply 삭제
+      meetingService.setTopicReplyDelete(idx);
+      
+      // meetingTopic 삭제
+      int res = meetingService.setTopicDelete(idx);
+      return res + "";
   }
-
+  
   @ResponseBody
   @RequestMapping(value = "/getTopicDetails", method = RequestMethod.GET)
   public MeetingTopicVO getTopicDetails(@RequestParam int idx) {

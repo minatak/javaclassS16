@@ -26,7 +26,7 @@ public interface MeetingDAO {
 
 		public List<FamilyMeetingVO> getUpcomingMeetings(@Param("familyCode") String familyCode);
 
-		public List<MeetingTopicVO> getProposedTopics(@Param("familyCode") String familyCode, @Param("status") String status);
+		public List<MeetingTopicVO> getProposedTopics(@Param("familyCode") String familyCode, @Param("status") String status, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("sortBy") String sortBy);
 
 		public void linkTopicToMeeting(@Param("meetingIdx") int meetingIdx, @Param("topicIdx") int topicIdx);
 
@@ -34,7 +34,7 @@ public interface MeetingDAO {
 
 		public List<MeetingTopicReplyVO> getTopicReplies(@Param("idx") int idx);
 
-		public String setReplyInput(@Param("replyVO") MeetingTopicReplyVO replyVO);
+		public int setReplyInput(@Param("replyVO") MeetingTopicReplyVO replyVO);
 
 		public int setReplyDelete(@Param("idx") int idx);
 
@@ -66,11 +66,15 @@ public interface MeetingDAO {
 
 		public int setMeetingTopicLink(@Param("idx") int idx);
 
-		public void setTopicReplyDelete(@Param("idx") int idx);
+		public int setTopicReplyDelete(@Param("idx") int idx);
 
-		public void setTopicLinkDelete(@Param("idx") int idx);
+		public int setTopicLinkDelete(@Param("idx") int idx);
 
-		public MeetingTopicLinkVO getLinkedTopicByIdx(@Param("idx") int idx);
+		public List<MeetingTopicLinkVO> getLinkedTopicByIdx(@Param("idx") int idx);
+
+		public List<MeetingTopicVO> getAllProposedTopics(@Param("familyCode") String familyCode, @Param("status") String status);
+
+		public int totTopicRecCnt(@Param("familyCode") String familyCode, @Param("searchString") String searchString);
 
 		
 		

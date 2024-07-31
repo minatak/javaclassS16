@@ -55,8 +55,8 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public List<MeetingTopicVO> getProposedTopics(String familyCode, String status) {
-		return meetingDAO.getProposedTopics(familyCode, status);
+	public List<MeetingTopicVO> getProposedTopics(String familyCode, String status, int startIndexNo, int pageSize, String sortBy) {
+		return meetingDAO.getProposedTopics(familyCode, status, startIndexNo, pageSize, sortBy);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public String setReplyInput(MeetingTopicReplyVO replyVO) {
+	public int setReplyInput(MeetingTopicReplyVO replyVO) {
 		return meetingDAO.setReplyInput(replyVO);
 	}
 
@@ -174,18 +174,23 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public void setTopicReplyDelete(int idx) {
-		meetingDAO.setTopicReplyDelete(idx);
+	public int setTopicReplyDelete(int idx) {
+		return meetingDAO.setTopicReplyDelete(idx);
 	}
 
 	@Override
-	public void setTopicLinkDelete(int idx) {
-		meetingDAO.setTopicLinkDelete(idx);
+	public int setTopicLinkDelete(int idx) {
+		return meetingDAO.setTopicLinkDelete(idx);
 	}
 
 	@Override
-	public MeetingTopicLinkVO getLinkedTopicByIdx(int idx) {
+	public List<MeetingTopicLinkVO> getLinkedTopicByIdx(int idx) {
 		return meetingDAO.getLinkedTopicByIdx(idx);
+	}
+
+	@Override
+	public List<MeetingTopicVO> getAllProposedTopics(String familyCode, String status) {
+		return meetingDAO.getAllProposedTopics(familyCode, status);
 	}
 	
 	

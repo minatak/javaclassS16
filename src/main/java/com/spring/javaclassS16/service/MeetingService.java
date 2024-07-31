@@ -31,11 +31,11 @@ public interface MeetingService {
 
 		public List<FamilyMeetingVO> getUpcomingMeetings(String familyCode);
 
-		public List<MeetingTopicVO> getProposedTopics(String familyCode, String status);
+		public List<MeetingTopicVO> getProposedTopics(String familyCode, String status, int startIndexNo, int pageSize, String sortBy);
 
 		public List<MeetingTopicReplyVO> getTopicReplies(int idx);
 
-		public String setReplyInput(MeetingTopicReplyVO replyVO);
+		public int setReplyInput(MeetingTopicReplyVO replyVO);
 
 		public int setReplyDelete(int idx);
 
@@ -71,11 +71,13 @@ public interface MeetingService {
 
 		public int setMeetingTopicLink(int idx);
 
-		public void setTopicReplyDelete(int idx);
+		public int setTopicReplyDelete(int idx);
 
-		public void setTopicLinkDelete(int idx);
+		public int setTopicLinkDelete(int idx);
 
-		public MeetingTopicLinkVO getLinkedTopicByIdx(int idx);
+		public List<MeetingTopicLinkVO> getLinkedTopicByIdx(int idx);
+
+		public List<MeetingTopicVO> getAllProposedTopics(String familyCode, String status);
 
 
     

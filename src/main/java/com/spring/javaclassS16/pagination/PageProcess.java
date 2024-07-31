@@ -57,6 +57,10 @@ public class PageProcess {
         if(section.equals("meeting")) {
           totRecCnt = meetingDAO.totRecCnt(familyCode, searchString);
         }
+        else if(section.equals("meetingTopic")) {
+    	  totRecCnt = meetingDAO.totTopicRecCnt(familyCode, searchString);
+        }
+        
         
         int totPage = (totRecCnt % pageSize) == 0 ? (totRecCnt / pageSize) : (totRecCnt / pageSize) + 1;
         int startIndexNo = (pag - 1) * pageSize;
