@@ -107,6 +107,11 @@
 	  .btn:hover {
 	    background-color: #6b8e76;
 	  }
+	  /* .button-group {
+	    display: flex;
+	    justify-content: flex-start;
+	    margin-top: 20px;
+	  } */
 	  .form-group {
 	    margin-bottom: 25px;
 	  }
@@ -288,88 +293,67 @@
 		  color: white;
 		}
 		
+		.meeting-minutes {
+		  background-color: #ffffff;
+		  border-radius: 8px;
+		  padding: 30px;
+		}
+		
 		.minutes-item {
-	    border: 1px solid #e0e0e0;
-	    border-radius: 8px;
-	    padding: 20px;
-	    margin-bottom: 20px;
-	    background-color: #fff;
-	    /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
-	  }
-	
-	  .minutes-item h5 {
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
-	    margin-bottom: 15px;
-	    padding-bottom: 10px;
-	    /* border-bottom: 1px solid #e0e0e0; */
-	  }
-	
-	  .minutes-content {
-	    background-color: #fff;
-	    padding: 15px;
-	    border-radius: 6px;
-	  }
-	
-	  /* 모달 스타일 */
-	  .modal-dialog {
-		  max-width: 800px; /* 기본값인 500px에서 증가 */
-		  width: 90%; /* 화면 너비의 90%로 설정 */
+		  background-color: #ffffff;
+		  border-radius: 8px;
+		  padding: 20px;
+		  margin-bottom: 20px;
+		}
+		
+		.minutes-item:last-child {
+		  margin-bottom: 0;
+		}
+		
+		.minutes-item h5 {
+		  color: #333c47;
+		  font-weight: 600;
+		  margin-bottom: 15px;
+		  padding-bottom: 10px;
+		}
+		
+		.minutes-content {
+		  color: #495057;
+		  line-height: 1.6;
+		  background-color: #f8f9fa;
+		  padding: 15px;
+		  border-radius: 6px;
+		}
+		
+		
+		.minutes-detail-container {
+		  padding: 20px;
+		}
+		
+		.minutes-header {
+		  margin-bottom: 20px;
 		}
 		
 		.minutes-detail-content {
-		  max-height: 600px; /* 400px에서 증가 */
+		  max-height: 400px;
+		  overflow-y: auto;
 		}
-	  
-	  .modal-content {
-	    border-radius: 8px;
-	    border: none;
-	  }
-	
-	  .minutes-detail-container {
-	    padding: 30px;
-	  }
-	
-	  .minutes-header {
-	    text-align: center;
-	    margin-bottom: 20px;
-	    font-weight: 700;
-	  }
-	
-	  .minutes-title {
-	    text-align: center;
-	    margin-bottom: 20px;
-	    font-weight: 700;
-	  }
-	
-	  .minutes-detail-content {
-	    max-height: 400px;
-	    overflow-y: auto;
-	    padding: 20px;
-	    background-color: #fff;
-	    border-radius: 6px;
-	  }
-	
-	  .minutes-actions {
-	    text-align: right;
-	    margin-top: 20px;
-	  }
-	
-	  .btn-close {
-	    background-color: #6c757d;
-	    color: white;
-	    border: none;
-	    padding: 10px 20px;
-	    border-radius: 5px;
-	    cursor: pointer;
-	    transition: background-color 0.15s ease-in-out;
-	  }
-	
-	  .btn-close:hover {
-	    background-color: #5a6268;
-	  }
 		
+		.modalBtn {
+		  padding: 10px 20px;
+		  border: none;
+		  border-radius: 5px;
+		  cursor: pointer;
+		}
+		
+		.btn-close {
+		  background-color: #6c757d;
+		  color: white;
+		}
+		
+		.btn-close:hover {
+		  background-color: #5a6268;
+		}
 	</style>
   <script>
   
@@ -554,115 +538,58 @@
 		}
 		
 		//수정 모드 활성화
-		/* function enableEditing() {
+		function enableEditing() {
 		 initializeCKEditor();
 		 document.getElementById('editButton').style.display = 'none';
 		 document.getElementById('saveButton').style.display = 'inline-block';
 		}
-		 */
-		 
-		function enableEditing() {
-		  initializeCKEditor();
-		  document.getElementById('editButton').style.display = 'none';
-		  document.getElementById('saveButton').style.display = 'inline-block';
-		  
-		  // 기존 내용을 textarea에 복사
-		  document.getElementById('decisions').value = document.getElementById('fullDecisions').innerHTML;
-		  document.getElementById('actionItems').value = document.getElementById('fullActionItems').innerHTML;
-		  document.getElementById('notes').value = document.getElementById('fullNotes').innerHTML;
-		  
-		  // 표시 상태 변경
-		  document.getElementById('fullDecisions').style.display = 'none';
-		  document.getElementById('fullActionItems').style.display = 'none';
-		  document.getElementById('fullNotes').style.display = 'none';
-		  document.getElementById('decisions').style.display = 'block';
-		  document.getElementById('actionItems').style.display = 'block';
-		  document.getElementById('notes').style.display = 'block';
-		  
-		  // 짧은 글과 자세히 보기 버튼 숨기기 (존재하는 경우에만)
-		  hideElementIfExists('shortDecisions');
-		  hideElementIfExists('shortActionItems');
-		  hideElementIfExists('shortNotes');
-		}
-
-		// 요소가 존재하면 숨기는 헬퍼 함수
-		function hideElementIfExists(elementId) {
-		  const element = document.getElementById(elementId);
-		  if (element) {
-		    element.style.display = 'none';
-		  }
-		}
-		 
+		
 		//수정된 회의록 저장
 		function saveChanges() {
-			let decisions = CKEDITOR.instances.decisions.getData();
-			let actionItems = CKEDITOR.instances.actionItems.getData();
-			let notes = CKEDITOR.instances.notes.getData();
-			
-			if(decisions.trim() == "") {
-			 showAlert("결정 사항을 입력해주세요.");
-			 CKEDITOR.instances.decisions.focus();
-			 return false;
-			}
-			else if(actionItems.trim() == "") {
-			 showAlert("실행 항목을 입력해주세요.");
-			 CKEDITOR.instances.actionItems.focus();
-			 return false;
-			}
-			else if(notes.trim() == "") {
-			 showAlert("기타 메모를 입력해주세요.");
-			 CKEDITOR.instances.notes.focus();
-			 return false;
-			}
-			
-			$.ajax({
-			 type: "POST",
-			 url: "${ctp}/familyMeeting/saveMeeting",
-			 data: {
-			   idx: ${meeting.idx},
-			   decisions: decisions,
-			   actionItems: actionItems,
-			   notes: notes
-			 },
-			 success: function(res) {
-			   if(res == 1) {
-			     showAlert("회의록이 수정되었습니다.", function() {
-			       location.reload();
-			     });
-			   } 
-			   else {
-			     showAlert("회의록 수정에 실패했습니다. 다시 시도해주세요.");
-			   }
-			 },
-			 error: function(xhr, status, error) {
-			   console.error("Error details:", xhr.responseText);
-			   showAlert("서버 오류가 발생했습니다. 나중에 다시 시도해주세요.");
-			 }
-			});
-		}
+		 let decisions = CKEDITOR.instances.decisions.getData();
+		 let actionItems = CKEDITOR.instances.actionItems.getData();
+		 let notes = CKEDITOR.instances.notes.getData();
 		
-		function showMinutesDetail(section) {
-		  let content = '';
-		  let title = '';
-		  
-		  switch(section) {
-		    case 'decisions':
-		      content = document.getElementById('fullDecisions').innerHTML;
-		      title = '결정 사항';
-		      break;
-		    case 'actionItems':
-		      content = document.getElementById('fullActionItems').innerHTML;
-		      title = '실행 항목';
-		      break;
-		    case 'notes':
-		      content = document.getElementById('fullNotes').innerHTML;
-		      title = '기타 메모';
-		      break;
-		  }
-		  
-		  document.getElementById('minutesTitle').textContent = title;
-		  document.getElementById('minutesContent').innerHTML = content;
-		  $('#minutesDetailModal').modal('show');
+		 if(decisions.trim() == "") {
+		   showAlert("결정 사항을 입력해주세요.");
+		   CKEDITOR.instances.decisions.focus();
+		   return false;
+		 }
+		 else if(actionItems.trim() == "") {
+		   showAlert("실행 항목을 입력해주세요.");
+		   CKEDITOR.instances.actionItems.focus();
+		   return false;
+		 }
+		 else if(notes.trim() == "") {
+		   showAlert("기타 메모를 입력해주세요.");
+		   CKEDITOR.instances.notes.focus();
+		   return false;
+		 }
+		 
+		 $.ajax({
+		   type: "POST",
+		   url: "${ctp}/familyMeeting/saveMeeting",
+		   data: {
+		     idx: ${meeting.idx},
+		     decisions: decisions,
+		     actionItems: actionItems,
+		     notes: notes
+		   },
+		   success: function(res) {
+		     if(res == 1) {
+		       showAlert("회의록이 수정되었습니다.", function() {
+		         location.reload();
+		       });
+		     } 
+		     else {
+		       showAlert("회의록 수정에 실패했습니다. 다시 시도해주세요.");
+		     }
+		   },
+		   error: function(xhr, status, error) {
+		     console.error("Error details:", xhr.responseText);
+		     showAlert("서버 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+		   }
+		 });
 		}
     
   </script>
@@ -719,87 +646,18 @@
 		  <h4 class="section-title">회의록</h4>
 		  <form name="minutesForm">
 		    <div class="minutes-item">
-		      <h5>
-		        결정 사항
-		        <c:if test="${!empty shortDecision}">
-		          <button type="button" class="btn btn-sm btn-outline-primary" onclick="showMinutesDetail('decisions')">자세히 보기</button>
-		        </c:if>
-		      </h5>
-		      <textarea id="decisions" name="decisions" style="display: none;">${meeting.decisions}</textarea>
-		      <c:choose>
-		        <c:when test="${!empty shortDecision}">
-		          <div id="shortDecisions" class="minutes-content">
-		            ${shortDecision}
-		          </div>
-		          <div id="fullDecisions" style="display: none;">${meeting.decisions}</div>
-		        </c:when>
-		        <c:otherwise>
-		          <div id="fullDecisions" class="minutes-content">${meeting.decisions}</div>
-		        </c:otherwise>
-		      </c:choose>
+		      <h5>결정 사항</h5>
+		      <div id="decisions" class="minutes-content">${meeting.decisions}</div>
 		    </div>
-		
-		    <div class="minutes-item"> 
-		      <h5>
-		        실행 항목
-		        <c:if test="${!empty shortActionItem}">
-		          <button type="button" class="btn btn-sm btn-outline-primary" onclick="showMinutesDetail('actionItems')">자세히 보기</button>
-		        </c:if>
-		      </h5>
-		      <textarea id="actionItems" name="actionItems" style="display: none;">${meeting.actionItems}</textarea>
-		      <c:choose>
-		        <c:when test="${!empty shortActionItem}">
-		          <div id="shortActionItems" class="minutes-content">
-		            ${shortActionItem}
-		          </div>
-		          <div id="fullActionItems" style="display: none;">${meeting.actionItems}</div>
-		        </c:when>
-		        <c:otherwise>
-		          <div id="fullActionItems" class="minutes-content">${meeting.actionItems}</div>
-		        </c:otherwise>
-		      </c:choose>
-		    </div>
-		
 		    <div class="minutes-item">
-		      <h5>
-		        기타 메모
-		        <c:if test="${!empty shortNote}">
-		          <button type="button" class="btn btn-sm btn-outline-primary" onclick="showMinutesDetail('notes')">자세히 보기</button>
-		        </c:if>
-		      </h5>
-		      <textarea id="notes" name="notes" style="display: none;">${meeting.notes}</textarea>
-		      <c:choose>
-		        <c:when test="${!empty shortNote}">
-		          <div id="shortNotes" class="minutes-content">
-		            ${shortNote}
-		          </div>
-		          <div id="fullNotes" style="display: none;">${meeting.notes}</div>
-		        </c:when>
-		        <c:otherwise>
-		          <div id="fullNotes" class="minutes-content">${meeting.notes}</div>
-		        </c:otherwise>
-		      </c:choose>
+		      <h5>실행 항목</h5>
+		      <div id="actionItems" class="minutes-content">${meeting.actionItems}</div>
+		    </div>
+		    <div class="minutes-item">
+		      <h5>기타 메모</h5>
+		      <div id="notes" class="minutes-content">${meeting.notes}</div>
 		    </div>
 		  </form>
-		</div>
-		
-		
-		<div class="modal" id="minutesDetailModal" tabindex="-1" role="dialog" aria-labelledby="minutesDetailModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-centered" role="document">
-		    <div class="modal-content">
-		      <div class="minutes-detail-container">
-		        <div class="minutes-header">
-		          <h4 id="minutesTitle"></h4>
-		        </div>
-		        <div class="minutes-detail-content">
-		          <p id="minutesContent"></p>
-		        </div>
-		        <div class="minutes-actions">
-		          <button type="button" class="btn-close" data-dismiss="modal">닫기</button>
-		        </div>
-		      </div>
-		    </div>
-		  </div>
 		</div>
 		
 		<div class="button-group">

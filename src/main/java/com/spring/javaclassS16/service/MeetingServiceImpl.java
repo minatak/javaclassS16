@@ -157,6 +157,27 @@ public class MeetingServiceImpl implements MeetingService {
 	public int updateMeetingTopicsStatus(int idx) {
 		return meetingDAO.updateMeetingTopicsStatus(idx);
 	}
+
+	@Override
+	public String truncateStr(String str, int maxLength) {
+		
+		// HTML 태그 제거
+    String plainText = str.replaceAll("<[^>]*>", ""); // <[^>]+>는 모든 HTML 태그를 제거함. (여는 태그와 닫는 태그를 모두 포함해서)
+    
+    // 연속된 공백 제거 및 앞뒤 공백 제거
+    plainText = plainText.replaceAll("\\s+", " ").trim();
+    
+//    plainText = plainText.replaceAll("<","").replaceAll("[","").replaceAll(")","").replaceAll("^","").replaceAll("]","").replaceAll("*","").replaceAll(">","");
+    
+    if(plainText.length() <= 100) return str;
+    
+    // 글자 수 제한
+    if (plainText.length() > maxLength) {
+        return plainText.substring(0, maxLength) + "...";
+    }
+    
+    return plainText;
+	}
 	
 	
 	

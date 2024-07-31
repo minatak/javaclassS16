@@ -238,6 +238,29 @@ public class MeetingController {
     model.addAttribute("meeting", meeting);
     model.addAttribute("topics", topics);
     
+    String shortDecision = "";
+    String shortActionItem = "";
+    String shortNote = "";
+    
+	  if(meeting.getDecisions() != null && meeting.getDecisions().length() >= 100) {
+	  	shortDecision = meetingService.truncateStr(meeting.getDecisions(), 100);
+	  	if(shortDecision.equals(meeting.getDecisions())) shortDecision = "";
+	  }
+	  if(meeting.getActionItems() != null && meeting.getActionItems().length() >= 100) {
+	  	shortActionItem = meetingService.truncateStr(meeting.getActionItems(), 100);
+	  	if(shortActionItem.equals(meeting.getActionItems())) shortActionItem = "";
+	  }
+	  if(meeting.getNotes() != null && meeting.getNotes().length() >= 100) {
+	  	shortNote = meetingService.truncateStr(meeting.getNotes(), 100);
+	  	if(shortNote.equals(meeting.getNotes())) shortNote = "";
+	  }
+    
+	  model.addAttribute("meeting", meeting);
+    model.addAttribute("topics", topics);
+    model.addAttribute("shortDecision", shortDecision);
+    model.addAttribute("shortActionItem", shortActionItem);
+    model.addAttribute("shortNote", shortNote);
+    
     return "familyMeeting/meetingContent";
   }
   

@@ -571,7 +571,7 @@
 <p><br/></p>
 <div class="inputContainer">
   <div class="header">
-    <a href="${ctp}/familyMeeting/meetingList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+    <a href="${ctp}/familyMeeting/meetingContent?idx=${meeting.idx}" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
     <font size="5" class="mb-4 h2">회의 수정</font>
   </div>
   <form name="myform" method="post">

@@ -64,6 +64,8 @@ public interface MeetingService {
 
 		public int updateMeetingTopicsStatus(int idx);
 
+		public String truncateStr(String decisions, int maxLength);
+
 
     
 }
