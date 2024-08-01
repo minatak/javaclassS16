@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>투표 등록 | HomeLink</title>
+  <title>투표 수정 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
   <style>
 	  body {
@@ -206,13 +206,21 @@
     function toggleEndTime() {
       const endTimeGroup = document.getElementById('endTimeGroup');
       const endTimeInput = document.getElementById('endTime');
-      if (document.getElementById('noEndTime').checked) {
+      const noEndTimeCheckbox = document.getElementById('noEndTime');
+      
+      if (noEndTimeCheckbox.checked) {
         endTimeGroup.style.display = 'none';
         endTimeInput.removeAttribute('required');
+        endTimeInput.value = ''; // 체크 시 기존 값 제거
       } else {
         endTimeGroup.style.display = 'block';
         endTimeInput.setAttribute('required', '');
       }
+    }
+
+    // 페이지 로드 시 실행
+    window.onload = function() {
+      toggleEndTime(); // 초기 상태 설정
     }
   
     function fCheck() {
@@ -265,78 +273,71 @@
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
 <p><br/></p>
+<p><br/></p>
 <div class="inputContainer">
-  <div class="header">
-	  <a href="${ctp}/vote/voteList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
-	  <font size="5" class="mb-4 h2">투표 등록</font>
-	</div>
-  <form name="myform" method="post">
-    <div class="form-group">
-      <label for="title">제목</label>
-      <input type="text" name="title" id="title" placeholder="제목을 작성해 주세요." autofocus required class="form-control" />
+    <div class="header">
+        <a href="${ctp}/vote/voteList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+        <font size="5" class="mb-4 h2">투표 수정</font>
     </div>
-    <div class="form-group">
-      <label for="description">설명</label>
-      <textarea name="description" id="description" rows="4" placeholder="투표 설명을 입력해 주세요." class="form-control" required></textarea>
-    </div>
-    <!-- <div class="form-group">
-      <label for="part">분류</label>
-      <input type="text" name="part" id="part" placeholder="투표 분류를 입력해 주세요. (예: 활동 관련)" class="form-control" required />
-    </div> -->
-    <div class="form-group">
-      <label>투표 항목</label>
-      <div id="optionsContainer">
-			  <div class="option-container">
-			    <div class="option-input">
-			      <span class="option-number">1</span>
-			      <input type="text" name="options[]" placeholder="항목 입력" required>
-			      <button type="button" onclick="removeOption(this)"><i class="fa-solid fa-minus"></i></button>
-			    </div>
-			  </div>
-			  <div class="option-container">
-			    <div class="option-input">
-			      <span class="option-number">2</span>
-			      <input type="text" name="options[]" placeholder="항목 입력" required>
-			      <button type="button" onclick="removeOption(this)"><i class="fa-solid fa-minus"></i></button>
-			    </div>
-			  </div>
-			</div>
-      <button type="button" class="add-option" onclick="addOption()">+ 항목 추가하기</button>
-    </div>
-    
-		<div class="form-group" style="margin-bottom:15px;" id="endTimeGroup">
-		  <label for="endTime">종료 시간</label>
-		  <input type="datetime-local" name="endTime" id="endTime" class="form-control" required />
-		</div>
-		<div class="form-group">
-		  <label>
-		    <input type="checkbox" id="noEndTime" onchange="toggleEndTime()"> 종료시간 설정 안함
-		  </label>
-		</div>
-    <div class="form-group">
-      <label>익명 투표</label>
-      <div class="radio-inline">
-        <label><input type="radio" name="anonymous" value="true"> 예</label>
-        <label><input type="radio" name="anonymous" value="false" checked> 아니오</label>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>복수 선택</label>
-      <div class="radio-inline">
-        <label><input type="radio" name="multipleChoice" value="true"> 허용</label>
-        <label><input type="radio" name="multipleChoice" value="false" checked> 허용 안함</label>
-      </div>
-    </div>
-    <input type="hidden" name="memberIdx" value="${sIdx}">
-    <input type="hidden" name="name" value="${sName}">
-    <input type="hidden" name="familyCode" value="${sFamCode}">
-    <div class="form-group" style="margin-bottom:15px;">
-      <input type="button" value="등록하기" onclick="fCheck()" class="btn"/>
-    </div>
-    <div class="form-group">
-      <input type="button" value="돌아가기" onclick="location.href='${ctp}/vote/voteList';" class="btn btn-back"/>
-    </div>
-  </form>
+    <form name="myform" method="post">
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" name="title" id="title" value="${vo.title}" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="description">설명</label>
+            <textarea name="description" id="description" rows="4" class="form-control" required>${vo.description}</textarea>
+        </div>
+        <div class="form-group">
+            <label>투표 항목</label>
+            <div id="optionsContainer">
+                <c:forEach var="option" items="${options}" varStatus="status">
+                    <div class="option-container">
+                        <div class="option-input">
+                            <span class="option-number">${status.count}</span>
+                            <input type="text" name="options[]" value="${option.optionText}" required>
+                            <button type="button" onclick="removeOption(this)"><i class="fa-solid fa-minus"></i></button>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+            <button type="button" class="add-option" onclick="addOption()">+ 항목 추가하기</button>
+        </div>
+        <c:set var="noEndTime" value="${empty vo.endTime}" />
+				<div class="form-group" id="endTimeGroup" style="${noEndTime ? 'display:none;' : ''}">
+				    <label for="endTime">종료 시간</label>
+				    <input type="datetime-local" name="endTime" id="endTime" value="${vo.endTime}" class="form-control" ${noEndTime ? '' : 'required'} />
+				</div>
+				<div class="form-group">
+				    <label>
+				        <input type="checkbox" id="noEndTime" onchange="toggleEndTime()" ${noEndTime ? 'checked' : ''}> 종료시간 설정 안함
+				    </label>
+				</div>
+        <div class="form-group">
+            <label>익명 투표</label>
+            <div class="radio-inline">
+                <label><input type="radio" name="anonymous" value="true" ${vo.anonymous ? 'checked' : ''}> 예</label>
+                <label><input type="radio" name="anonymous" value="false" ${!vo.anonymous ? 'checked' : ''}> 아니오</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>복수 선택</label>
+            <div class="radio-inline">
+                <label><input type="radio" name="multipleChoice" value="true" ${vo.multipleChoice ? 'checked' : ''}> 허용</label>
+                <label><input type="radio" name="multipleChoice" value="false" ${!vo.multipleChoice ? 'checked' : ''}> 허용 안함</label>
+            </div>
+        </div>
+        <input type="hidden" name="idx" value="${vo.idx}">
+        <input type="hidden" name="memberIdx" value="${vo.memberIdx}">
+        <input type="hidden" name="name" value="${vo.name}">
+        <input type="hidden" name="familyCode" value="${vo.familyCode}">
+        <div class="form-group" style="margin-bottom:15px;">
+            <input type="button" value="수정하기" onclick="fCheck()" class="btn"/>
+        </div>
+        <div class="form-group">
+            <input type="button" value="돌아가기" onclick="location.href='${ctp}/vote/voteList';" class="btn btn-back"/>
+        </div>
+    </form>
 </div>
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />

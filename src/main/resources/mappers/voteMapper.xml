@@ -3,7 +3,40 @@
 <mapper namespace="com.spring.javaclassS16.dao.VoteDAO">
     
 	<select id="getVoteList" resultType="com.spring.javaclassS16.vo.VoteVO">
-		select * from vote where familyCode = #{familyCode} order by endTime limit #{startIndexNo}, #{pageSize};
+	  SELECT * FROM vote 
+	  WHERE familyCode = #{familyCode}
+	  <if test="choice == 'ACTIVE'">
+	    AND status = 'ACTIVE'
+	  </if>
+	  <if test="choice == 'CLOSED'">
+	    AND status = 'CLOSED'
+	  </if>
+	  <if test="choice == '미참여'">
+	    AND idx NOT IN (SELECT voteIdx FROM voteParticipation WHERE memberIdx = #{memberIdx})
+	    AND status = 'ACTIVE'
+	  </if>
+	  ORDER BY 
+	    CASE 
+	      WHEN status = 'ACTIVE' THEN 0 
+	      ELSE 1 
+	    END,
+	    endTime DESC
+	  LIMIT #{startIndexNo}, #{pageSize}
+	</select>
+	
+	<select id="totRecCnt" resultType="int">
+	  SELECT COUNT(*) FROM vote 
+	  WHERE familyCode = #{familyCode}
+	  <if test="choice == 'ACTIVE'">
+	    AND status = 'ACTIVE'
+	  </if>
+	  <if test="choice == 'CLOSED'">
+	    AND status = 'CLOSED'
+	  </if>
+	  <if test="choice == '미참여'">
+	    AND idx NOT IN (SELECT voteIdx FROM voteParticipation WHERE memberIdx = #{memberIdx})
+	    AND status = 'ACTIVE'
+	  </if>
 	</select>
 	
 	<select id="getVoteContent" resultType="com.spring.javaclassS16.vo.VoteVO">
@@ -123,7 +156,22 @@
 	  UPDATE voteOption
 	  SET voteCount = voteCount - 1
 	  WHERE idx IN (SELECT optionIdx FROM voteParticipation WHERE voteIdx = #{voteIdx} AND memberIdx = #{memberIdx})
- </delete>
+ 	</delete>
 
+	<delete id="deleteVoteReplies">
+	    DELETE FROM voteReply WHERE voteIdx = #{voteIdx}
+	</delete>
+	
+	<delete id="deleteVoteParticipations">
+	    DELETE FROM voteParticipation WHERE voteIdx = #{voteIdx}
+	</delete>
+	
+	<delete id="deleteVoteOptions">
+	    DELETE FROM voteOption WHERE voteIdx = #{voteIdx}
+	</delete>
+	
+	<delete id="deleteVote">
+	    DELETE FROM vote WHERE idx = #{voteIdx}
+	</delete>
 
 </mapper>

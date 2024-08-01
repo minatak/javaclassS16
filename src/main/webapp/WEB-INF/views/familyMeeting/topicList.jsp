@@ -37,23 +37,21 @@
     }
     .home-icon:hover {color: #c6c6c6;}
     
-    
-    .btn {
-		  background-color: #84a98c;
-		  color: white;
-		  border: none;
-		  border-radius: 0px;
-		  padding: 8px 16px;
-		  cursor: pointer;
-		  transition: background-color 0.3s ease;
-		  font-weight: 600;
-		  font-size: 14px;
-		}
-		
-		.btn:hover {
-		  color: white;
-		  background-color: #6b8e76;
-		}
+		.btn {
+      background-color: #84a98c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .btn:hover {
+      color: white;
+      background-color: #6b8e76;
+    }
 		
 		.cardList {
 		  background-color: #fff;
@@ -120,19 +118,6 @@
 		  box-sizing: border-box;
 		  background-color: #fff;
 		}
-		
-		/* .topic-icon-container {
-		  height: 60px;
-		  display: flex;
-		  justify-content: flex-start;
-		  align-items: center;
-		}
-		
-		.topic-icon {
-		  font-size: 30px;
-		  color: #84a98c;
-		} */
-		
 		.topic-icon-container {
 		  height: 35%;
 		  display: flex;
@@ -163,22 +148,6 @@
 		  margin-bottom: 12px;
 		  font-weight: 600;
 		}
-		/* 
-		.topic-status-제안됨 { 
-		  background-color: #e8f5e9; 
-		  color: #1b5e20;
-		}
-		
-		.topic-status-예정 { 
-		  background-color: #e3f2fd; 
-		  color: #0d47a1;
-		}
-		
-		.topic-status-결정됨 { 
-		  background-color: #fbe9e7; 
-		  color: #bf360c;
-		}
-		 */
 		 
 		.topic-status-제안됨 { 
 		  background-color: #84a98c; 
@@ -452,167 +421,167 @@
 		}
 		
 		.topic-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 20px;
-  width: 100%;
-  height: 400px; /* 높이를 조금 늘렸습니다 */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-sizing: border-box;
-  background-color: #fff;
-}
-
-.topic-icon-container {
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #e8f5e9; /* 연한 초록색 배경 */
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-
-.topic-icon {
-  font-size: 36px;
-  color: #84a98c;
-}
-
-.topic-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.topic-status {
-  font-size: 12px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  display: inline-block; 
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-
-.topic-title {
-  font-size: 18px; 
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 12px;
-}
-
-.topic-description {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 12px;
-  line-height: 1.6;
-  flex-grow: 1;
-  overflow: hidden;
-}
-
-.topic-info {
-  font-size: 12px;
-  color: #777;
-  margin-top: auto; /* 설명 아래에 위치하도록 변경 */
-}
-
-.modal-title {
-  font-size: 20px; /* 모달 제목 크기 줄임 */
-  font-weight: 600;
-  color: #333c47;
-  margin-bottom: 20px;
-}
-
-.btn-primary {
-  background-color: #84a98c;
-  border-color: #84a98c;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  border-color: #6c757d;
-}
-
-.btn-primary:hover {
-  background-color: #6b8e76;
-  border-color: #6b8e76;
-}
-
-.btn-secondary:hover {
-  background-color: #5a6268;
-  border-color: #5a6268;
-}
+		  border: 1px solid #e0e0e0;
+		  border-radius: 15px;
+		  padding: 25px;
+		  margin-bottom: 20px;
+		  width: 100%;
+		  height: 400px;  
+		  display: flex;
+		  flex-direction: column;
+		  overflow: hidden;
+		  box-sizing: border-box;
+		  background-color: #fff;
+		}
 		
+		.topic-icon-container {
+		  height: 100px;
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  background-color: #e8f5e9; /* 연한 초록색 배경 */
+		  border-radius: 10px;
+		  margin-bottom: 15px;
+		}
 		
+		.topic-icon {
+		  font-size: 36px;
+		  color: #84a98c;
+		}
+		
+		.topic-content {
+		  flex-grow: 1;
+		  display: flex;
+		  flex-direction: column;
+		}
+		
+		.topic-status {
+		  font-size: 12px;
+		  padding: 4px 12px;
+		  border-radius: 20px;
+		  display: inline-block; 
+		  margin-bottom: 12px;
+		  font-weight: 600;
+		}
+		
+		.topic-title {
+		  font-size: 18px; 
+		  font-weight: bold;
+		  color: #333;
+		  margin-bottom: 12px;
+		}
+		
+		.topic-description {
+		  font-size: 14px;
+		  color: #555;
+		  margin-bottom: 12px;
+		  line-height: 1.6;
+		  flex-grow: 1;
+		  overflow: hidden;
+		}
+		
+		.topic-info {
+		  font-size: 12px;
+		  color: #777;
+		  margin-top: auto; /* 설명 아래에 위치하도록 변경 */
+		}
+		
+		.modal-title {
+		  font-size: 20px; /* 모달 제목 크기 줄임 */
+		  font-weight: 600;
+		  color: #333c47;
+		  margin-bottom: 20px;
+		}
+		
+		.btn-primary {
+		  background-color: #84a98c;
+		  border-color: #84a98c;
+		}
+		
+		.btn-secondary {
+		  background-color: #6c757d;
+		  border-color: #6c757d;
+		}
+		
+		.btn-primary:hover {
+		  background-color: #6b8e76;
+		  border-color: #6b8e76;
+		}
+		
+		.btn-secondary:hover {
+		  background-color: #5a6268;
+		  border-color: #5a6268;
+		}
+				
+				
 		.comments-container {
-  display: flex;
-  flex-direction: column;
-  height: 80vh;
-  max-height: 600px;
-}
-
-.comments-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.comments-body {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-
-.comment-input-area {
-  display: flex;
-  padding: 15px 20px;
-  border-top: 1px solid #e0e0e0;
-  background-color: #fff;
-}
-
-#newCommentInput {
-  flex-grow: 1;
-  border: none;
-  background-color: white;
-  padding: 10px 15px;
-  border-radius: 20px;
-  margin-right: 10px;
-}
-
-.btn-submit {
-  background-color: #84a98c;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.3s;
-}
-
-.btn-submit:hover {
-  background-color: #52796f;
-}
-
-.close {
-  font-size: 24px;
-  color: #adb5bd;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.modal-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #333c47;
-  margin: 0;
-}
+		  display: flex;
+		  flex-direction: column;
+		  height: 80vh;
+		  max-height: 600px;
+		}
+		
+		.comments-header {
+		  display: flex;
+		  justify-content: space-between;
+		  align-items: center;
+		  padding: 15px 20px;
+		  border-bottom: 1px solid #e0e0e0;
+		}
+		
+		.comments-body {
+		  flex-grow: 1;
+		  overflow-y: auto;
+		  padding: 20px;
+		}
+		
+		.comment-input-area {
+		  display: flex;
+		  padding: 15px 20px;
+		  border-top: 1px solid #e0e0e0;
+		  background-color: #fff;
+		}
+		
+		#newCommentInput {
+		  flex-grow: 1;
+		  border: none;
+		  background-color: white;
+		  padding: 10px 15px;
+		  border-radius: 20px;
+		  margin-right: 10px;
+		}
+		
+		.btn-submit {
+		  background-color: #84a98c;
+		  color: white;
+		  border: none;
+		  border-radius: 50%;
+		  width: 40px;
+		  height: 40px;
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  transition: background-color 0.3s;
+		}
+		
+		.btn-submit:hover {
+		  background-color: #52796f;
+		}
+		
+		.close {
+		  font-size: 24px;
+		  color: #adb5bd;
+		  background: none;
+		  border: none;
+		  cursor: pointer;
+		}
+		
+		.modal-title {
+		  font-size: 20px;
+		  font-weight: 600;
+		  color: #333c47;
+		  margin: 0;
+		}
 		
   </style>
   <script>
@@ -1075,15 +1044,15 @@
         <form name="editTopicForm" method="post">
           <input type="hidden" id="editTopicIdx">
           <div class="form-group">
-            <label for="editTopicTitle">안건 제목 *</label>
+            <label for="editTopicTitle">안건 제목</label>
             <input type="text" class="form-control" id="editTopicTitle" required>
           </div>
           <div class="form-group">
-            <label for="editTopicDescription">안건 설명 *</label>
+            <label for="editTopicDescription">안건 설명</label>
             <textarea class="form-control" id="editTopicDescription" rows="3" required></textarea>
           </div>
           <div class="form-group">
-            <label for="editTopicPriority">우선순위 *</label>
+            <label for="editTopicPriority">우선순위</label>
             <select class="form-control" id="editTopicPriority" required>
               <option value="1">1 (최고 우선순위)</option>
               <option value="2">2 (높음)</option>
@@ -1093,7 +1062,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="editTopicStatus">상태 *</label>
+            <label for="editTopicStatus">상태</label>
             <select class="form-control" id="editTopicStatus" required>
               <option value="제안됨">제안됨</option>
               <option value="예정">예정</option>

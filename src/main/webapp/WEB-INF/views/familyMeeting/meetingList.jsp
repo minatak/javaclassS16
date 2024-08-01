@@ -15,7 +15,7 @@
       background-color: #ffffff;
     }
     .header {
-      margin-bottom: 50px;
+      margin-bottom: 50px; 
     }
     h1, h2, h3, h4, h5 {font-family: 'Pretendard' !important;}
     .header .h2 {

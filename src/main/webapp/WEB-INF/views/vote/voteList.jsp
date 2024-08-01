@@ -25,7 +25,7 @@
 		  margin-bottom: 50px;
 		}
     .voteContainer {
-      max-width: 1000px;
+      max-width: 900px;
       background-color: white;
       padding: 40px;
       margin: 30px auto;
@@ -44,10 +44,10 @@
     .vote-card {
 		  border: 1px solid #ddd;
 		  border-radius: 8px;
-		  padding: 15px;
+		  padding: 25px;
 		  margin-bottom: 20px;
-		  width: 230px;
-		  height: 300px;
+		  width: 100%;
+		  height: 350px;
 		  display: flex;
 		  flex-direction: column;
 		  transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -61,11 +61,12 @@
 		  /* transform: scale(1.03);
 		  box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
 		  
-		  transform: scale(1.02); /* 마우스 올리면 커지는 정도 */
-		  box-shadow: 0 3px 6px rgba(0,0,0,0.07); 
+		  transform: scale(1.01); /* 마우스 올리면 커지는 정도 */
+		  /* box-shadow: 0 3px 6px rgba(0,0,0,0.07);  */
 		}
 		.vote-icon-container {
-		  height: 35%;
+		 /*  height: 35%; */
+		 	height: 100px;
 		  display: flex;
 		  flex-direction: column;
 		  justify-content: center;
@@ -196,6 +197,7 @@
     .hidden {
       display: none;
     }
+
   </style>
 </head>
 <body>
@@ -209,15 +211,14 @@
 	    <font size="5" class="mb-4 h2">가족 투표</font>
 	  </div>
     
-    
     <div class="d-flex justify-content-between mb-3">
       <div class="search-bar">
         <select name="choice" id="choice" onchange="photoSearch()">
-          <option value="전체" ${choice == '전체' ? 'selected' : ''}>전체</option>
-          <option value="진행중" ${choice == '진행중' ? 'selected' : ''}>진행 중</option>
-          <option value="종료" ${choice == '종료' ? 'selected' : ''}>종료</option>
-          <option value="미참여" ${choice == '미참여' ? 'selected' : ''}>미참여</option>
-        </select>
+				  <option value="전체" ${choice == '전체' ? 'selected' : ''}>전체</option>
+				  <option value="ACTIVE" ${choice == 'ACTIVE' ? 'selected' : ''}>진행 중</option>
+				  <option value="CLOSED" ${choice == 'CLOSED' ? 'selected' : ''}>종료</option>
+				  <option value="미참여" ${choice == '미참여' ? 'selected' : ''}>미참여</option>
+				</select>
       </div>    
       <div>
         <button class="btn cardList" id="cardViewBtn">카드</button>
@@ -229,7 +230,7 @@
     <div id="cardView">
 		  <div class="row">
 		    <c:forEach var="vo" items="${vos}" varStatus="st">
-		      <div class="col-md-3 mb-4">
+		      <div class="col-md-4 mb-4">
 					  <div class="vote-card ${vo.status == 'ACTIVE' ? 'active-vote' : ''}" onclick="location.href='voteContent?idx=${vo.idx}'">
 				      <div>
 					      <span class="vote-status ${vo.status == 'ACTIVE' ? 'vote-status-ongoing' : 'vote-status-completed'}">
@@ -289,6 +290,11 @@
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+  function photoSearch() {
+    let choice = document.getElementById("choice").value;
+    location.href = "voteList?choice=" + choice;
+  }
+
   document.getElementById('cardViewBtn').addEventListener('click', function() {
     document.getElementById('cardView').classList.remove('hidden');
     document.getElementById('listView').classList.add('hidden');

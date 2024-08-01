@@ -5,13 +5,13 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>사진 업로드 | HomeLink</title>
+  <title>사진 수정 | HomeLink</title>
   <script src="${ctp}/ckeditor/ckeditor.js"></script>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
    <style>
 	  body {
 	    font-family: 'pretendard' !important;
-	    background-color: #f8f8f8;
+	    background-color: #fff;
 	    color: #333;
 	  }
 	  .inputContainer {
@@ -120,42 +120,65 @@
     }
     
     function fCheck() {
-        let content = CKEDITOR.instances.content.getData();
-        
-        if(content.trim() == "") {
-            showAlert("사진을 업로드해주세요");
-            return false;
-        }
-        
-        let textContent = content.replace(/<p>\s*<img [^>]+>\s*<\/p>/g, "").replace(/<[^>]+>/g, "").trim();
-        if (textContent.length > 0) {
-            showAlert("사진 업로드 칸에는 텍스트를 입력할 수 없습니다.");
-            return false;
-        }
-        
-        // 이미지 확장자 검사
-        let imgRegex = /<img[^>]+src="([^">]+)"/g;
-        let match;
-        let invalidFiles = [];
-        
-        while (match = imgRegex.exec(content)) {
-            let imgSrc = match[1];
-            let fileExt = imgSrc.split('.').pop().toLowerCase();
-            
-            if (!['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
-                invalidFiles.push(imgSrc.split('/').pop());
-            }
-        }
-        
-        if (invalidFiles.length > 0) {
-            showAlert("지원되지 않는 파일 형식이 포함되어있어요. JPG, PNG, GIF 파일만 업로드 가능해요!");
-            return false;
-        }
-        
-        myform.submit();
-    }
+  	  let title = myform.title.value.trim();
+  	  let description = myform.description.value.trim();
+  	  let content = CKEDITOR.instances.content.getData();
+  	  let textContent = content.replace(/<p>\s*<img [^>]+>\s*<\/p>/g, "").replace(/<[^>]+>/g, "").trim();
+  	  
+  	  if(title == "") {
+  	    showAlert("제목을 입력해주세요", function() {
+  	      myform.title.focus();
+  	    });
+  	    return false;
+  	  }
+  	  
+  	  if(title.length > 50) {
+  	    showAlert("제목은 50자 이내로 작성해주세요", function() {
+  	      myform.title.focus();
+  	    });
+  	    return false;
+  	  }
+  	  
+  	  if(description.length > 100) {
+  	    showAlert("설명은 100자 이내로 작성해주세요", function() {
+  	      myform.description.focus();
+  	    });
+  	    return false;
+  	  }
+  	  
+  	  if(content.trim() == "") {
+  	    showAlert("사진을 업로드해주세요");
+  	    return false;
+  	  }
+  	  
+  	  if (textContent.length > 0) {
+  	    showAlert("사진 업로드 칸에는 텍스트를 입력할 수 없습니다.");
+  	    return false;
+  	  }
+  	  
+  	  // 이미지 확장자 검사
+  	  let imgRegex = /<img[^>]+src="([^">]+)"/g;
+  	  let match;
+  	  let invalidFiles = [];
+  	  
+  	  while (match = imgRegex.exec(content)) {
+  	    let imgSrc = match[1];
+  	    let fileExt = imgSrc.split('.').pop().toLowerCase();
+  	    
+  	    if (!['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
+  	      invalidFiles.push(imgSrc.split('/').pop());
+  	    }
+  	  }
+  	  
+  	  if (invalidFiles.length > 0) {
+  	    showAlert("지원되지 않는 파일 형식이 포함되어있어요. JPG, PNG, GIF 파일만 업로드 가능해요!");
+  	    return false;
+  	  }
+  	  
+  	  myform.submit();
+  	}
 
-</script>
+	</script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
@@ -164,32 +187,19 @@
 <div class="inputContainer">
   <div class="header">
   <a href="${ctp}/photo/photoList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
-    <font size="5" class="mb-4 h2">새로운 순간 공유하기</font>
+    <font size="5" class="mb-4 h2">사진 수정하기</font>
   </div>
   <div class="alert alert-info" role="alert">
     <strong>Tip:</strong> JPG, PNG, GIF 형식의 이미지를 공유해보세요.
   </div>
   <form name="myform" method="post">
-    <!-- <div class="form-group">
-      <label for="part">카테고리</label>
-      <select name="part" id="part" class="form-control">
-        <option value="풍경" selected>풍경</option>
-        <option value="인물">인물</option>
-        <option value="음식">음식</option>
-        <option value="여행">여행</option>
-        <option value="학습">학습</option>
-        <option value="사물">사물</option>
-        <option value="기타">기타</option>
-      </select>
-    </div> -->
-   <!--  <div class="form-group">
-      <label for="title">제목</label>
-      <input type="text" name="title" id="title" class="form-control" placeholder="당신의 순간에 제목을 붙여주세요"/>
-    </div> -->
-    
+  	<div class="form-group">
+		  <label for="title">제목 <span class="explain">필수사항</span></label>
+		  <input type="text" name="title" id="title" class="form-control" value="${vo.title}" required>
+		</div>
     <div class="form-group">
       <label for="content">사진 업로드 <span class="explain">파일의 사진을 끌어와주세요! 여러장의 사진 업로드도 가능합니다. </span></label>
-      <textarea name="content" id="content" rows="10" class="form-control" required></textarea>
+      <textarea name="content" id="content" rows="10" class="form-control" required>${vo.content}</textarea>
     </div>
     <script>
 			CKEDITOR.replace("content", {
@@ -208,18 +218,22 @@
 		</script>
 		<div class="form-group">
       <label for="description">설명 <span class="explain">선택사항</span></label>
-      <textarea name="description" id="description" rows="3" class="form-control" placeholder="이 순간에 대해 더 자세히 알려주세요"></textarea>
+      <textarea name="description" id="description" rows="3" class="form-control" placeholder="이 순간에 대해 더 자세히 알려주세요">${vo.description}</textarea>
     </div>
     <div class="form-group">
-      <button type="button" onclick="fCheck()" class="btn btn-upload">공유하기</button>
+      <button type="button" onclick="fCheck()" class="btn btn-upload">수정하기</button>
     </div>
     <div class="form-group">
       <button type="button" onclick="location.href='${ctp}/photo/photoList';" class="btn btn-back">돌아가기</button>
     </div>
+    <input type="hidden" name="idx" value="${vo.idx}"/>
+    <input type="hidden" name="pag" value="${pag}"/>
+    <input type="hidden" name="pageSize" value="${pageSize}"/>
     <input type="hidden" name="mid" value="${sMid}" />
   </form>
 </div>
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -12,7 +12,7 @@ import com.spring.javaclassS16.vo.VoteVO;
 
 public interface VoteDAO {
 
-	public ArrayList<VoteVO> getVoteList(@Param("familyCode") String familyCode, @Param("memberIdx") int memberIdx, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+	public ArrayList<VoteVO> getVoteList(@Param("familyCode") String familyCode, @Param("memberIdx") int memberIdx, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("choice") String choice);
 
 	public int setVoteInput(@Param("vo") VoteVO vo);
 
@@ -49,6 +49,16 @@ public interface VoteDAO {
 	public List<VoteReplyVO> getVoteReply(@Param("idx") int idx);
 
 	public List<VoteVO> getActiveVotes(@Param("familyCode") String familyCode);
+
+	public int totRecCnt(@Param("familyCode") String familyCode, @Param("choice") String choice, @Param("memberIdx") int memberIdx);
+
+	public int deleteVoteReplies(@Param("voteIdx") int voteIdx);
+
+	public int deleteVoteParticipations(@Param("voteIdx") int voteIdx);
+
+	public int deleteVoteOptions(@Param("voteIdx") int voteIdx);
+
+	public int deleteVote(@Param("voteIdx") int voteIdx);
 
 	
 	

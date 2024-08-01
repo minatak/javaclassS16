@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.spring.javaclassS16.dao.MeetingDAO;
 import com.spring.javaclassS16.dao.NoticeDAO;
 import com.spring.javaclassS16.dao.PhotoDAO;
+import com.spring.javaclassS16.dao.VoteDAO;
 import com.spring.javaclassS16.dao.WorkDAO;
 import com.spring.javaclassS16.vo.MeetingTopicReplyVO;
 import com.spring.javaclassS16.vo.PageVO;
@@ -24,6 +25,9 @@ public class PageProcess {
     
     @Autowired
     MeetingDAO meetingDAO;
+    
+    @Autowired
+    VoteDAO voteDAO;
     
     public PageVO totRecCnt(int pag, int pageSize, String section, String part, String searchString, HttpSession session) {
         PageVO pageVO = new PageVO();
@@ -54,13 +58,16 @@ public class PageProcess {
 	          totRecCnt = workDAO.totRecCntSearch(search, searchString);
 	        }
         }
-        if(section.equals("meeting")) {
+        else if(section.equals("meeting")) {
           totRecCnt = meetingDAO.totRecCnt(familyCode, searchString);
         }
         else if(section.equals("meetingTopic")) {
-    	  totRecCnt = meetingDAO.totTopicRecCnt(familyCode, searchString);
+        	totRecCnt = meetingDAO.totTopicRecCnt(familyCode, searchString);
         }
-        
+        else if(section.equals("vote")) {
+        	int memberIdx = (int) session.getAttribute("sIdx");
+          totRecCnt = voteDAO.totRecCnt(familyCode, part, memberIdx);
+        }
         
         int totPage = (totRecCnt % pageSize) == 0 ? (totRecCnt / pageSize) : (totRecCnt / pageSize) + 1;
         int startIndexNo = (pag - 1) * pageSize;

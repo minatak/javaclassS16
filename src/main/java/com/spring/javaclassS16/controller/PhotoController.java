@@ -2,7 +2,6 @@ package com.spring.javaclassS16.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.javaclassS16.service.PhotoService;
 import com.spring.javaclassS16.vo.MemberVO;
@@ -44,35 +44,72 @@ public class PhotoController {
         String familyCode = (String) session.getAttribute("sFamCode");
         int startIndexNo = (pag - 1) * pageSize;
         
-        ArrayList<PhotoVO> vos = photoService.getPhotoList(startIndexNo, pageSize, familyCode, choice);
+        String imsiChoice = "";
+    		if(choice.equals("최신순")) imsiChoice = "idx";
+    		else if(choice.equals("추천순")) imsiChoice = "goodCount";
+    		else if(choice.equals("조회순")) imsiChoice = "readNum";
+    		else if(choice.equals("댓글순")) imsiChoice = "replyCnt";	
+    		else imsiChoice = choice;
+        
+        ArrayList<PhotoVO> vos = photoService.getPhotoList(startIndexNo, pageSize, familyCode, imsiChoice);
         
         model.addAttribute("vos", vos);
         model.addAttribute("choice", choice);
         return "photo/photoList";
     }
     
+
+    // 페이징 처리 (무한스크롤)
+		@ResponseBody
+		@RequestMapping(value = "/photoPaging", method = RequestMethod.POST)
+		public ModelAndView photoPagingPost(Model model,
+	        HttpSession session,
+	        @RequestParam(defaultValue = "1") int pag,
+	        @RequestParam(defaultValue = "16") int pageSize,
+	        @RequestParam(defaultValue = "최신순") String choice) {
+	    String familyCode = (String) session.getAttribute("sFamCode");
+	    int startIndexNo = (pag - 1) * pageSize;
+	    
+	    String imsiChoice = "";
+	    if(choice.equals("최신순")) imsiChoice = "idx";
+			else if(choice.equals("추천순")) imsiChoice = "goodCount";
+			else if(choice.equals("조회순")) imsiChoice = "readNum";
+			else if(choice.equals("댓글순")) imsiChoice = "replyCnt";	
+			else imsiChoice = choice;
+	    
+	    ArrayList<PhotoVO> vos = photoService.getPhotoList(startIndexNo, pageSize, familyCode, imsiChoice);
+	    
+	    model.addAttribute("vos", vos);
+	    model.addAttribute("choice", choice);
+	    
+	    // ModelAndView에 담아서 return
+	    ModelAndView mv = new ModelAndView();
+	    mv.setViewName("photo/photoPaging");
+	    return mv;
+		}
+    
     // 사진 업로드 폼보기
     @RequestMapping(value = "/photoInput", method = RequestMethod.GET)
     public String photoInputForm() {
-        return "photo/photoInput";
+      return "photo/photoInput";
     }
 
     // 사진 업로드
     @RequestMapping(value = "/photoInput", method = RequestMethod.POST)
     public String photoInputProcess(PhotoVO vo, HttpServletRequest request, HttpSession session) {
-        String mid = (String) session.getAttribute("sMid");
-        String familyCode = (String) session.getAttribute("sFamCode");
-        
-        MemberVO mVo = photoService.getMemberVoByMid(mid);
-        
-        vo.setMemberIdx(mVo.getIdx());
-        vo.setName(mVo.getName());
-        vo.setFamilyCode(familyCode);
-        
-        int res = photoService.setPhotoInput(vo);
-        
-        if(res != 0) return "redirect:/message/photoInputOk";
-        else return "redirect:/message/photoInputNo";
+      String mid = (String) session.getAttribute("sMid");
+      String familyCode = (String) session.getAttribute("sFamCode");
+      
+      MemberVO mVo = photoService.getMemberVoByMid(mid);
+      
+      vo.setMemberIdx(mVo.getIdx());
+      vo.setName(mVo.getName());
+      vo.setFamilyCode(familyCode);
+      
+      int res = photoService.setPhotoInput(vo);
+      
+      if(res != 0) return "redirect:/message/photoInputOk";
+      else return "redirect:/message/photoInputNo";
     }
 
     // 사진 보기 처리
@@ -123,7 +160,7 @@ public class PhotoController {
     @ResponseBody
     @RequestMapping(value = "/photoToggleLike", method = RequestMethod.POST)
     public String photoToggleLike(@RequestParam int idx, HttpSession session) {
-        return photoService.togglePhotoLike(idx, session);
+      return photoService.togglePhotoLike(idx, session);
     }
 
     
@@ -134,9 +171,9 @@ public class PhotoController {
     	
     	// 삭제하려는 댓글이 부모 댓글인지 대댓글인지 확인 (parentIdx가 null이면 부모댓글)
     	PhotoReplyVO vo = photoService.getPhotoReplyVo(idx);
-    	
+    	System.out.println("vo : " + vo);
     	// 부모 댓글을 삭제할 경우
-    	if(vo.getParentIdx() == 0) {
+    	if(vo.getParentIdx() == null) {
     		// 먼저 대댓글들을 삭제 
     		photoService.setPhotoReplyDeleteByParentIdx(idx);
     	}
@@ -148,102 +185,91 @@ public class PhotoController {
     @ResponseBody
     @RequestMapping("/imageUpload")
     public void imageUpload(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) throws Exception {
-        photoService.imageUpload(request, response, upload);
+      photoService.imageUpload(request, response, upload);
     }
     
-    // 페이징 처리 (무한스크롤)
-    @RequestMapping(value = "/photoPaging", method = RequestMethod.POST)
-    public String photoPaging(Model model,
-                              HttpSession session,
-                              @RequestParam(defaultValue = "1") int pag,
-                              @RequestParam(defaultValue = "16") int pageSize,
-                              @RequestParam(defaultValue = "최신순") String choice) {
-        String familyCode = (String) session.getAttribute("sFamCode");
-        int startIndexNo = (pag - 1) * pageSize;
-        
-        ArrayList<PhotoVO> vos = photoService.getPhotoList(startIndexNo, pageSize, familyCode, choice);
-        
-        model.addAttribute("vos", vos);
-        model.addAttribute("hasMore", vos.size() == pageSize);  // 더 로드할 항목이 있는지 확인
-        
-        return "photo/photoPaging";
-    }
     
   	// 부모댓글 입력처리(원본글에 대한 댓글)
     @ResponseBody
     @RequestMapping(value = "/photoReplyInput", method = RequestMethod.POST)
     public String photoReplyInputPost(PhotoReplyVO vo, HttpSession session) {
-        String name = (String) session.getAttribute("sName");
-        vo.setName(name);
-        vo.setParentIdx(null);  // 부모 댓글이므로 parentIdx는 null
-        
-        int res = photoService.setPhotoReplyInput(vo);
-        
-        return res + "";
+      String name = (String) session.getAttribute("sName");
+      vo.setName(name);
+      vo.setParentIdx(null);  // 부모 댓글이므로 parentIdx는 null
+      
+      int res = photoService.setPhotoReplyInput(vo);
+      
+      return res + "";
     }
 
     // 대댓글 입력처리(부모댓글에 대한 댓글)
     @ResponseBody
     @RequestMapping(value = "/photoReplyInputRe", method = RequestMethod.POST)
     public String photoReplyInputRePost(PhotoReplyVO vo) {
-        int res = photoService.setPhotoReplyInput(vo);
-        
-        return res + "";
+      int res = photoService.setPhotoReplyInput(vo);
+      
+      return res + "";
     }
     
     // 사진 다운로드 
     @RequestMapping(value = "/photoTotalDown", method = RequestMethod.GET)
     public void photoTotalDown(HttpServletRequest request, HttpServletResponse response, int idx) throws IOException {
-        String realPath = request.getSession().getServletContext().getRealPath("/resources/data/photo/");
-        
-        PhotoVO vo = photoService.getPhotoContent(idx);
-        
-        // content에서 이미지 경로 추출
-        List<String> imagePaths = photoService.extractImagePaths(vo.getContent());
-        
-        String zipName = vo.getpDate().replaceAll("[-:]", "").replace(" ", "_").replaceAll("\\.0$", "") + ".zip";
-        
-        response.setContentType("application/zip");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + zipName + "\"");
-        
-        try (ZipOutputStream zos = new ZipOutputStream(response.getOutputStream())) {
-            byte[] buffer = new byte[1024];
-            for (String imagePath : imagePaths) {
-                File imageFile = new File(realPath + imagePath);
-                if (imageFile.exists()) {
-                    ZipEntry zipEntry = new ZipEntry(imagePath);
-                    zos.putNextEntry(zipEntry);
-                    
-                    try (FileInputStream fis = new FileInputStream(imageFile)) {
-                        int length;
-                        while ((length = fis.read(buffer)) > 0) {
-                            zos.write(buffer, 0, length);
-                        }
-                    }
-                    zos.closeEntry();
-                }
+      String realPath = request.getSession().getServletContext().getRealPath("/resources/data/photo/");
+      
+      PhotoVO vo = photoService.getPhotoContent(idx);
+      
+      // content에서 이미지 경로 추출
+      List<String> imagePaths = photoService.extractImagePaths(vo.getContent());
+      
+      String zipName = vo.getPDate().replaceAll("[-:]", "").replace(" ", "_").replaceAll("\\.0$", "") + ".zip";
+      
+      response.setContentType("application/zip");
+      response.setHeader("Content-Disposition", "attachment; filename=\"" + zipName + "\"");
+      
+      try (ZipOutputStream zos = new ZipOutputStream(response.getOutputStream())) {
+        byte[] buffer = new byte[1024];
+        for (String imagePath : imagePaths) {
+          File imageFile = new File(realPath + imagePath);
+          if (imageFile.exists()) {
+            ZipEntry zipEntry = new ZipEntry(imagePath);
+            zos.putNextEntry(zipEntry);
+            
+            try (FileInputStream fis = new FileInputStream(imageFile)) {
+              int length;
+              while ((length = fis.read(buffer)) > 0) {
+                zos.write(buffer, 0, length);
+              }
             }
-        } 
+            zos.closeEntry();
+          }
+        }
+      } 
     }
     
     
     // 사진 삭제 처리 
     @RequestMapping(value = "/photoDelete", method = RequestMethod.GET)
     public String photoDeleteGet(int idx,
-  			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-  			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-  		// 게시글에 사진이 존재한다면 서버에 저장된 사진을 삭제처리한다.
-  		PhotoVO vo = photoService.getPhotoContent(idx);
-  		if(vo.getContent().indexOf("src=\"/") != -1) photoService.imgDelete(vo.getContent());
-  		
-  	  // 먼저 연결된 댓글(reply) 삭제
-      photoService.deletePhotoReply(idx);
-  		
-  		// 사진작업을 끝나면 DB에 저장된 실제 정보레코드를 삭제처리한다.
-    	int res = photoService.setPhotoDelete(idx);
-    	
-    	if(res != 0) return "redirect:/message/photoDeleteOk";
-    	else return "redirect:/message/photoDeleteNo?idx="+idx;
+          @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+          @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+      // 게시글에 사진이 존재한다면 서버에 저장된 사진을 삭제처리한다.
+      PhotoVO vo = photoService.getPhotoContent(idx);
+      if(vo.getContent().indexOf("src=\"/") != -1) photoService.imgDelete(vo.getContent());
+      
+      // 1. 먼저 좋아요 삭제
+      photoService.deletePhotoLike(idx);
+      
+      // 2. 대댓글(자식 댓글) 삭제
+      photoService.deleteChildPhotoReplies(idx);
+      
+      // 3. 부모 댓글 삭제
+      photoService.deleteParentPhotoReplies(idx);
+      
+      // 4. 사진 삭제
+      int res = photoService.setPhotoDelete(idx);
+      
+      if(res != 0) return "redirect:/message/photoDeleteOk";
+      else return "redirect:/message/photoDeleteNo?idx="+idx;
     }
     
     // 사진 수정

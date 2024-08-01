@@ -5,7 +5,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>사진 수정 | HomeLink</title>
+  <title>사진 업로드 | HomeLink</title>
   <script src="${ctp}/ckeditor/ckeditor.js"></script>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
    <style>
@@ -120,42 +120,65 @@
     }
     
     function fCheck() {
-        let content = CKEDITOR.instances.content.getData();
-        
-        if(content.trim() == "") {
-            showAlert("사진을 업로드해주세요");
-            return false;
-        }
-        
-        let textContent = content.replace(/<p>\s*<img [^>]+>\s*<\/p>/g, "").replace(/<[^>]+>/g, "").trim();
-        if (textContent.length > 0) {
-            showAlert("사진 업로드 칸에는 텍스트를 입력할 수 없습니다.");
-            return false;
-        }
-        
-        // 이미지 확장자 검사
-        let imgRegex = /<img[^>]+src="([^">]+)"/g;
-        let match;
-        let invalidFiles = [];
-        
-        while (match = imgRegex.exec(content)) {
-            let imgSrc = match[1];
-            let fileExt = imgSrc.split('.').pop().toLowerCase();
-            
-            if (!['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
-                invalidFiles.push(imgSrc.split('/').pop());
-            }
-        }
-        
-        if (invalidFiles.length > 0) {
-            showAlert("지원되지 않는 파일 형식이 포함되어있어요. JPG, PNG, GIF 파일만 업로드 가능해요!");
-            return false;
-        }
-        
-        myform.submit();
-    }
+  	  let title = myform.title.value.trim();
+  	  let description = myform.description.value.trim();
+  	  let content = CKEDITOR.instances.content.getData();
+  	  let textContent = content.replace(/<p>\s*<img [^>]+>\s*<\/p>/g, "").replace(/<[^>]+>/g, "").trim();
+  	  
+  	  if(title == "") {
+  	    showAlert("제목을 입력해주세요", function() {
+  	      myform.title.focus();
+  	    });
+  	    return false;
+  	  }
+  	  
+  	  if(title.length > 50) {
+  	    showAlert("제목은 50자 이내로 작성해주세요", function() {
+  	      myform.title.focus();
+  	    });
+  	    return false;
+  	  }
+  	  
+  	  if(description.length > 99) {
+  	    showAlert("설명은 100자 이내로 작성해주세요", function() {
+  	      myform.description.focus();
+  	    });
+  	    return false;
+  	  }
+  	  
+  	  if(content.trim() == "") {
+  	    showAlert("사진을 업로드해주세요");
+  	    return false;
+  	  }
+  	  
+  	  if (textContent.length > 0) {
+  	    showAlert("사진 업로드 칸에는 텍스트를 입력할 수 없습니다.");
+  	    return false;
+  	  }
+  	  
+  	  // 이미지 확장자 검사
+  	  let imgRegex = /<img[^>]+src="([^">]+)"/g;
+  	  let match;
+  	  let invalidFiles = [];
+  	  
+  	  while (match = imgRegex.exec(content)) {
+  	    let imgSrc = match[1];
+  	    let fileExt = imgSrc.split('.').pop().toLowerCase();
+  	    
+  	    if (!['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
+  	      invalidFiles.push(imgSrc.split('/').pop());
+  	    }
+  	  }
+  	  
+  	  if (invalidFiles.length > 0) {
+  	    showAlert("지원되지 않는 파일 형식이 포함되어있어요. JPG, PNG, GIF 파일만 업로드 가능해요!");
+  	    return false;
+  	  }
+  	  
+  	  myform.submit();
+  	}
 
-</script>
+	</script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
@@ -170,9 +193,13 @@
     <strong>Tip:</strong> JPG, PNG, GIF 형식의 이미지를 공유해보세요.
   </div>
   <form name="myform" method="post">
+  	<div class="form-group">
+		  <label for="title">제목 <span class="explain">필수사항</span></label>
+		  <input type="text" name="title" id="title" class="form-control" required>
+		</div>
     <div class="form-group">
       <label for="content">사진 업로드 <span class="explain">파일의 사진을 끌어와주세요! 여러장의 사진 업로드도 가능합니다. </span></label>
-      <textarea name="content" id="content" rows="10" class="form-control" required>${vo.content}</textarea>
+      <textarea name="content" id="content" rows="10" class="form-control" required></textarea>
     </div>
     <script>
 			CKEDITOR.replace("content", {
@@ -191,7 +218,7 @@
 		</script>
 		<div class="form-group">
       <label for="description">설명 <span class="explain">선택사항</span></label>
-      <textarea name="description" id="description" rows="3" class="form-control" placeholder="이 순간에 대해 더 자세히 알려주세요">${vo.description}</textarea>
+      <textarea name="description" id="description" rows="3" class="form-control" placeholder="이 순간에 대해 더 자세히 알려주세요"></textarea>
     </div>
     <div class="form-group">
       <button type="button" onclick="fCheck()" class="btn btn-upload">공유하기</button>
@@ -199,10 +226,6 @@
     <div class="form-group">
       <button type="button" onclick="location.href='${ctp}/photo/photoList';" class="btn btn-back">돌아가기</button>
     </div>
-    <input type="hidden" name="idx" value="${vo.idx}"/>
-    <input type="hidden" name="pag" value="${pag}"/>
-    <input type="hidden" name="pageSize" value="${pageSize}"/>
-    <input type="hidden" name="mid" value="${sMid}" />
   </form>
 </div>
 <p><br/></p>

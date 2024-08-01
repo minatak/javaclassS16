@@ -13,6 +13,17 @@
       font-family: 'Pretendard' !important;
       background-color: #ffffff;
     }
+    .header {
+			margin-bottom: 50px;
+		}
+		.header .h2 {
+			font-family: 'pretendard' !important;
+		  font-weight: 600;
+		  font-size: 24px;
+		  color: #333c47;
+		  text-align: center;
+		  margin-bottom: 50px;
+		}
     .voteContainer {
       max-width: 1000px;
       background-color: white;
@@ -21,8 +32,9 @@
     } 
     .home-icon { 
       font-size: 24px; 
-      color: #e4e6eb; 
+      color: #cecece; 
     }
+    .home-icon:hover {color: #c6c6c6;}
     h2 {
       font-family: 'Pretendard' !important;
       color: #333;
@@ -184,6 +196,7 @@
     .hidden {
       display: none;
     }
+
   </style>
 </head>
 <body>
@@ -192,10 +205,12 @@
 <p><br/></p>
 <div class="container">
   <div class="voteContainer">
-    <div style="display: flex; align-items: center; gap: 20px;" class="mb-5"> 
-      <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
-      <h2>가족 투표</h2>
-    </div>
+    <div class="header">
+	    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+	    <font size="5" class="mb-4 h2">가족 투표</font>
+	  </div>
+    
+    
     <div class="d-flex justify-content-between mb-3">
       <div class="search-bar">
         <select name="choice" id="choice" onchange="photoSearch()">
@@ -257,14 +272,14 @@
     <!-- 블록페이지 시작 -->
     <div class="d-flex justify-content-center my-4">
       <ul class="pagination justify-content-center">
-        <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=1&pageSize=${pageVO.pageSize}">첫페이지</a></li></c:if>
-        <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전블록</a></li></c:if>
+        <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link text-secondary" href="voteList?pag=1&pageSize=${pageVO.pageSize}">첫페이지</a></li></c:if>
+        <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" href="voteList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전블록</a></li></c:if>
         <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
-          <c:if test="${i <= pageVO.totPage && i == pageVO.pag}"><li class="page-item active"><a class="page-link bg-secondary border-secondary" href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
-          <c:if test="${i <= pageVO.totPage && i != pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
+          <c:if test="${i <= pageVO.totPage && i == pageVO.pag}"><li class="page-item active"><a class="page-link bg-secondary border-secondary" href="voteList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
+          <c:if test="${i <= pageVO.totPage && i != pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="voteList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
         </c:forEach>
-        <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음블록</a></li></c:if>
-        <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막페이지</a></li></c:if>
+        <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="voteList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음블록</a></li></c:if>
+        <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link text-secondary" href="voteList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막페이지</a></li></c:if>
       </ul>
     </div>
     <!-- 블록페이지 끝 -->

@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface PhotoService {
     
-  public ArrayList<PhotoVO> getPhotoList(int pag, int pageSize, String familyCode, String choice);
+  public ArrayList<PhotoVO> getPhotoList(int startIndexNo, int pageSize, String familyCode, String choice);
   
   public int setPhotoInput(PhotoVO vo);
   
@@ -63,5 +63,11 @@ public interface PhotoService {
 	public void deletePhotoReply(int idx);
 
 	public List<PhotoVO> getRecentPhotos(String familyCode);
+
+	public void deletePhotoLike(int idx);
+
+	public void deleteChildPhotoReplies(int idx);
+
+	public void deleteParentPhotoReplies(int idx);
 
 }

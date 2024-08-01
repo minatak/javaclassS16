@@ -63,5 +63,11 @@ public interface PhotoDAO {
 	public int totRecCntSearch(@Param("search") String search, @Param("searchString") String searchString);
 
 	public List<PhotoVO> getRecentPhotos(@Param("familyCode") String familyCode);
+
+	public void deletePhotoLike(@Param("idx") int idx);
+
+	public void deleteChildPhotoReplies(@Param("idx") int idx);
+
+	public void deleteParentPhotoReplies(@Param("idx") int idx);
   
 }

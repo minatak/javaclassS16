@@ -3,28 +3,24 @@
 <mapper namespace="com.spring.javaclassS16.dao.PhotoDAO">
     
     <select id="getPhotoList" resultType="com.spring.javaclassS16.vo.PhotoVO">
-		    SELECT p.*, IFNULL(r.replyCnt, 0) as replyCnt
-		    FROM photo p
-		    LEFT JOIN (
-		        SELECT photoIdx, COUNT(*) as replyCnt
-		        FROM photoReply
-		        GROUP BY photoIdx
-		    ) r ON p.idx = r.photoIdx
-		    WHERE p.familyCode = #{familyCode}
-		    ORDER BY
-		    <choose>
-		        <when test="choice == '추천순'">p.goodCount DESC</when>
-		        <when test="choice == '조회순'">p.readNum DESC</when>
-		        <when test="choice == '댓글순'">IFNULL(r.replyCnt, 0) DESC</when>
-		        <when test="choice == '오래된순'">p.idx ASC</when>
-		        <otherwise>p.idx DESC</otherwise>
-		    </choose>
-		    LIMIT #{startIndexNo}, #{pageSize}
+	    SELECT p.*, 
+         	(SELECT COUNT(*) FROM photoReply WHERE photoIdx = p.idx) AS replyCnt 
+	    FROM photo p 
+	    WHERE familyCode = #{familyCode} 
+	    ORDER BY 
+	    <choose>
+        <when test="choice == 'goodCount'">goodCount DESC</when>
+        <when test="choice == 'readNum'">readNum DESC</when>
+        <when test="choice == 'replyCnt'">replyCnt DESC</when>
+        <when test="choice == 'idx ASC'">idx ASC</when>
+        <otherwise>idx DESC</otherwise>
+	    </choose>
+	    LIMIT #{startIndexNo}, #{pageSize}
 		</select>
     
     <select id="getPhotoContent" resultType="com.spring.javaclassS16.vo.PhotoVO">
-        SELECT * FROM photo
-        WHERE idx = #{idx}
+      SELECT * FROM photo
+      WHERE idx = #{idx}
     </select>
     
     <select id="getPhotoReplyCount" resultType="int">
@@ -90,8 +86,8 @@
     
     
     <insert id="setPhotoInput" parameterType="com.spring.javaclassS16.vo.PhotoVO">
-      INSERT INTO photo (memberIdx, name, familyCode, description, content, photoCount, thumbnail, pDate)
-      VALUES (#{vo.memberIdx}, #{vo.name}, #{vo.familyCode}, #{vo.description}, #{vo.content}, #{vo.photoCount}, #{vo.thumbnail}, NOW())
+      INSERT INTO photo (memberIdx, name, familyCode, title, description, content, photoCount, thumbnail, pDate)
+      VALUES (#{vo.memberIdx}, #{vo.name}, #{vo.familyCode}, #{vo.title}, #{vo.description}, #{vo.content}, #{vo.photoCount}, #{vo.thumbnail}, NOW())
     </insert>
     
     <insert id="addPhotoLike">
@@ -116,11 +112,11 @@
     </update>
     
     <update id="setPhotoUpdate">
-		  update photo set description=#{vo.description}, content=#{vo.content}, photoCount=#{vo.photoCount}, thumbnail=#{vo.thumbnail} where idx=#{vo.idx};
+		  update photo set title=#{vo.title}, description=#{vo.description}, content=#{vo.content}, photoCount=#{vo.photoCount}, thumbnail=#{vo.thumbnail} where idx=#{vo.idx};
 		</update>
     
     
-     <delete id="removePhotoLike">
+    <delete id="removePhotoLike">
       DELETE FROM photoLikes WHERE photoIdx = #{idx} AND memberIdx = #{memberIdx}
     </delete>
     
@@ -137,13 +133,19 @@
 		</delete>
     
     <delete id="deletePhotoReply">
-		   WITH RECURSIVE cte AS (
-		      SELECT idx FROM photoReply WHERE photoIdx = #{idx}
-		      UNION ALL
-		      SELECT pr.idx FROM photoReply pr
-		      INNER JOIN cte ON pr.parentIdx = cte.idx
-		  )
-		  DELETE FROM photoReply WHERE idx IN (SELECT idx FROM cte);
+	    DELETE FROM photoReply WHERE photoIdx = #{idx} OR parentIdx = #{idx};
+		</delete>
+		
+		<delete id="deletePhotoLike">
+	    DELETE FROM photoLikes WHERE photoIdx = #{idx}
+		</delete>
+		
+		<delete id="deleteChildPhotoReplies">
+	    DELETE FROM photoReply WHERE parentIdx IN (SELECT idx FROM (SELECT idx FROM photoReply WHERE photoIdx = #{idx}) AS temp)
+		</delete>
+		
+		<delete id="deleteParentPhotoReplies">
+	    DELETE FROM photoReply WHERE photoIdx = #{idx} AND parentIdx IS NULL
 		</delete>
 
 </mapper>

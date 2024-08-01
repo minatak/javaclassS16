@@ -11,7 +11,7 @@ import com.spring.javaclassS16.vo.VoteVO;
 
 public interface VoteService {
 
-	public ArrayList<VoteVO> getVoteList(String familyCode, int memberIdx, int startIndexNo, int pageSize);
+	public ArrayList<VoteVO> getVoteList(String familyCode, int memberIdx, int startIndexNo, int pageSize, String choice);
 
 	public int setVoteInput(VoteVO vo, List<String> options);
 
@@ -40,5 +40,7 @@ public interface VoteService {
 	public List<VoteReplyVO> getVoteReply(int idx);
 
 	public List<VoteVO> getActiveVotes(String familyCode);
+
+	public boolean setDeleteVote(int idx);
 
 }

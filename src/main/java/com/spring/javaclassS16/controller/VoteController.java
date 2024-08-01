@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javaclassS16.pagination.PageProcess;
 import com.spring.javaclassS16.service.VoteService;
+import com.spring.javaclassS16.vo.FamilyMeetingVO;
+import com.spring.javaclassS16.vo.MeetingTopicVO;
 import com.spring.javaclassS16.vo.MemberVO;
 import com.spring.javaclassS16.vo.NoticeReplyVO;
 import com.spring.javaclassS16.vo.PageVO;
@@ -39,14 +41,17 @@ public class VoteController {
   
   
   @RequestMapping(value = "/voteList", method = RequestMethod.GET)
-  public String noticeListGet(Model model, HttpSession session,
+  public String voteListGet(Model model, HttpSession session,
     @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-    @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "vote", "", "", session);
+    @RequestParam(name="pageSize", defaultValue = "9", required = false) int pageSize,
+    @RequestParam(name="choice", defaultValue = "전체", required = false) String choice) {
+    
     String familyCode = (String) session.getAttribute("sFamCode");
     int memberIdx = (int) session.getAttribute("sIdx");
-  
-    ArrayList<VoteVO> vos = voteService.getVoteList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize);
+
+    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "vote", choice, "", session);
+    
+    ArrayList<VoteVO> vos = voteService.getVoteList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize, choice);
 
     // 현재 날짜 구하기
     LocalDateTime currentDateTime = LocalDateTime.now();
@@ -71,6 +76,7 @@ public class VoteController {
     
     model.addAttribute("vos", vos);
     model.addAttribute("pageVO", pageVO);
+    model.addAttribute("choice", choice); 
     
     return "vote/voteList";
   }
@@ -90,7 +96,6 @@ public class VoteController {
     if(res != 0) return "redirect:/message/voteInputOk";
     else return "redirect:/message/voteInputNo";
   }
-  
   
   @RequestMapping(value = "/voteContent", method = RequestMethod.GET)
   public String voteContentGet(Model model, HttpSession session,
@@ -119,7 +124,6 @@ public class VoteController {
         voteService.setEndVote(idx);
         voteVO.setStatus("CLOSED");
       }
-      
 
       // 남은 일수 계산 (종료되지 않은 경우에만)
       if (!isEnded) {
@@ -205,75 +209,37 @@ public class VoteController {
   @ResponseBody
 	@RequestMapping(value = "/voteReplyInput", method = RequestMethod.POST)
 	public String noticeReplyInputPost(VoteReplyVO replyVO, HttpSession session) {
-	    String name = (String) session.getAttribute("sName");
-	    replyVO.setName(name);
-	    int res = voteService.setVoteReplyInput(replyVO);
-	    
-	    return res+"";
+    String name = (String) session.getAttribute("sName");
+    replyVO.setName(name);
+    int res = voteService.setVoteReplyInput(replyVO);
+    
+    return res+"";
 	}
   
-//  @Transactional
-//  @ResponseBody
-//  @RequestMapping(value = "/noticeReplyDelete", method = RequestMethod.POST)
-//  public String noticeReplyDelete(@RequestParam int idx) {
-//      NoticeReplyVO vo = voteService.getVoteReplyVo(idx);
-//      
-//      if(vo.getParentIdx() == 0) {
-//      	voteService.setReplyDeleteByParentIdx(idx);
-//      }
-//
-//      return voteService.setReplyDelete(idx);
-//  }
+  @RequestMapping(value = "/voteDelete", method = RequestMethod.GET)
+  public String voteDeleteGet(@RequestParam(name="idx") int idx) {
+    boolean isDeleted = voteService.setDeleteVote(idx);
+    
+    if(isDeleted) {
+        return "redirect:/message/voteDeleteOk";
+    } else {
+        return "redirect:/message/voteDeleteNo?idx=" + idx;
+    }
+  }
   
-  
-  
-  
-//  
-//  @ResponseBody
-//  @RequestMapping(value = "/voteUpdate", method = RequestMethod.POST)
-//  public String voteUpdatePost(VoteVO vo, 
-//                               @RequestParam("options[]") List<String> options,
-//                               HttpSession session) {
-//      int memberIdx = (int) session.getAttribute("sIdx");
-//      if (vo.getMemberIdx() != memberIdx) {
-//          return "0"; // 투표 생성자만 수정 가능
-//      }
-//      
-//      int res = voteService.setUpdateVote(vo, options);
-//      
-//      return res > 0 ? "1" : "0";
-//  }
-//
-//  @ResponseBody
-//  @RequestMapping(value = "/voteDelete", method = RequestMethod.POST)
-//  public String voteDeletePost(@RequestParam("idx") int idx, HttpSession session) {
-//      int memberIdx = (int) session.getAttribute("sIdx");
-//      VoteVO voteVO = voteService.getVoteContent(idx, null);
-//      
-//      if (voteVO.getMemberIdx() != memberIdx) {
-//          return "0"; // 투표 생성자만 삭제 가능
-//      }
-//      
-//      int res = voteService.setDeleteVote(idx);
-//      
-//      return res > 0 ? "1" : "0";
-//  }
-//
-//  @ResponseBody
-//  @RequestMapping(value = "/voteEnd", method = RequestMethod.POST)
-//  public String voteEndPost(@RequestParam("idx") int idx, HttpSession session) {
-//      int memberIdx = (int) session.getAttribute("sIdx");
-//      VoteVO voteVO = voteService.getVoteContent(idx, null);
-//      
-//      if (voteVO.getMemberIdx() != memberIdx) {
-//          return "0"; // 투표 생성자만 종료 가능
-//      }
-//      
-//      int res = voteService.setEndVote(idx);
-//      
-//      return res > 0 ? "1" : "0";
-//  }
-//  
+  @RequestMapping(value = "/voteUpdate", method = RequestMethod.GET)
+  public String meetingUpdateGet(@RequestParam int idx, Model model, HttpSession session) {
+    String familyCode = (String) session.getAttribute("sFamCode");
+    // 투표 정보 조회
+    VoteVO voteVO = voteService.getVoteContent(idx, familyCode);
+    
+    // 투표 옵션 조회
+    List<VoteOptionVO> options = voteService.getVoteOptions(idx);
+    
+    model.addAttribute("vo", voteVO);
+    model.addAttribute("options", options);
+    return "vote/voteUpdate";
+  }
   
   
   

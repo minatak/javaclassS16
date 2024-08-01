@@ -132,6 +132,14 @@ public class MessageController {
 			model.addAttribute("msg", "회의 정보 수정에 실패했어요");
 			model.addAttribute("url", "/familyMeeting/meetingContent?idx="+idx);
 		}
+		else if(msgFlag.equals("photoUpdateOk")) {
+			model.addAttribute("msg", "사진이 수정되었습니다");
+			model.addAttribute("url", "/photo/photoContent?idx="+idx);
+		}
+		else if(msgFlag.equals("photoUpdateNo")) {
+			model.addAttribute("msg", "사진 정보 수정에 실패했어요");
+			model.addAttribute("url", "/photo/photoContent?idx="+idx);
+		}
 		else if(msgFlag.equals("meetingDeleteOk")) {
 			model.addAttribute("msg", "회의가 삭제되었습니다");
 			model.addAttribute("url", "/familyMeeting/meetingList");

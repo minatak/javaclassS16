@@ -5,6 +5,7 @@ CREATE TABLE photo (
 	memberIdx INT NOT NULL,                /* 엘범을 올린 회원의 고유번호 */
 	name varchar(50),											 /* 작성자 이름 */
 	familyCode varchar(20),								 /* 엘범이 속한 가족 코드 */
+	title VARCHAR(50),           	 				/* 사진 제목 */	
 	description VARCHAR(100),           	 /* 사진 설명 */	
 	content TEXT,                      		 /* 엘범 내용 */
 	photoCount INT NOT NULL,               /* 업로드된 사진 수량 */

@@ -40,8 +40,7 @@ public class PhotoServiceImpl implements PhotoService {
   @Autowired
 	JavaclassProvide javaclassProvide;
 
-  public ArrayList<PhotoVO> getPhotoList(int pag, int pageSize, String familyCode, String choice) {
-    int startIndexNo = Math.max(0, (pag - 1) * pageSize);
+  public ArrayList<PhotoVO> getPhotoList(int startIndexNo, int pageSize, String familyCode, String choice) {
     return photoDAO.getPhotoList(startIndexNo, pageSize, familyCode, choice);
   }
   
@@ -356,9 +355,20 @@ public class PhotoServiceImpl implements PhotoService {
 
 	@Override
 	public int setPhotoUpdate(PhotoVO vo) {
+		String content = vo.getContent();
+    
+    // 썸네일 설정
+    String thumbnail = extractThumbnail(content);
+    vo.setThumbnail(thumbnail);
+    
+    // 사진 수량 계산
+    int photoCount = countPhotos(content);
+    vo.setPhotoCount(photoCount);
+		
 		return photoDAO.setPhotoUpdate(vo);
 	}
 
+	
 	@Override
 	public void deletePhotoReply(int idx) {
 		photoDAO.deletePhotoReply(idx);
@@ -369,4 +379,20 @@ public class PhotoServiceImpl implements PhotoService {
 		return photoDAO.getRecentPhotos(familyCode);
 	}
 
+	@Override
+	public void deletePhotoLike(int idx) {
+		photoDAO.deletePhotoLike(idx);
+	}
+
+	@Override
+	public void deleteChildPhotoReplies(int idx) {
+		photoDAO.deleteChildPhotoReplies(idx);
+	}
+
+	@Override
+	public void deleteParentPhotoReplies(int idx) {
+		photoDAO.deleteParentPhotoReplies(idx);
+	}
+	
+	
 }

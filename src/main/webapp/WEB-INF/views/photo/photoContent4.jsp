@@ -33,6 +33,7 @@
       background-color: #fff;
       border: 1px solid #dbdbdb;
       border-radius: 3px;
+      /* box-shadow: 0 1px 2px rgba(0,0,0,0.1); */
     }
     .titleHeader {
       margin-bottom: 50px;
@@ -61,6 +62,11 @@
       font-weight: 600;
       color: #262626;
     }
+    /* .post-time {
+      color: #8e8e8e;
+      font-size: 12px;
+      margin-left: auto;
+    } */
     .slideshow-container {
       position: relative;
       width: 100%;
@@ -79,6 +85,28 @@
       height: 100%;
       object-fit: cover;
     }
+   /*  .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 18px;
+      text-decoration: none;
+      transition: 0.3s ease;
+      z-index: 1;
+    } 
+    .prev { left: 10px; }
+    .next { right: 10px; } */
+    /* .prev:hover, .next:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    } */
     .dot {
       height: 6px;
       width: 6px;
@@ -91,6 +119,23 @@
     .active {
       background-color: #717171;
     }
+   /*  .interaction-bar {
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+    }
+    .interaction-icon {
+      font-size: 24px;
+      margin-right: 16px;
+      color: #262626;
+      cursor: pointer;
+    }
+    .post-likes {
+      padding: 0 16px;
+      margin-bottom: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    } */
     .description, .comments-section {
       padding: 0 16px;
     }
@@ -137,6 +182,70 @@
       margin-bottom: 8px;
       cursor: pointer;
     }
+   /*  .modal-content {
+      border: none;
+    }
+    .modal-header {
+      border-bottom: 1px solid #efefef;
+      padding: 10px 15px;
+    }
+    .modal-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .modal-body {
+      padding: 5px;
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom:10px;
+    }
+    .modal-comment {
+      padding: 12px 16px;
+      border-bottom: 1px solid #efefef;
+    }
+    .modal-comment:last-child {
+      border-bottom: none;
+    }
+    .modal-comment-username {
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .modal-comment-content {
+      word-break: break-word;
+    }
+    .modal-comment-time {
+      color: #8e8e8e;
+      font-size: 12px;
+      margin-top: 4px;
+    } */
+    /* .reply-btn {
+      color: #8e8e8e;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .reply-form {
+      margin-top: 10px;
+    }
+    .reply-form textarea {
+      width: 100%;
+      border: 1px solid #efefef;
+      border-radius: 3px;
+      padding: 5px;
+      resize: none;
+    }
+    .reply-form button {
+      background-color: #0095f6;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 5px;
+    } */
     .fa-heart.fas {
       color: #ed4956;
     } 
@@ -169,6 +278,22 @@
       font-size: 12px;
       margin-top: 4px;
     }
+    /* .navigation-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.3);
+      color: white;
+      padding: 10px;
+      text-decoration: none;
+      font-size: 18px; 
+    }
+    .prev-btn {
+      left: 10px;
+    }
+    .next-btn {
+      right: 10px;
+    } */
     .swal2-confirm {
       background-color: white !important;
       color: black !important;
@@ -196,13 +321,79 @@
     .swal2-confirm:hover {
       background-color: none !important;
     }
+		
+   /*  .navigation-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.3);
+      color: white;
+      padding: 10px;
+      text-decoration: none;
+      font-size: 18px;
+      z-index: 10;  /* 버튼이 콘텐츠 위에 표시되도록 */
+    }
     .prev-btn {
       left: 10px;
     }
     .next-btn {
       right: 10px;
     }
-    
+      /* 
+    .reply-form {
+      display: flex;
+      border-top: 1px solid #efefef;
+      padding: 8px 16px;
+    }
+    .reply-form textarea {
+      flex-grow: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      padding: 8px; 
+      background-color: #fafafa;
+      border-radius: 3px;
+      resize: none;
+    } */
+   /*  .reply-form button {
+      border: none;
+      background: none;
+      color: #0095f6;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      padding-left: 16px;
+    }
+    .reply-form button:disabled {
+      opacity: 0.3;
+      cursor: default;
+    } */
+
+    /* .comment-input {
+      flex-grow: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      padding: 10px 15px;
+      background-color: #f1f3f5;
+      border-radius: 20px;
+    }
+
+		.post-comment-btn {
+      border: none;
+      background: #84a98c;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 20px;
+      margin-left: 10px;
+    }
+    .post-comment-btn:hover {
+      background: #52796f;
+    }
+ */
 		.interaction-bar {
       padding: 15px 20px;
       display: flex;
@@ -222,6 +413,20 @@
       cursor: pointer;
       color: #333c47;
     }
+
+		/* .navigation-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: white;
+      color: black;
+      border: 1px solid #dbdbdb;
+      padding: 15px;
+      text-decoration: none;
+      font-size: 24px;
+      border-radius: 50%;
+      z-index: 10;
+    } */
 		.navigation-btn:hover {
       text-decoration: none;
       background-color: #dbdbdb;
@@ -232,6 +437,9 @@
     .next-btn {
       right: -30px;
     }
+    
+    
+    
     
 		.navigation-btn{
 		  position: absolute;
@@ -302,36 +510,36 @@
 		  background-color: #ccc;
 		  cursor: not-allowed;
 		}
-	
-    .modal-comments-container {
-		  display: flex;
-		  flex-direction: column;
-		  height: 80vh;
-		  max-height: 600px;
+    
+		    .modal-comments-container {
+			  display: flex;
+			  flex-direction: column;
+			  height: 80vh;
+			  max-height: 600px;
+			}
+			
+			.comments-header {
+			  display: flex;
+			  justify-content: space-between;
+			  align-items: center;
+			  padding: 15px 20px;
+			  border-bottom: 1px solid #e0e0e0;
+			}
+			
+			.comments-body {
+			  flex-grow: 1;
+			  overflow-y: auto;
+			  padding: 20px;
 		}
 		
-		.comments-header {
-		  display: flex;
-		  justify-content: space-between;
-		  align-items: center;
-		  padding: 15px 20px;
-		  border-bottom: 1px solid #e0e0e0;
-		}
-		
-		.comments-body {
-		  flex-grow: 1;
-		  overflow-y: auto;
-		  padding: 20px;
-		}
-		
-	/* 	.comment-input-area {
+		.comment-input-area {
 		  display: flex;
 		  padding: 15px 20px;
 		  border-top: 1px solid #e0e0e0;
 		  background-color: #fff;
 		}
-		 */
-		#contentModal {
+		
+		#newCommentInput {
 		  flex-grow: 1;
 		  border: none;
 		  background-color: white;
@@ -355,7 +563,6 @@
 		
 		.btn-submit:hover {
 		  background-color: #52796f;
-		  color: white;
 		}
 		
 		.close {
@@ -395,10 +602,57 @@
 		  color: #6c757d;
 		  margin-top: 5px;
 		}
+		/* 
+		.delete-btn {
+		  color: #84a98c;
+		  margin-left: 10px;
+		  font-size: 0.9em;
+		  text-decoration: none;
+		}
+		
+		.delete-btn:hover {
+		  text-decoration: underline;
+		}
+		
+		.reply-btn {
+		  color: #84a98c;
+		  margin-left: 10px;
+		  font-size: 0.9em;
+		  cursor: pointer;
+		} */
+		/* 
+		.reply-form {
+		  margin-top: 10px;
+		} */
+		/* 
+		.comment-input-re {
+		  width: 100%;
+		  border: 1px solid #e0e0e0;
+		  border-radius: 20px;
+		  padding: 10px 15px;
+		  margin-bottom: 10px;
+		}
+		 */
+		/* 
+		.bodyContainer {
+		  max-width: 935px;
+		  margin: 20px auto;
+		  background-color: #fff;
+		  border-radius: 12px;
+		  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+		} */
+		
 		.contentContainer {
 		  border-radius: 12px;
 		  overflow: hidden;
 		}
+		
+		/* .header {
+		  padding: 16px;
+		  display: flex;
+		  align-items: center;
+		  border-bottom: 1px solid #efefef;
+		} */
 		
 		.user-avatar {
 		  width: 32px;
@@ -506,6 +760,16 @@
 		.comments-container {
 		  padding: 12px 16px;
 		}
+		/* 
+		.comment-input {
+		  width: 100%;
+		  border: none;
+		  outline: none;
+		  font-size: 14px;
+		  padding: 10px 0;
+		  border-top: 1px solid #efefef;
+		}
+		 */
 		.post-comment-btn {
 		  background-color: #84a98c;
 		  color: white;
@@ -762,81 +1026,50 @@
   	    data : query,
   	    success:function(res) {
 		    	if(res != "0") {
-	          showAlert("댓글이 입력되었습니다.", function() {
-	            location.reload();
-	          });
+		          showAlert("댓글이 입력되었습니다.", function() {
+		            location.reload();
+		          });
+		        }
+		        else showAlert("댓글 입력에 실패했어요");
+		      },
+	        error : function() {
+	          showAlert("전송 오류!");
 	        }
-	        else showAlert("댓글 입력에 실패했어요");
-	      },
-        error : function() {
-          showAlert("전송 오류!");
-        }
-      });
-  	}
-    
-    function modalReplyCheck() {
-  	  let content = $("#contentModal").val();
-  	  if(content.trim() == "") {
-  	    showAlert("댓글을 입력하세요");
-  	    return false;
-  	  }
-  	  let query = {
-  			photoIdx: ${vo.idx},
-		    mid: '${sMid}',
-		    name: '${sName}',
-		    content: content
-  	  }
-  	  
-  	  $.ajax({
-  	    url  : "${ctp}/photo/photoReplyInput",
-  	    type : "post",
-  	    data : query,
-  	    success:function(res) {
-		    	if(res != "0") {
-	          showAlert("댓글이 입력되었습니다.", function() {
-	            location.reload();
-	          });
-	        }
-	        else showAlert("댓글 입력에 실패했어요");
-	      },
-        error : function() {
-          showAlert("전송 오류!");
-        }
-      });
+	      });
   	}
     
     function submitReply(idx, photoIdx) {
-  	  let content = $("#contentRe"+idx).val();
-  	  if(content.trim() == "") {
-  	    showAlert("답변글을 입력하세요");
-  	    $("#contentRe"+idx).focus();
-  	    return false;
-  	  }
-  	  let query = {
-  	    photoIdx: photoIdx,
-  	    parentIdx: idx,  // 부모 댓글의 idx
-  	    mid: '${sMid}',
-  	    name: '${sName}',
-  	    content: content
-  	  };
-  	  $.ajax({
-  	    url: "${ctp}/photo/photoReplyInputRe",
-  	    type: "POST",
-  	    data: query,
-  	    success: function(res) {
-  	      if (res !== "0") {
-  	        showAlert("댓글이 입력되었습니다.", function() {
-  	          location.reload();
-  	        });
-  	      } else {
-  	        showAlert("답변글 입력 실패~~");
-  	      }
-  	    },
-  	    error: function() {
-  	      showAlert("전송오류!");
-  	    }
-  	  });
-  	}
+    	  let content = $("#contentRe"+idx).val();
+    	  if(content.trim() == "") {
+    	    showAlert("답변글을 입력하세요");
+    	    $("#contentRe"+idx).focus();
+    	    return false;
+    	  }
+    	  let query = {
+    	    photoIdx: photoIdx,
+    	    parentIdx: idx,  // 부모 댓글의 idx
+    	    mid: '${sMid}',
+    	    name: '${sName}',
+    	    content: content
+    	  };
+    	  $.ajax({
+    	    url: "${ctp}/photo/photoReplyInputRe",
+    	    type: "POST",
+    	    data: query,
+    	    success: function(res) {
+    	      if (res !== "0") {
+    	        showAlert("댓글이 입력되었습니다.", function() {
+    	          location.reload();
+    	        });
+    	      } else {
+    	        showAlert("답변글 입력 실패~~");
+    	      }
+    	    },
+    	    error: function() {
+    	      showAlert("전송오류!");
+    	    }
+    	  });
+    	}
     
     function toggleLike() {
       $.ajax({
@@ -895,59 +1128,82 @@
     }
   
     function toggleComments() {
-  	  const commentsList = document.getElementById('comments-list');
-  	  const viewAllCommentsBtn = document.querySelector('.view-all-comments');
-  	  
-  	  commentsVisible = !commentsVisible;
-  	  
-  	  if (commentsVisible) {
-  	    commentsList.style.display = 'block';
-  	    viewAllCommentsBtn.textContent = '댓글 숨기기';
-  	  } else {
-  	    commentsList.style.display = 'none';
-  	    viewAllCommentsBtn.textContent = `댓글 ${replyCnt}개 모두 보기`;
-  	  }
-  	}
+    	  const commentsList = document.getElementById('comments-list');
+    	  const viewAllCommentsBtn = document.querySelector('.view-all-comments');
+    	  
+    	  commentsVisible = !commentsVisible;
+    	  
+    	  if (commentsVisible) {
+    	    commentsList.style.display = 'block';
+    	    viewAllCommentsBtn.textContent = '댓글 숨기기';
+    	  } else {
+    	    commentsList.style.display = 'none';
+    	    viewAllCommentsBtn.textContent = `댓글 ${replyCnt}개 모두 보기`;
+    	  }
+    	}
  
 
-  	function replyDelete(idx) {
-		  showConfirm('정말로 이 댓글을 삭제하시겠습니까?', function() {
-		    $.ajax({
-		      url: `${ctp}/photo/photoReplyDelete`,
-		      type: "POST",
-		      data: {idx: idx},
-		      success: function(res) {
-		        if (res == "1") {
-		          showAlert("댓글이 삭제되었습니다.", function() {
-		            location.reload();
-		          });
-		        } else {
-		          showAlert("댓글 삭제에 실패했습니다.");
-		        }
-		      },
-		      error: function() {
-		        showAlert("전송오류!");
-		      }
-		    });
-		  });
-		}
+
+    	/* function replyDelete(idx) {
+    	  if (showConfirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+    	    $.ajax({
+    	      url: "${ctp}/photo/photoReplyDelete",
+    	      type: "POST",
+    	      data: {idx: idx},
+    	      success: function(res) {
+    	        if (res === "1") {
+    	          showAlert("댓글이 삭제되었습니다.", function() {
+    	            location.reload();
+    	          });
+    	        } else {
+    	          showAlert("댓글 삭제에 실패했습니다.");
+    	        }
+    	      },
+    	      error: function() {
+    	        showAlert("전송오류!");
+    	      }
+    	    });
+    	  }
+    	} */
+    	
+    	function replyDelete(idx) {
+    		  showConfirm('정말로 이 댓글을 삭제하시겠습니까?', function() {
+    		    $.ajax({
+    		      url: `${ctp}/photo/photoReplyDelete`,
+    		      type: "POST",
+    		      data: {idx: idx},
+    		      success: function(res) {
+    		        if (res == "1") {
+    		          showAlert("댓글이 삭제되었습니다.", function() {
+    		            location.reload();
+    		          });
+    		        } else {
+    		          showAlert("댓글 삭제에 실패했습니다.");
+    		        }
+    		      },
+    		      error: function() {
+    		        showAlert("전송오류!");
+    		      }
+    		    });
+    		  });
+    		}
 
     	
-  	function replyShow(idx) {
-      const replyForm = document.getElementById('replyForm' + idx);
-      const showBtn = document.getElementById('showReplyBtn' + idx);
-      const closeBtn = document.getElementById('closeReplyBtn' + idx);
+    	 function replyShow(idx) {
+	      const replyForm = document.getElementById('replyForm' + idx);
+	      const showBtn = document.getElementById('showReplyBtn' + idx);
+	      const closeBtn = document.getElementById('closeReplyBtn' + idx);
 
-      if (replyForm.style.display === 'none' || replyForm.style.display === '') {
-        replyForm.style.display = 'block';
-        showBtn.style.display = 'none';
-        closeBtn.style.display = 'inline';
-      } else {
-        replyForm.style.display = 'none';
-        showBtn.style.display = 'inline';
-        closeBtn.style.display = 'none';
-      }
-    }
+	      if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+	        replyForm.style.display = 'block';
+	        showBtn.style.display = 'none';
+	        closeBtn.style.display = 'inline';
+	      } else {
+	        replyForm.style.display = 'none';
+	        showBtn.style.display = 'inline';
+	        closeBtn.style.display = 'none';
+	      }
+	    }
 
     	 
     function deletePhoto() {
@@ -979,10 +1235,10 @@
 	      <img src="${ctp}/member/${photo}" alt="User Avatar" class="user-avatar">
 	      <span class="user-name">${vo.name}</span>
 	      <c:if test="${sMid == vo.mid}"> 
-	      	<span class="post-time-left">${fn:substring(vo.PDate,0,11)}</span>  
+	      	<span class="post-time-left">${fn:substring(vo.PDate,0,16)}</span>  
 	      </c:if>
 	      <c:if test="${sMid != vo.mid}"> 
-	      	<span class="post-time">${fn:substring(vo.PDate,0,11)}</span>  
+	      	<span class="post-time">${fn:substring(vo.PDate,0,16)}</span>  
 	      </c:if>
 	      <c:if test="${sMid == vo.mid}"> 
 	      	<%-- <div class="updateBtn">
@@ -1072,8 +1328,50 @@
 	</div>
 </div>
 
-<!-- 댓글 모달 -->
-<div class="modal" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+
+	<!-- 댓글 모달 -->
+	<%-- <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="commentsModalLabel">댓글</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <c:if test="${!empty replyVos}">      
+	          <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
+	            <div class="modal-comment ${replyVo.parentIdx != null ? 'reply-comment' : ''}" id="comment${replyVo.idx}">
+	              <span class="modal-comment-username">${replyVo.name}</span>
+	              <span class="modal-comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</span>
+	              <div class="modal-comment-time">
+	                ${fn:substring(replyVo.prDate, 0, 10)}
+	                <c:if test="${sMid == replyVo.mid}">
+	                  <a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제" class="delete-btn">삭제</a>
+	                </c:if>
+	                <c:if test="${replyVo.parentIdx == null}">
+	                  <span id="showReplyBtn${replyVo.idx}" class="reply-btn" onclick="replyShow(${replyVo.idx})">답글 달기</span>
+	                  <span id="closeReplyBtn${replyVo.idx}" class="reply-btn" onclick="replyShow(${replyVo.idx})" style="display:none;">닫기</span>
+	                </c:if>
+	              </div>
+	              <div class="reply-form" id="replyForm${replyVo.idx}" style="display:none;">
+	                <input type="text" id="contentRe${replyVo.idx}" placeholder="답글을 입력하세요..." class="comment-input-re" value="@${replyVo.name} ">
+	                <button onclick="submitReply(${replyVo.idx}, ${vo.idx})"><i class="fas fa-paper-plane"></i></button>
+	              </div>
+	            </div>
+	          </c:forEach>
+	        </c:if>
+	        <c:if test="${empty replyVos}">
+	          <div class="m-3">
+	            <span class="modal-comment-username">아직 작성된 댓글이 없어요</span>
+	          </div>
+	        </c:if>
+	      </div>
+	    </div>
+	  </div>
+	</div> --%>
+	
+	<!-- 댓글 모달 -->
+<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-comments-container">
@@ -1108,48 +1406,43 @@
           </c:if>
           <c:if test="${empty replyVos}">
             <div class="m-3">
-              <!-- <span class="modal-comment-username">아직 작성된 댓글이 없어요</span> -->
-              <p>아직 댓글이 없습니다.</p>
+              <span class="modal-comment-username">아직 작성된 댓글이 없어요</span>
             </div>
           </c:if>
         </div>
-        <div class="comment-input-area">
-          <input type="text" id="contentModal" placeholder="새 댓글을 입력하세요...">
-          <button type="button" class="btn btn-submit" onclick="modalReplyCheck()">
-            <i class="fas fa-paper-plane"></i>
-          </button>
-      	</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 좋아요 모달 -->
-<div class="modal fade" id="likesModal" tabindex="-1" aria-labelledby="likesModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="likesModalLabel">좋아요</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- 좋아요 누른 사람들의 목록 -->
-        <c:if test="${!empty likers}">
-	        <c:forEach var="liker" items="${likers}">
-	          <div class="modal-comment">
-	            <span class="modal-comment-username">${liker.name}</span>
-	          </div>
-	        </c:forEach>
-        </c:if>
-        <c:if test="${empty likers}">
-          <div class="modal-comment">
-            <span class="modal-comment-username">아직 좋아요를 누른 가족이 없어요</span>
-          </div> 
-        </c:if>
-      </div>
-    </div>
-  </div>
-</div>
+
+    
+		<!-- 좋아요 모달 -->
+		<div class="modal fade" id="likesModal" tabindex="-1" aria-labelledby="likesModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="likesModalLabel">좋아요</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <!-- 좋아요 누른 사람들의 목록 -->
+		        <c:if test="${!empty likers}">
+			        <c:forEach var="liker" items="${likers}">
+			          <div class="modal-comment">
+			            <span class="modal-comment-username">${liker.name}</span>
+			          </div>
+			        </c:forEach>
+		        </c:if>
+		        <c:if test="${empty likers}">
+		          <div class="modal-comment">
+		            <span class="modal-comment-username">아직 좋아요를 누른 가족이 없어요</span>
+		          </div> 
+		        </c:if>
+		      </div>
+		    </div>
+		  </div>
+		</div>
     
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />

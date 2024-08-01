@@ -175,14 +175,6 @@
     .btn-edit:hover, .btn-delete:hover {
       background-color: #d0d0d0;
     }
-  
-    /*.btn-end-vote {
-      background-color: #4a69bd;
-      color: white;
-      border: 1px solid #3c55a5;
-      font-weight: 700;
-      padding: 10px 18px;
-    } */
     .btn-end-vote {
       background-color: #84a98c;
       color: #ffffff;
@@ -673,6 +665,16 @@
     	    }
     	  });
     	}
+      
+      
+      function voteDelete(idx) {
+	 			showConfirm("정말로 이 회의를 삭제하시겠습니까?", function() {
+	 		  	location.href = "voteDelete?idx="+idx;
+	 			});
+	 		}
+ 		
+      
+      
 
   </script>
 </head>
@@ -719,11 +721,11 @@
 	  <div class="vote-actions">
 	    <c:if test="${vo.memberIdx == sIdx}">
 	      <button class="btn btn-end-vote" onclick="voteEnd()">투표 종료</button>
+		    <c:if test="${vo.memberIdx == sIdx && !hasVoted}">
+		      <a href="${ctp}/vote/voteUpdate?idx=${vo.idx}" class="btn btn-edit"><i class="fas fa-edit"></i> 수정</a>
+		    </c:if>
+		    <a href="javascript:voteDelete(${vo.idx})" class="btn btn-delete"><i class="fas fa-trash-alt"></i> 삭제</a>
 	    </c:if>
-	    <c:if test="${vo.memberIdx == sIdx && !hasVoted}">
-	      <a href="javascript:voteUpdate(${vo.idx})" class="btn btn-edit"><i class="fas fa-edit"></i> 수정</a>
-	    </c:if>
-	    <a href="javascript:voteDelete(${vo.idx})" class="btn btn-delete"><i class="fas fa-trash-alt"></i> 삭제</a>
 	  </div>
 	</div>
   

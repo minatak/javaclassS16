@@ -20,8 +20,8 @@ public class VoteServiceImpl implements VoteService {
 	VoteDAO voteDAO;
 	
 	@Override
-	public ArrayList<VoteVO> getVoteList(String familyCode, int memberIdx, int startIndexNo, int pageSize) {
-		return voteDAO.getVoteList(familyCode, memberIdx, startIndexNo, pageSize);
+	public ArrayList<VoteVO> getVoteList(String familyCode, int memberIdx, int startIndexNo, int pageSize, String choice) {
+		return voteDAO.getVoteList(familyCode, memberIdx, startIndexNo, pageSize, choice);
 	}
 
 	@Override
@@ -112,6 +112,18 @@ public class VoteServiceImpl implements VoteService {
 	public List<VoteVO> getActiveVotes(String familyCode) {
 		return voteDAO.getActiveVotes(familyCode);
 	}
+
+	@Override
+  @Transactional
+  public boolean setDeleteVote(int voteIdx) {
+    int replyResult = voteDAO.deleteVoteReplies(voteIdx);
+    int participationResult = voteDAO.deleteVoteParticipations(voteIdx);
+    int optionResult = voteDAO.deleteVoteOptions(voteIdx);
+    int voteResult = voteDAO.deleteVote(voteIdx);
+
+    // 모든 삭제 작업이 성공적으로 수행되었는지 확인
+    return voteResult > 0; // voteResult가 0보다 큰 경우에는 true, 그렇지 않은 경우에는 false를 반환함
+  }
 
 	
 	
