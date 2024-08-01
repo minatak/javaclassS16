@@ -94,6 +94,16 @@
     AND familyCode = #{familyCode}
     ORDER BY createdAt DESC
   </select>
+	
+	<select id="getVotedOptions" resultType="com.spring.javaclassS16.vo.VoteOptionVO">
+    SELECT vo.* FROM voteOption vo
+    JOIN voteParticipation vp ON vo.idx = vp.optionIdx
+    WHERE vp.voteIdx = #{voteIdx} AND vp.memberIdx = #{memberIdx}
+	</select>
+
+	<select id="getVoteReplyVo" resultType="com.spring.javaclassS16.vo.VoteReplyVO">
+		select * FROM voteReply WHERE idx = #{idx}
+	</select>
 
 	
 	<insert id="setVoteInput" useGeneratedKeys="true" keyProperty="idx"> <!-- 이걸 써줘야 됨 -->
@@ -127,6 +137,10 @@
 	  )
 	</insert>
 	
+	<insert id="insertVoteOption">
+    INSERT INTO voteOption (voteIdx, optionText)
+    VALUES (#{voteIdx}, #{optionText})
+	</insert>
 	
 	
 	<update id="updateVoteOptionCount">
@@ -147,6 +161,25 @@
     WHERE <![CDATA[endTime < NOW()]]> AND status = 'ACTIVE'
   </update>
   
+  <update id="setVoteUpdate">
+    UPDATE vote 
+    SET title = #{title}, 
+        description = #{description}, 
+        endTime = #{endTime}, 
+        anonymous = #{anonymous}, 
+        multipleChoice = #{multipleChoice}
+    WHERE idx = #{idx}
+	</update>
+  
+  <update id="updateVoteOption">
+    UPDATE voteOption 
+    SET optionText = #{optionText}
+    WHERE idx = #{optionIdx}
+	</update>
+	
+	<update id="setDecreaseVoteCount">
+		UPDATE voteOption SET voteCount = voteCount - 1 WHERE idx = #{optionIdx};
+	</update>
   
   
   <delete id="setCancelVote">
@@ -173,5 +206,22 @@
 	<delete id="deleteVote">
 	    DELETE FROM vote WHERE idx = #{voteIdx}
 	</delete>
+	
+	<delete id="deleteVoteOption">
+    DELETE FROM voteOption WHERE idx = #{optionIdx}
+	</delete>
+	
+	<delete id="deleteVoteParticipation">
+    DELETE FROM voteParticipation WHERE voteIdx = #{voteIdx} AND memberIdx = #{memberIdx};
+	</delete>
+	
+	<delete id="setReplyDeleteByParentIdx">
+    DELETE FROM voteReply WHERE parentIdx = #{idx}
+	</delete>
+	
+	<delete id="setReplyDelete">
+   	DELETE FROM voteReply WHERE idx = #{idx} 
+	</delete>
+	
 
 </mapper>

@@ -216,6 +216,12 @@
       }
     }
   
+    function isValidEndTime(endTime) {
+   	  const now = new Date();
+   	  const selectedEndTime = new Date(endTime);
+   	  return selectedEndTime > now;
+   	}
+    
     function fCheck() {
   	  let title = myform.title.value;
   	  let description = myform.description.value;
@@ -250,7 +256,13 @@
 	  	    endTime.focus();
 	  	  });
 	  	  return false;
-	  	}
+   		} 
+	  	else if (!noEndTime.checked && !isValidEndTime(endTime.value)) {
+        showAlert("종료 시간은 현재 시간 이후로 설정해주세요", function() {
+          endTime.focus();
+        });
+        return false;
+      }
 	  	else {
 	  	  for(let i = 0; i < options.length; i++) {
 	  	    if(options[i].value.trim() == "") {
@@ -262,6 +274,10 @@
 	  	  }
 	  	}
 
+	  	if (noEndTime.checked) {
+  	    document.myform.endTime.value = "";
+  	  }
+	  	
   	  document.myform.submit();
   	}
     

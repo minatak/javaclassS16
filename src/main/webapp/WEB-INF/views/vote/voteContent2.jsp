@@ -423,114 +423,199 @@
     }
 
     /* 댓글 섹션 스타일 수정 */
+    /* .comment-section {
+      margin-top: 40px;
+      border-top: 1px solid #e4e6eb;
+      padding-top: 20px;
+    }
+
+    .comment {
+      padding: 15px 0;
+      border-bottom: 1px solid #f0f2f5;
+    }
+
+    .comment-author {
+      font-weight: 600;
+      color: #365899;
+      margin-right: 8px;
+    }
+
+    .comment-content {
+      margin: 5px 0;
+      line-height: 1.4;
+    }
+
+    .comment-meta {
+      font-size: 12px;
+      color: #65676B;
+      margin-top: 5px;
+    }
+
+    .reply-btn, .delete-btn {
+      cursor: pointer;
+      color: #65676B;
+      margin-left: 10px;
+      font-size: 12px;
+      transition: color 0.3s ease;
+    }
+
+    .reply-btn:hover, .delete-btn:hover {
+      color: #1877f2;
+    }
+
+    .comment.reply {
+      margin-left: 20px;
+      padding-left: 15px;
+      position: relative;
+    }
+
+    .comment.reply::before {
+      content: '↳';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      color: #65676B;
+    }
+
+    .comment-input-container {
+      margin-bottom: 20px;
+    }
+
+    .comment-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccd0d5;
+      border-radius: 8px;
+      font-size: 14px; 
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .btn-comment {
+      background-color: #84a98c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-comment:hover {
+      background-color: #6b8e72;
+    }
+
+    .reply-form {
+      margin-top: 10px;
+      margin-left: 20px;
+    } */
+    
     .comment-section {
-		  margin-top: 40px;
-		  border-top: 1px solid #e0e0e0;
-		  padding-top: 30px;
-		}
-		
-		.comment-section h4 {
-		  font-size: 18px;
-		  color: #333;
-		  margin-bottom: 20px;
-		}
-		
-		.comment-input-container {
-		  margin-bottom: 30px;
-		}
-		
-		.comment-input {
-		  width: 100%;
-		  padding: 15px;
-		  border: 1px solid #e0e0e0;
-		  border-radius: 4px;
-		  font-size: 14px; 
-		  resize: vertical;
-		  min-height: 100px;
-		}
-		
-		.comment-input:focus {
-		  outline: none;
-		  border-color: #84a98c;
-		}
-		
-		.btn-comment {
-		  background-color: #84a98c;
-		  color: #fff;
-		  border: none;
-		  padding: 8px 16px;
-		  border-radius: 4px;
-		  font-size: 14px;
-		  font-weight: 500;
-		  margin-top: 10px;
-		  transition: background-color 0.2s ease;
-		}
-		
-		.btn-comment:hover {
-		  background-color: #6b8e72;
-		}
-		
-		.comment {
-		  padding: 20px 0;
-		}
-		
-		.comment:not(.reply) {
-		  border-bottom: 1px solid #e0e0e0;
-		}
-		
-		.comment-author {
-		  font-weight: 600;
-		  color: #333;
-		  margin-right: 10px;
-		}
-		
-		.comment-content {
-		  margin: 10px 0;
-		  line-height: 1.6;
-		  color: #333;
-		}
-		
-		.comment-meta {
-		  font-size: 12px;
-		  color: #999;
-		  margin-top: 5px;
-		}
-		
-		.comment-time {
-		  margin-right: 10px;
-		}
-		
-		.reply-btn, .delete-btn {
-		  cursor: pointer;
-		  color: #84a98c;
-		  margin-left: 10px;
-		  font-size: 12px;
-		  transition: color 0.2s ease;
-		}
-		
-		.reply-btn:hover, .delete-btn:hover {
-		  color: #6b8e72;
-		}
-		
-		.comment.reply {
-		  margin-left: 30px;
-		  position: relative;
-		  padding-left: 20px;
-		  border-bottom: none;
-		}
-		
-		.comment.reply::before {
-		  content: '└';
-		  position: absolute;
-		  left: 0;
-		  top: 20px;
-		  color: #84a98c;
-		}
-		
-		.reply-form {
-		  margin-top: 15px;
-		  margin-left: 30px;
-		}
+  margin-top: 40px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 30px;
+}
+
+.comment-section h4 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.comment-input-container {
+  margin-bottom: 30px;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px; 
+  resize: vertical;
+  min-height: 100px;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #84a98c;
+}
+
+.btn-comment {
+  background-color: #f8f9fa;
+  color: #333;
+  border: 1px solid #ced4da;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-comment:hover {
+  background-color: #e9ecef;
+}
+
+.comment {
+  border-top: 1px solid #e0e0e0;
+  padding: 20px 0;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: #333;
+  margin-right: 10px;
+}
+
+.comment-content {
+  margin: 10px 0;
+  line-height: 1.6;
+  color: #333;
+}
+
+.comment-meta {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.comment-time {
+  margin-right: 10px;
+}
+
+.reply-btn, .delete-btn {
+  cursor: pointer;
+  color: #999;
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+.reply-btn:hover, .delete-btn:hover {
+  text-decoration: underline;
+}
+
+.comment.reply {
+  margin-left: 20px;
+  position: relative;
+  padding-left: 25px;
+}
+
+.reply-icon {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  color: #999;
+  font-size: 14px;
+  transform: rotate(180deg) scaleX(-1);
+}
+
+.reply-form {
+  margin-top: 15px;
+  margin-left: 30px;
+}
+
   </style>
   <script>
     'use strict';
@@ -789,27 +874,6 @@
     	    });
     	}
       
-      function deleteComment(idx) {
-			 	showConfirm('정말로 이 댓글을 삭제하시겠습니까?', function() {
-					$.ajax({
-					  url: '${ctp}/vote/replyDelete',
-					  type: "POST",
-					  data: {idx: idx},
-					  success: function(res) {
-					    if (res == "1") {
-					      showAlert("댓글이 삭제되었습니다.", function() {
-                	location.reload();
-                });
-					    } else {
-					      showAlert("댓글 삭제에 실패했습니다.");
-					    }
-					  },
-					  error: function() {
-					    showAlert("전송오류!");
-					  }
-					});
-			 	});
-		  }
 
   </script>
 </head>
@@ -899,6 +963,30 @@
     </div>
   </c:if>
 
+  <%-- <c:if test="${vo.status == 'CLOSED' || isEnded}">
+    <h3>투표 결과</h3>
+    <div id="chart_div"></div>
+    <div class="vote-options">
+      <c:forEach var="option" items="${voteOptions}">
+        <div class="vote-option mt-3">
+          <div class="vote-bar">
+            <div class="vote-progress" style="width: ${option.votePercent}%;"></div>
+          </div>
+          <span class="vote-text">${option.optionText}</span>
+          <span class="vote-percent">${option.votePercent}% (${option.voteCount}표)</span>
+        </div>
+        <c:if test="${!vo.anonymous}">
+          <div class="voter-info">
+            <c:forEach var="voter" items="${option.voters}">
+              <img src="${ctp}/member/${voter.photo}" alt="${voter.name}" class="voter-photo">
+              <span>${voter.name}</span>
+            </c:forEach>
+          </div>
+        </c:if>
+      </c:forEach>
+    </div>
+  </c:if> --%>
+  
   <c:if test="${vo.status == 'CLOSED' || isEnded}">
 	  <h3>투표 결과</h3>
 	  <div id="voteResultContainer">
@@ -973,13 +1061,13 @@
         <span class="comment-author">${replyVo.name}</span>
         <span>${fn:replace(replyVo.content, newLine, "<br/>")}</span>
         <div class="comment-meta">
-          <span class="comment-time">${fn:substring(replyVo.createdAt, 0, 16)}</span>
+          <span class="comment-time">${replyVo.createdAt}</span>
           <span id="replyBtn${replyVo.idx}" class="reply-btn" onclick="toggleReplyForm(${replyVo.idx})">
-            답글
+            <i class="fas fa-reply"></i> 답글
           </span>
           <c:if test="${replyVo.memberIdx == sIdx}">
             <span class="delete-btn" onclick="deleteComment(${replyVo.idx})">
-              삭제
+              <i class="fas fa-trash-alt"></i> 삭제
             </span>
           </c:if>
         </div>
@@ -994,13 +1082,14 @@
         <c:forEach var="childReply" items="${replyVos}">
           <c:if test="${childReply.parentIdx == replyVo.idx}">
             <div class="comment reply">
-              <span class="comment-author">${childReply.name}</span>
-              <span>${fn:replace(childReply.content, newLine, "<br/>")}</span>
+						  <i class="fas fa-reply reply-icon"></i>
+						  <span class="comment-author">${childReply.name}</span>
+						  <span>${fn:replace(childReply.content, newLine, "<br/>")}</span>
               <div class="comment-meta">
-                <span class="comment-time">${fn:substring(childReply.createdAt, 0, 16)}</span>
+                <span class="comment-time">${childReply.createdAt}</span>
                 <c:if test="${childReply.memberIdx == sIdx}">
                   <span class="delete-btn" onclick="deleteComment(${childReply.idx})">
-                    삭제
+                    <i class="fas fa-trash-alt"></i> 삭제
                   </span>
                 </c:if>
               </div>

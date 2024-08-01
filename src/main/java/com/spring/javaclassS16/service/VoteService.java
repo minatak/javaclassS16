@@ -43,4 +43,16 @@ public interface VoteService {
 
 	public boolean setDeleteVote(int idx);
 
+	public int setVoteUpdate(VoteVO vo, List<String> options, List<Integer> deletedOptions);
+
+//	public int deleteVoteParticipation(int voteIdx, int memberIdx);
+
+	public int setCancelAndResetVote(int voteIdx, int memberIdx);
+
+	public int setReplyDelete(int idx);
+
+	public VoteReplyVO getVoteReplyVo(int idx);
+
+	public void setReplyDeleteByParentIdx(int idx);
+
 }

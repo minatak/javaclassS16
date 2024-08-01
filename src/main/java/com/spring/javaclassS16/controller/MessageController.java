@@ -148,6 +148,22 @@ public class MessageController {
 			model.addAttribute("msg", "회의 삭제에 실패했어요");
 			model.addAttribute("url", "/familyMeeting/meetingContent?idx="+idx);
 		}
+		else if(msgFlag.equals("voteDeleteOk")) {
+			model.addAttribute("msg", "투표가 삭제되었습니다");
+			model.addAttribute("url", "/vote/voteList");
+		}
+		else if(msgFlag.equals("voteDeleteNo")) {
+			model.addAttribute("msg", "투표 삭제에 실패했어요");
+			model.addAttribute("url", "/vote/voteContent?idx="+idx);
+		}
+		else if(msgFlag.equals("voteUpdateOk")) {
+			model.addAttribute("msg", "투표가 수정되었습니다");
+			model.addAttribute("url", "/vote/voteContent?idx="+idx);
+		}
+		else if(msgFlag.equals("voteUpdateNo")) {
+			model.addAttribute("msg", "투표 수정에 실패했어요");
+			model.addAttribute("url", "/vote/voteContent?idx="+idx);
+		}
 		
 		
 		return "include/message";

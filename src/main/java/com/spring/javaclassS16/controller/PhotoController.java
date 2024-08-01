@@ -171,7 +171,6 @@ public class PhotoController {
     	
     	// 삭제하려는 댓글이 부모 댓글인지 대댓글인지 확인 (parentIdx가 null이면 부모댓글)
     	PhotoReplyVO vo = photoService.getPhotoReplyVo(idx);
-    	System.out.println("vo : " + vo);
     	// 부모 댓글을 삭제할 경우
     	if(vo.getParentIdx() == null) {
     		// 먼저 대댓글들을 삭제 

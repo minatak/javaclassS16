@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javaclassS16.pagination.PageProcess;
 import com.spring.javaclassS16.service.VoteService;
-import com.spring.javaclassS16.vo.FamilyMeetingVO;
-import com.spring.javaclassS16.vo.MeetingTopicVO;
 import com.spring.javaclassS16.vo.MemberVO;
-import com.spring.javaclassS16.vo.NoticeReplyVO;
 import com.spring.javaclassS16.vo.PageVO;
 import com.spring.javaclassS16.vo.VoteOptionVO;
 import com.spring.javaclassS16.vo.VoteReplyVO;
@@ -241,6 +238,56 @@ public class VoteController {
     return "vote/voteUpdate";
   }
   
+  @RequestMapping(value = "/voteUpdate", method = RequestMethod.POST)
+  public String voteUpdatePost(VoteVO vo, 
+	                           @RequestParam("options[]") List<String> options,
+	                           @RequestParam(value = "deletedOptions[]", required = false) List<Integer> deletedOptions) {
+	  if(vo.getEndTime().trim().equals("")) vo.setEndTime(null);
+	  
+	  int res = voteService.setVoteUpdate(vo, options, deletedOptions);
+	  
+	  if(res != 0) return "redirect:/message/voteUpdateOk?idx=" + vo.getIdx();
+	  else return "redirect:/message/voteUpdateNo?idx=" + vo.getIdx();
+  }
+  
+  @ResponseBody
+  @RequestMapping(value = "/reVote", method = RequestMethod.POST)
+  public String reVotePost(@RequestParam("voteIdx") int voteIdx, HttpSession session) {
+      int memberIdx = (int) session.getAttribute("sIdx");
+      
+      // 이전 투표 삭제 및 voteCount 감소
+      int res = voteService.setCancelAndResetVote(voteIdx, memberIdx);
+      
+      if(res > 0) {
+          return "1"; // 성공
+      } else {
+          return "0"; // 실패
+      }
+  }
+  
+//  @ResponseBody
+//  @RequestMapping(value = "/replyDelete", method = RequestMethod.POST)
+//  public int replyDeletePost(@RequestParam(name="idx") int idx) {
+//    return voteService.setReplyDelete(idx);
+//  }
+  
+
+  @Transactional
+  @ResponseBody
+  @RequestMapping(value = "/replyDelete", method = RequestMethod.POST)
+  public String replyDeletePost(@RequestParam int idx) {
+  	
+  	// 삭제하려는 댓글이 부모 댓글인지 대댓글인지 확인 (parentIdx가 null이면 부모댓글)
+  	VoteReplyVO vo = voteService.getVoteReplyVo(idx);
+  	// 부모 댓글을 삭제할 경우
+  	if(vo.getParentIdx() == null) {
+  		// 먼저 대댓글들을 삭제 
+  		voteService.setReplyDeleteByParentIdx(idx);
+  	}
+
+  	// 그 다음 부모 댓글 삭제
+  	return voteService.setReplyDelete(idx) + "";
+  }
   
   
 }

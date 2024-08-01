@@ -60,6 +60,25 @@ public interface VoteDAO {
 
 	public int deleteVote(@Param("voteIdx") int voteIdx);
 
+	public int setVoteUpdate(VoteVO vo);
+	
+	public void deleteVoteOption(@Param("optionIdx") int optionIdx);
+	
+	public void updateVoteOption(@Param("optionIdx") int optionIdx, @Param("optionText") String optionText);
+	
+	public void insertVoteOption(@Param("voteIdx") int voteIdx, @Param("optionText") String optionText);
+
+	public int deleteVoteParticipation(@Param("voteIdx") int voteIdx, @Param("memberIdx") int memberIdx);
+
+	public List<VoteOptionVO> getVotedOptions(@Param("voteIdx") int voteIdx, @Param("memberIdx") int memberIdx);
+
+	public void setDecreaseVoteCount(@Param("optionIdx") int optionIdx);
+
+	public int setReplyDelete(@Param("idx") int idx);
+
+	public VoteReplyVO getVoteReplyVo(@Param("idx") int idx);
+
+	public void setReplyDeleteByParentIdx(@Param("idx") int idx);
 	
 	
 }

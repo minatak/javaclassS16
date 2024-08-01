@@ -11,7 +11,7 @@
   <style>
 	  body {
 	    font-family: 'pretendard' !important;
-	    background-color: #f8f8f8;
+	    background-color: #fff;
 	    color: #333;
 	  }
 	  .inputContainer {
@@ -26,6 +26,7 @@
 	    font-size: 24px; 
 	    color: #cecece; 
 	  }
+	  .home-icon:hover {color: #c6c6c6;}
 	  .h2 {
 	    font-family: 'pretendard' !important;
 	    font-weight: 600;
@@ -223,6 +224,12 @@
       toggleEndTime(); // 초기 상태 설정
     }
   
+    function isValidEndTime(endTime) {
+   	  const now = new Date();
+   	  const selectedEndTime = new Date(endTime);
+   	  return selectedEndTime > now;
+   	}
+    
     function fCheck() {
   	  let title = myform.title.value;
   	  let description = myform.description.value;
@@ -231,33 +238,40 @@
   	  let endTime = document.getElementById('endTime');
   	  
   	  if(title.trim() == "") {
-  	    showAlert("제목을 입력해주세요.");
+  	    showAlert("제목을 입력해주세요");
   	    myform.title.focus();
   	    return false;
   	  }
   	  else if (title.trim().length > 100) {
-  	    showAlert("제목은 100자 이내로 입력해주세요.");
+  	    showAlert("제목은 100자 이내로 입력해주세요");
   	    myform.title.focus();
   	    return false;
   	  } 
   	  else if(description.trim() == "") {
-  	    showAlert("내용을 입력해주세요.");
+  	    showAlert("내용을 입력해주세요");
   	    myform.description.focus();
   	    return false;
   	  }
   	  else if(options.length < 2) {
-  	    showAlert("최소 두 개 이상의 항목을 입력해주세요.");
+  	    showAlert("최소 두 개 이상의 항목을 입력해주세요");
   	    return false;
   	  }
-  	  else if (!noEndTime.checked && endTime.value.trim() == "") { // '종료시간 설정 안함'을 체크하지 않았고, 종료 시간이 입력되지 않았을 경우
-		    showAlert("종료 시간을 입력해주세요.");
-		    endTime.focus();
-		    return false;
-		  }
+	  	else if (!noEndTime.checked && endTime.value.trim() == "") {
+		  	  showAlert("종료 시간을 입력해주세요", function() {
+		  	    endTime.focus();
+		  	  });
+		  	  return false;
+	 		} 
+		  	else if (!noEndTime.checked && !isValidEndTime(endTime.value)) {
+	      showAlert("종료 시간은 현재 시간 이후로 설정해주세요", function() {
+	        endTime.focus();
+	      });
+	      return false;
+	    }
   	  else {
   	    for(let i = 0; i < options.length; i++) {
   	      if(options[i].value.trim() == "") {
-  	        showAlert("투표 항목을 입력해주세요.");
+  	        showAlert("투표 항목을 입력해주세요");
   	        options[i].focus();
   	        return false;
   	      }
@@ -272,7 +286,6 @@
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
-<p><br/></p>
 <p><br/></p>
 <div class="inputContainer">
     <div class="header">
