@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>공지사항 | HomeLink</title>
+  <title>가족소식 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
   
   <style>
@@ -77,33 +77,6 @@
 		  color: #e4e6eb;
 		  margin-right: 5px;
 		}
-    /* 
-    .notice-item {
-		  border-bottom: 1px solid #e5e5e5;
-		  padding: 15px 0;
-		  display: flex;
-		  align-items: center;
-		}
-		.notice-number {
-		  flex: 0 0 120px;
-		  display: flex;
-		  align-items: center;
-		}
-		.notice-title {
-		  flex: 1;
-		  font-weight: 500;
-		}
-		.notice-info {
-		  flex: 0 0 150px;
-		  display: flex;
-		  flex-direction: column;
-		  align-items: flex-end;
-		}
-		.notice-date {
-		  flex: 0 0 100px;
-		  text-align: right;
-		} */
-    
     .btn-write {
       background-color: #e4e6eb;
       border-color: #e4e6eb;
@@ -183,7 +156,7 @@
       margin-right: 5px;
     }
     
-    
+    /* 
     .pagination {
 		  display: inline-block;
 		  padding-left: 0;
@@ -235,7 +208,7 @@
 		  cursor: default;
 		  background-color: #84a98c;
 		  border-color: #84a98c;
-		}
+		} */
   </style>
   
   <script>
@@ -256,7 +229,7 @@
   <div class="noticeContainer">
     <div class="header">
 	    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
-	    <font size="5" class="mb-4 h2">공지사항</font>
+	    <font size="5" class="mb-4 h2">가족 소식</font>
 		</div>
     
     <div class="searchContainer">
@@ -320,7 +293,7 @@
 		  </c:forEach>
 		</div> 
     
-    <!-- 블록페이지 시작  
+    <!-- 블록페이지 시작 -->
 		<div class="d-flex justify-content-center my-4">
 		  <ul class="pagination justify-content-center">
 			  <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=1&pageSize=${pageVO.pageSize}">첫페이지</a></li></c:if>
@@ -333,10 +306,10 @@
 			  <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link text-secondary" href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막페이지</a></li></c:if>
 		  </ul>
 		</div>
-		블록페이지 끝 -->
+		<!-- 블록페이지 끝 -->
 		
 		<!-- 블록페이지 시작 -->
-		<div class="d-flex justify-content-center my-4">
+		<%-- <div class="d-flex justify-content-center my-4">
 		  <ul class="pagination">
 		    <c:if test="${pageVO.pag > 1}">
 		      <li><a href="noticeList?pag=1&pageSize=${pageVO.pageSize}">처음</a></li>
@@ -359,7 +332,7 @@
 		      <li><a href="noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">끝</a></li>
 		    </c:if>
 		  </ul>
-		</div>
+		</div> --%>
 		<!-- 블록페이지 끝 -->
      
   </div>

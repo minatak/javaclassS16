@@ -6,13 +6,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>일정관리 | HomeLink</title>
+  <title>캘린더 | HomeLink</title>
   <%@ include file="/WEB-INF/views/include/bs4.jsp" %>
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <style>
 	  body { 
-	    font-family: 'Pretendard' !important; 
+	    font-family: 'Pretendard', sans-serif; 
 	    background-color: #ffffff;
 	  }
 	  
@@ -26,6 +26,8 @@
 	    padding: 40px;
 	    margin-top:0;
 	  }
+	 
+	 
 	 
 	  .header {
       margin-bottom: 50px;
@@ -132,7 +134,7 @@
 	    margin: 5px;
 	  }
 	  
-	  /* .fc .fc-highlight {
+	  .fc .fc-highlight {
 	    background-color: #e9ecef;
 	    opacity: 0.7;
 	  }
@@ -144,7 +146,7 @@
 	  .fc .fc-col-header-cell-cushion {
 	    color: #495057;
 	    font-weight: bold;
-	  } */
+	  }
 	  
 	  .modal-content {
 	    border-radius: 15px;
@@ -251,7 +253,7 @@
     }
     
     /* 상단 버튼 스타일 */
-    /* .fc .fc-button {
+    .fc .fc-button {
       background-color: #84a98c;
       color: white;
       border: none;
@@ -269,34 +271,13 @@
       border: none;
       font-size: 14px;
     }
-     */
-   /*   .fc .fc-button {
-      background-color: #808080;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-weight: 600;
-      font-size: 14px;
-    }
     
-    .fc .fc-button:hover {
-      color: white;
-      background-color: #666666;
-      border: none;
-      font-size: 14px;
-    }
-      */
-     
-     
 		/* '오늘' 버튼 스타일 */
 		/* .fc .fc-today-button {
 		  background-color: #e9ecef;
 		  color: #333;
 		} */
-		/* 
+		
 		.fc .fc-today-button:hover {
 		  background-color: #26292a;  
 		  color: #fff;
@@ -306,7 +287,7 @@
     .fc .fc-button-primary:not(:disabled):active {
       background-color: #5d7d64;
       color: white;
-    } */
+    }
 		.modal-content {
 		  background-color: white;
 		}
@@ -329,13 +310,13 @@
 	  
 		.help-icon {
 		  font-size: 24px;
-		  color: #b0b0b0;
+		  color: #808080;
 		  cursor: pointer;
 		  margin-left: 5px;
 		}
 		
 		.help-icon:hover {
-		  color: #9f9f9f;
+		  color: #666666;
 		}
 		
 		/* 모달 중앙 배치를 위한 스타일 */
@@ -352,116 +333,9 @@
 		  }
 		}
 		
-		.swal2-confirm {
-		  background-color: white !important;
-		  color: black !important;
-		  border-radius: 0px !important;
-		  box-shadow: none !important;
-		  font-weight: bold !important;
-		  font-size: 18px !important;
-		  margin: 0 !important;
-		  
-		}
-		.swal2-cancel {
-		  background-color: white !important;
-		  color: black !important;
-		  border-radius: 0px !important;
-		  box-shadow: none !important;
-		  /* font-weight: bold !important; */
-		  font-size: 18px !important;
-		  margin: 0 !important;
-		}
-		.custom-swal-popup {
-		  width: 350px !important;
-		  padding-top: 20px !important;
-		  border-radius: 0px !important;
-		}
-		.swal2-confirm:hover {
-		  background-color: none !important;
-		}
 		
-		
-		
-		
-		.fc .fc-button {
-		  background-color: white;
-		  color: #808080;
-		  border: 1px solid #e0e0e0;
-		  border-radius: 5px;
-		  padding: 8px 16px;
-		  cursor: pointer;
-		  transition: background-color 0.3s ease, color 0.3s ease;
-		  font-weight: 600;
-		  font-size: 14px;
-		}
-		
-		.fc .fc-button:hover {
-		  background-color: #f5f5f5;
-		  color: #606060;
-		  border: 1px solid #e0e0e0;
-		}
-		
-		.fc .fc-button-primary:not(:disabled).fc-button-active,
-		.fc .fc-button-primary:not(:disabled):active {
-		  background-color: #e0e0e0;
-		  color: #404040;
-		  border-color: #d0d0d0;
-		}
-		
-		.fc .fc-today-button:hover {
-		  background-color: #f0f0f0;
-		  color: #404040;
-		}
   </style>
   <script>
-  
-  	'use strict';
-	
-		//커스텀 알럿 및 확인 함수
-		function showAlert(message, callback) {
-		 Swal.fire({
-		   html: message,
-		   confirmButtonText: '확인',
-		   customClass: {
-		     confirmButton: 'swal2-confirm',
-		     popup: 'custom-swal-popup',
-		     htmlContainer: 'custom-swal-text'
-		   },
-		   scrollbarPadding: false,
-		   allowOutsideClick: false,
-		   heightAuto: false
-		 }).then((result) => {
-		   if (result.isConfirmed && callback) {
-		     callback();
-		   }
-		 });
-		}
-		
-		function showConfirm(message, confirmCallback, cancelCallback) {
-		 Swal.fire({
-		   html: message,
-		   showCancelButton: true,
-		   cancelButtonText: '아니요',
-		   confirmButtonText: '네',
-		   customClass: {
-		     cancelButton: 'swal2-cancel',
-		     confirmButton: 'swal2-confirm',
-		     popup: 'custom-swal-popup',
-		     htmlContainer: 'custom-swal-text'
-		   },
-		   scrollbarPadding: false,
-		   allowOutsideClick: false,
-		   heightAuto: false
-		 }).then((result) => {
-		   if (result.isConfirmed && confirmCallback) {
-		     confirmCallback();
-		   } else if (result.isDismissed && cancelCallback) {
-		     cancelCallback();
-		   }
-		 });
-		}
-  
-  
 	  document.addEventListener('DOMContentLoaded', function() {
 	    var calendarEl = document.getElementById('calendar');
 	    var showSharedOnly = false;
@@ -581,6 +455,7 @@
 	    	  
 	    	  const isAuthor = event ? (event.extendedProps.memberId === '${sMid}') : true;
 	    	  const isNewEvent = !event;
+
 	    	  $('#eventId').val(event ? event.id : '');
 	    	  $('#eventTitle').val(event ? event.title : '').prop('readonly', !isAuthor);
 	    	  $('#eventAllDay').prop('checked', event ? event.allDay : allDay).prop('disabled', !isAuthor);
@@ -591,6 +466,7 @@
 	    	  $('#eventDescription').val(event ? event.extendedProps.description : '').prop('readonly', !isAuthor);
 	    	  $('#eventSharing').prop('checked', event ? event.extendedProps.sharing : false).prop('disabled', !isAuthor);
 	    	  $('#eventAuthor').text(event ? '작성자: ' + event.extendedProps.memberId : '');
+
 	    	  // 저장/수정 버튼 설정
 	    	  if (isAuthor) {
 	    	    $('#saveEvent').show();
@@ -601,13 +477,15 @@
 	    	  
 	    	  // 삭제 버튼 설정 (새 이벤트가 아니고 작성자인 경우에만 표시)
 	    	  $('#deleteEvent').toggle(!isNewEvent && isAuthor);
+
 	    	  toggleAllDay();
+
 	    	  if (event && isAuthor) {
 	    	    $('#deleteEvent').show().removeClass('btn-secondary').addClass('btnDanger');
 	    	    $('#deleteEvent').off('click').on('click', function() {
-	    	      showConfirm('이 일정을 삭제하시겠습니까?', function() {
+	    	      if (confirm('이 일정을 삭제하시겠습니까?')) {
 	    	        deleteEvent(event.id);
-	    	      });
+	    	      }
 	    	    });
 	    	  } else {
 	    	    $('#deleteEvent').hide();
@@ -637,17 +515,14 @@
 	            success: function(res) {
 	              if(res === '1') {
 	                $('#eventModal').modal('hide');
-			        	  showAlert("일정이 등록되었습니다", function() {
-				            calendar.refetchEvents();
-				        	});
-	                
+	                calendar.refetchEvents();
 	              } else {
-	                showAlert('일정 저장에 실패했습니다. 오류: ' + res);
+	                alert('일정 저장에 실패했습니다. 오류: ' + res);
 	              }
 	            },
 	            error: function(jqXHR, textStatus, errorThrown) {
 	              console.error("AJAX error: " + textStatus + ' : ' + errorThrown);
-	              showAlert('서showAlert신 중 오류가 발생했습니다. 오류: ' + jqXHR.responseText);
+	              alert('서버와의 통신 중 오류가 발생했습니다. 오류: ' + jqXHR.responseText);
 	            }
 	          });
 	        });
@@ -678,16 +553,13 @@
 	        data: JSON.stringify(updatedEvent),
 	        success: function(res) {
 	          if(res === '1') {
-	        	  $('#eventModal').modal('hide');
-	        	  showAlert("일정이 수정되었습니다", function() {
-		            calendar.refetchEvents();
-		        	});
+	            calendar.refetchEvents();
 	          } else {
-	            showAlert('일정 수정에 실패했습니다.');
+	            alert('일정 수정에 실패했습니다.');
 	          }
 	        },
 	        error: function() {
-	          showAlert('서버와의 통신 중 오류가 발생했습니다.');
+	          alert('서버와의 통신 중 오류가 발생했습니다.');
 	        }
 	      });
 	    }
@@ -700,34 +572,32 @@
 	        success: function(res) {
 	          if(res === '1') {
 	            $('#eventModal').modal('hide');
-	            showAlert("일정이 삭제되었습니다", function() {
-		            calendar.refetchEvents();
-		        	});
+	            calendar.refetchEvents();
 	          } else {
-	            showAlert('일정 삭제에 실패했습니다');
+	            alert('일정 삭제에 실패했습니다.');
 	          }
 	        },
 	        error: function() {
-	          showAlert('서버와의 통신 중 오류가 발생했습니다.');
+	          alert('서버와의 통신 중 오류가 발생했습니다.');
 	        }
 	      });
 	    }
 	
 	    function validateEventForm() {
 	      if (!$('#eventTitle').val()) {
-	        showAlert('제목을 입력해주세요.');
+	        alert('제목을 입력해주세요.');
 	        return false;
 	      }
 	      if (!$('#eventStart').val()) {
-	        showAlert('시작일을 입력해주세요.');
+	        alert('시작일을 입력해주세요.');
 	        return false;
 	      }
 	      if (!$('#eventEnd').val()) {
-	        showAlert('종료일을 입력해주세요.');
+	        alert('종료일을 입력해주세요.');
 	        return false;
 	      }
 	      if (new Date($('#eventEnd').val()) < new Date($('#eventStart').val())) {
-	    	  showAlert('종료일은 시작일보다 이후여야 합니다');
+	        alert('종료일은 시작일보다 이후여야 합니다.');
 	        return false;
 	      }
 	      return true;

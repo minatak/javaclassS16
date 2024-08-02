@@ -207,13 +207,13 @@
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
+<p><br/></p>
 <div class="container">
 	<div class="photoContainer">
     <div class="header">
 	    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
 	    <font size="5" class="mb-4 h2">가족 앨범</font>
 		</div>
-	  <hr/> 
 		<div class="searchItems">
 		  <div class="searchContainer">
 			  <div class="search-bar">

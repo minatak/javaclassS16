@@ -7,7 +7,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>자세히 보기 | HomeLink</title>
+  <title>앨범 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
    <style>
     body {
