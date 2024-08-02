@@ -223,8 +223,4 @@
     DELETE FROM noticeLikes WHERE noticeIdx = #{idx}
   </delete>
   
-  <delete id="deleteNoticeReplies">
-    DELETE FROM noticeReply WHERE noticeIdx = #{idx}
-  </delete>
-  
 </mapper>

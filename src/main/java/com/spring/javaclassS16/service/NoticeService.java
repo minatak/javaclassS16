@@ -60,6 +60,4 @@ public interface NoticeService {
 
 	public void deleteNoticeLikes(int idx);
 
-	public void deleteNoticeReplies(int idx);
-	
 }

@@ -257,9 +257,4 @@ public class NoticeServiceImpl implements NoticeService {
 		noticeDAO.deleteNoticeLikes(idx);		
 	}
 
-	@Override
-	public void deleteNoticeReplies(int idx) {
-		noticeDAO.deleteNoticeReplies(idx);		
-	}
-	
 }

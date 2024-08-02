@@ -157,30 +157,44 @@ public class NoticeController {
 	@Transactional
 	@RequestMapping(value = "/noticeDelete", method = RequestMethod.GET)
 	public String noticeDeleteGet(int idx, HttpSession session,
-    @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-    @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-    
-		// 1. 게시글에 사진이 존재한다면 서버에 저장된 사진을 삭제처리한다.
-		NoticeVO vo = noticeService.getNoticeContent(idx);
-		if(vo.getContent().indexOf("src=\"/") != -1) noticeService.imgDelete(vo.getContent());
-		 
-		// 2. 관련된 읽음 상태 삭제
-	  noticeService.deleteNoticeReadStatus(idx);
+	    @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+	    @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+	    
+	    // 1. 게시글에 사진이 존재한다면 서버에 저장된 사진을 삭제처리한다.
+	    NoticeVO vo = noticeService.getNoticeContent(idx);
+	    if(vo.getContent().indexOf("src=\"/") != -1) noticeService.imgDelete(vo.getContent());
+	     
+	    // 2. 관련된 읽음 상태 삭제
+	    noticeService.deleteNoticeReadStatus(idx);
 	 
-	  // 3. 관련된 좋아요 삭제
-	  noticeService.deleteNoticeLikes(idx);
+	    // 3. 관련된 좋아요 삭제
+	    noticeService.deleteNoticeLikes(idx);
 	 
-	  // 4. 관련된 댓글 삭제
-	  noticeService.deleteNoticeReplies(idx);
+	    // 4. 관련된 댓글 삭제 (대댓글 포함)
+	    List<NoticeReplyVO> replies = noticeService.getNoticeReply(idx);
+	    
+	    // 대댓글부터 삭제
+	    for (NoticeReplyVO reply : replies) {
+	        if (reply.getParentIdx() != null && reply.getParentIdx() != 0) {
+	            noticeService.setNoticeReplyDelete(reply.getIdx());
+	        }
+	    }
+	    
+	    // 부모 댓글 삭제
+	    for (NoticeReplyVO reply : replies) {
+	        if (reply.getParentIdx() == null || reply.getParentIdx() == 0) {
+	            noticeService.setNoticeReplyDelete(reply.getIdx());
+	        }
+	    }
 	 
-	  // 5. 공지사항 삭제
-		int res = noticeService.setNoticeDelete(idx);
-		
-		if(res != 0) {
-		   return "redirect:/message/noticeDeleteOk?pag="+pag+"&pageSize="+pageSize;
-		} else {
-		   return "redirect:/message/noticeDeleteNo?idx="+idx+"&pag="+pag+"&pageSize="+pageSize;
-		}
+	    // 5. 공지사항 삭제
+	    int res = noticeService.setNoticeDelete(idx);
+	    
+	    if(res != 0) {
+	       return "redirect:/message/noticeDeleteOk?pag="+pag+"&pageSize="+pageSize;
+	    } else {
+	       return "redirect:/message/noticeDeleteNo?idx="+idx+"&pag="+pag+"&pageSize="+pageSize;
+	    }
 	}
 	
 	@ResponseBody

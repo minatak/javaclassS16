@@ -764,7 +764,7 @@
     	}
       
       function voteDelete(idx) {
-	 			showConfirm("정말로 이 회의를 삭제하시겠습니까?", function() {
+	 			showConfirm("정말로 이 투표를 삭제하시겠습니까?", function() {
 	 		  	location.href = "voteDelete?idx="+idx;
 	 			});
 	 		}

@@ -124,16 +124,30 @@ public class VoteServiceImpl implements VoteService {
 	}
 
 	@Override
-  @Transactional
-  public boolean setDeleteVote(int voteIdx) {
-    int replyResult = voteDAO.deleteVoteReplies(voteIdx);
-    int participationResult = voteDAO.deleteVoteParticipations(voteIdx);
-    int optionResult = voteDAO.deleteVoteOptions(voteIdx);
-    int voteResult = voteDAO.deleteVote(voteIdx);
-
-    // 모든 삭제 작업이 성공적으로 수행되었는지 확인
-    return voteResult > 0; // voteResult가 0보다 큰 경우에는 true, 그렇지 않은 경우에는 false를 반환함
-  }
+	@Transactional
+	public boolean setDeleteVote(int voteIdx) {
+	    // 투표에 속한 모든 댓글 가져오기
+	    List<VoteReplyVO> replies = voteDAO.getVoteReply(voteIdx);
+	    
+	    // 부모 댓글 먼저 삭제 (이 과정에서 대댓글도 함께 삭제됨)
+	    for (VoteReplyVO reply : replies) {
+	        if (reply.getParentIdx() == null) {
+	            voteDAO.setReplyDeleteByParentIdx(reply.getIdx());
+	            voteDAO.setReplyDelete(reply.getIdx());
+	        }
+	    }
+	    
+	    // 투표 참여 기록 삭제
+	    int participationResult = voteDAO.deleteVoteParticipations(voteIdx);
+	    
+	    // 투표 옵션 삭제
+	    int optionResult = voteDAO.deleteVoteOptions(voteIdx);
+	    
+	    // 투표 삭제
+	    int voteResult = voteDAO.deleteVote(voteIdx);
+	    
+	    return voteResult > 0;
+	}
 
 	@Override
 	@Transactional

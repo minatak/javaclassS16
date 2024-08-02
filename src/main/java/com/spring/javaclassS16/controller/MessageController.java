@@ -164,6 +164,14 @@ public class MessageController {
 			model.addAttribute("msg", "투표 수정에 실패했어요");
 			model.addAttribute("url", "/vote/voteContent?idx="+idx);
 		}
+		else if(msgFlag.equals("noticeDeleteOk")) {
+			model.addAttribute("msg", "소식이 삭제되었습니다");
+			model.addAttribute("url", "/notice/noticeList?pag="+pag+"&pageSize="+pageSize);
+		}
+		else if(msgFlag.equals("noticeDeleteOk")) {
+			model.addAttribute("msg", "소식 삭제에 실패했어요");
+			model.addAttribute("url", "/notice/noticeContent?idx="+idx+"pag="+pag+"&pageSize="+pageSize);
+		}
 		
 		
 		return "include/message";

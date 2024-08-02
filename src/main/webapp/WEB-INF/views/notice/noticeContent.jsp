@@ -13,7 +13,7 @@
    <style>
      body {
       font-family: 'Pretendard' !important;
-      background-color: #ffffff;
+      background-color: #ffffaff;
       color: #333333;
     }
     .home-icon { 
@@ -161,6 +161,8 @@
     }
 
     .btn-list:hover {
+      color: #333;
+      text-decoration: none;
       background-color: #f8f8f8;
     }
     .btn-edit {
@@ -364,7 +366,7 @@
   	}
     
     function noticeDelete() {
-      showConfirm("현재 공지사항을 삭제하시겠습니까?", function() {
+      showConfirm("현재 가족 소식을 삭제하시겠습니까?", function() {
         location.href = "noticeDelete?idx=${vo.idx}";
       });
     }
@@ -594,7 +596,7 @@
 	    </c:if>
 	  </div>
 
-	  <a href="noticeList" class="btn-list mt-3">목록</a>
+	  <a href="noticeList?pag=${pag}&pageSize=${pageSize}" class="btn-list mt-3">목록</a>
 	</div>
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />

@@ -151,10 +151,10 @@
     <font size="5" class="mb-4 h2">소식 수정</font>
   </div>
   <form name="myform" method="post">
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label for="memberName">글쓴이</label>
       <input type="text" name="memberName" id="memberName" value="${sName}" readonly class="form-control"/>
-    </div>
+    </div> -->
     <div class="form-group">
       <label for="title">글제목</label>
       <input type="text" name="title" id="title" value="${vo.title}" autofocus required class="form-control" />
@@ -197,6 +197,7 @@
     <input type="hidden" name="idx" value="${vo.idx}"/>
     <input type="hidden" name="familyCode" value="${sFamCode}"/>
     <input type="hidden" name="memberIdx" value="${sIdx}"/>
+    <input type="hidden" name="memberName" value="${sName}"/>
   </form>
 </div>
 <p><br/></p>

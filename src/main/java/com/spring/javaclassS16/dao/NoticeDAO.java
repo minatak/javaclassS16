@@ -77,6 +77,5 @@ public interface NoticeDAO {
 
 		public void deleteNoticeLikes(@Param("idx") int idx);
 
-		public void deleteNoticeReplies(@Param("idx") int idx);
 
 }
