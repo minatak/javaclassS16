@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.javaclassS16.dao.NoticeDAO">
   
-  <!-- SELECT queries -->
   <select id="getNoticeList" resultType="com.spring.javaclassS16.vo.NoticeVO">
     SELECT 
       n.*,
@@ -18,9 +17,16 @@
       n.familyCode = #{familyCode}
     ORDER BY 
       n.pinned DESC,
-      n.createdAt DESC
+      <choose>
+        <when test="choice == '추천순'">n.goodCount DESC,</when>
+        <when test="choice == '조회순'">n.viewCount DESC,</when>
+        <when test="choice == '댓글순'">replyCnt DESC,</when>
+        <when test="choice == '오래된순'">n.createdAt ASC,</when>
+        <otherwise>n.createdAt DESC,</otherwise>
+      </choose>
+      n.idx DESC
     LIMIT #{startIndexNo}, #{pageSize}
-  </select>
+	</select>
   
   <select id="getNoticeContent" resultType="com.spring.javaclassS16.vo.NoticeVO">
     SELECT 
@@ -37,6 +43,22 @@
   <select id="totRecCnt" resultType="int">
     SELECT COUNT(*) FROM notice WHERE familyCode = #{familyCode}
   </select>
+  
+  <select id="getTotalSearchCount" resultType="int">
+	  SELECT COUNT(*) FROM notice 
+	  WHERE familyCode = #{familyCode}
+	  <choose>
+	    <when test="search == 'title'">
+	      AND title LIKE CONCAT("%", #{searchString}, "%")
+	    </when>
+	    <when test="search == 'content'">
+	      AND content LIKE CONCAT("%", #{searchString}, "%")
+	    </when>
+	    <when test="search == 'memberName'">
+	      AND memberName LIKE CONCAT("%", #{searchString}, "%")
+	    </when>
+	  </choose>
+	</select>
   
   <select id="getPreNexSearch" resultType="com.spring.javaclassS16.vo.NoticeVO">
     <if test="str == 'preVo'">
@@ -60,8 +82,39 @@
   </select>
   
   <select id="getNoticeSearchList" resultType="com.spring.javaclassS16.vo.NoticeVO">
-    SELECT * FROM notice WHERE ${search} LIKE CONCAT("%",#{searchString},"%") AND familyCode = #{familyCode} ORDER BY idx DESC LIMIT #{startIndexNo},#{pageSize}
-  </select>
+	  SELECT 
+	    n.*,
+	    DATEDIFF(n.createdAt, NOW()) AS date_diff,
+	    TIMESTAMPDIFF(HOUR, n.createdAt, NOW()) AS hour_diff,
+	    (SELECT COUNT(*) FROM noticeReply WHERE noticeIdx = n.idx) AS replyCnt,
+	    CASE WHEN nrs.idx IS NOT NULL THEN true ELSE false END AS isRead
+	  FROM 
+	    notice n
+	  LEFT JOIN 
+	    noticeReadStatus nrs ON n.idx = nrs.noticeIdx AND nrs.readerIdx = #{memberIdx}
+	  WHERE
+	    n.familyCode = #{familyCode}
+	    <choose>
+	      <when test="search == 'title'">
+	        AND n.title LIKE CONCAT("%",#{searchString},"%")
+	      </when>
+	      <when test="search == 'content'">
+	        AND n.content LIKE CONCAT("%",#{searchString},"%")
+	      </when>
+	      <when test="search == 'memberName'">
+	        AND n.memberName LIKE CONCAT("%",#{searchString},"%")
+	      </when>
+	    </choose>
+	  ORDER BY 
+	    <choose>
+	      <when test="choice == '추천순'">n.goodCount DESC, n.createdAt DESC</when>
+	      <when test="choice == '조회순'">n.viewCount DESC, n.createdAt DESC</when>
+	      <when test="choice == '댓글순'">replyCnt DESC, n.createdAt DESC</when>
+	      <when test="choice == '오래된순'">n.createdAt ASC</when>
+	      <otherwise>n.createdAt DESC</otherwise>
+	    </choose>
+	  LIMIT #{startIndexNo}, #{pageSize}
+	</select>
 
   <select id="getReadStatus" resultType="com.spring.javaclassS16.vo.NoticeReadStatusVO">
     SELECT * FROM noticeReadStatus WHERE noticeIdx = #{idx} AND readerIdx = #{memberIdx}
@@ -160,6 +213,18 @@
   
   <delete id="removeNoticeLike">
       DELETE FROM noticeLikes WHERE noticeIdx = #{idx} AND memberIdx = #{memberIdx}
+  </delete>
+  
+  <delete id="deleteNoticeReadStatus">
+    DELETE FROM noticeReadStatus WHERE noticeIdx = #{idx}
+  </delete>
+  
+  <delete id="deleteNoticeLikes">
+    DELETE FROM noticeLikes WHERE noticeIdx = #{idx}
+  </delete>
+  
+  <delete id="deleteNoticeReplies">
+    DELETE FROM noticeReply WHERE noticeIdx = #{idx}
   </delete>
   
 </mapper>

@@ -35,18 +35,20 @@ public class NoticeController {
 	
 	@RequestMapping(value = "/noticeList", method = RequestMethod.GET)
 	public String noticeListGet(Model model, HttpSession session,
-	        @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-	        @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-	    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", "", "", session);
-	    String familyCode = (String) session.getAttribute("sFamCode");
-	    int memberIdx = (int) session.getAttribute("sIdx");
-	
-	    ArrayList<NoticeVO> vos = noticeService.getNoticeList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize);
-	
-	    model.addAttribute("vos", vos);
-	    model.addAttribute("pageVO", pageVO);
-	
-	    return "notice/noticeList";
+        @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+        @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize,
+        @RequestParam(name="choice", defaultValue = "최신순", required = false) String choice) {
+    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", "", "", session);
+    String familyCode = (String) session.getAttribute("sFamCode");
+    int memberIdx = (int) session.getAttribute("sIdx");
+
+    ArrayList<NoticeVO> vos = noticeService.getNoticeList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize, choice);
+
+    model.addAttribute("vos", vos);
+    model.addAttribute("pageVO", pageVO);
+    model.addAttribute("choice", choice);
+
+    return "notice/noticeList";
 	}
 	
 	@RequestMapping(value = "/noticeInput", method = RequestMethod.GET)
@@ -152,79 +154,105 @@ public class NoticeController {
 		else return "redirect:/message/noticeUpdateNo?idx=" + vo.getIdx();
 	}
 	
+	@Transactional
 	@RequestMapping(value = "/noticeDelete", method = RequestMethod.GET)
 	public String noticeDeleteGet(int idx, HttpSession session,
-			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-		String familyCode = (String) session.getAttribute("sFamCode");
-		
-		// 게시글에 사진이 존재한다면 서버에 저장된 사진을 삭제처리한다.
+    @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+    @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+    
+		// 1. 게시글에 사진이 존재한다면 서버에 저장된 사진을 삭제처리한다.
 		NoticeVO vo = noticeService.getNoticeContent(idx);
 		if(vo.getContent().indexOf("src=\"/") != -1) noticeService.imgDelete(vo.getContent());
-		
-		noticeService.setNoticeReplyDelete(idx);
-		
-		// 사진작업, 댓글 삭제 작업이 끝나면 DB에 저장된 실제 정보레코드를 삭제처리한다.
+		 
+		// 2. 관련된 읽음 상태 삭제
+	  noticeService.deleteNoticeReadStatus(idx);
+	 
+	  // 3. 관련된 좋아요 삭제
+	  noticeService.deleteNoticeLikes(idx);
+	 
+	  // 4. 관련된 댓글 삭제
+	  noticeService.deleteNoticeReplies(idx);
+	 
+	  // 5. 공지사항 삭제
 		int res = noticeService.setNoticeDelete(idx);
-
-		return "redirect:/notice/noticeList?pag="+pag+"&pageSize="+pageSize;
+		
+		if(res != 0) {
+		   return "redirect:/message/noticeDeleteOk?pag="+pag+"&pageSize="+pageSize;
+		} else {
+		   return "redirect:/message/noticeDeleteNo?idx="+idx+"&pag="+pag+"&pageSize="+pageSize;
+		}
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/noticeReplyInput", method = RequestMethod.POST)
 	public String noticeReplyInputPost(NoticeReplyVO replyVO, HttpSession session) {
-	    String name = (String) session.getAttribute("sName");
-	    replyVO.setName(name);
-	    
-	    //replyVO.setParentIdx(0);  // 부모 댓글이므로 parentIdx는 0
-	    
-	    int res = noticeService.setNoticeReplyInput(replyVO);
-	    
-	    return res+"";
+    String name = (String) session.getAttribute("sName");
+    replyVO.setName(name);
+    
+    //replyVO.setParentIdx(0);  // 부모 댓글이므로 parentIdx는 0
+    
+    int res = noticeService.setNoticeReplyInput(replyVO);
+    
+    return res+"";
 	}
 	
 	@Transactional
-  @ResponseBody
-  @RequestMapping(value = "/noticeReplyDelete", method = RequestMethod.POST)
-  public String noticeReplyDelete(@RequestParam int idx) {
-      NoticeReplyVO vo = noticeService.getNoticeReplyVo(idx);
-      
-      if(vo.getParentIdx() == 0) {
-          noticeService.setNoticeReplyDeleteByParentIdx(idx);
-      }
-
-      return noticeService.setNoticeReplyDelete(idx);
-  }
+	@ResponseBody
+	@RequestMapping(value = "/noticeReplyDelete", method = RequestMethod.POST)
+	public String noticeReplyDelete(@RequestParam int idx) {
+    NoticeReplyVO vo = noticeService.getNoticeReplyVo(idx);
+    
+    // 부모 댓글인 경우 (parentIdx가 null 또는 0)
+    if(vo.getParentIdx() == null || vo.getParentIdx() == 0) {
+      // 먼저 대댓글들을 삭제
+      noticeService.setNoticeReplyDeleteByParentIdx(idx);
+    }
+    
+    // 그 다음 해당 댓글 삭제 (부모 댓글이든 대댓글이든)
+    return noticeService.setNoticeReplyDelete(idx);
+	}
 	
   @ResponseBody
   @RequestMapping(value = "/noticeToggleLike", method = RequestMethod.POST)
   public String noticeToggleLike(@RequestParam int idx, HttpSession session) {
-      int memberIdx = (int) session.getAttribute("sIdx");
-      
-      return noticeService.toggleNoticeLike(idx, memberIdx);
+    int memberIdx = (int) session.getAttribute("sIdx");
+    
+    return noticeService.toggleNoticeLike(idx, memberIdx);
   }
 	
-	@RequestMapping(value = "/noticeSearch")
-	public String noticeSearchGet(Model model, HttpSession session, String search,
-			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
-			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
-		PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", search, searchString, session);
-		
-		List<NoticeVO> vos = noticeService.getNoticeSearchList(pageVO.getStartIndexNo(), pageSize, search, searchString);
-	
-		String searchTitle = "";
-		if(pageVO.getSearh().equals("title")) searchTitle = "글제목";
-		else if(pageVO.getSearh().equals("nickName")) searchTitle = "글쓴이";
-		else searchTitle = "글내용";
-		
-		model.addAttribute("vos", vos);
-		model.addAttribute("pageVO", pageVO);
-		model.addAttribute("searchTitle", searchTitle);
-		model.addAttribute("search", search);
-		model.addAttribute("searchString", searchString);
-		model.addAttribute("searchCount", vos.size());
-		
-		return "notice/noticeSearchList";
-	}
+  
+  @RequestMapping(value = "/noticeSearch")
+  public String noticeSearchPost(Model model, HttpSession session, 
+      @RequestParam(name="search", defaultValue = "title", required = false) String search,
+      @RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+      @RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+      @RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize,
+      @RequestParam(name="choice", defaultValue = "최신순", required = false) String choice) {
+    String familyCode = (String) session.getAttribute("sFamCode");
+    int memberIdx = (int) session.getAttribute("sIdx");
+    
+    // 페이지네이션을 위한 PageVO 객체 생성
+    PageVO pageVO = pageProcess.totRecCnt(pag, pageSize, "notice", search, searchString, session);
+    
+    // 검색 결과의 총 개수를 가져오는 로직  
+    int totalSearchCount = noticeService.getTotalSearchCount(familyCode, search, searchString);
+    
+    List<NoticeVO> vos = noticeService.getNoticeSearchList(familyCode, memberIdx, pageVO.getStartIndexNo(), pageSize, search, searchString, choice);
+    
+    String searchTitle = "";
+    if(search.equals("title")) searchTitle = "글제목";
+    else if(search.equals("memberName")) searchTitle = "글쓴이";
+    else searchTitle = "글내용";
+    
+    model.addAttribute("vos", vos);
+    model.addAttribute("pageVO", pageVO);
+    model.addAttribute("searchTitle", searchTitle);
+    model.addAttribute("search", search);
+    model.addAttribute("searchString", searchString);
+    model.addAttribute("searchCount", totalSearchCount);
+    model.addAttribute("choice", choice);
+    
+    return "notice/noticeSearchList";
+  }
+
 }

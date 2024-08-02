@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>공지사항 수정 | HomeLink</title>
+  <title>소식 수정 | HomeLink</title>
   <script src="${ctp}/ckeditor/ckeditor.js"></script>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
   <style>
@@ -24,9 +24,10 @@
       margin-bottom: 30px;
     }
     .home-icon { 
-      font-size: 24px; 
-      color: #cecece; 
-    }
+	    font-size: 24px; 
+	    color: #cecece; 
+	  }
+	  .home-icon:hover {color: #c6c6c6;}
     .h2 {
       font-family: 'pretendard' !important;
       font-weight: 600;
@@ -147,7 +148,7 @@
 <div class="inputContainer">
   <div class="header">
     <a href="${ctp}/notice/noticeList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
-    <font size="5" class="mb-4 h2">공지사항 수정</font>
+    <font size="5" class="mb-4 h2">소식 수정</font>
   </div>
   <form name="myform" method="post">
     <div class="form-group">

@@ -18,7 +18,7 @@ public interface NoticeDAO {
 
     public int totRecCnt(@Param("familyCode") String familyCode);
 
-    public ArrayList<NoticeVO> getNoticeList(@Param("familyCode") String familyCode, @Param("memberIdx") int memberIdx, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+    public ArrayList<NoticeVO> getNoticeList(@Param("familyCode") String familyCode, @Param("memberIdx") int memberIdx, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("choice") String choice);
 
     public void setReadNumPlus(@Param("idx") int idx);
 
@@ -36,10 +36,17 @@ public interface NoticeDAO {
 
     public void setReplyOrderUpdate(@Param("noticeIdx") int noticeIdx, @Param("re_order") int re_order);
 
-    public int totRecCntSearch(@Param("search") String search, @Param("searchString") String searchString);
+    public int totRecCntSearch(@Param("search") String search, @Param("searchString") String searchString, @Param("familyCode") String familyCode);
 
-    public List<NoticeVO> getNoticeSearchList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("search") String search, @Param("searchString") String searchString);
-
+    public List<NoticeVO> getNoticeSearchList(
+        @Param("familyCode") String familyCode, 
+        @Param("memberIdx") int memberIdx, 
+        @Param("startIndexNo") int startIndexNo, 
+        @Param("pageSize") int pageSize, 
+        @Param("search") String search, 
+        @Param("searchString") String searchString, 
+        @Param("choice") String choice
+    );
     public void setNoticeRead(@Param("idx") int idx, @Param("memberIdx") int memberIdx);
 
     public NoticeReadStatusVO getReadStatus(@Param("idx") int idx, @Param("memberIdx") int memberIdx);
@@ -52,7 +59,7 @@ public interface NoticeDAO {
 
     public void setNoticeReplyDeleteByParentIdx(@Param("idx") int idx);
 
-    public String setNoticeReplyDelete(@Param("idx") int idx);
+    public int setNoticeReplyDelete(@Param("idx") int idx);
 
 		public void removeNoticeLike(@Param("idx") int idx, @Param("memberIdx") int memberIdx);
 
@@ -63,5 +70,13 @@ public interface NoticeDAO {
 		public void increaseNoticeLikeCount(@Param("idx") int idx);
 
 		public List<NoticeVO> getRecentNotices(@Param("familyCode") String familyCode);
+
+		public int getTotalSearchCount(@Param("familyCode") String familyCode, @Param("search") String search, @Param("searchString") String searchString);
+
+		public void deleteNoticeReadStatus(@Param("idx") int idx);
+
+		public void deleteNoticeLikes(@Param("idx") int idx);
+
+		public void deleteNoticeReplies(@Param("idx") int idx);
 
 }

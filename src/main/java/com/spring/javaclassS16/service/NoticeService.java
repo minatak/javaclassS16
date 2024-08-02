@@ -14,7 +14,7 @@ public interface NoticeService {
 	
 	public NoticeVO getNoticeContent(int idx);
 	
-	public ArrayList<NoticeVO> getNoticeList(String familyCode, int memberIdx, int startIndexNo, int pageSize);
+	public ArrayList<NoticeVO> getNoticeList(String familyCode, int memberIdx, int startIndexNo, int pageSize, String choice);
 	
 	public void setReadNumPlus(int idx);
 	
@@ -34,12 +34,11 @@ public interface NoticeService {
 	
 	public List<NoticeReplyVO> getNoticeReply(int idx);
 	
-	public List<NoticeVO> getNoticeSearchList(int startIndexNo, int pageSize, String search, String searchString);
+	public List<NoticeVO> getNoticeSearchList(String familyCode, int memberIdx, int startIndexNo, int pageSize, String search, String searchString, String choice);
 	
 	public void setNoticeRead(int idx, int memberIdx);
 	
 	public NoticeReadStatusVO getReadStatus(int idx, int memberIdx);
-	
 	
 	public NoticeReplyVO getNoticeReplyVo(int idx);
 	
@@ -54,5 +53,13 @@ public interface NoticeService {
 	public List<MemberVO> getNoticeLikers(int idx);
 
 	public List<NoticeVO> getRecentNotices(String familyCode);
+
+	public int getTotalSearchCount(String familyCode, String search, String searchString);
+
+	public void deleteNoticeReadStatus(int idx);
+
+	public void deleteNoticeLikes(int idx);
+
+	public void deleteNoticeReplies(int idx);
 	
 }

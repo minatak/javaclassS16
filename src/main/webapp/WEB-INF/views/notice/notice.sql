@@ -8,7 +8,7 @@ CREATE TABLE notice (
   title VARCHAR(100) NOT NULL,          /* 공지사항 제목 */
   content TEXT NOT NULL,                /* 공지사항 내용 */
   viewCount INT DEFAULT 0,              /* 조회수 */
-  gootCount INT DEFAULT 0,              /* 좋아요 수 */
+  goodCount INT DEFAULT 0,              /* 좋아요 수 */
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,  /* 작성 일시 */
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,  /* 수정 일시 */
   important BOOLEAN DEFAULT FALSE,    /* 중요 공지사항 여부 */

@@ -102,15 +102,17 @@
       justify-content: flex-end;
       color: #666;
       border-top: 1px solid #e4e6eb;
+      font-size: 18px;
     }
     
     .interaction-icon {
       color: #84a98c;
       cursor: pointer;
       margin-right: 5px;
+      margin-top: 5px;
     }
     
-    .comment-section {
+    /* .comment-section {
       margin-top: 40px;
     }
     
@@ -122,7 +124,7 @@
     .comment-author {
       font-weight: 600;
       margin-right: 8px;
-    }
+    } */
     
     .navigation-links {
       margin-top: 40px;
@@ -191,63 +193,121 @@
 		.notice-meta i {
 		  margin-right: 3px;
 		}
-		
+		/* 
 		.comment-input-container {
 		  position: relative;
 		  margin-bottom: 40px;
 		}
 		
+	  
+	  
+	  .comment-section {
+		  margin-top: 40px;
+		  /* border-top: 1px solid #e0e0e0; */
+		  padding-top: 30px;
+		}
+		
+		.comment-section h4 {
+		  font-size: 18px;
+		  color: #333;
+		  margin-bottom: 20px;
+		}
+		
+		.comment-input-container {
+		  margin-bottom: 30px;
+		}
+		
 		.comment-input {
 		  width: 100%;
-		  padding: 12px;
-		  border: 1px solid #ccd0d5;
+		  padding: 15px;
+		  border: 1px solid #e0e0e0;
 		  border-radius: 4px;
-		  font-size: 14px;
+		  font-size: 14px; 
 		  resize: vertical;
 		  min-height: 100px;
 		}
 		
+		.comment-input:focus {
+		  outline: none;
+		  border-color: #84a98c;
+		}
+		
 		.btn-comment {
-		  bottom: 10px;
-		  right: 10px;
 		  background-color: #84a98c;
-		  color: #ffffff;
+		  color: #fff;
 		  border: none;
 		  padding: 8px 16px;
-		  font-weight: 600;
-		  margin-bottom: 20px; /* 버튼 아래 여백 추가 */
-		}
-		
-    .reply-form {
-	    margin-top: 10px;
-	    padding-left: 20px;
-	    border-left: 2px solid #e4e6eb;
-	    display: none;
-	  }
-	  .reply-btn {
-	    cursor: pointer;
-	    color: #84a98c;
-	    margin-left: 10px;
-	  }
-	  .reply-btn:hover {
-	    text-decoration: underline;
-	  }
-	  .comment.reply {
-		  margin-left: 20px;
-		  border-left: 2px solid #e4e6eb;
-		  padding-left: 15px;
+		  border-radius: 4px;
+		  font-size: 14px;
+		  font-weight: 500;
 		  margin-top: 10px;
-		}
-	  .delete-btn {
-		  cursor: pointer;
-		  color: #dc3545;
-		  margin-left: 10px;
+		  transition: background-color 0.2s ease;
 		}
 		
-		.delete-btn:hover {
-		  text-decoration: underline;
+		.btn-comment:hover {
+		  background-color: #6b8e72;
 		}
-	  
+		
+		.comment {
+		  padding: 20px 0;
+		}
+		
+		.comment:not(.reply) {
+		  border-bottom: 1px solid #e0e0e0;
+		}
+		
+		.comment-author {
+		  font-weight: 600;
+		  color: #333;
+		  margin-right: 10px;
+		}
+		
+		.comment-content {
+		  display: inline; /* 이름과 내용을 한 줄에 표시 */
+		  color: #333;
+		}
+		
+		.comment-meta {
+		  font-size: 12px;
+		  color: #999;
+		  margin-top: 5px;
+		}
+		
+		.comment-time {
+		  margin-right: 10px;
+		}
+		
+		.reply-btn, .delete-btn {
+		  cursor: pointer;
+		  color: #84a98c;
+		  margin-left: 10px;
+		  font-size: 12px;
+		  transition: color 0.2s ease;
+		}
+		
+		.reply-btn:hover, .delete-btn:hover {
+		  color: #6b8e72;
+		}
+		
+		.comment.reply {
+		  margin-left: 30px;
+		  position: relative;
+		  padding-left: 20px;
+		  border-bottom: none;
+		}
+		
+		.comment.reply::before {
+		  content: '└';
+		  position: absolute;
+		  left: 0;
+		  top: 20px;
+		  color: #84a98c;
+		}
+		
+		.reply-form {
+		  margin-top: 15px;
+		  margin-left: 30px;
+		}
   </style>
   <script>
     'use strict';
@@ -308,12 +368,6 @@
         location.href = "noticeDelete?idx=${vo.idx}";
       });
     }
-    
-   /*  function showReplyForm(idx) {
-    	let replyForm = document.getElementById('replyForm' + idx);
-    	
-    	replyForm.style.display = 'block';
-    } */
     
     function toggleReplyForm(idx) {
       let replyForm = document.getElementById('replyForm' + idx);
@@ -394,6 +448,29 @@
   	  });
   	}
 
+  	function deleteComment(idx) {
+  	  showConfirm("정말로 이 댓글을 삭제하시겠습니까?", function() {
+  	    $.ajax({
+  	      url: "${ctp}/notice/noticeReplyDelete",
+  	      type: "post",
+  	      data: {idx: idx},
+  	      success: function(res) {
+  	        if(res == "1") {
+  	          showAlert("댓글이 삭제되었습니다.", function() {
+  	            location.reload();
+  	          });
+  	        }
+  	        else {
+  	          showAlert("댓글 삭제에 실패했습니다.");
+  	        }
+  	      },
+  	      error: function() {
+  	        showAlert("서버 오류가 발생했습니다.");
+  	      }
+  	    });
+  	  });
+  	}
+  	
   </script>
 </head>
 <body>
@@ -403,7 +480,7 @@
 	<div class="noticeContainer">
 	  
 	  <a href="${ctp}/notice/noticeList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>
-	  <h2>공지사항</h2>
+	  <!-- <h2>가족 소식</h2> -->
 	 <%--  <div class="header">
 		    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
 		    <font size="5" class="mb-4 h2">공지사항</font>
@@ -443,15 +520,15 @@
 		  ${fn:replace(vo.content, 'width:', 'max-width:')}
 	  </div>
 	  
-	  <div class="interaction-bar">
-	    <i id="likeButton" class="interaction-icon fa-heart ${isLiked ? 'fas active' : 'far'}" onclick="toggleLike()"></i>
+	  <div class="interaction-bar">  
+	    <i id="likeButton" class="interaction-icon fa-thumbs-up ${isLiked ? 'fa-solid' : 'fa-regular'}" onclick="toggleLike()"></i>
 	    <span>${vo.goodCount}</span>
 	  </div>
 	  
 	  <div class="comment-section">
 		  <h4>댓글 ${fn:length(replyVos)}개</h4>
 		  <div class="comment-input-container">
-		    <textarea id="commentContent" name="content" class="comment-input" placeholder="댓글을 입력하세요..." style="padding-bottom: 40px;"></textarea>
+		    <textarea id="commentContent" name="content" class="comment-input" placeholder="댓글을 입력하세요..." rows="3"></textarea>
 		    <div class="text-right">
 		      <button class="btn-comment" onclick="submitComment(0)">등록</button>    
 		    </div>
@@ -462,14 +539,16 @@
 		    <c:if test="${replyVo.parentIdx == null}">
 		      <div class="comment">
 		        <span class="comment-author">${replyVo.name}</span>
-		        <span>${fn:replace(replyVo.content, newLine, "<br/>")}</span>
-		        <div class="notice-meta">
-		          <fmt:parseDate value="${replyVo.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedReplyDate" type="both" />
-		          <fmt:formatDate value="${parsedReplyDate}" pattern="yyyy.MM.dd" var="formattedReplyDate" />
-		          <span>${formattedReplyDate}</span>
-		          <span id="replyBtn${replyVo.idx}" class="reply-btn" onclick="toggleReplyForm(${replyVo.idx})">답글 달기</span>
+		        <div class="comment-content">${fn:replace(replyVo.content, newLine, "<br/>")}</div>
+		        <div class="comment-meta">
+		          <span class="comment-time">${fn:substring(replyVo.createdAt, 0, 16)}</span>
+		          <span id="replyBtn${replyVo.idx}" class="reply-btn" onclick="toggleReplyForm(${replyVo.idx})">
+		            답글
+		          </span>
 		          <c:if test="${replyVo.memberIdx == sIdx}">
-		            <span class="delete-btn" onclick="deleteComment(${replyVo.idx})">삭제</span>
+		            <span class="delete-btn" onclick="deleteComment(${replyVo.idx})">
+		              삭제
+		            </span>
 		          </c:if>
 		        </div>
 		        <div id="replyForm${replyVo.idx}" class="reply-form" style="display: none;">
@@ -482,15 +561,15 @@
 		        <!-- 대댓글 표시 -->
 		        <c:forEach var="childReply" items="${replyVos}">
 		          <c:if test="${childReply.parentIdx == replyVo.idx}">
-		            <div class="comment reply" style="margin-left: 20px; border-left: 2px solid #e4e6eb; padding-left: 15px;">
+		            <div class="comment reply">
 		              <span class="comment-author">${childReply.name}</span>
-		              <span>${fn:replace(childReply.content, newLine, "<br/>")}</span>
-		              <div class="notice-meta">
-		                <fmt:parseDate value="${childReply.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedChildReplyDate" type="both" />
-		                <fmt:formatDate value="${parsedChildReplyDate}" pattern="yyyy.MM.dd" var="formattedChildReplyDate" />
-		                <span>${formattedChildReplyDate}</span>
+		              <div class="comment-content">${fn:replace(childReply.content, newLine, "<br/>")}</div>
+		              <div class="comment-meta">
+		                <span class="comment-time">${fn:substring(childReply.createdAt, 0, 16)}</span>
 		                <c:if test="${childReply.memberIdx == sIdx}">
-		                  <span class="delete-btn" onclick="deleteComment(${childReply.idx})">삭제</span>
+		                  <span class="delete-btn" onclick="deleteComment(${childReply.idx})">
+		                    삭제
+		                  </span>
 		                </c:if>
 		              </div>
 		            </div>

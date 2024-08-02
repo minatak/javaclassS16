@@ -12,213 +12,268 @@
   
   <style>
     body {
-		  font-family: 'Pretendard' !important;
-		  background-color: #ffffff;
-		}
-		.header {
-		  margin-bottom: 50px;
+      font-family: 'Pretendard' !important;
+      background-color: #ffffff;
+    }
+    .header {
+			margin-bottom: 50px;
 		}
 		.header .h2 {
-		  font-family: 'pretendard' !important;
+			font-family: 'pretendard' !important;
 		  font-weight: 600;
 		  font-size: 24px;
 		  color: #333c47;
 		  text-align: center;
 		  margin-bottom: 50px;
 		}
-		.noticeContainer {
-		  max-width: 900px;
-		  background-color: white;
-		  padding: 40px;
-		  margin: 30px auto;
-		} 
-		.home-icon { 
-		  font-size: 24px; 
-		  color: #cecece; 
-		}
-		.home-icon:hover {color: #c6c6c6;}
-		
-		h2 {
-		  color: #333;
-		  margin-bottom: 30px;
-		  font-weight: 700;
-		}
-		
-		.notice-item {
+    .noticeContainer {
+      max-width: 900px;
+      background-color: white;
+      padding: 40px;
+      margin: 30px auto;
+    } 
+    .home-icon { 
+      font-size: 24px; 
+      color: #cecece; 
+    }
+    .home-icon:hover {color: #c6c6c6;}
+    h2 {
+    	font-family: 'Pretendard' !important;
+      color: #333;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    .notice-item {
 		  border-bottom: 1px solid #e5e5e5;
 		  padding: 15px 0;
 		  display: flex;
 		  align-items: center;
 		}
-		
 		.notice-number {
 		  flex: 0 0 60px;
 		  font-weight: bold;
 		  color: #666;
 		}
-		
 		.notice-title {
 		  flex: 1;
 		  font-weight: 500;
 		}
-		
-		.notice-author, .notice-date {
+		.notice-author {
 		  flex: 0 0 100px;
 		  text-align: center;
 		}
-		
 		.notice-views {
 		  flex: 0 0 60px;
 		  text-align: center;
 		}
-		
-		/* .pinned {
+		.notice-date {
+		  flex: 0 0 100px;
+		  text-align: center;
+		}
+		.pinned {
 		  background-color: #f0f8ff;
 		}
-		 */
-		
-	/* 	.pinned-icon, .important-icon {
+		.pinned-icon {
 		  color: #e4e6eb;
 		  margin-right: 5px;
-		} */
-		.pinned-icon, .important-icon {
-		  color: #84a98c;
-		  margin-right: 5px;
 		}
-		
-		.search-and-write {
+    .btn-write {
+      background-color: #e4e6eb;
+      border-color: #e4e6eb;
+      color: black;
+    }
+    .btn-write:hover {
+      background-color: #d0d3d9;
+      border-color: #d0d3d9;
+      color: black;
+    }
+    .pagination .page-link {
+      color: #e4e6eb;
+    }
+    .pagination .page-item.active .page-link {
+      background-color: #e4e6eb;
+      border-color: #e4e6eb;
+      color: black;
+    }
+    .form-control:focus {
+      border-color: #e4e6eb;
+      box-shadow: 0 0 0 0.2rem rgba(228, 230, 235, 0.25);
+    }
+    .badge-new {
+      background-color: #ff5722;
+      color: white;
+    }
+    .badge-unread {
+	    background-color: #f0f2f5;
+	    color: #333;
+	  }
+	  
+	  .badge-important {
+	    background-color: #e4e6eb;
+	    color: #333;
+	    font-weight: bold;
+	  }
+    .pinned {
+      background-color: #f0f8ff;
+    }
+    .pinned-icon, .important-icon {
+      color: #e4e6eb;
+      margin-right: 5px;
+    }
+
+   .search-and-write {
 		  display: flex;
 		  justify-content: space-between;
 		  align-items: center;
-		  margin-bottom: 40px;
-		  /* padding: 20px; */
-		  /* background-color: #fff;
-		  border-radius: 8px; */
+		  margin-bottom: 20px;
 		}
-		
-		.select-options {
-		  display: flex;
-		  align-items: center;
-		}
-		
-		.select-options select {
-		 /*  margin-right: 10px; */
-		 	/* margin-right: 5px; */
-		  padding: 8px;
-		  border: 1px solid #ced4da;
-		  border-radius: 4px; 
-		}
-		
-	/* 	.search-form {
-		  display: flex;
-		  align-items: center;
-		  flex-grow: 1;
-		  justify-content: center;
-		  margin: 0 20px;
-		}
-		
-		.search-form select,
-		.search-form input[type="text"] {
-		  padding: 8px;
-		  border: 1px solid #ced4da;
-		}
-		
-		.search-form input[type="text"] {
-		  width: 200px;
-		  hight: 100%;
-		  border-radius: 0px;
-		}
-		 */
-		.btn {
-		  background-color: #84a98c;
-		  color: white;
-		  border: none;
-		  border-radius: 4px;
-		  padding: 8px 16px;
-		  cursor: pointer;
-		  transition: background-color 0.3s ease;
-		  font-weight: 600;
-		  font-size: 14px;
-		}
-		
-		.btn:hover {
-		  background-color: #6b8e76;
-		  color: white;
-		}
-		
-		.write-btn {
-		  white-space: nowrap;
-		}
-		
-		.pagination {
-		  margin-top: 30px;
-		}
-		
-		.pagination .page-link {
-		  color: #84a98c;
-		}
-		
-		.pagination .page-item.active .page-link {
-		  background-color: #84a98c;
-		  border-color: #84a98c;
-		  color: white;
-		}
-		
-		.badge-new {
-		  background-color: #ff5722;
-		  color: white;
-		}
-		
-		.badge-unread {
-		  background-color: #f0f2f5;
-		  color: #333;
-		}
-		
-		.badge-important {
-		  background-color: #e4e6eb;
-		  color: #333;
-		  font-weight: bold;
-		}
-		
-		
-		.search-form select,
-		.search-form input[type="text"],
-		.search-form .btn {
-		  height: 40px; /* 모든 요소의 높이를 동일하게 설정 */
-		  padding: 6px 12px; /* 내부 여백 조정 */
-		  font-size: 14px; /* 글자 크기 통일 */
-		  line-height: 1.5; /* 줄 높이 조정 */
-		  vertical-align: middle; /* 수직 정렬 */
-		  border-radius: 0px; 
-		}
-		
-		.search-form select {
-		  border-top-left-radius: 4px;
-		  border-bottom-left-radius: 4px;
-		  border: 1px solid #ced4da;
-		}
-		
-		.search-form input[type="text"] {
-		  width: 200px;
-		  border-radius: 0;
-		  border-left: none;
-		  border-right: none;
-		}
-		
-		.search-form .btn {
-		  border-top-right-radius: 4px;
-		  border-bottom-right-radius: 4px;
-		  
-		}
-		
-		/* 기존 스타일 수정 */
-		.search-form {
-		  display: flex;
-		  align-items: stretch; /* 변경: center에서 stretch로 */
-		  flex-grow: 1;
-		  justify-content: center;
-		  margin: 0 20px;
-		}
+
+.select-options {
+  display: flex;
+  align-items: center;
+}
+
+.select-options select {
+  margin-right: 10px;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.write-btn {
+  white-space: nowrap;
+}
+
+select {
+  background-color: white;
+  border: 1px solid #dbdbdb;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.btn {
+  background-color: #84a98c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.btn:hover {
+  color: white;
+  background-color: #6b8e76;
+}
+
+.btn-primary {
+  background-color: #84a98c;
+}
+
+.btn-primary:hover {
+  background-color: #6b8e76;
+} 
+
+
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+
+.pagination > li {
+  display: inline;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  margin-left: -1px;
+  line-height: 1.42857143;
+  color: #84a98c;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  color: #2a6496;
+  background-color: #eee;
+  border-color: #ddd;
+}
+
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  z-index: 2;
+  color: #fff;
+  cursor: default;
+  background-color: #84a98c;
+  border-color: #84a98c;
+}
+
+
+.pagination .page-link {
+    color: #84a98c;
+  }
+  .pagination .page-item.active .page-link {
+    background-color: #84a98c;
+    border-color: #84a98c;
+    color: white;
+  }
+  .search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px;
+  }
+  .search-form select {
+    margin-right: 0;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .search-form input[type="text"] {
+    width: 200px;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .search-form .btn {
+    background-color: white;
+    color: #84a98c;
+    border: 1px solid #ced4da;
+    margin-left: 5px;
+  }
+
   </style>
   
   <script>
@@ -226,16 +281,10 @@
     
     function pageSizeCheck() {
       let pageSize = $("#pageSize").val();
-      let choice = $("#choice").val();
-      location.href = "noticeList?pageSize=" + pageSize + "&choice=" + choice;
+      location.href = "noticeList?pageSize="+pageSize;
     }
 
-    function noticeChoice() {
-      let pageSize = $("#pageSize").val();
-      let choice = $("#choice").val();
-      location.href = "noticeList?pageSize=" + pageSize + "&choice=" + choice;
-    }
-
+    
   </script>
 </head>
 <body>
@@ -257,7 +306,7 @@
 		      <option ${pageVO.pageSize==20 ? "selected" : ""}>20</option>
 		      <option ${pageVO.pageSize==30 ? "selected" : ""}>30</option>
 		    </select>
-		    <select name="choice" id="choice" onchange="noticeChoice()">
+		    <select name="choice" id="choice" onchange="noticeSearch()">
 		      <option value="최신순" ${choice == '최신순' ? 'selected' : ''}>최신순</option>
 		      <option value="추천순" ${choice == '추천순' ? 'selected' : ''}>추천순</option>
 		      <option value="조회순" ${choice == '조회순' ? 'selected' : ''}>조회순</option>
@@ -269,26 +318,24 @@
 		    <select name="search" id="search">
 		      <option value="title">글제목</option>
 		      <option value="content">글내용</option>
-		      <option value="memberName">글쓴이</option>
 		    </select>
-		    <input type="text" name="searchString" id="searchString" required class="form-control" placeholder="검색어를 입력하세요..." />
-		    <button type="submit" class="btn">
-	        <i class="fa-solid fa-magnifying-glass"></i>
-		    </button>
+		    <input type="text" name="searchString" id="searchString" required class="form-control" placeholder="검색어" />
+		    <input type="submit" value="검색" class="btn"/>
 		    <input type="hidden" name="pag" value="${pageVO.pag}"/>
 		    <input type="hidden" name="pageSize" value="${pageVO.pageSize}"/>
 		  </form>
 		  <a href="noticeInput" class="btn write-btn">글쓰기</a>
 		</div>
     
-    
-    <c:set var="curScrStartNo" value="${pageVO.curScrStartNo}" />
+    <c:set var="pinnedCount" value="${fn:length(vos.stream().filter(vo -> vo.pinned).toList())}" />
+		<c:set var="counter" value="${(pageVO.pag-1) * pageVO.pageSize - pinnedCount}" />
     <div class="notice-list">
 		  <c:forEach var="vo" items="${vos}" varStatus="st">
+		    <c:set var="counter" value="${counter + 1}" />
 		    <div class="notice-item ${vo.pinned ? 'pinned' : ''}">
 		      <div class="notice-number">
 		        <c:if test="${vo.pinned}"><i class="fa-solid fa-thumbtack pinned-icon"></i></c:if>
-		        <c:if test="${!vo.pinned}">${curScrStartNo}</c:if>
+		        <c:if test="${!vo.pinned}">${counter}</c:if>
 		      </div>
 		      <div class="notice-title">
 		        <a href="noticeContent?idx=${vo.idx}&pag=${pageVO.pag}&pageSize=${pageVO.pageSize}" class="text-dark">
@@ -299,16 +346,11 @@
 		        </a>
 		      </div>
 		      <div class="notice-author">${vo.memberName}</div>
-		     <%--  <div class="notice-views text-muted">${vo.viewCount}</div> --%>
-		      <div class="notice-views text-muted">${vo.viewCount}(${vo.goodCount})</div>
-		     <%--  <div class="notice-date text-muted">
-		        ${fn:substring(vo.createdAt,0,10)}
-		      </div> --%>
+		      <div class="notice-views text-muted">${vo.viewCount}</div>
 		      <div class="notice-date text-muted">
-            ${vo.date_diff == 0 ? fn:substring(vo.createdAt,11,16) : fn:substring(vo.createdAt,0,10)}
-          </div>
+		        ${fn:substring(vo.createdAt,0,10)}
+		      </div>
 		    </div> 
-		    <c:set var="curScrStartNo" value="${curScrStartNo - 1}" />
 		  </c:forEach>
 		</div> 
     

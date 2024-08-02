@@ -7,39 +7,168 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>boardSearchList.jsp</title>
+  <title>가족 소식 검색 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
+  
+  <style>
+    body {
+      font-family: 'Pretendard' !important;
+      background-color: #ffffff;
+    }
+    .header {
+      margin-bottom: 50px;
+    }
+    .header .h2 {
+      font-family: 'pretendard' !important;
+      font-weight: 600;
+      font-size: 24px;
+      color: #333c47;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .noticeContainer {
+      max-width: 900px;
+      background-color: white;
+      padding: 40px;
+      margin: 30px auto;
+    } 
+    .home-icon { 
+      font-size: 24px; 
+      color: #cecece; 
+    }
+    .home-icon:hover {color: #c6c6c6;}
+    
+    h2 {
+      color: #333;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    
+    .notice-item {
+      border-bottom: 1px solid #e5e5e5;
+      padding: 15px 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .notice-number {
+      flex: 0 0 60px;
+      font-weight: bold;
+      color: #666;
+    }
+    
+    .notice-title {
+      flex: 1;
+      font-weight: 500;
+    }
+    
+    .notice-author, .notice-date {
+      flex: 0 0 100px;
+      text-align: center;
+    }
+    
+    .notice-views {
+      flex: 0 0 60px;
+      text-align: center;
+    }
+    
+    .pinned-icon, .important-icon {
+      color: #84a98c;
+      margin-right: 5px;
+    }
+    
+    .search-and-write {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    
+    .select-options {
+      display: flex;
+      align-items: center;
+    }
+    
+    .select-options select {
+      padding: 8px;
+      border: 1px solid #ced4da;
+      border-radius: 4px; 
+    }
+    
+    .btn {
+      background-color: #84a98c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .btn:hover {
+      background-color: #6b8e76;
+      color: white;
+    }
+    
+    .pagination {
+      margin-top: 30px;
+    }
+    
+    .pagination .page-link {
+      color: #84a98c;
+    }
+    
+    .pagination .page-item.active .page-link {
+      background-color: #84a98c;
+      border-color: #84a98c;
+      color: white;
+    }
+    
+    .badge-new {
+      background-color: #ff5722;
+      color: white;
+    }
+    
+    .search-result {
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+    
+    .search-result span {
+      font-weight: bold;
+      color: #84a98c;
+    }
+  </style>
+  
   <script>
     'use strict';
     
-    function pageSizeCheck() {
-    	let pageSize = $("#pageSize").val();
-    	location.href = "BoardSearchList.bo?search=${search}&searchString=${searchString}&pageSize="+pageSize;
-    }
-    
-  	function modalCheck(idx, hostIp, mid, nickName) {
-  		$("#myModal #modalHostIp").text(hostIp);
-  		$("#myModal #modalMid").text(mid);
-  		$("#myModal #modalNickName").text(nickName);
-  		$("#myModal #modalIdx").text(idx);
+    function noticeChoice() {
+  	  let pageSize = $("#pageSize").val();
+  	  let choice = $("#choice").val();
+  	  location.href = "noticeSearch?search=${search}&searchString=${searchString}&choice=" + choice;
   	}
   </script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/side.jsp" />
-<p><br/></p>
 <div class="container">
-  <table class="table table-borderless m-0 p-0">
-    <tr>
-      <td colspan="2" class="text-center">
-        <h2 class="text-center">게시판 조건별 검색 리스트</h2>
-        (<font color="blue">${searchTitle}</font>(으)로 <font color="blue">${searchString}</font>(을)를 검색한 결과 <font color="red"><b>${searchCount}</b></font> 건의 게시글이 검색되었습니다.)
-      </td>
-    </tr>
-    <tr>
-      <td><c:if test="${sLevel != 1}"><a href="BoardInput.bo" class="btn btn-success btn-sm">글쓰기</a></c:if></td>
-      <td class="text-right">
+  <div class="noticeContainer">
+    <div class="header">
+      <a href="${ctp}/notice/noticeList" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+      <font size="5" class="mb-4 h2">가족 소식 검색 결과</font>
+    </div>
+    
+    <div class="search-result">
+      <span>${searchTitle}</span>(으)로 <span>${searchString}</span>(을)를 검색한 결과 <span>${searchCount}</span>건의 게시글이 검색되었습니다.
+    </div>
+    <%-- 
+    <div class="search-and-write">
+      <div class="select-options">
         <select name="pageSize" id="pageSize" onchange="pageSizeCheck()">
           <option ${pageSize==5  ? "selected" : ""}>5</option>
           <option ${pageSize==10 ? "selected" : ""}>10</option>
@@ -47,112 +176,75 @@
           <option ${pageSize==20 ? "selected" : ""}>20</option>
           <option ${pageSize==30 ? "selected" : ""}>30</option>
         </select>
-      </td>
-    </tr>
-  </table>
-  <table class="table table-hover m-0 p-0 text-center">
-    <tr class="table-dark text-dark">
-      <th>글번호</th>
-      <th>글제목</th>
-      <th>글쓴이</th>
-      <th>글쓴날짜</th>
-      <th>조회수(좋아요)</th>
-    </tr>
-    <c:set var="curScrStartNo" value="${pageVO.curScrStartNo}" />
-    <c:forEach var="vo" items="${vos}" varStatus="st">
-      <%-- 
-      <c:if test="${vo.openSw == 'OK' || sLevel == 0 || sNickName == vo.nickName}">
-      	<c:if test="${vo.complaint == 'NO' || sLevel == 0 || sNickName == vo.nickName}">
-       --%>
-			    <tr>
-			      <td>${curScrStartNo}</td>
-			      <td class="text-left">
-			        <a href="boardContent?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}&flag=search&search=${search}&searchString=${searchString}">${vo.title}</a>
-			        <c:if test="${vo.hour_diff <= 24}"><img src="${ctp}/images/new.gif" /></c:if>  
-			      </td>
-			      <td>
-			        ${vo.nickName}
-			        <c:if test="${sLevel == 0}">
-			          <a href="#" onclick="modalCheck('${vo.idx}','${vo.hostIp}','${vo.mid}','${vo.nickName}')" data-toggle="modal" data-target="#myModal" class="badge badge-success">모달</a>
-			        </c:if>
-			      </td>
-			      <td>
-			        <!-- 1일(24시간) 이내는 시간만 표시(10:43), 이후는 날짜와 시간을 표시 : 2024-05-14 10:43 -->
-			        ${vo.date_diff == 0 ? fn:substring(vo.WDate,11,19) : fn:substring(vo.WDate,0,10)}
-			      </td>
-			      <td>${vo.readNum}(${vo.good})</td>
-			    </tr>
-			<%-- 
-		    </c:if>
-	    </c:if>
-	     --%>
-	    <c:set var="curScrStartNo" value="${curScrStartNo - 1}" />
-	  </c:forEach>
-	  <tr><td colspan="5" class="m-0 p-0"></td></tr>
-  </table>
-  <br/>
-	<!-- 블록페이지 시작 -->
-	<div class="text-center">
-	  <ul class="pagination justify-content-center">
-		  <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/boardSearchList?search=${search}&searchString=${searchString}&pag=1&pageSize=${pageVO.pageSize}">첫페이지</a></li></c:if>
-		  <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/boardSearchList?search=${search}&searchString=${searchString}&pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전블록</a></li></c:if>
-		  <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + blockSize}" varStatus="st">
-		    <c:if test="${i <= pageVO.totPage && i == pageVO.pag}"><li class="page-item active"><a class="page-link bg-secondary border-secondary" href="${ctp}/boardSearchList?search=${search}&searchString=${searchString}&pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
-		    <c:if test="${i <= pageVO.totPage && i != pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/boardSearchList?search=${search}&searchString=${searchString}&pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
-		  </c:forEach>
-		  <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/boardSearchList?search=${search}&searchString=${searchString}&pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음블록</a></li></c:if>
-		  <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/boardSearchList?search=${search}&searchString=${searchString}&pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막페이지</a></li></c:if>
-	  </ul>
-	</div>
-	<!-- 블록페이지 끝 -->
-	<br/>
-	<!-- 검색기 시작 -->
-	<!-- 
-	<div class="container text-center">
-	  <form name="searchForm" method="post" action="BoardSearch.bo">
-	    <b>검색 : </b>
-	    <select name="search" id="search">
-	      <option value="title">글제목</option>
-	      <option value="nickName">글쓴이</option>
-	      <option value="content">글내용</option>
-	    </select>
-	    <input type="text" name="searchString" id="searchString" required />
-	    <input type="submit" value="검색" class="btn btn-secondary btn-sm"/>
-	  </form>
-	</div>
-	 -->
-	<!-- 검색기 끝 -->
-	<input type="button" value="돌아가기" onclick="location.href='boardList?pag=${pageVO.pag}&pageSize=${pageVO.pageSize}';" class="btn btn-warning"/>
-</div>
-<p><br/></p>
-
-<!-- 모달에 회원정보 출력하기 -->
-  <div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-          고유번호 : <span id="modalIdx"></span><br/>
-          아이디 : <span id="modalMid"></span><br/>
-          호스트IP : <span id="modalHostIp"></span><br/>
-          닉네임 : <span id="modalNickName"></span><br/>
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
       </div>
+      <a href="noticeInput" class="btn write-btn">글쓰기</a>
+    </div>
+     --%>
+    <div class="search-and-write">
+		  <div class="select-options">
+		   <%--  <select name="pageSize" id="pageSize" onchange="pageSizeCheck()">
+		      <option ${pageSize==5  ? "selected" : ""}>5</option>
+		      <option ${pageSize==10 ? "selected" : ""}>10</option>
+		      <option ${pageSize==15 ? "selected" : ""}>15</option>
+		      <option ${pageSize==20 ? "selected" : ""}>20</option>
+		      <option ${pageSize==30 ? "selected" : ""}>30</option>
+		    </select> --%>
+		    <select name="choice" id="choice" onchange="noticeChoice()">
+		      <option value="최신순" ${choice == '최신순' ? 'selected' : ''}>최신순</option>
+		      <option value="추천순" ${choice == '추천순' ? 'selected' : ''}>추천순</option>
+		      <option value="조회순" ${choice == '조회순' ? 'selected' : ''}>조회순</option>
+		      <option value="댓글순" ${choice == '댓글순' ? 'selected' : ''}>댓글순</option>
+		      <option value="오래된순" ${choice == '오래된순' ? 'selected' : ''}>오래된순</option>
+		    </select>
+		  </div>
+		  <!-- <a href="noticeInput" class="btn write-btn">글쓰기</a> -->
+		</div>
+     
+     
+    <div class="notice-list">
+    	<c:set var="curScrStartNo" value="${pageVO.curScrStartNo}" />
+      <c:forEach var="vo" items="${vos}" varStatus="st">
+        <div class="notice-item">
+          <div class="notice-number">${curScrStartNo}</div>
+          <div class="notice-title">
+            <a href="noticeContent?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}&flag=search&search=${search}&searchString=${searchString}" class="text-dark">
+              ${vo.title}
+              <c:if test="${vo.hour_diff <= 24}"><span class="badge badge-new ml-1">N</span></c:if>
+            </a>
+          </div>
+          <div class="notice-author">${vo.memberName}</div>
+          <div class="notice-views text-muted">${vo.viewCount}(${vo.goodCount})</div>
+          <div class="notice-date text-muted">
+            ${vo.date_diff == 0 ? fn:substring(vo.createdAt,11,16) : fn:substring(vo.createdAt,0,10)}
+          </div>
+        </div> 
+        <c:set var="curScrStartNo" value="${curScrStartNo - 1}" />
+      </c:forEach>
+    </div> 
+    
+    <!-- 블록페이지 시작 -->
+    <div class="d-flex justify-content-center my-4">
+      <ul class="pagination justify-content-center">
+        <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/notice/noticeSearch?search=${search}&searchString=${searchString}&pag=1&pageSize=${pageVO.pageSize}">첫페이지</a></li></c:if>
+        <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/notice/noticeSearch?search=${search}&searchString=${searchString}&pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전블록</a></li></c:if>
+        <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
+          <c:if test="${i <= pageVO.totPage && i == pageVO.pag}"><li class="page-item active"><a class="page-link bg-secondary border-secondary" href="${ctp}/notice/noticeSearch?search=${search}&searchString=${searchString}&pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
+          <c:if test="${i <= pageVO.totPage && i != pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/notice/noticeSearch?search=${search}&searchString=${searchString}&pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if>
+        </c:forEach>
+        <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/notice/noticeSearch?search=${search}&searchString=${searchString}&pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&pageSize=${pageVO.pageSize}">다음블록</a></li></c:if>
+        <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/notice/noticeSearch?search=${search}&searchString=${searchString}&pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막페이지</a></li></c:if>
+      </ul>
+    </div>
+    <!-- 블록페이지 끝 -->
+    
+    <div class="text-center mt-4">
+      <%-- <input type="button" value="돌아가기" onclick="location.href='noticeList?pag=${pageVO.pag}&pageSize=${pageVO.pageSize}';" class="btn"/> --%>
+    	<a href="${ctp}/notice/noticeList" class="btn">돌아가기</a> 
     </div>
   </div>
+</div>
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -39,8 +39,8 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ArrayList<NoticeVO> getNoticeList(String familyCode, int memberIdx, int startIndexNo, int pageSize) {
-		return noticeDAO.getNoticeList(familyCode, memberIdx, startIndexNo, pageSize);
+	public ArrayList<NoticeVO> getNoticeList(String familyCode, int memberIdx, int startIndexNo, int pageSize, String choice) {
+		return noticeDAO.getNoticeList(familyCode, memberIdx, startIndexNo, pageSize, choice);
 	}
 
 	@Override
@@ -182,9 +182,10 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public List<NoticeVO> getNoticeSearchList(int startIndexNo, int pageSize, String search, String searchString) {
-		return noticeDAO.getNoticeSearchList(startIndexNo, pageSize, search, searchString);
+	public List<NoticeVO> getNoticeSearchList(String familyCode, int memberIdx, int startIndexNo, int pageSize, String search, String searchString, String choice) {
+		return noticeDAO.getNoticeSearchList(familyCode, memberIdx, startIndexNo, pageSize, search, searchString, choice);
 	}
+
 
 	@Override
 	public void setNoticeRead(int idx, int memberIdx) {
@@ -227,7 +228,8 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public String setNoticeReplyDelete(int idx) {
-		return noticeDAO.setNoticeReplyDelete(idx);
+		int result = noticeDAO.setNoticeReplyDelete(idx);
+    return (result > 0) ? "1" : "0";
 	}
 
 	@Override
@@ -238,6 +240,26 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public List<NoticeVO> getRecentNotices(String familyCode) {
 		return noticeDAO.getRecentNotices(familyCode);
+	}
+
+	@Override
+	public int getTotalSearchCount(String familyCode, String search, String searchString) {
+		return noticeDAO.getTotalSearchCount(familyCode, search, searchString);
+	}
+
+	@Override
+	public void deleteNoticeReadStatus(int idx) {
+		noticeDAO.deleteNoticeReadStatus(idx);
+	}
+
+	@Override
+	public void deleteNoticeLikes(int idx) {
+		noticeDAO.deleteNoticeLikes(idx);		
+	}
+
+	@Override
+	public void deleteNoticeReplies(int idx) {
+		noticeDAO.deleteNoticeReplies(idx);		
 	}
 	
 }
