@@ -220,6 +220,16 @@
 		  width: 16px;
 		  text-align: center;
 		}
+		
+		.btn-secondary {
+		  background-color: #6c757d;
+		  border-color: #6c757d;
+		}
+		
+		.btn-secondary:hover {
+		  background-color: #5a6268;
+		  border-color: #5a6268;
+		}
   </style>
   <script>
     'use strict';
@@ -278,9 +288,7 @@
         <button type="button" class="btn mr-1" onclick="addNewMeeting()">
           <i class="fas fa-plus"></i> 새 회의 등록
         </button>
-        <button type="button" class="btn" onclick="viewProposedTopics()">
-          <i class="fas fa-lightbulb"></i> 제안된 안건 보기
-        </button>
+        <button type="button" class="btn" onclick="viewProposedTopics()">제안된 안건 보기</button>
       </div>
     </div>
 

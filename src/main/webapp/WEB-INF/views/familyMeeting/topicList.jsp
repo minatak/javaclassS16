@@ -660,7 +660,8 @@
 		         commentHtml += '</div></div>';
 		       });
 		     } else {
-		       commentHtml = '<p>아직 댓글이 없습니다.</p>';
+		       commentHtml = '<div class="text-center"><p>아직 작성된 댓글이 없어요.</p>';
+		       commentHtml += '<p style="margin-top:0;">당신의 의견을 남겨주세요!</p></div>';
 		     }
 		     $('#modalComments').html(commentHtml);
 		     $('#commentsModal').modal('show');
