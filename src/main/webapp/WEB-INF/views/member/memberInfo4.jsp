@@ -237,7 +237,7 @@
 		  width: 40px;
 		  height: 40px;
 		  border: 3px solid #f3f3f3;
-		  border-top: 3px solid #84a98c;
+		  border-top: 3px solid #3498db;
 		  border-radius: 50%;
 		  animation: spin 1s linear infinite;
 		}
@@ -451,151 +451,88 @@
    	  });
    	}
     
-    let emailCheckSw = 0; 
-
     function showLoading() {
-      document.getElementById('loading-container').classList.add('show');
-    }
+   	  document.getElementById('loading-container').classList.add('show');
+   	}
 
-    function hideLoading() {
-      document.getElementById('loading-container').classList.remove('show');
-    }
+   	function hideLoading() {
+   	  document.getElementById('loading-container').classList.remove('show');
+   	}
 
-    let timer;
+   	function sendVerificationCode() {
+   	  let email = document.getElementById('emailInput').value.trim();
 
-    function timer_start() {
-      let timeLeft = 300; // 5분
-      clearInterval(timer); // 기존 타이머가 있다면 제거
-      
-      const timerElement = document.getElementById('timer');
-      if (!timerElement) {
-        console.error('Timer element not found');
-        return;
-      }
+   	  if (email === "") {
+   	    showAlert("이메일을 입력하세요");
+   	    return;
+   	  }
 
-      timer = setInterval(function() {
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          timerElement.textContent = "0:00";
-          showAlert("시간이 초과되었습니다<br/>인증번호를 다시 발급해주세요");
-          sessionStorage.removeItem('sEmailKey');
-          document.getElementById('sendCodeBtn').style.display = "inline-block";
-          document.getElementById('verificationSection').style.display = "none";
-        } else {
-          timerElement.textContent = Math.floor(timeLeft / 60) + ":" + ('0' + (timeLeft % 60)).slice(-2);
-        }
-        timeLeft -= 1;
-      }, 1000);
-    }
+   	  showLoading();
 
-    function sendVerificationCode() {
-      const emailInput = document.getElementById('email');
-      if (!emailInput) {
-        showAlert("이메일 입력 필드를 찾을 수 없습니다.");
-        return;
-      }
-      
-      let email = emailInput.value.trim();
-      if (email === "") {
-        showAlert("이메일을 입력하세요");
-        return;
-      }
-      
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-      if (!emailRegex.test(email)) {
-        showAlert("올바른 이메일 형식이 아닙니다");
-        return;
-      }
-      
-      showLoading();
-      $.ajax({
-        type: 'POST',
-        url: '${ctp}/member/memberEmailCheck',
-        data: { email: email },
-        success: function(response) {
-          if(response == "alreadyMember") {
-            showAlert("이미 사용 중인 이메일입니다.");
-          }
-          else {
-            showAlert("인증 코드가 전송되었습니다");
-            document.getElementById('verificationSection').style.display = "block";
-            document.getElementById('sendCodeBtn').style.display = "none";
-            timer_start();
-          }
-        },
-        error: function() {
-          showAlert("인증 코드 전송 중 오류가 발생했습니다<br/>다시 시도해주세요");
-        },
-        complete: function() {
-          hideLoading();
-        }
-      });
-    }
+   	  $.ajax({
+   	    type: 'POST',
+   	    url: '${ctp}/member/joinEmailCheck',
+   	    data: { email: email },
+   	    success: function(response) {
+   	      if(response == "alreadyMember") {
+   	    	showAlert("이미 가입되어있는 이메일입니다");
+   	      }
+   	      else {
+   	        ResponseCode = response;
+   	        sessionStorage.setItem('sEmailKey', ResponseCode);
+   	        showAlert("인증 코드가 전송되었습니다");
+   	        document.getElementById('verificationSection').style.display = "block";
+   	        document.getElementById('sendCodeBtn').style.display = "none";
+   	      }
+   	    },
+   	    error: function() {
+   	      showAlert("인증 코드 전송 중 오류가 발생했습니다<br/>다시 시도해주세요");
+   	    },
+   	    complete: function() {
+   	      hideLoading();
+   	    }
+   	  });
+   	}
 
-    function verifyAndSaveEmail() {
-      let verificationCode = document.getElementById('verificationCode').value.trim();
-      if (verificationCode === "") {
-        showAlert("인증 코드를 입력하세요");
-        return;
-      }
-      $.ajax({
-        type: 'POST',
-        url: '${ctp}/member/memberEmailCheckOk',
-        data: { checkKey: verificationCode },
-        success: function(response) {
-          if(response == "1") {
-            updateEmail();
-          } else {
-            showAlert("인증코드가 일치하지 않습니다");
-          }
-        },
-        error: function() {
-          showAlert("인증 확인 중 오류가 발생했습니다<br/>다시 시도해주세요");
-        }
-      });
-    }
+   	function verifyAndSaveEmail() {
+   	  const newEmail = document.getElementById('emailInput').value;
+   	  const verificationCode = document.getElementById('verificationCode').value;
+   	  
+   	  showLoading();
 
-    function updateEmail() {
-      let email = document.getElementById('email').value.trim();
-      showLoading();
-      $.ajax({
-        type: 'POST',
-        url: '${ctp}/member/updateField',
-        data: { 
-          field: 'email', 
-          value: email,
-          mid: '${vo.mid}'
-        },
-        success: function(response) {
-          if(response == "success") {
-            showAlert("이메일이 성공적으로 변경되었습니다.", function() {
-              location.reload();
-            });
-          } else {
-            showAlert("이메일 변경에 실패했습니다. 다시 시도해주세요.");
-          }
-        },
-        error: function() {
-          showAlert("서버 오류가 발생했습니다. 나중에 다시 시도해주세요.");
-        },
-        complete: function() {
-          hideLoading();
-        }
-      });
-    }
+   	  $.ajax({
+   	    type: 'POST',
+   	    url: '${ctp}/member/verifyAndUpdateEmail',
+   	    data: { 
+   	      email: newEmail,
+   	      verificationCode: verificationCode
+   	    },
+   	    success: function(response) {
+   	      if(response === 'success') {
+   	        document.getElementById('emailValue').textContent = newEmail;
+   	        cancelEdit('email');
+   	        showAlert("이메일이 성공적으로 변경되었습니다.");
+   	      } else {
+   	        showAlert('이메일 변경에 실패했습니다. 다시 시도해주세요.');
+   	      }
+   	    },
+   	    error: function() {
+   	      showAlert('서버와의 통신 중 오류가 발생했습니다.');
+   	    },
+   	    complete: function() {
+   	      hideLoading();
+   	    }
+   	  });
+   	}
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const emailInput = document.getElementById('email');
-      if (emailInput) {
-        emailInput.addEventListener('input', function() {
-          document.getElementById('verificationSection').style.display = "none";
-          document.getElementById('sendCodeBtn').style.display = "inline-block";
-          clearInterval(timer);
-          const timerElement = document.getElementById('timer');
-          if (timerElement) timerElement.textContent = "5:00";
-        });
-      }
-    });
+   	function cancelEdit(field) {
+   	  document.getElementById(field + 'Display').style.display = 'block';
+   	  document.getElementById(field + 'Edit').style.display = 'none';
+   	  if(field === 'email') {
+   	    document.getElementById('verificationSection').style.display = 'none';
+   	    document.getElementById('sendCodeBtn').style.display = 'block';
+   	  }
+   	}
     
   </script>
 </head>
@@ -643,12 +580,11 @@
 				  <button type="button" class="edit-button" onclick="editField('email')">변경</button>
 				</div>
 				<div class="form-group edit-form" id="emailEdit" style="display: none;">
-				  <label for="email">이메일</label>
-				  <input type="email" class="form-control" id="email" value="${vo.email}">
+				  <label for="emailInput">이메일</label>
+				  <input type="email" class="form-control" id="emailInput" value="${vo.email}">
 				  <button type="button" class="btn btn-cancel mt-2" id="sendCodeBtn" onclick="sendVerificationCode()">인증번호 발송</button>
 				  <div id="verificationSection" style="display: none;"> 
 				    <input type="text" class="form-control mt-2" id="verificationCode" placeholder="인증번호 입력">
-				    <span id="timer">5:00</span>
 				    <div class="mt-2">
 				      <button type="button" class="btn btn-save" onclick="verifyAndSaveEmail()">인증 및 저장</button>
 				      <button type="button" class="btn btn-cancel" onclick="cancelEdit('email')">취소</button>

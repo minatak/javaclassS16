@@ -66,15 +66,15 @@ public class MemberServiceImpl implements MemberService {
 		return sFileName;
 	}
 
-	@Override
-	public int setMemberUpdateOk(MemberVO vo) {
-		return memberDAO.setMemberUpdateOk(vo);
-	}
+//	@Override
+//	public int setMemberUpdateOk(MemberVO vo) {
+//		return memberDAO.setMemberUpdateOk(vo);
+//	}
 
-	@Override
-	public int setUserDel(String mid) {
-		return memberDAO.setUserDel(mid);
-	}
+//	@Override
+//	public int setUserDel(String mid) {
+//		return memberDAO.setUserDel(mid);
+//	}
 
 	@Override
 	public MemberVO getMemberNameEmailCheck(String name, String email) {
@@ -147,6 +147,35 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public String getMemberNameByIdx(int idx) {
 		return memberDAO.getMemberNameByIdx(idx);
+	}
+
+	@Override
+	public int updateMemberField(String field, String value, String mid) {
+		return memberDAO.updateMemberField(field, value, mid);
+	}
+
+	@Override
+    public String updateMemberPhoto(MultipartFile fName, String mid) {
+        MemberVO member = memberDAO.getMemberIdCheck(mid);
+        if (member == null) {
+            return "failure";
+        }
+
+        String oldPhoto = member.getPhoto();
+        String newFileName = fileUpload(fName, mid, oldPhoto);
+
+        if (newFileName != null) {
+            int result = memberDAO.updateMemberPhoto(newFileName, mid);     
+            if (result == 1) {
+                return newFileName;
+            }
+        }
+        return "failure";
+    }
+
+	@Override
+	public void setMemberDel(String mid) {
+		memberDAO.setMemberDel(mid);
 	}
   
 	

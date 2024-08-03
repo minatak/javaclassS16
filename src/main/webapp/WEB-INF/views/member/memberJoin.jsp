@@ -12,7 +12,7 @@
       display: flex; 
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      height: 100vh; 
       margin: 0;
       overflow: hidden; /* Prevent page from scrolling */
     }
@@ -117,7 +117,7 @@
     .next {
       width: 78%;
       padding: 15px;
-      background-color: #000000;
+      background-color: #84a98c;
       border: none;
       border-radius: 4px;
       color: white;
@@ -203,7 +203,7 @@
     let timer;
     let emailCheckSw = 0;
 
-    function innerReset() { // 오류 메세지 초기화
+    function innerReset() {
       document.getElementById('nameError').innerHTML = "";
       document.getElementById('emailError').innerHTML = "";
       document.getElementById('codeError').innerHTML = "";
@@ -215,7 +215,7 @@
 
       nameInput.oninput = function() {
         innerReset();
-        let regName = /^[가-힣a-zA-Z]+$/;        // 이름은 한글/영문 가능
+        let regName = /^[가-힣a-zA-Z]+$/;
 
         if (!regName.test(nameInput.value)) {
           document.getElementById('nameError').innerHTML = "이름은 한글과 영문 대소문자만 사용가능합니다";
@@ -230,6 +230,9 @@
           document.getElementById('emailError').innerHTML = "올바른 이메일 형식이 아닙니다";
         }
       };
+
+      document.getElementById('sendCodeBtn').addEventListener('click', sendVerificationCode);
+      document.querySelector('.next').addEventListener('click', fCheck);
     };
 
     function fCheck() {
@@ -238,63 +241,63 @@
       let verificationCode = document.myform.verificationCode.value.trim();
       let sessionKey = sessionStorage.getItem('sEmailKey');
 
-      let regName = /^[가-힣a-zA-Z]+$/;        // 이름은 한글/영문 가능
-      let regEmail =/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+      let regName = /^[가-힣a-zA-Z]+$/;
+      let regEmail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
 
       if(name == "") {
-    	  showAlert("이름을 입력하세요", function() {
-    	    document.myform.name.focus();
-    	  });
-    	  return false;
-    	}
-    	else if(email == "") {
-    	  showAlert("이메일을 입력하세요", function() {
-    	    document.myform.email.focus();  
-    	  });
-    	  return false;
-    	}
-    	else if (!regName.test(name)) {
-    	  showAlert("이름은 한글과 영문대소문자만 사용가능합니다", function() {
-    	    document.myform.name.focus();
-    	  });
-    	  return false;
-    	}
-    	else if (!regEmail.test(email)) {
-    	  showAlert("올바른 이메일 형식이 아닙니다", function() {
-    	    document.myform.email.focus();
-    	  });
-    	  return false;
-    	}
-    	else if(emailCheckSw != 1) {
-    	  showAlert("이메일을 인증해주세요");
-    	  return false;
-    	}
-    	else {
-    	  myform.submit();
-    	}
+        showAlert("이름을 입력하세요", function() {
+          document.myform.name.focus();
+        });
+        return false;
+      }
+      else if(email == "") {
+        showAlert("이메일을 입력하세요", function() {
+          document.myform.email.focus();  
+        });
+        return false;
+      }
+      else if (!regName.test(name)) {
+        showAlert("이름은 한글과 영문대소문자만 사용가능합니다", function() {
+          document.myform.name.focus();
+        });
+        return false;
+      }
+      else if (!regEmail.test(email)) {
+        showAlert("올바른 이메일 형식이 아닙니다", function() {
+          document.myform.email.focus();
+        });
+        return false;
+      }
+      else if(emailCheckSw != 1) {
+        showAlert("이메일을 인증해주세요");
+        return false;
+      }
+      else {
+        myform.submit();
+      }
+    }
 
     function showErrorMsg(elementId, message) {
       document.getElementById(elementId).innerHTML = message;
     }
 
-    
     function showAlert(message) {
-    	  Swal.fire({
-    	    html: message,
-    	    confirmButtonText: '확인',
-    	    customClass: {
-    	      confirmButton: 'swal2-confirm',
-    	      popup: 'custom-swal-popup',
-    	      htmlContainer: 'custom-swal-text'
-    	    },
-    	    scrollbarPadding: false,
-    	    allowOutsideClick: false,
-    	    heightAuto: false,
-    	    didOpen: () => {
-    	      document.body.style.paddingRight = '0px';
-    	    }
-    	  });
-    	}
+      Swal.fire({
+        html: message,
+        confirmButtonText: '확인',
+        customClass: {
+          confirmButton: 'swal2-confirm',
+          popup: 'custom-swal-popup',
+          htmlContainer: 'custom-swal-text'
+        },
+        scrollbarPadding: false,
+        allowOutsideClick: false,
+        heightAuto: false,
+        didOpen: () => {
+          document.body.style.paddingRight = '0px';
+        }
+      });
+    }
 
     function timer_start() {
       let timeLeft = 300; // 5분
@@ -303,7 +306,6 @@
           clearInterval(timer);
           document.getElementById('timer').textContent = "0:00";
           showAlert("시간이 초과되었습니다<br/>인증번호를 다시 발급해주세요");
-          // 세션 초기화
           sessionStorage.removeItem('sEmailKey');
           document.getElementById('sendCodeBtn').style.display = "block";
           document.getElementById('auth_container').style.display = "none";
@@ -329,17 +331,17 @@
         url: '${ctp}/member/joinEmailCheck',
         data: { email: email },
         success: function(response) {
-        	if(response == "alreadyMember") {
-        		window.location.href = '${ctp}/message/alreadyMember';
-        	}
-        	else {
-	          ResponseCode = response;
-	          sessionStorage.setItem('sEmailKey', ResponseCode);
-	          showAlert("인증 코드가 전송되었습니다");
-	          document.getElementById('auth_container').style.display = "block";
-	          document.getElementById('sendCodeBtn').style.display = "none";
-	          timer_start();        		
-        	}
+          if(response == "alreadyMember") {
+            window.location.href = '${ctp}/message/alreadyMember';
+          }
+          else {
+            ResponseCode = response;
+            sessionStorage.setItem('sEmailKey', ResponseCode);
+            showAlert("인증 코드가 전송되었습니다");
+            document.getElementById('auth_container').style.display = "block";
+            document.getElementById('sendCodeBtn').style.display = "none";
+            timer_start();        		
+          }
         },
         error: function() {
           showAlert("인증 코드 전송 중 오류가 발생했습니다<br/>다시 시도해주세요");
@@ -393,7 +395,7 @@
         </div>
         <div class="form-group">
           <label for="verificationCode">인증번호</label>
-          <button type="button" id="sendCodeBtn" onclick="sendVerificationCode()">인증번호 전송</button>
+          <button type="button" id="sendCodeBtn">인증번호 전송</button>
           <div class="form-group" id="auth_container" style="display:none;">
             <input type="text" id="verificationCode" name="verificationCode" placeholder="인증번호를 입력하세요.">
             <div class="timer" id="timer">5:00</div>
@@ -403,13 +405,10 @@
         </div>
         <div class="form-actions">
           <button type="button" class="back" onclick="window.history.back()">뒤로</button>
-          <button type="button" class="next" onclick="fCheck()">다음</button>
+          <button type="button" class="next">다음</button>
         </div>
       </form>
     </div>
-    <%-- <div class="login-links">
-      이미 계정이 있나요?<a href="${ctp}/member/memberLogin"><b>로그인하기</b></a>
-    </div> --%>
   </div>
   <div id="loading-container" class="loading-container">
     <div class="loading-spinner"></div>

@@ -136,7 +136,7 @@
     .next {
       width: 78%;
       padding: 15px;
-      background-color: #000000;
+      background-color: #84a98c;
       border: none;
       border-radius: 4px;
       color: white;

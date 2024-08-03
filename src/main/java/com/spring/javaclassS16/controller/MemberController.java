@@ -246,6 +246,16 @@ public class MemberController {
       }
   }
     
+  @RequestMapping(value = "/memberIdSearch", method = RequestMethod.GET)
+	public String memberIdSearchGet() {
+		return "member/memberIdSearch";
+	}
+  
+  @RequestMapping(value = "/memberPwdChange", method = RequestMethod.GET)
+  public String memberPwdChangeGet() {
+  	return "member/memberPwdChange";
+  }
+  
 	// 일반 로그인 폼
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
 	public String memberLoginGet(HttpServletRequest request) {
@@ -272,8 +282,6 @@ public class MemberController {
 		) throws MessagingException {
 		// 카카오 로그아웃을 위한 카카오앱키를 세션에 저장시켜둔다.
 		session.setAttribute("sAccessToken", accessToken);
-		
-		System.out.println("name:"+name+"email:"+email);
 		
 		// 카카오 로그인한 회원인 경우에는 우리 회원인지를 조사한다. 
 		MemberVO vo = memberService.getMemberNameEmailCheck(name, email);
@@ -370,7 +378,6 @@ public class MemberController {
 			
 			// 카카오에서 정상적으로 처리 되었다면 200번이 돌아온다.
 			int responseCode = conn.getResponseCode();
-			System.out.println("responseCode : " + responseCode);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -390,8 +397,94 @@ public class MemberController {
 		return "member/memberInfo";
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/checkPassword", method = RequestMethod.POST)
+	public String checkPasswordPost(HttpSession session, String pwd) {
+		String mid = (String) session.getAttribute("sMid");
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		if(passwordEncoder.matches(pwd, vo.getPwd())) return "1";
+		return "0";
+	}
 	
+	@ResponseBody
+  @RequestMapping(value = "/updateField", method = RequestMethod.POST)
+  public String updateField(String field, String value, String mid, HttpSession session) {
+	int res = memberService.updateMemberField(field, value, mid);
+	  if (res == 1) {
+	    // 업데이트 성공 시 세션 정보도 업데이트
+	    if(field.equals("name")) session.setAttribute("sName", value);
+	    return "success";
+	  }
+    return "failure";
+  }
+
+	@ResponseBody
+	@RequestMapping(value = "/updatePhoto", method = RequestMethod.POST)
+	public String updatePhoto(MultipartFile fName, HttpSession session) {
+	  String mid = (String) session.getAttribute("sMid");
+	  String res = memberService.updateMemberPhoto(fName, mid);
+	  if (!res.equals("0")) {
+	    // 업데이트 성공 시 세션의 사진 정보도 업데이트
+	    session.setAttribute("sPhoto", res);
+	    return "success";
+	  }
+	  return "failure";
+	}
+    
+  @RequestMapping(value = "/userDel", method = RequestMethod.GET)
+  public String userDel(HttpSession session) {
+    String mid = (String) session.getAttribute("sMid");
+    memberService.setMemberDel(mid);
+    session.invalidate();
+    return "redirect:/message/memberDeleteOk";
+  }
 	
+  @ResponseBody
+  @RequestMapping(value = "/memberEmailCheck", method = RequestMethod.POST)
+  public String infoMemberEmailCheckPost(String email, HttpSession session) throws MessagingException {
+    MemberVO vo = memberService.getMemberEmailCheck(email);
+    if(vo != null) {
+      return "alreadyMember";
+    }
+    else {
+      UUID uid = UUID.randomUUID();
+      String emailKey = uid.toString().substring(0, 8);
+      session.setAttribute("sEmailKey", emailKey);
+      
+      String emailContent = 
+        "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;'>" +
+            "<img src='cid:logo.png' alt='HomeLink Logo' style='display: block; margin: 0 auto; max-width: 150px;'>" +
+            "<h2 style='color: #333; text-align: center;'>HomeLink 이메일 변경 인증</h2>" +
+            "<p style='color: #666; line-height: 1.6;'>안녕하세요, HomeLink 회원님!</p>" +
+            "<p style='color: #666; line-height: 1.6;'>이메일 주소 변경을 위한 인증 절차입니다. 아래 8자리 인증번호를 사용하여 이메일 변경을 완료해주세요.</p>" +
+            "<div style='background-color: #f0f0f0; padding: 15px; border-radius: 5px; text-align: center; margin: 20px 0;'>" +
+                "<h3 style='margin: 0; color: #333;'>인증번호</h3>" +
+                "<p style='font-size: 24px; font-weight: bold; color: #4a90e2; letter-spacing: 2px; margin: 10px 0;'>" + emailKey + "</p>" +
+            "</div>" +
+            "<h4 style='color: #333;'>인증 방법:</h4>" +
+            "<ol style='color: #666; line-height: 1.6;'>" +
+                "<li>이메일 변경 화면으로 돌아가세요.</li>" +
+                "<li>\"이메일 인증\" 필드를 찾습니다.</li>" +
+                "<li>위에 발급된 8자리 인증번호를 입력합니다.</li>" +
+                "<li>\"인증 확인\" 버튼을 클릭합니다.</li>" +
+            "</ol>" +
+            "<p style='color: #666; line-height: 1.6;'>이메일 인증을 완료하면 새 이메일 주소로 변경이 완료됩니다.</p>" +
+            "<p style='color: #666; line-height: 1.6;'>감사합니다!</p>" +
+            "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
+            "<p style='color: #999; font-size: 12px; margin-top: 20px;'>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
+            "<p style='text-align: center;'>" +
+                "<a href='' style='display: inline-block; background-color: #4a90e2; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
+            "</p>" +
+        "</div>";
+
+      joinMailSend(email, "HomeLink 이메일 변경 인증번호 안내", emailContent);
+      return "success";
+    }
+  }
+
+  
+  
+  
 	// 여기부터 그냥 복붙해놓은 코드
 	@ResponseBody
 	@RequestMapping(value = "/memberNewPassword", method = RequestMethod.POST)
@@ -412,7 +505,6 @@ public class MemberController {
 			String res = mailSend(email, title, mailFlag);
 			
 			// 새 비밀번호를 발급하였을시에 sLogin이란 세션을 발생시키고, 2분안에 새 비밀번호로 로그인후 비밀번호를 변경처리할수 있도록 처리(___)
-			// 숙제___
 			session.setAttribute("sLogin", "OK");
 			
 			
@@ -459,54 +551,12 @@ public class MemberController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/memberPwdCheck", method = RequestMethod.POST)
-	public String memberPwdCheckPost(String mid, String pwd) {
-		MemberVO vo = memberService.getMemberIdCheck(mid);
-		if(passwordEncoder.matches(pwd, vo.getPwd())) return "1";
-		return "0";
-	}
-	
-	@ResponseBody
 	@RequestMapping(value = "/memberPwdChangeOk", method = RequestMethod.POST)
 	public String memberPwdChangeOkPost(String mid, String pwd) {
 		return memberService.setPwdChangeOk(mid, passwordEncoder.encode(pwd)) + "";
 	}
 	
-	@RequestMapping(value = "/memberUpdate", method = RequestMethod.GET)
-	public String memberUpdateGet(Model model, HttpSession session) {
-		String mid = (String) session.getAttribute("sMid");
-		MemberVO vo = memberService.getMemberIdCheck(mid);
-		model.addAttribute("vo", vo);
-		return "member/memberUpdate";
-	}
-	
-	@RequestMapping(value = "/memberUpdate", method = RequestMethod.POST)
-	public String memberUpdatePost(MemberVO vo, MultipartFile fName, HttpSession session) {
-		
-		// 회원 사진 처리(service객체에서 처리후 DB에 저장한다. 원본파일은 noimage.jpg가 아닐경우 삭제한다.)
-		if(fName.getOriginalFilename() != null && !fName.getOriginalFilename().equals("")) vo.setPhoto(memberService.fileUpload(fName, vo.getMid(), vo.getPhoto()));
-		
-		int res = memberService.setMemberUpdateOk(vo);
-		if(res != 0) {
-			session.setAttribute("sName", vo.getName());
-			return "redirect:/message/memberUpdateOk";
-		}
-		else return "redirect:/message/memberUpdateNo";
-	}
 
-	// 회원 탈퇴 신청 
-	@ResponseBody
-	@RequestMapping(value = "/userDel", method = RequestMethod.POST)
-	public String userDelPost(HttpSession session, HttpServletRequest request) {
-		String mid = (String) session.getAttribute("sMid");
-		int res = memberService.setUserDel(mid);
-		
-		if(res == 1) {
-			session.invalidate();
-			return "1";
-		}
-		else return "0";
-	}
 	
 
 	

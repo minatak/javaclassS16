@@ -3,6 +3,7 @@ package com.spring.javaclassS16.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javaclassS16.vo.MemberVO;
 
@@ -37,6 +38,12 @@ public interface MemberDAO {
 	public List<MemberVO> getFamilyMembersByFamCode(@Param("familyCode") String familyCode);
 
 	public String getMemberNameByIdx(@Param("idx") int idx);
+
+	public int updateMemberField(@Param("field") String field, @Param("value") String value, @Param("mid") String mid);
+
+	public void setMemberDel(@Param("mid") String mid);
+
+	public int updateMemberPhoto(@Param("newFileName") String newFileName, @Param("mid") String mid);
 
 
 }

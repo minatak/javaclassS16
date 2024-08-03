@@ -88,17 +88,13 @@
     .login-button {
       width: 100%;
       padding: 10px;
-      background-color: #84a98c;
+      background-color: #000000;
       border: none;
       border-radius: 10px;
       color: white;
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.3s;
-    }
-    
-    .login-button:hover {
-      background-color: #6b8e73;
     }
 
     .kakaoLogin {
@@ -160,7 +156,7 @@
       });
     });
     
-    /* // 비밀번호 찾기
+    // 비밀번호 찾기
     function pwdSearch() {
       $("#searchPassword").show();
     }
@@ -195,7 +191,7 @@
           alert("전송오류!!")
         }
       });
-    } */
+    }
 
     // 카카오 로그인(자바스크립트 앱키 등록)
     window.Kakao.init("de6e07199c4aa87682edf478ce5966ae");
@@ -226,12 +222,12 @@
       <form method="post" class="login-form">
         <div class="input-group mb-3">
           <label for="username">아이디</label>
-          <a href="${ctp}/member/memberIdSearch" class="forgot-link">아이디를 잊어버리셨나요?</a>
+          <a href="javascript:midSearch()" class="forgot-link">아이디를 잊어버리셨나요?</a>
           <input type="text" name="mid" value="${mid}" autofocus required placeholder="아이디를 입력해주세요.">
         </div>
         <div class="input-group">
           <label for="password">비밀번호</label>
-          <a href="${ctp}/member/memberPwdChange" class="forgot-link">비밀번호를 잊어버리셨나요?</a>
+          <a href="javascript:pwdSearch()" class="forgot-link">비밀번호를 잊어버리셨나요?</a>
           <input type="password" name="pwd" required placeholder="비밀번호를 입력해주세요.">
           <i class="fa fa-eye-slash" aria-hidden="true"></i>
         </div>

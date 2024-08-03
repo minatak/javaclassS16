@@ -20,9 +20,7 @@ public interface MemberService {
 
 	public String fileUpload(MultipartFile fName, String mid, String photo);
 
-	public int setMemberUpdateOk(MemberVO vo);
-
-	public int setUserDel(String mid);
+//	public int setMemberUpdateOk(MemberVO vo);
 
 	public MemberVO getMemberNameEmailCheck(String name, String email);
 
@@ -41,5 +39,11 @@ public interface MemberService {
 	public List<MemberVO> getFamilyMembersByFamCode(String familyCode);
 
 	public String getMemberNameByIdx(int idx);
+
+	public int updateMemberField(String field, String value, String mid);
+
+	public String updateMemberPhoto(MultipartFile fName, String mid);
+
+	public void setMemberDel(String mid);
 
 }

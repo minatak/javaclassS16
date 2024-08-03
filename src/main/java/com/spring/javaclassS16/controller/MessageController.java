@@ -172,6 +172,10 @@ public class MessageController {
 			model.addAttribute("msg", "소식 삭제에 실패했어요");
 			model.addAttribute("url", "/notice/noticeContent?idx="+idx+"pag="+pag+"&pageSize="+pageSize);
 		}
+		else if(msgFlag.equals("memberDeleteOk")) {
+			model.addAttribute("msg", "회원 탈퇴가 정상적으로 완료되었습니다");
+			model.addAttribute("url", "/");
+		}
 		
 		
 		return "include/message";
