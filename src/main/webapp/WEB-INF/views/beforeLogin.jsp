@@ -36,99 +36,164 @@
 
 	<style>
 		body {font-family: 'Pretendard' !important;}
-	  .modal {
-	    display: none;
-	    position: fixed;
-	    z-index: 1000;
-	    left: 0;
-	    top: 0;
-	    width: 100%;
-	    height: 100%;
-	    overflow: auto;
-	    background-color: rgba(0,0,0,0.4);
-	  }
-	
-	  .modal-content {
-	    background-color: #fefefe;
-	    margin: 15% auto;
-	    padding: 20px;
-	    border: 1px solid #888;
-	    width: 80%;
-	    max-width: 600px;
-	    border-radius: 10px;
-	    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-	  }
-	
-	  .close {
-	    color: #aaa;
-	    float: right;
-	    font-size: 28px;
-	    font-weight: bold;
-	    cursor: pointer;
-	  }
-	
-	  .close:hover,
-	  .close:focus {
-	    color: #000;
-	    text-decoration: none;
-	    cursor: pointer;
-	  }
+		.modal {
+		  display: none;
+		  position: fixed;
+		  z-index: 1000;
+		  left: 0;
+		  top: 0;
+		  width: 100%;
+		  height: 100%;
+		  overflow: auto;
+		  background-color: rgba(0,0,0,0.4);
+		}
+		
+		.modal-content {
+		  background-color: #fefefe;
+		  margin: 5% auto;
+		  padding: 20px;
+		  border: 1px solid #888;
+		  width: 80%;
+		  max-width: 600px;
+		  border-radius: 10px;
+		  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		}
+		
+		.close {
+		  color: #aaa;
+		  float: right;
+		  font-size: 28px;
+		  font-weight: bold;
+		  cursor: pointer;
+		}
+		
+		.close:hover,
+		.close:focus {
+		  color: #000;
+		  text-decoration: none;
+		  cursor: pointer;
+		}
+		
+		.modal-body {
+		  margin-top: 20px;
+		  display: flex;
+		  flex-direction: column;
+		  align-items: center;
+		}
+		
+		.modal-body img {
+		  max-width: 100%;
+		  height: auto;
+		  margin-bottom: 20px;
+		  border-radius: 5px;
+		}
+		
+		.modal-footer {
+		  margin-top: 20px;
+		  text-align: center;
+		}
+		
+		#modalTitle {
+		  color: #ff6b6b;
+		  margin-bottom: 10px;
+		}
+		
+		#modalDescription {
+		  line-height: 1.6;
+		  color: #333;
+		}
 	</style>
 	<script>
-    $(document).ready(function(){
-        $(".owl-carousel").owlCarousel({
-            loop: true,
-            margin: 30,
-            nav: true,
-            responsive:{
-                0:{ items: 1 },
-                600:{ items: 2 },
-                1000:{ items: 4 }
-            }
-        });
+	$(document).ready(function(){
+		  $(".owl-carousel").owlCarousel({
+		    loop: true,
+		    margin: 30,
+		    nav: true,
+		    responsive:{
+		      0:{ items: 1 },
+		      600:{ items: 2 },
+		      1000:{ items: 4 }
+		    }
+		  });
+		});
 
         // 모달 관련 요소 선택
-        var modal = $("#serviceModal");
-        var modalTitle = $("#modalTitle");
-        var modalDescription = $("#modalDescription");
-        var span = $(".close");
-
-        // 서비스 정보 객체
-        var serviceInfo = {
-            "일정 관리": "가족 구성원들이 공유하는 일정들을 한눈에 볼 수 있습니다. 중요한 약속이나 이벤트를 등록하여 모든 가족이 확인할 수 있게 합니다.",
-            "가족 투표": "가족 내에서 중요한 결정을 할 때 투표 기능을 활용할 수 있습니다. 투표 주제와 선택지를 설정하여 모든 가족 구성원들이 참여할 수 있습니다. 실시간으로 투표 결과를 확인할 수 있어 빠르고 공정한 의사결정을 도울 수 있습니다.",
-            "가사 분담": "가정 내 가사 업무를 효율적으로 분담할 수 있는 기능입니다. 각 가사 항목에 대해 담당자를 지정하고, 진행 상황을 체크할 수 있습니다. 가사 업무의 균형을 맞추고, 모든 가족 구성원이 가사에 참여할 수 있도록 도와줍니다.",
-            "가족 앨범": "가족 사진을 공유하고 저장할 수 있는 기능입니다. 특별한 순간이나 추억을 앨범 형태로 정리하여 간편하게 열람할 수 있습니다. 사진마다 설명을 추가할 수 있어, 추억을 더 생생하게 기억할 수 있습니다.",
-            "가족 회의": "온라인으로 가족 회의를 진행하고 회의록을 작성할 수 있는 기능입니다. 회의 안건을 미리 등록하고, 회의 결과를 기록하여 모든 가족 구성원이 확인할 수 있습니다.",
-            "가족 소식": "가족 내 중요한 소식과 정보를 공유할 수 있는 게시판 기능입니다. 공지사항이나 긴급한 정보를 빠르게 전달하여 모든 가족 구성원이 동일한 정보를 가질 수 있습니다."
-        };
-
-        // 자세히 보기 버튼에 클릭 이벤트 리스너 추가
-        $(".modal-trigger").on("click", function(e) {
-            e.preventDefault();
-            var serviceName = $(this).closest('.service-item').find('h4').text();
-            showModal(serviceName);
-        });
-
-        // 모달 표시 함수
-        function showModal(serviceName) {
-          modalTitle.text(serviceName);
-          modalDescription.text(serviceInfo[serviceName]);
-          modal.css("display", "block");
-        }
-
-        // 모달 닫기
-        span.on("click", function() {
-            modal.css("display", "none");
-        });
-
-        // 모달 외부 클릭 시 닫기
-        $(window).on("click", function(event) {
-            if (event.target == modal[0]) {
-                modal.css("display", "none");
-            }
-        });
-    });
+        var modal = document.getElementById("featureModal");
+				var modalTitle = document.getElementById("modalTitle");
+				var modalImage = document.getElementById("modalImage");
+				var modalDescription = document.getElementById("modalDescription");
+				var modalCTA = document.getElementById("modalCTA");
+				var span = document.getElementsByClassName("close")[0];
+				
+				// 서비스 정보 객체
+				var serviceInfo = {
+				  "일정 관리": {
+				    title: "일정 관리",
+				    description: "가족 구성원들의 일정을 한눈에 확인하고 관리할 수 있습니다. 개인 및 공유 일정을 구분하여 등록할 수 있으며, 중요한 가족 행사나 기념일도 놓치지 않도록 알림 기능을 제공합니다. 또한, 일정별로 색상 구분이 가능해 직관적인 일정 파악이 가능합니다.",
+				    image: "assets/images/calendar.jpg",
+				    ctaLink: "#"
+				  },
+				  "가족 투표": {
+				    title: "가족 투표",
+				    description: "중요한 가족 결정사항을 민주적으로 결정할 수 있는 투표 시스템을 제공합니다. 주말 여행지 선택, 저녁 메뉴 결정 등 다양한 주제로 투표를 생성할 수 있으며, 익명 투표 옵션도 제공합니다. 실시간으로 투표 결과를 그래프로 확인할 수 있어 가족 간 소통을 더욱 원활하게 합니다.",
+				    image: "assets/images/voting.jpg",
+				    ctaLink: "#"
+				  },
+				  "가사 분담": {
+				    title: "가사 분담",
+				    description: "가사 업무를 효율적으로 분담하고 관리할 수 있는 시스템을 제공합니다. 정기적인 집안일부터 특별한 tasks까지 등록하고 담당자를 지정할 수 있습니다. 완료된 일을 체크하면 포인트가 쌓이는 재미있는 요소도 있어, 가족 구성원 모두가 자발적으로 가사에 참여하도록 동기를 부여합니다.",
+				    image: "assets/images/chores.jpg",
+				    ctaLink: "#"
+				  },
+				  "가족 앨범": {
+				    title: "가족 앨범",
+				    description: "소중한 가족의 추억을 저장하고 공유할 수 있는 디지털 앨범 기능을 제공합니다. 각 가족 구성원이 사진을 업로드하고 앨범을 만들 수 있으며, 댓글 기능을 통해 추억을 나눌 수 있습니다. 연도별, 이벤트별로 앨범을 구분하여 정리할 수 있어 체계적인 추억 관리가 가능합니다.",
+				    image: "assets/images/album.jpg",
+				    ctaLink: "#"
+				  },
+				  "가족 회의": {
+				    title: "가족 회의",
+				    description: "정기적인 가족 회의를 효과적으로 진행할 수 있는 도구를 제공합니다. 회의 안건을 사전에 등록하고, 온라인으로 의견을 나눌 수 있습니다. 회의 결과와 결정사항을 기록하고 공유할 수 있어, 모든 가족 구성원이 중요한 가족 사안에 대해 알고 참여할 수 있습니다.",
+				    image: "assets/images/meeting.jpg",
+				    ctaLink: "#"
+				  },
+				  "가족 소식": {
+				    title: "가족 소식",
+				    description: "가족 내 중요한 소식과 정보를 공유할 수 있는 게시판 기능을 제공합니다. 공지사항, 긴급 연락사항, 축하 메시지 등을 올릴 수 있으며, 댓글 기능을 통해 실시간으로 소통할 수 있습니다. 또한, 중요한 소식에 대해서는 푸시 알림 기능을 제공하여 빠른 정보 전달이 가능합니다.",
+				    image: "assets/images/news.jpg",
+				    ctaLink: "#"
+				  }
+				};
+				
+				// 모달 열기 함수
+				function openModal(serviceName) {
+				  var service = serviceInfo[serviceName];
+				  modalTitle.textContent = service.title;
+				  modalImage.src = service.image;
+				  modalDescription.textContent = service.description;
+				  modalCTA.href = service.ctaLink;
+				  modal.style.display = "block";
+				}
+				
+				// 모달 닫기
+				span.onclick = function() {
+				  modal.style.display = "none";
+				}
+				
+				// 모달 외부 클릭 시 닫기
+				window.onclick = function(event) {
+				  if (event.target == modal) {
+				    modal.style.display = "none";
+				  }
+				} 
+				
+				// 서비스 아이템에 클릭 이벤트 리스너 추가
+				document.querySelectorAll('.service-item').forEach(item => {
+				  item.addEventListener('click', function() {
+				    var serviceName = this.querySelector('h4').textContent;
+				    openModal(serviceName);
+				  });
+				});
   </script>
   </head>
 
@@ -143,7 +208,7 @@
         <span></span>
         <span></span>
       </div>
-    </div>
+    </div> 
   </div>
   <!-- ***** Preloader End ***** -->
 
@@ -161,11 +226,11 @@
             <!-- ***** Logo End ***** -->
             <!-- ***** Menu Start ***** -->
             <ul class="nav">
-              <li class="scroll-to-section"><a href="#top" class="active">홈</a></li>
-              <li class="scroll-to-section"><a href="#services">서비스</a></li>
-              <li class="scroll-to-section"><a href="#about">소개</a></li>
-              <li class="scroll-to-section"><a href="${ctp}/member/memberLogin">로그인</a></li>
-              <li><div class="gradient-button"><a href="${ctp}/member/memberJoin0"><i class="fa fa-sign-in-alt"></i> 회원가입</a></div></li> 
+              <li class="scroll-to-section"><a href="#home" class="active">홈</a></li>
+              <li class="scroll-to-section"><a href="#features">기능</a></li>
+              <li class="scroll-to-section"><a href="#testimonials">후기</a></li>
+              <li class="scroll-to-section"><a href="#contact">문의</a></li>
+              <li><div class="gradient-button"><a href="${ctp}/member/memberJoin0"><i class="fa fa-sign-in-alt"></i> 시작하기</a></div></li> 
             </ul>        
             <a class='menu-trigger'>
                 <span>메뉴</span>
@@ -231,8 +296,8 @@
 	          <h4>일정 관리</h4>
 	          <p>가족 구성원들의 일정을 한눈에 확인하고 관리할 수 있습니다.</p>
 	          <div class="text-button">
-	            <a href="#" class="modal-trigger">자세히 보기 <i class="fa fa-arrow-right"></i></a>
-	          </div>
+						  <a href="#" class="modal-trigger" data-service="일정 관리">자세히 보기 <i class="fa fa-arrow-right"></i></a>
+						</div>
 	        </div>
 	      </div>
 	      <div class="item">
@@ -617,11 +682,26 @@
   </footer>
 
 	<!-- 모달 구조 -->
-	<div id="serviceModal" class="modal">
+	<!-- <div id="serviceModal" class="modal">
 	  <div class="modal-content">
 	    <span class="close">&times;</span>
 	    <h2 id="modalTitle"></h2>
 	    <p id="modalDescription"></p>
+	  </div>
+	</div> -->
+	
+	<!-- 모달 창 -->
+	<div id="featureModal" class="modal">
+	  <div class="modal-content">
+	    <span class="close">&times;</span>
+	    <h2 id="modalTitle"></h2>
+	    <div class="modal-body">
+	      <img id="modalImage" src="" alt="Feature image">
+	      <p id="modalDescription"></p>
+	    </div>
+	    <div class="modal-footer">
+	      <a href="#" class="cta-button" id="modalCTA">자세히 알아보기</a>
+	    </div>
 	  </div>
 	</div>
 

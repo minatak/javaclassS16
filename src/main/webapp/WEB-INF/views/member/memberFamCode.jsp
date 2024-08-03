@@ -165,7 +165,7 @@
     .modal-footer button {
       width: 100%;
       padding: 14px;
-      background-color: #333;
+      background-color: #84a98c;
       color: white;
       border: none;
       border-radius: 8px;
@@ -173,7 +173,7 @@
     }
 
     .modal-footer button:hover {
-      background-color: #555;
+      background-color: #6b8e73;
     }
 
     .close {
