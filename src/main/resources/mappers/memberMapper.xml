@@ -23,7 +23,7 @@
   </select>
     
 	<select id="getFamilyMembersByFamCode" resultType="com.spring.javaclassS16.vo.MemberVO">
-		select * from member where familyCode = #{familyCode};
+		select * from member where familyCode = #{familyCode} and userDel != 'OK';
 	</select>
 
 	<select id="getMemberNameByIdx" resultType="String">

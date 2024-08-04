@@ -197,6 +197,27 @@
       transition: background-color 0.3s;
       background-color: #d4d4d4;
     }
+    
+    .form-group select {
+		  width: 100%;
+		  padding: 10px;
+		  border: 1px solid #ccc;
+		  border-radius: 10px;
+		  box-sizing: border-box;
+		  transition: border-color 0.3s;
+		  outline-width: 0.7px;
+		  appearance: none;
+		  -webkit-appearance: none;
+		  -moz-appearance: none;
+		  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="6"><path d="M0 0l6 6 6-6z" fill="%23333"/></svg>') no-repeat right 10px center;
+		  background-size: 12px;
+		  background-color: white;
+		}
+		
+		.form-group select:focus {
+		  border-color: #84a98c;
+		}
+		
   </style>
   <script>
     'use strict';
@@ -406,6 +427,20 @@
           <label for="file">프로필 사진</label>
           <input type="file" name="fName" id="file"/>
         </div>
+        
+        <div class="form-group">
+				  <label for="relationship">가족관계</label>
+				  <select name="relationship" id="relationship">
+				    <option value="">선택하기</option>
+				    <option>엄마</option>
+				    <option>아빠</option>
+				    <option>딸</option>
+				    <option>아들</option>
+				    <option>할머니</option>
+				    <option>할아버지</option>
+				  </select>
+				</div>
+        
         <input type="hidden" name="email" value="${email}"/>
         <input type="hidden" name="name" value="${name}"/>
         <div class="form-actions">

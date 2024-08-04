@@ -2,9 +2,7 @@ package com.spring.javaclassS16.controller;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -21,7 +19,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,7 +71,7 @@ public class MemberController {
 		            "<p style='color: #666; line-height: 1.6;'>아래 8자리 인증번호를 사용하여 이메일 인증을 완료해주세요.</p>" +
 		            "<div style='background-color: #f0f0f0; padding: 15px; border-radius: 5px; text-align: center; margin: 20px 0;'>" +
 		                "<h3 style='margin: 0; color: #333;'>인증번호</h3>" +
-		                "<p style='font-size: 24px; font-weight: bold; color: #4a90e2; letter-spacing: 2px; margin: 10px 0;'>" + emailKey + "</p>" +
+		                "<p style='font-size: 24px; font-weight: bold; color: #84a98c; letter-spacing: 2px; margin: 10px 0;'>" + emailKey + "</p>" +
 		            "</div>" +
 		            "<h4 style='color: #333;'>인증 방법:</h4>" +
 		            "<ol style='color: #666; line-height: 1.6;'>" +
@@ -88,7 +85,7 @@ public class MemberController {
 		            "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
 		            "<p style='color: #999; font-size: 12px; margin-top: 20px;'>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
 		            "<p style='text-align: center;'>" +
-		                "<a href='' style='display: inline-block; background-color: #4a90e2; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
+		                "<a href='' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
 		            "</p>" +
 		        "</div>";
 	
@@ -463,7 +460,7 @@ public class MemberController {
             "<p style='color: #666; line-height: 1.6;'>이메일 주소 변경을 위한 인증 절차입니다. 아래 8자리 인증번호를 사용하여 이메일 변경을 완료해주세요.</p>" +
             "<div style='background-color: #f0f0f0; padding: 15px; border-radius: 5px; text-align: center; margin: 20px 0;'>" +
                 "<h3 style='margin: 0; color: #333;'>인증번호</h3>" +
-                "<p style='font-size: 24px; font-weight: bold; color: #4a90e2; letter-spacing: 2px; margin: 10px 0;'>" + emailKey + "</p>" +
+                "<p style='font-size: 24px; font-weight: bold; color: #84a98c; letter-spacing: 2px; margin: 10px 0;'>" + emailKey + "</p>" +
             "</div>" +
             "<h4 style='color: #333;'>인증 방법:</h4>" +
             "<ol style='color: #666; line-height: 1.6;'>" +
@@ -477,7 +474,7 @@ public class MemberController {
             "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
             "<p style='color: #999; font-size: 12px; margin-top: 20px;'>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
             "<p style='text-align: center;'>" +
-                "<a href='' style='display: inline-block; background-color: #4a90e2; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
+                "<a href='' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
             "</p>" +
         "</div>";
 
@@ -524,7 +521,7 @@ public class MemberController {
               "<p style='color: #666; line-height: 1.6;'>아이디 찾기를 위한 인증 절차입니다. 아래 8자리 인증번호를 사용하여 인증을 완료해주세요.</p>" +
               "<div style='background-color: #f0f0f0; padding: 15px; border-radius: 5px; text-align: center; margin: 20px 0;'>" +
                   "<h3 style='margin: 0; color: #333;'>인증번호</h3>" +
-                  "<p style='font-size: 24px; font-weight: bold; color: #4a90e2; letter-spacing: 2px; margin: 10px 0;'>" + emailKey + "</p>" +
+                  "<p style='font-size: 24px; font-weight: bold; color: #84a98c; letter-spacing: 2px; margin: 10px 0;'>" + emailKey + "</p>" +
               "</div>" +
               "<h4 style='color: #333;'>인증 방법:</h4>" +
               "<ol style='color: #666; line-height: 1.6;'>" +
@@ -538,7 +535,7 @@ public class MemberController {
               "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
               "<p style='color: #999; font-size: 12px; margin-top: 20px;'>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
               "<p style='text-align: center;'>" +
-                  "<a href='' style='display: inline-block; background-color: #4a90e2; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
+                  "<a href='' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
               "</p>" +
           "</div>";
 
@@ -574,13 +571,13 @@ public class MemberController {
                   "<p style='color: #666; line-height: 1.6;'>귀하의 계정에 대한 임시 비밀번호가 발급되었습니다. 아래의 임시 비밀번호를 사용하여 로그인해 주세요.</p>" +
                   "<div style='background-color: #f0f0f0; padding: 15px; border-radius: 5px; text-align: center; margin: 20px 0;'>" +
                       "<h3 style='margin: 0; color: #333;'>임시 비밀번호</h3>" +
-                      "<p style='font-size: 24px; font-weight: bold; color: #4a90e2; letter-spacing: 2px; margin: 10px 0;'>" + pwd + "</p>" +
+                      "<p style='font-size: 24px; font-weight: bold; color: #84a98c; letter-spacing: 2px; margin: 10px 0;'>" + pwd + "</p>" +
                   "</div>" +
                   "<p style='color: #666; line-height: 1.6;'>보안을 위해 로그인 후 즉시 비밀번호를 변경해 주시기 바랍니다.</p>" +
                   "<p style='color: #666; line-height: 1.6;'>감사합니다!</p>" +
                   "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
                   "<p style='text-align: center;'>" +
-                      "<a href='' style='display: inline-block; background-color: #4a90e2; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 로그인 페이지</a>" +
+                      "<a href='' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 로그인 페이지</a>" +
                   "</p>" +
               "</div>";
           
@@ -627,6 +624,25 @@ public class MemberController {
 	    return "success";
 	}
 
+	@RequestMapping(value = "/linkedFamily", method = RequestMethod.GET)
+	public String viewFamily(HttpSession session, Model model) {
+		 // 세션에서 현재 로그인한 사용자의 정보를 가져옵니다.
+		 String mid = (String) session.getAttribute("sMid");
+		 String familyCode = (String) session.getAttribute("sFamCode");
+		 
+		 
+		 if(familyCode == null || familyCode.isEmpty()) {
+		     model.addAttribute("message", "연결된 가족이 없습니다.");
+		     return "member/linkedFamily"; // 가족이 없는 경우에 대한 처리
+		 }
+		 
+		 // 가족 코드에 해당하는 모든 가족 구성원을 가져옵니다.
+		 List<MemberVO> familyMembers = memberService.getFamilyMembersByFamCode(familyCode);
+		 
+		 model.addAttribute("familyMembers", familyMembers);
+		 
+		 return "member/linkedFamily";
+	}
 
 	
 }
