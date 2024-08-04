@@ -678,7 +678,7 @@
 
         <div class="form-group" style="border-bottom: 1px solid #ced4da;">
           <label>비밀번호</label> 
-          <button type="button" class="edit-button" onclick="location.href = '/pwdChange'">비밀번호 재설정</button>
+          <button type="button" class="edit-button" onclick="location.href = '${ctp}/member/pwdChange'">비밀번호 재설정</button>
         </div>
 				
         <div class="form-group mt-5">

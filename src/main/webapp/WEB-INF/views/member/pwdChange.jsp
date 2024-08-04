@@ -48,7 +48,7 @@
       font-weight: bold;
     }
     .input-group input[type="text"],
-    .input-group input[type="email"] {
+    .input-group input[type="password"] {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -133,86 +133,92 @@
     .swal2-confirm:hover {
       background-color: none !important;
     }
+    
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
   </style>
   <script>
-    'use strict';
-    
-    function showAlert(message) {
-      Swal.fire({
-        html: message,
-        confirmButtonText: '확인',
-        customClass: {
-          confirmButton: 'swal2-confirm',
-          popup: 'custom-swal-popup',
-          htmlContainer: 'custom-swal-text'
-        },
-        scrollbarPadding: false,
-        allowOutsideClick: false,
-        heightAuto: false,
-        didOpen: () => {
-          document.body.style.paddingRight = '0px';
-        }
-      });
-    }
-    
-    function newPassword() {
-      let mid = $("#midSearch").val().trim();
-      let email = $("#emailSearch").val().trim();
-      
-      let regMid = /^[a-z0-9_]{4,20}$/;
-      let regEmail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
-
-      if(mid == "") {
-        showAlert("아이디를 입력하세요", function() {
-          document.myform.midSearch.focus();
-        });
-        return false;
-      }
-      else if(email == "") {
-        showAlert("이메일을 입력하세요", function() { 
-          document.myform.emailSearch.focus();  
-        });
-        return false;
-      }
-      else if (!regMid.test(mid)) {
-        showAlert("아이디는 4~20자의 영문 소문자, 숫자와<br/>특수기호(_)만 사용 가능합니다", function() {
-          document.myform.midSearch.focus();
-        });
-        return false;
-      }
-      else if (!regEmail.test(email)) {
-        showAlert("올바른 이메일 형식이 아닙니다", function() {
-          document.myform.emailSearch.focus();
-        });
-        return false;
-      }
-      
-      $(".loading-container").addClass("show");
-      
-      $.ajax({
-        url  : "${ctp}/member/memberNewPassword",
-        type : "post",
-        data : {
-          mid   : mid,
-          email : email
-        }, 
-        success:function(res) {
-          if(res != "0") { 
-            showAlert("새로운 비밀번호가<br/>"+email+"으로<br/>발송되었습니다 :)");
-          }
-          else {
-            showAlert("등록하신 정보가 일치하지 않습니다.<br/>확인후 다시 처리하세요.");
-          }
-        },
-        error : function() {
-          showAlert("전송 오류!");
-        },
-        complete : function() {
-          $(".loading-container").removeClass("show");
-        }
-      });
-    }
-  </script>
+  	'use strict';
+  
+		function showAlert(message) {
+		  Swal.fire({
+		    html: message,
+		    confirmButtonText: '확인',
+		    customClass: {
+		      confirmButton: 'swal2-confirm',
+		      popup: 'custom-swal-popup',
+		      htmlContainer: 'custom-swal-text'
+		    },
+		    scrollbarPadding: false,
+		    allowOutsideClick: false,
+		    heightAuto: false,
+		    didOpen: () => {
+		      document.body.style.paddingRight = '0px';
+		    }
+		  });
+		}
+		
+		function newPassword() {
+		  let regPwd = /^[a-zA-Z0-9!@#$%^*+=-_]{8,16}$/;
+		  const currentPwd = document.getElementById('currentPwd').value.trim();
+		  const newPwd = document.getElementById('newPwd').value.trim();
+		  const confirmPwd = document.getElementById('confirmPwd').value.trim();
+		
+		  // 현재 비밀번호 확인
+		  if (currentPwd === '') {
+		    showAlert("현재 비밀번호를 입력해주세요.");
+		    return;
+		  }
+		
+		  // 새 비밀번호 유효성 검사
+		  if (!regPwd.test(newPwd)) {
+  		  showAlert("새 비밀번호는 8~16자리의 영문 대소문자와 특수문자, 숫자, 밑줄만 사용가능합니다", function() {
+  		    document.myform.newPwd.focus();
+  		  });
+  		  return;
+  		}
+		
+		  // 새 비밀번호 확인
+		  if (newPwd !== confirmPwd) {
+		    showAlert("새 비밀번호와 확인 비밀번호가<br/>일치하지 않습니다.");
+		    return;
+		  }
+		
+		  $(".loading-container").addClass("show");
+		  
+		  $.ajax({
+		    url  : "${ctp}/member/updatePassword",
+		    type : "post",
+		    data : {
+		      currentPwd: currentPwd,
+		      newPwd: newPwd
+		    }, 
+		    success: function(res) {
+		      if(res == "success") { 
+		        showAlert("비밀번호가 성공적으로 변경되었습니다.");
+		        setTimeout(() => {
+		          window.location.href = "${ctp}/member/memberInfo";
+		        }, 2000);
+		      }
+		      else if (res == "wrong_password") {
+		        showAlert("현재 비밀번호가 일치하지 않습니다.");
+		      }
+		      else {
+		        showAlert("비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
+		      }
+		    },
+		    error : function() {
+		      showAlert("서버 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+		    },
+		    complete : function() {
+		      $(".loading-container").removeClass("show");
+		    }
+		  });
+		}
+		</script>
 </head>
 <body>
   <div class="loading-container">
@@ -220,19 +226,23 @@
   </div>
   <div class="container">
     <a href="/javaclassS16/"><img src="${ctp}/resources/images/logo.png" width="130" alt="Logo"></a>
-    <h3 class="mt-4">비밀번호 찾기</h3>
+    <h3 class="mt-4">비밀번호 변경</h3>
     <div class="search-container">
       <div class="input-group">
-        <label for="midSearch">아이디</label>
-        <input type="text" id="midSearch" placeholder="아이디를 입력하세요">
+        <label for="currentPwd">현재 비밀번호</label>
+        <input type="password" id="currentPwd" placeholder="현재 비밀번호를 입력하세요">
       </div>
       <div class="input-group">
-        <label for="emailSearch">이메일</label>
-        <input type="email" id="emailSearch" placeholder="이메일을 입력하세요">
+        <label for="newPwd">새 비밀번호</label>
+        <input type="password" id="newPwd" placeholder="새 비밀번호를 입력하세요">
       </div>
-      <button onclick="newPassword()" class="search-button">새 비밀번호 발급</button>
+      <div class="input-group">
+        <label for="confirmPwd">새 비밀번호 확인</label>
+        <input type="password" id="confirmPwd" placeholder="새 비밀번호를 다시 입력하세요">
+      </div>
+      <button onclick="newPassword()" class="search-button">비밀번호 변경</button>
       <div class="login-link">
-        <a href="${ctp}/member/memberLogin">로그인 페이지로 돌아가기</a>
+        <a href="${ctp}/member/memberInfo">회원 정보 화면으로 돌아가기</a>
       </div>
     </div>
   </div>

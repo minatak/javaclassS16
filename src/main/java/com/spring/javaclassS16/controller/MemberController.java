@@ -584,61 +584,49 @@ public class MemberController {
                   "</p>" +
               "</div>";
           
-          String res = mailSend(email, title, emailContent);
-          
-          if(res.equals("1")) {
+          try {
+              joinMailSend(email, title, emailContent);
               session.setAttribute("sLogin", "OK");
               return "1";
+          } catch (MessagingException e) {
+              // 이메일 전송 실패 시 로그 기록 또는 예외 처리
+              e.printStackTrace();
+              return "0";
           }
       }
       return "0";
   }
   
-    
-	// 메일 전송하기(아이디찾기, 비밀번호 찾기)
-	private String mailSend(String toMail, String title, String mailFlag) throws MessagingException {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-		String content = "";
-		
-		// 메일 전송을 위한 객체 : MimeMessage(), MimeMessageHelper()
-		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-		
-		// 메일보관함에 작성한 메세지들의 정보를 모두 저장시킨후 작업처리...
-		messageHelper.setTo(toMail);			// 받는 사람 메일 주소
-		messageHelper.setSubject(title);	// 메일 제목
-		messageHelper.setText(content);		// 메일 내용
-		
-		// 메세지 보관함의 내용(content)에 , 발신자의 필요한 정보를 추가로 담아서 전송처리한다.
-		content = content.replace("\n", "<br>");
-		content += "<br><hr><h3>"+mailFlag+"</h3><hr><br>";
-		content += "<hr>";
-		messageHelper.setText(content, true);
-		
-		// 본문에 기재될 그림파일의 경로를 별도로 표시시켜준다. 그런후 다시 보관함에 저장한다.
-		FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/main.jpg"));
-		messageHelper.addInline("logo.png", file);
-		
-		// 메일 전송하기
-		mailSender.send(message);
-		
-		return "1";
-	}
-	
-	@RequestMapping(value = "/memberPwdCheck/{pwdFlag}", method = RequestMethod.GET)
-	public String memberPwdCheckGet(@PathVariable String pwdFlag, Model model) {
-		model.addAttribute("pwdFlag", pwdFlag);
-		return "member/memberPwdCheck";
+  // 비밀번호 재설정 페이지
+	@RequestMapping(value = "/pwdChange", method = RequestMethod.GET)
+	public String pwdChangeGet(HttpSession session, Model model) {
+		return "member/pwdChange";
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/memberPwdChangeOk", method = RequestMethod.POST)
-	public String memberPwdChangeOkPost(String mid, String pwd) {
-		return memberService.setPwdChangeOk(mid, passwordEncoder.encode(pwd)) + "";
+	@RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+	public String updatePassword(@RequestParam String currentPwd, 
+	                             @RequestParam String newPwd, 
+	                             HttpSession session) {
+	    String mid = (String) session.getAttribute("sMid");
+	    MemberVO member = memberService.getMemberIdCheck(mid);
+	    
+	    if (member == null) {
+	        return "user_not_found";
+	    }
+	    
+	    // 현재 비밀번호 확인
+	    if (!passwordEncoder.matches(currentPwd, member.getPwd())) {
+	        return "wrong_password";
+	    }
+	    
+	    // 새 비밀번호 암호화 및 업데이트
+	    String encodedNewPwd = passwordEncoder.encode(newPwd);
+	    memberService.setPasswordUpdate(mid, encodedNewPwd);
+	    
+	    return "success";
 	}
-	
 
-	
 
 	
 }

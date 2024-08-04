@@ -68,4 +68,8 @@
   	UPDATE member SET familyCode = #{familyCode} WHERE mid = #{mid}
   </update>
 	
+	<update id="setPasswordUpdate">
+  	UPDATE member SET pwd = #{pwd} WHERE mid = #{mid}
+  </update>
+	
 </mapper>
