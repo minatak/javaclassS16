@@ -311,6 +311,10 @@ public class MemberController {
 			@RequestParam(name="pwd", defaultValue = "1234", required = false) String pwd,
 			@RequestParam(name="idSave", defaultValue = "1234", required = false) String idSave
 		) {
+		
+		mid = mid.trim();
+		pwd = pwd.trim();
+		
 		//  로그인 인증처리(스프링 시큐리티의 BCryptPasswordEncoder객체를 이용한 암호화되어 있는 비밀번호 비교하기)
 		MemberVO vo = memberService.getMemberIdCheck(mid);
 		
@@ -482,37 +486,114 @@ public class MemberController {
     }
   }
 
-  
-  
-  
-	// 여기부터 그냥 복붙해놓은 코드
-	@ResponseBody
-	@RequestMapping(value = "/memberNewPassword", method = RequestMethod.POST)
-	public String memberNewPasswordPost(String mid, String email, HttpSession session) throws MessagingException {
-		MemberVO vo = memberService.getMemberIdCheck(mid);
-		if(vo != null && vo.getEmail().equals(email)) {
-			// 정보확인후 정보가 맞으면 임시 비밀번호를 발급받아서 메일로 전송처리한다.
-			
-			UUID uid = UUID.randomUUID();
-			String pwd = uid.toString().substring(0,8);
-			
-			// 새로 발급받은 비밀번호를 암호화 한후, DB에 저장한다.
-			memberService.setPasswordUpdate(mid, passwordEncoder.encode(pwd));
-			
-			// 발급받은 비밀번호를 메일로 전송처리한다.
-			String title = "임시 비밀번호를 발급하셨습니다.";
-			String mailFlag = "임시 비밀번호 : " + pwd;
-			String res = mailSend(email, title, mailFlag);
-			
-			// 새 비밀번호를 발급하였을시에 sLogin이란 세션을 발생시키고, 2분안에 새 비밀번호로 로그인후 비밀번호를 변경처리할수 있도록 처리(___)
-			session.setAttribute("sLogin", "OK");
-			
-			
-			if(res == "1") return "1";
-		}
-		return "0";
-	}
+  @ResponseBody
+  @RequestMapping(value = "/verifyEmailForIdSearch", method = RequestMethod.POST)
+  public String verifyEmailForIdSearch(@RequestParam String email, @RequestParam String verificationCode, HttpSession session) {
+    String storedCode = (String) session.getAttribute("sEmailKey");
+    if (storedCode != null && storedCode.equals(verificationCode)) {
+      // 인증 성공
+      MemberVO member = memberService.getMemberEmailCheck(email);
+      if (member != null) {
+        return member.getMid(); // 아이디 반환
+      } else {
+        return "not_found";
+      }
+    } 
+    else {
+      return "invalid_code";
+    }
+  }
 
+  @ResponseBody
+  @RequestMapping(value = "/sendVerificationForIdSearch", method = RequestMethod.POST)
+  public String sendVerificationForIdSearch(@RequestParam String email, @RequestParam String name, HttpSession session) {
+      MemberVO member = memberService.getMemberNameEmailCheck(name, email);
+      if (member == null) {
+        return "not_found";
+      }
+
+      UUID uid = UUID.randomUUID();
+      String emailKey = uid.toString().substring(0, 8);
+      session.setAttribute("sEmailKey", emailKey);
+      
+      String emailContent = 
+          "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;'>" +
+              "<img src='cid:logo.png' alt='HomeLink Logo' style='display: block; margin: 0 auto; max-width: 150px;'>" +
+              "<h2 style='color: #333; text-align: center;'>HomeLink 아이디 찾기 인증</h2>" +
+              "<p style='color: #666; line-height: 1.6;'>안녕하세요 "+name+"님 :)</p>" +
+              "<p style='color: #666; line-height: 1.6;'>아이디 찾기를 위한 인증 절차입니다. 아래 8자리 인증번호를 사용하여 인증을 완료해주세요.</p>" +
+              "<div style='background-color: #f0f0f0; padding: 15px; border-radius: 5px; text-align: center; margin: 20px 0;'>" +
+                  "<h3 style='margin: 0; color: #333;'>인증번호</h3>" +
+                  "<p style='font-size: 24px; font-weight: bold; color: #4a90e2; letter-spacing: 2px; margin: 10px 0;'>" + emailKey + "</p>" +
+              "</div>" +
+              "<h4 style='color: #333;'>인증 방법:</h4>" +
+              "<ol style='color: #666; line-height: 1.6;'>" +
+                  "<li>아이디 찾기 화면으로 돌아가세요.</li>" +
+                  "<li>\"인증번호\" 필드를 찾습니다.</li>" +
+                  "<li>위에 발급된 8자리 인증번호를 입력합니다.</li>" +
+                  "<li>\"인증 확인\" 버튼을 클릭합니다.</li>" +
+              "</ol>" +
+              "<p style='color: #666; line-height: 1.6;'>인증을 완료하면 귀하의 아이디를 확인하실 수 있습니다.</p>" +
+              "<p style='color: #666; line-height: 1.6;'>감사합니다!</p>" +
+              "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
+              "<p style='color: #999; font-size: 12px; margin-top: 20px;'>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
+              "<p style='text-align: center;'>" +
+                  "<a href='' style='display: inline-block; background-color: #4a90e2; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
+              "</p>" +
+          "</div>";
+
+      try {
+          joinMailSend(email, "HomeLink 아이디 찾기 인증번호 안내", emailContent);
+          return "success";
+      } catch (MessagingException e) {
+          e.printStackTrace();
+          return "error";
+      }
+  }
+  
+  @ResponseBody
+  @RequestMapping(value = "/memberNewPassword", method = RequestMethod.POST)
+  public String memberNewPasswordPost(String mid, String email, HttpSession session) throws MessagingException {
+      MemberVO vo = memberService.getMemberIdCheck(mid);
+      if(vo != null && vo.getEmail().equals(email)) {
+          // 정보확인후 정보가 맞으면 임시 비밀번호를 발급받아서 메일로 전송처리한다.
+          
+          UUID uid = UUID.randomUUID();
+          String pwd = uid.toString().substring(0,8);
+          
+          // 새로 발급받은 비밀번호를 암호화 한후, DB에 저장한다.
+          memberService.setPasswordUpdate(mid, passwordEncoder.encode(pwd));
+          
+          // 발급받은 비밀번호를 메일로 전송처리한다.
+          String title = "HomeLink 임시 비밀번호 발급";
+          String emailContent = 
+              "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;'>" +
+                  "<img src='cid:logo.png' alt='HomeLink Logo' style='display: block; margin: 0 auto; max-width: 150px;'>" +
+                  "<h2 style='color: #333; text-align: center;'>HomeLink 임시 비밀번호 발급</h2>" +
+                  "<p style='color: #666; line-height: 1.6;'>안녕하세요 " + vo.getName() + "님,</p>" +
+                  "<p style='color: #666; line-height: 1.6;'>귀하의 계정에 대한 임시 비밀번호가 발급되었습니다. 아래의 임시 비밀번호를 사용하여 로그인해 주세요.</p>" +
+                  "<div style='background-color: #f0f0f0; padding: 15px; border-radius: 5px; text-align: center; margin: 20px 0;'>" +
+                      "<h3 style='margin: 0; color: #333;'>임시 비밀번호</h3>" +
+                      "<p style='font-size: 24px; font-weight: bold; color: #4a90e2; letter-spacing: 2px; margin: 10px 0;'>" + pwd + "</p>" +
+                  "</div>" +
+                  "<p style='color: #666; line-height: 1.6;'>보안을 위해 로그인 후 즉시 비밀번호를 변경해 주시기 바랍니다.</p>" +
+                  "<p style='color: #666; line-height: 1.6;'>감사합니다!</p>" +
+                  "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
+                  "<p style='text-align: center;'>" +
+                      "<a href='' style='display: inline-block; background-color: #4a90e2; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 로그인 페이지</a>" +
+                  "</p>" +
+              "</div>";
+          
+          String res = mailSend(email, title, emailContent);
+          
+          if(res.equals("1")) {
+              session.setAttribute("sLogin", "OK");
+              return "1";
+          }
+      }
+      return "0";
+  }
+  
     
 	// 메일 전송하기(아이디찾기, 비밀번호 찾기)
 	private String mailSend(String toMail, String title, String mailFlag) throws MessagingException {
