@@ -35,7 +35,7 @@
 		 <!-- Pretendard 폰트 추가 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     
-<style>
+	<style>
     body {
         font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
     }
@@ -76,6 +76,7 @@
 				font-family: 'Pretendard', sans-serif;
 			  font-size: 1.2rem;
 			  font-weight: 700;
+			  color: white;
 			}
 			
 			.services-carousel .service-item {
