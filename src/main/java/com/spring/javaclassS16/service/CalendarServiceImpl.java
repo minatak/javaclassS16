@@ -16,27 +16,37 @@ public class CalendarServiceImpl implements CalendarService {
 
     @Override
     public int calendarInput(CalendarVO vo) {
-        return calendarDAO.calendarInput(vo);
+      return calendarDAO.calendarInput(vo);
     }
 
     @Override
     public int calendarUpdate(CalendarVO vo) {
-        return calendarDAO.calendarUpdate(vo);
+      return calendarDAO.calendarUpdate(vo);
     }
 
     @Override
     public List<CalendarVO> getCalendarList(String memberId, String familyCode) {
-      return calendarDAO.getCalendarList(memberId, familyCode);
+    	return calendarDAO.getCalendarList(memberId, familyCode);
     }
 
     @Override
     public List<CalendarVO> getCalendarSummary(String memberId, String familyCode) {
-        return calendarDAO.getCalendarSummary(memberId, familyCode);
+      return calendarDAO.getCalendarSummary(memberId, familyCode);
     }
 
     @Override
     public int calendarDelete(int idx) {
-        return calendarDAO.calendarDelete(idx);
+      return calendarDAO.calendarDelete(idx);
     }
+
+		@Override
+		public List<CalendarVO> getUpcomingSchedules(String familyCode) {
+			return calendarDAO.getUpcomingSchedules(familyCode);
+		}
+
+		@Override
+		public List<CalendarVO> getWeeklyEvents(String memberId, String familyCode, String startDate, String endDate) {
+			return calendarDAO.getWeeklyEvents(memberId, familyCode, startDate, endDate);
+		}
     
 }

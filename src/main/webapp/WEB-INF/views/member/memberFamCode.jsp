@@ -89,15 +89,16 @@
       width: 100%;
       padding: 14px;
       font-size: 16px;
-      background-color: #f0f4f8;
+      background-color: #fff;
       border: 1px solid #ccc;
       color: #333;
       border-radius: 10px;
       cursor: pointer;
+      font-family: 'pretendard';
     }
 
     .form-group button:hover {
-      background-color: #eaeaea;
+      background-color: #f0f4f8;
     }
 
     .error-msg {

@@ -16,6 +16,24 @@
     LIMIT 5
   </select>
   
+  <select id="getUpcomingSchedules" resultType="com.spring.javaclassS16.vo.CalendarVO" parameterType="string">
+    SELECT * FROM calendar 
+    WHERE familyCode = #{familyCode} 
+    AND startTime >= CURDATE() 
+    AND <![CDATA[startTime <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)]]> 
+    ORDER BY startTime ASC LIMIT 5
+	</select>
+  
+  <select id="getWeeklyEvents" resultType="com.spring.javaclassS16.vo.CalendarVO">
+    SELECT * FROM calendar 
+    WHERE (memberId = #{memberId} OR sharing = TRUE) 
+    AND familyCode = #{familyCode} 
+    AND startTime >= #{startDate} AND <![CDATA[startTime < #{endDate}]]> 
+    ORDER BY startTime
+	</select>
+  
+  
+  
   <!-- 일정 입력 -->
   <insert id="calendarInput" parameterType="com.spring.javaclassS16.vo.CalendarVO">
     INSERT INTO calendar (title, startTime, endTime, allDay, description, sharing, memberId, familyCode)

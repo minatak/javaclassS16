@@ -20,3 +20,9 @@ desc calendar;
 
 insert into calendar values(default, '일정시작', '데이터베이스 설계 끝내기!', '2024-07-08', '2024-07-09', false, 'mina', 'NOLVEYEP', false);
 
+
+SELECT * FROM calendar 
+WHERE (memberId = 'takmin0926' OR sharing = TRUE) 
+AND familyCode = 'HE5KMNHV' 
+AND startTime >= '2024-08-04 00:00:00' AND startTime < '2024-08-11 00:00:00' 
+ORDER BY startTime;

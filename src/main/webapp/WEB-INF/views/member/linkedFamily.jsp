@@ -57,7 +57,7 @@
       margin-bottom: 20px;
       padding: 20px;
       border-radius: 10px;
-      background-color: #f8f9fa;
+      background-color: #fff;
     }
     
     .profile-photo {
@@ -107,8 +107,8 @@
     }
     
     .connect-box {
-		  background-color: #f8f9fa;
-		  border: 1px solid #e9ecef;
+		  background-color: #fff;
+		  /* border: 1px solid #e9ecef; */ 
 		  border-radius: 10px;
 		  padding: 25px;
 		  margin-top: 30px;

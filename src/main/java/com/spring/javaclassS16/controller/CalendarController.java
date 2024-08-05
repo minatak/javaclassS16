@@ -1,6 +1,12 @@
 package com.spring.javaclassS16.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -125,4 +131,54 @@ public class CalendarController {
                            .body("Error: " + e.getMessage());
     }
   }
+  
+  @ResponseBody
+  @RequestMapping(value = "/weeklyEvents", method = RequestMethod.GET)
+  public List<Map<String, Object>> getWeeklyEvents(@RequestParam String startDate, @RequestParam String endDate, HttpSession session) {
+      String memberId = (String) session.getAttribute("sMid");
+      String familyCode = (String) session.getAttribute("sFamCode");
+      
+      // 날짜 형식 변환
+      startDate = convertDateFormat(startDate);
+      endDate = convertDateFormat(endDate);
+      
+      List<CalendarVO> events = calendarService.getWeeklyEvents(memberId, familyCode, startDate, endDate);
+      
+      SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+      
+      List<Map<String, Object>> eventList = new ArrayList<>();
+      
+      try {
+      	for (CalendarVO event : events) {
+      		Map<String, Object> eventMap = new HashMap<>();
+      		eventMap.put("id", event.getIdx());
+      		eventMap.put("title", event.getTitle());
+      		eventMap.put("start", outputFormat.format(inputFormat.parse(event.getStartTime())));
+      		eventMap.put("end", outputFormat.format(inputFormat.parse(event.getEndTime())));
+      		eventMap.put("allDay", event.isAllDay());
+      		eventMap.put("color", event.isSharing() ? "#84a98c" : "#8c9daa");
+      		eventList.add(eventMap);
+      	}
+      	
+		  } catch (Exception e) {
+		    System.err.println("Error processing event: " + e.getMessage());
+		    e.printStackTrace();
+		  }
+      
+      return eventList;
+  }
+  
+  private String convertDateFormat(String dateString) {
+    try {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = inputFormat.parse(dateString);
+        return outputFormat.format(date);
+    } catch (ParseException e) {
+        e.printStackTrace();
+        return dateString; // 파싱 실패 시 원래 문자열 반환
+    }
+  }
+  
 }
