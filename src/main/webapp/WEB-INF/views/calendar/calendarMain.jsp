@@ -6,6 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="${ctp}/images/favicon.png">
   <title>일정관리 | HomeLink</title>
   <%@ include file="/WEB-INF/views/include/bs4.jsp" %>
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>

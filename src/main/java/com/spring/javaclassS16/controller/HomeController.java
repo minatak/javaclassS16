@@ -178,37 +178,6 @@ public class HomeController {
   	return "beforeLogin";
   }
   
-  // 에러페이지 디자인 확인
-  @RequestMapping(value = "/404", method = RequestMethod.GET)
-  public String errorGet() {
-  	
-  	return "errorPage/404";
-  }
-  @RequestMapping(value = "/405", method = RequestMethod.GET)
-  public String error2Get() {
-  	
-  	return "errorPage/405";
-  }
-  @RequestMapping(value = "/500", method = RequestMethod.GET)
-  public String error3Get() {
-  	
-  	return "errorPage/500";
-  }
-  @RequestMapping(value = "/400", method = RequestMethod.GET)
-  public String error4Get() {
-  	
-  	return "errorPage/400";
-  }
-  @RequestMapping(value = "/errorNullPointer", method = RequestMethod.GET)
-  public String errorNullPointerGet() {
-  	
-  	return "errorPage/errorNullPointer";
-  }
-  @RequestMapping(value = "/errorNumberFormat", method = RequestMethod.GET)
-  public String errorNumberFormatGet() {
-  	
-  	return "errorPage/errorNumberFormat";
-  }
   
   private String getCustomWeatherIcon(String apiIcon) {
     switch(apiIcon) {

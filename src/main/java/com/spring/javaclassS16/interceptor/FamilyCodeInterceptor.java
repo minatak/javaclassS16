@@ -11,14 +11,6 @@ public class FamilyCodeInterceptor extends HandlerInterceptorAdapter {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     
     HttpSession session = request.getSession();
-    Integer sIdx = (Integer) session.getAttribute("sIdx");
-    
-    // sIdx가 없으면 (로그인하지 않은 상태) 로그인 메시지 페이지로 보냄
-    if(sIdx == null) {
-      RequestDispatcher dispatcher = request.getRequestDispatcher("/message/LoginNo");
-      dispatcher.forward(request, response);
-      return false;
-    }
     
     // 로그인 상태일 경우 가족 코드 확인
     String sFamCode = (String) session.getAttribute("sFamCode");

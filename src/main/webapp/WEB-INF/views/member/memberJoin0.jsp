@@ -5,6 +5,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="${ctp}/images/favicon.png">
   <title>회원가입 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
   <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>

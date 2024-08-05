@@ -122,7 +122,6 @@ public class CalendarController {
       vo.setMemberId(memberId);
       vo.setFamilyCode(familyCode);
       
-    	System.out.println("vo : " + vo);
       int res = calendarService.calendarUpdate(vo);
       return ResponseEntity.ok(String.valueOf(res));
     } catch (Exception e) {

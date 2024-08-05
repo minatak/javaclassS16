@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="${ctp}/images/favicon.png">
 <title>HomeLink</title>
 <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
 <style>
@@ -296,6 +297,106 @@
 	  margin-left: 5px;
 	  display: inline-block;
 	}
+	
+	.card-body .row {
+	  margin: 0 -15px;
+	}
+	
+	.card-body .col-md-6 {
+	  padding: 0 15px;
+	}
+	
+	@media (min-width: 768px) {
+	  .card-body .col-md-6:first-child {
+	    border-right: 1px solid #f0f0f0;
+	  }
+	}
+	
+	
+	.card {
+	  border: 1px solid #ddd;
+	  border-radius: 8px;
+	  margin-bottom: 30px;
+	  overflow: hidden;
+	  min-height: 300px; /* 카드의 최소 높이를 증가 */
+	}
+	
+	.card-body {
+	  padding: 30px; /* 카드 내부 여백 증가 */
+	  background-color: #fff;
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: flex-start; /* 내용을 위쪽으로 정렬 */
+	}
+	
+	.list-group-item {
+	  border: none;
+	  padding: 15px 0; /* 각 항목의 상하 여백 증가 */
+	  border-bottom: 1px solid #f0f0f0;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  text-overflow: ellipsis;
+	}
+	
+	.list-group-item:last-child {
+	  border-bottom: none;
+	}
+	
+	.card-body .row {
+	  margin: 0 -15px;
+	  height: 100%; /* 행의 높이를 100%로 설정 */
+	}
+	
+	.card-body .col-md-6 {
+	  padding: 0 15px;
+	  display: flex;
+	  flex-direction: column;
+	}
+	
+	@media (min-width: 768px) {
+	  .card-body .col-md-6:first-child {
+	    border-right: 1px solid #f0f0f0;
+	  }
+	}
+	
+	.list-group {
+	  flex-grow: 1; /* 리스트가 열의 높이를 채우도록 설정 */
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: flex-start;
+	}
+	
+	.card {
+	  min-height: 300px;
+	}
+	
+	.card-body {
+	  padding: 30px;
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: flex-start;
+	}
+	
+	.list-group-item {
+	  padding: 15px 0;
+	}
+	
+	.card-body .row {
+	  height: 100%;
+	}
+	
+	.card-body .col-md-6 {
+	  display: flex;
+	  flex-direction: column;
+	}
+	
+	.list-group {
+	  flex-grow: 1;
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: flex-start;
+	}
+	
 </style>
 </head>
 <script>
@@ -307,7 +408,7 @@
 	    }
 	  }; 
 
-	  document.querySelectorAll('.truncate').forEach(el => truncateText(el, 55));
+	  document.querySelectorAll('.truncate').forEach(el => truncateText(el, 25));
 	});
 </script>
 <body>
@@ -338,22 +439,44 @@
 	    <a href="${ctp}/notice/noticeList" class="view-all">모두 보기 <i class="fas fa-arrow-right"></i></a>
 	  </div>
 	  <div class="card-body">
-	    <c:if test="${not empty notices}">
-	      <ul class="list-group list-group-flush">
-	        <c:forEach items="${notices}" var="notice">
-	          <li class="list-group-item">
-	            <a href="${ctp}/notice/noticeContent?idx=${notice.idx}">
-	              <div class="notice-info">
-	                <div class="notice-title truncate">${notice.title}</div>
-	                <div class="notice-details">
-	                  ${notice.memberName} | ${notice.createdAt.toString().substring(0, 10)}
-	                </div>
-	              </div>
-	            </a>
-	          </li>
-	        </c:forEach>
-	      </ul>
-	    </c:if>
+	    <div class="row">
+	      <div class="col-md-6">
+	        <c:if test="${not empty notices}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${notices}" var="notice" begin="0" end="1">
+	              <li class="list-group-item">
+	                <a href="${ctp}/notice/noticeContent?idx=${notice.idx}">
+	                  <div class="notice-info">
+	                    <div class="notice-title truncate">${notice.title}</div>
+	                    <div class="notice-details">
+	                      ${notice.memberName} | ${notice.createdAt.toString().substring(0, 10)}
+	                    </div>
+	                  </div>
+	                </a>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	      <div class="col-md-6">
+	        <c:if test="${not empty notices}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${notices}" var="notice" begin="2" end="3">
+	              <li class="list-group-item">
+	                <a href="${ctp}/notice/noticeContent?idx=${notice.idx}">
+	                  <div class="notice-info">
+	                    <div class="notice-title truncate">${notice.title}</div>
+	                    <div class="notice-details">
+	                      ${notice.memberName} | ${notice.createdAt.toString().substring(0, 10)}
+	                    </div>
+	                  </div>
+	                </a>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	    </div>
 	    <c:if test="${empty notices}">
 	      <div class="empty-message">새로운 소식이 없어요. 오늘 하루는 어떠셨나요?</div>
 	    </c:if>
@@ -366,29 +489,51 @@
 	    <a href="${ctp}/calendar/calendarMain" class="view-all">모두 보기 <i class="fas fa-arrow-right"></i></a>
 	  </div>
 	  <div class="card-body">
-	    <c:if test="${not empty schedules}">
-	      <ul class="list-group list-group-flush">
-	        <c:forEach items="${schedules}" var="schedule">
-	          <li class="list-group-item">
-	            <div class="schedule-info">
-	              <div class="schedule-title truncate">${schedule.title}</div>
-	              <div class="schedule-details">
-								  <i class="far fa-calendar-alt"></i> ${schedule.startTime.toString().substring(0, 10)}
-								  <c:if test="${schedule.sharing}">
-								    <span class="badge-shared">(공유됨)</span>
-								  </c:if>
-								</div>
-	            </div>
-	          </li>
-	        </c:forEach>
-	      </ul>
-	    </c:if>
+	    <div class="row">
+	      <div class="col-md-6">
+	        <c:if test="${not empty schedules}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${schedules}" var="schedule" begin="0" end="1">
+	              <li class="list-group-item">
+	                <div class="schedule-info">
+	                  <div class="schedule-title truncate">${schedule.title}</div>
+	                  <div class="schedule-details">
+	                    <i class="far fa-calendar-alt"></i> ${schedule.startTime.toString().substring(0, 10)}
+	                    <c:if test="${schedule.sharing}">
+	                      <span class="badge-shared">(공유됨)</span>
+	                    </c:if>
+	                  </div>
+	                </div>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	      <div class="col-md-6">
+	        <c:if test="${not empty schedules}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${schedules}" var="schedule" begin="2" end="3">
+	              <li class="list-group-item">
+	                <div class="schedule-info">
+	                  <div class="schedule-title truncate">${schedule.title}</div>
+	                  <div class="schedule-details">
+	                    <i class="far fa-calendar-alt"></i> ${schedule.startTime.toString().substring(0, 10)}
+	                    <c:if test="${schedule.sharing}">
+	                      <span class="badge-shared">(공유됨)</span>
+	                    </c:if>
+	                  </div>
+	                </div>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	    </div>
 	    <c:if test="${empty schedules}">
 	      <div class="empty-message">예정된 일정이 없습니다. 새로운 일정을 추가해보세요!</div>
 	    </c:if>
 	  </div>
 	</div>
-	
 	
 	<div class="card">
 	  <div class="card-header">
@@ -396,17 +541,36 @@
 	    <a href="${ctp}/housework/workMain" class="view-all">모두 보기 <i class="fas fa-arrow-right"></i></a>
 	  </div>
 	  <div class="card-body">
-	    <c:if test="${not empty houseworks}">
-	      <ul class="list-group list-group-flush">
-	        <c:forEach items="${houseworks}" var="work" varStatus="status">
-	          <li class="list-group-item">
-	            <div class="housework-info">
-	              <span class="member-name"><i class="fas fa-user"></i> ${work.memberName}</span><span class="housework-info truncate"> ${work.description}</span>
-	            </div>
-	          </li>
-	        </c:forEach>
-	      </ul>
-	    </c:if>
+	    <div class="row">
+	      <div class="col-md-6">
+	        <c:if test="${not empty houseworks}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${houseworks}" var="work" begin="0" end="1">
+	              <li class="list-group-item">
+	                <div class="housework-info">
+	                  <span class="member-name"><i class="fas fa-user"></i> ${work.memberName}</span>
+	                  <span class="housework-title truncate">${work.description}</span>
+	                </div>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	      <div class="col-md-6">
+	        <c:if test="${not empty houseworks}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${houseworks}" var="work" begin="2" end="3">
+	              <li class="list-group-item">
+	                <div class="housework-info">
+	                  <span class="member-name"><i class="fas fa-user"></i> ${work.memberName}</span>
+	                  <span class="housework-title truncate">${work.description}</span>
+	                </div>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	    </div>
 	    <c:if test="${empty houseworks}">
 	      <div class="empty-message">오늘은 특별한 할 일이 없어요. 가족과 함께 즐거운 시간 보내세요!</div>
 	    </c:if>
@@ -419,22 +583,44 @@
 	    <a href="${ctp}/vote/voteList" class="view-all">모두 보기 <i class="fas fa-arrow-right"></i></a>
 	  </div>
 	  <div class="card-body">
-	    <c:if test="${not empty votes}">
-	      <ul class="list-group list-group-flush">
-	        <c:forEach items="${votes}" var="vote">
-	          <li class="list-group-item">
-	          	<a href="${ctp}/vote/voteContent?idx=${vote.idx}">
-		            <div class="vote-info"> 
-		              <div class="vote-title truncate">${vote.title}</div>
-		              <div class="vote-details">
-		                <i class="far fa-clock"></i> ${vote.endTime.toString().substring(0, 10)} 마감
-		              </div>
-		            </div>
-	            </a>
-	          </li>
-	        </c:forEach>
-	      </ul>
-	    </c:if>
+	    <div class="row">
+	      <div class="col-md-6">
+	        <c:if test="${not empty votes}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${votes}" var="vote" begin="0" end="1">
+	              <li class="list-group-item">
+	                <a href="${ctp}/vote/voteContent?idx=${vote.idx}">
+	                  <div class="vote-info"> 
+	                    <div class="vote-title truncate">${vote.title}</div>
+	                    <div class="vote-details">
+	                      <i class="far fa-clock"></i> ${vote.endTime.toString().substring(0, 10)} 마감
+	                    </div>
+	                  </div>
+	                </a>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	      <div class="col-md-6">
+	        <c:if test="${not empty votes}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${votes}" var="vote" begin="2" end="3">
+	              <li class="list-group-item">
+	                <a href="${ctp}/vote/voteContent?idx=${vote.idx}">
+	                  <div class="vote-info"> 
+	                    <div class="vote-title truncate">${vote.title}</div>
+	                    <div class="vote-details">
+	                      <i class="far fa-clock"></i> ${vote.endTime.toString().substring(0, 10)} 마감
+	                    </div>
+	                  </div>
+	                </a>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	    </div>
 	    <c:if test="${empty votes}">
 	      <div class="empty-message">진행 중인 투표가 없어요. 가족과 함께 결정할 일이 있나요?</div>
 	    </c:if>
@@ -447,23 +633,46 @@
 	    <a href="${ctp}/familyMeeting/meetingList" class="view-all">모두 보기 <i class="fas fa-arrow-right"></i></a>
 	  </div>
 	  <div class="card-body">
-	    <c:if test="${not empty meetings}">
-	      <ul class="list-group list-group-flush">
-	        <c:forEach items="${meetings}" var="meeting">
-	          <li class="list-group-item">
-	          	<a href="${ctp}/familyMeeting/meetingContent?idx=${meeting.idx}">
-		            <div class="meeting-info">
-		              <div class="meeting-title truncate">${meeting.title}</div>
-		              <div class="meeting-datetime">
-		                <i class="far fa-calendar-alt"></i> ${meeting.meetingDate.toString().substring(0, 10)}
-		                <i class="far fa-clock"></i> ${meeting.meetingDate.toString().substring(11, 16)}
-		              </div>
-		            </div>
-		        	</a>
-	          </li>
-	        </c:forEach>
-	      </ul>
-	    </c:if>
+	    <div class="row">
+	      <div class="col-md-6">
+	        <c:if test="${not empty meetings}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${meetings}" var="meeting" begin="0" end="1">
+	              <li class="list-group-item">
+	                <a href="${ctp}/familyMeeting/meetingContent?idx=${meeting.idx}">
+	                  <div class="meeting-info">
+	                    <div class="meeting-title truncate">${meeting.title}</div>
+	                    <div class="meeting-datetime">
+	                      <i class="far fa-calendar-alt"></i> ${meeting.meetingDate.toString().substring(0, 10)}
+	                      <i class="far fa-clock"></i> ${meeting.meetingDate.toString().substring(11, 16)}
+	                    </div>
+	                  </div>
+	                </a>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	      <div class="col-md-6">
+	        <c:if test="${not empty meetings}">
+	          <ul class="list-group list-group-flush">
+	            <c:forEach items="${meetings}" var="meeting" begin="2" end="3">
+	              <li class="list-group-item">
+	                <a href="${ctp}/familyMeeting/meetingContent?idx=${meeting.idx}">
+	                  <div class="meeting-info">
+	                    <div class="meeting-title truncate">${meeting.title}</div>
+	                    <div class="meeting-datetime">
+	                      <i class="far fa-calendar-alt"></i> ${meeting.meetingDate.toString().substring(0, 10)}
+	                      <i class="far fa-clock"></i> ${meeting.meetingDate.toString().substring(11, 16)}
+	                    </div>
+	                  </div>
+	                </a>
+	              </li>
+	            </c:forEach>
+	          </ul>
+	        </c:if>
+	      </div>
+	    </div>
 	    <c:if test="${empty meetings}">
 	      <div class="empty-message">아직 예정된 회의가 없어요. 가족과 함께 이야기 나누며 해결하고 싶은 일들을 찾아보세요.</div>
 	    </c:if>
@@ -471,7 +680,7 @@
 	</div>
 
 	
-	<div class="card">
+	<div class="card" style="min-height: 250px;">
 	  <div class="card-header">
 	    <i class="fas fa-camera-retro"></i> 추억의 순간들
 	    <a href="${ctp}/photo/photoList" class="view-all">모두 보기 <i class="fas fa-arrow-right"></i></a>

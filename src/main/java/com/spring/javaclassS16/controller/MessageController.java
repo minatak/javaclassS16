@@ -33,7 +33,7 @@ public class MessageController {
 			model.addAttribute("url", "/home");
 		}
 		else if(msgFlag.equals("memberLoginNo")) {
-			model.addAttribute("msg", "로그인에 실패했어요. 아이디와 비밀번호를 확인해주세요.");
+			model.addAttribute("msg", "로그인에 실패했어요.<br/>아이디와 비밀번호를 확인해주세요.");
 			model.addAttribute("url", "/member/memberLogin");
 		}
 		else if(msgFlag.equals("memberLogout")) {
@@ -41,7 +41,7 @@ public class MessageController {
 			model.addAttribute("url", "/member/memberLogin");
 		}
 		else if(msgFlag.equals("alreadyMember")) {
-			model.addAttribute("msg", "이미 가입되어있는 이메일이에요.\\n아이디 찾기 등을 이용하여 로그인해주세요!");
+			model.addAttribute("msg", "이미 가입되어있는 이메일이에요.<br/>아이디 찾기 등을 이용하여 로그인해주세요!");
 			model.addAttribute("url", "/member/memberLogin");
 		}
 		else if(msgFlag.equals("successFamCode")) {
@@ -49,7 +49,7 @@ public class MessageController {
 			model.addAttribute("url", "/home");
 		}
 		else if(msgFlag.equals("memberNot")) {
-			model.addAttribute("msg", "회원가입이 되지 않은 사용자에요.\\n회원가입 후 진행해주세요!");
+			model.addAttribute("msg", "회원가입이 되지 않은 사용자에요.<br/>회원가입 후 진행해주세요!");
 			model.addAttribute("url", "/member/memberJoin0");
 		}
 		else if(msgFlag.equals("photoInputOk")) {
@@ -180,7 +180,7 @@ public class MessageController {
 			model.addAttribute("msg", "로그인 후 이용해주세요");
 			model.addAttribute("url", "/member/memberLogin");
 		}
-		else if(msgFlag.equals("LoginNo")) {
+		else if(msgFlag.equals("FamilyNo")) {
 			model.addAttribute("msg", "가족코드 생성 혹은 연결 후 이용해주세요");
 			model.addAttribute("url", "/member/memberFamCode");
 		}

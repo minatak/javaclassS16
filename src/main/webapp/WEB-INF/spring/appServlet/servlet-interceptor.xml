@@ -12,9 +12,9 @@
 	
 	<interceptors>
 	  <interceptor>
-	    <mapping path="/**"/>  <!-- 모든 경로에 대해 로그인 체크 -->
-	    <exclude-mapping path="/"/>  <!-- 메인 페이지 제외 -->
-	    <exclude-mapping path="/resources/**"/>   
+	    <!-- <mapping path="/**"/> -->  <!-- 모든 경로에 대해 로그인 체크 -->
+	    <mapping path="/home/**"/>
+	    <mapping path="/member/**"/>
 	    <exclude-mapping path="/member/memberLogin"/>
 	    <exclude-mapping path="/member/memberJoin0"/>
 	    <exclude-mapping path="/member/memberJoin"/>
@@ -22,18 +22,26 @@
 	    <exclude-mapping path="/member/memberIdSearch"/>
 	    <exclude-mapping path="/member/memberPwdChange"/>
 	    <exclude-mapping path="/member/memberLogout"/>
+	    <exclude-mapping path="/member/kakaoLogin"/>
+	    <exclude-mapping path="/member/kakaoJoin"/>
+	    <exclude-mapping path="/member/joinEmailCheck"/>
+	    <exclude-mapping path="/member/joinMailSend"/>
+	    <exclude-mapping path="/member/memberEmailCheckOk"/>
+	    <exclude-mapping path="/member/memberIdCheck"/>
+	    <exclude-mapping path="/member/kakaoLogout"/>
+	    <exclude-mapping path="/member/memberEmailCheck"/>
+	    <exclude-mapping path="/member/verifyEmailForIdSearch"/>
+	    <exclude-mapping path="/member/memberNewPassword"/>
+	    <exclude-mapping path="/member/memberNewPassword"/>
 	    <beans:ref bean="loginCheckInterceptor" />
 	  </interceptor>
 	  <interceptor>    
 	    <mapping path="/calendar/**"/>
 	    <mapping path="/familyMeeting/**"/>
 	    <mapping path="/housework/**"/>
-	    <mapping path="/member/**"/>
 	    <mapping path="/notice/**"/>
 	    <mapping path="/photo/**"/>
 	    <mapping path="/vote/**"/>
-	    <exclude-mapping path="/member/memberFamCode"/>
-	    <exclude-mapping path="/member/home"/>
 	    <beans:ref bean="familyCodeInterceptor" />
 	  </interceptor>
 	</interceptors>

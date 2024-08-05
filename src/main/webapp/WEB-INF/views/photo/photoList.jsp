@@ -5,6 +5,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="${ctp}/images/favicon.png">
   <title>앨범 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">

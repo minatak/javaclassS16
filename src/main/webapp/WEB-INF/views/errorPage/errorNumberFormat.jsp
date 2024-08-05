@@ -5,6 +5,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="${ctp}/images/favicon.png">
   <title>Number Format Error | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
   <link rel="stylesheet" href="${ctp}/css/error-styles.css">

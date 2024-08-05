@@ -7,6 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="${ctp}/images/favicon.png">
   <title>가사 분담 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
   <link href="${ctp}/css/housework.css?after" rel="stylesheet" /> 

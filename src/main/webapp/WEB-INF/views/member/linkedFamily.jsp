@@ -8,6 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="${ctp}/images/favicon.png">
   <title>우리 가족 | HomeLink</title>
   <%@ include file="/WEB-INF/views/include/bs4.jsp" %>
   <style>

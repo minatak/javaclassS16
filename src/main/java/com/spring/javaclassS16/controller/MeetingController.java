@@ -366,8 +366,6 @@ public class MeetingController {
   @RequestMapping(value = "/topicUpdate", method = RequestMethod.POST)
   public int topicUpdatePost(MeetingTopicVO topicVO) {
   	
-  	System.out.println("topicVO : " + topicVO);
-  	
     return meetingService.setTopicUpdate(topicVO);
   }
   

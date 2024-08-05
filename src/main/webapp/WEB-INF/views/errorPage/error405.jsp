@@ -6,18 +6,18 @@
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="${ctp}/images/favicon.png">
-  <title>Null Pointer Error | HomeLink</title>
+  <title>405 Method Not Allowed | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
   <link rel="stylesheet" href="${ctp}/css/error-styles.css">
 </head>
 <body>
   <div class="error-container">
     <div class="error-icon">
-      <i class="fas fa-exclamation-circle"></i>
+      <i class="fas fa-ban"></i>
     </div>
-    <!-- <div class="error-code">NullPointerException</div> -->
-    <h1>null 참조 오류</h1>
-    <p>죄송합니다. 프로그램 실행 중 예기치 않은 오류가 발생했습니다.<br/>이 문제는 시스템 내부의 데이터 처리 과정에서 발생한 것으로,<br/>관리자에게 보고되었습니다. 잠시 후 다시 시도해 주세요.</p>
+    <div class="error-code">405</div>
+    <h1>허용되지 않은 메소드</h1>
+    <p>죄송합니다. 요청하신 방법은 이 페이지에서 허용되지 않습니다.<br/>올바른 접근 방법을 사용해 주세요.</p>
     <a href="${ctp}/home" class="btn">홈으로 돌아가기</a>
   </div>
 </body>

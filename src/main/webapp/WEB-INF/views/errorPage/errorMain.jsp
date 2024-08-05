@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="${ctp}/images/favicon.png">
-  <title>Null Pointer Error | HomeLink</title>
+  <title>오류 발생 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
   <link rel="stylesheet" href="${ctp}/css/error-styles.css">
 </head>
@@ -15,10 +15,15 @@
     <div class="error-icon">
       <i class="fas fa-exclamation-circle"></i>
     </div>
-    <!-- <div class="error-code">NullPointerException</div> -->
-    <h1>null 참조 오류</h1>
-    <p>죄송합니다. 프로그램 실행 중 예기치 않은 오류가 발생했습니다.<br/>이 문제는 시스템 내부의 데이터 처리 과정에서 발생한 것으로,<br/>관리자에게 보고되었습니다. 잠시 후 다시 시도해 주세요.</p>
+    <h1>오류가 발생했습니다</h1>
+    <p>죄송합니다. 요청을 처리하는 동안 예기치 않은 오류가 발생했습니다.<br/>
+    문제가 지속되면 관리자에게 문의해 주세요.</p>
     <a href="${ctp}/home" class="btn">홈으로 돌아가기</a>
+    <br><br>
+    <p class="error-details">
+      오류 코드: ${errorCode}<br>
+      오류 메시지: ${errorMsg}
+    </p>
   </div>
 </body>
 </html>

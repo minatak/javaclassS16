@@ -7,362 +7,309 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HomeLink</title>
 <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
-<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
-	<style>
-	  @font-face {
-		  font-family: 'yg-jalnan';
-		  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
-		  font-weight: normal;
-		  font-style: normal;
-		}
-		
-		@font-face {
-		  font-family: 'LeeSeoyun';
-		  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
-		  font-weight: normal;
-		  font-style: normal;
-		}
-		
-		@font-face {
-	    font-family: 'GmarketSansMedium';
-	    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-	    font-weight: normal;
-	    font-style: normal;
-		}
-		
-		body {
-		  font-family: 'Pretendard', sans-serif !important;
-		  background-color: #ffffff;
-		  color: #333c47;
-		}
-		
-		.content {
-		  max-width: 900px;
-		  margin: 40px auto;
-		  padding: 40px;
-		  margin-top:0;
-		}
-		
-		.header {
-		  margin-bottom: 50px;
-		}
-		
-		.header .h2 {
-		  font-weight: 600;
-		  font-size: 24px;
-		  color: #333c47;
-		  text-align: center;
-		  margin-bottom: 50px;
-		}
-		
-		.card {
-		  border: 1px solid #ddd;
-		  border-radius: 8px;
-		  margin-bottom: 30px;
-		  overflow: hidden;
-		  min-height: 200px;
-		}
-		
-		.card-header { 
-		  background-color: #fff;
-		  color: #84a98c;
-		  font-weight: 600;
-		  padding: 15px 20px;
-		  border-bottom: 1px solid #ddd;
-		}
-		
-		.card-body {
-		  padding: 20px;
-		  background-color: #fff;
-		  display: flex;
-		  flex-direction: column;
-		  justify-content: center;
-		}
-		
-		.list-group {
-		  margin-bottom: 0;
-		}
-		
-		.list-group-item {
-		  border: none;
-		  padding: 12px 0;
-		  border-bottom: 1px solid #f0f0f0;
-		  white-space: nowrap;
-		  overflow: hidden;
-		  text-overflow: ellipsis;
-		}
-		
-		.list-group-item:last-child {
-		  border-bottom: none;
-		}
-		
-		.view-all {
-		  font-size: 14px;
-		  color: #84a98c;
-		  text-decoration: none;
-		  float: right;
-		  transition: color 0.3s ease;
-		}
-		
-		.view-all:hover {
-		  color: #6b8e76;
-		  text-decoration: none;
-		}
-		
-		.empty-message {
-		  display: flex;
-		  align-items: center;
-		  justify-content: center;
-		  height: 100%;
-		  text-align: center;
-		  color: #6c757d;
-		  font-size: 14px;
-		  font-style: italic;
-		  padding: 20px;
-		}
-		
-		.weather-banner {
-		  background-color: #fff;
-		  color: #333c47;
-		  padding: 20px;
-		  border-radius: 12px;
-		  margin-bottom: 30px;
-		}
-		
-		.weather-content {
-		  display: flex;
-		  align-items: center;
-		}
-		
-		.weather-icon-temp {
-		  display: flex;
-		  flex-direction: column;
-		  align-items: center;
-		  margin-right: 20px;
-		}
-		
-		.weather-icon {
-		  width: 64px;
-		  height: 64px;
-		  margin-bottom: 0px;
-		}
-		
-		.temperature {
-		  font-family: 'KOTRAHOPE';
-		  font-size: 19px;
-		  font-weight: bold;
-		  color: #84a98c;
-		}
-		
-		.weather-text {
-		  flex: 1;
-		}
-		
-		.weather-title {
-		  font-size: 18px;
-		  font-weight: 600;
-		  margin-bottom: 10px;
-		  color: #2d3e50;
-		}
-		@font-face {
-	    font-family: 'KOTRAHOPE';
-	    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
-	    font-weight: normal;
-	    font-style: normal;
-		}
-		@font-face {
-	    font-family: 'omyu_pretty';
-	    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
-	    font-weight: normal;
-	    font-style: normal;
-		}
-		.weather-advice {
-		  font-family: 'omyu_pretty';
-		  font-size: 18px;
-		  /* line-height: 1.6; */
-		  margin-bottom: 0;
-		}
-		
-		.photo-preview {
-		  width: 100%;
-		  height: 130px;
-		  object-fit: cover;
-		  border-radius: 4px;
-		  transition: transform 0.3s ease;
-		}
-		
-		a {
-		  color: #333c47;
-		  transition: color 0.3s ease;
-		}
-		
-		a:hover {
-		  color: #84a98c;
-		  text-decoration: none;
-		}
-	   .meeting-info {
-	    display: flex;
-	    flex-direction: column;
-	  }
-	  .meeting-title {
-	    font-weight: bold;
-	    font-size: 1.1em;
-	    margin-bottom: 5px;
-	  }
-	  .meeting-datetime {
-	    font-size: 0.9em;
-	    color: #666;
-	  }
-	  .meeting-datetime i {
-	    margin-right: 5px;
-	    margin-left: 10px;
-	  }
-	  .meeting-datetime i:first-child {
-	    margin-left: 0;
-	  }
-	  
-	  .housework-info, .notice-info, .vote-info {
-		  display: flex;
-		  flex-direction: column;
-		}
-		
-		.housework-title, .notice-title, .vote-title {
-		  font-weight: bold;
-		  font-size: 1.1em;
-		  margin-bottom: 5px;
-		}
-		
-		.housework-details, .notice-details, .vote-details {
-		  font-size: 0.9em;
-		  color: #666;
-		}
-		
-		.housework-details i, .notice-details i, .vote-details i {
-		  margin-right: 5px;
-		  margin-left: 10px;
-		}
-		
-		.housework-details i:first-child, .notice-details i:first-child, .vote-details i:first-child {
-		  margin-left: 0;
-		}
-		
-		.housework-info {
-		  display: flex;
-		  font-weight: bold;
-		}
-		
-		.member-name {
-		  color: #999;
-		  margin-right: 10px;
-		  font-size: 0.9em;
-		}
-		
-		.housework-title {
-		  font-weight: bold;
-		}
-		
-		.member-name i {
-		  margin-right: 5px;
-		}
-	  
-	  .schedule-info {
-		  display: flex;
-		  flex-direction: column;
-		}
-		
-		.schedule-title {
-		  font-weight: bold;
-		  font-size: 1.1em;
-		  margin-bottom: 5px;
-		}
-		
-		#weeklyCalendar {
-		  font-size: 0.8em;
-		  height: 400px !important;
-		}
-		.fc-header-toolbar {
-		  font-size: 0.9em;
-		  margin-bottom: 10px !important;
-		}
-		.fc-timegrid-slot-label {
-		  font-size: 0.9em;
-		}
-		.fc-timegrid-axis {
-		  font-size: 0.9em;
-		}
-		.fc-timegrid-event {
-		  border-radius: 3px;
-		}
-		.fc-timegrid-event .fc-event-main {
-		  padding: 2px 4px;
-		}
-		.fc .fc-button {
-		  padding: 0.2em 0.5em;
-		  font-size: 0.9em;
-		}
-		.fc .fc-toolbar-title {
-		  font-size: 1.2em;
-		}
-		
-	</style>
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-		  const truncateText = (element, maxLength) => {
-		    let text = element.innerText;
-		    if (text.length > maxLength) {
-		      element.innerText = text.substring(0, maxLength) + '...';
-		    }
-		  }; 
+<style>
+  @font-face {
+	  font-family: 'yg-jalnan';
+	  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+	  font-weight: normal;
+	  font-style: normal;
+	}
 	
-		  document.querySelectorAll('.truncate').forEach(el => truncateText(el, 55));
-		});
-		
-		
-		document.addEventListener('DOMContentLoaded', function() {
-			  var calendarEl = document.getElementById('weeklyCalendar');
-			  var calendar = new FullCalendar.Calendar(calendarEl, {
-			    initialView: 'timeGridWeek',
-			    headerToolbar: {
-			      left: 'prev,next today',
-			      center: 'title',
-			      right: 'timeGridWeek,timeGridDay'
-			    },
-			    height: 'auto',
-			    allDaySlot: true,
-			    slotMinTime: '00:00:00',
-			    slotMaxTime: '24:00:00',
-			    events: function(info, successCallback, failureCallback) {
-			      $.ajax({
-			        url: '${ctp}/calendar/weeklyEvents',
-			        method: 'GET', 
-			        data: {
-			          startDate: info.startStr,
-			          endDate: info.endStr
-			        },
-			        dataType: 'json',
-			        success: function(res) {
-			          console.log('Received events:', res);
-			          successCallback(res);
-			        },
-			        error: function(jqXHR, textStatus, errorThrown) {
-			          console.error("AJAX error: " + textStatus + ' : ' + errorThrown);
-			          failureCallback("Error fetching events.");
-			        }
-			      });
-			    },
-			    eventClick: function(info) {
-			      console.log('Event clicked:', info.event);
-			      window.location.href = '${ctp}/calendar/calendarContent?idx=' + info.event.id;
-			    }
-			  });
-			  calendar.render();
-			  console.log('Calendar rendered');
-			});
-		
-	</script>
+	@font-face {
+	  font-family: 'LeeSeoyun';
+	  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+	  font-weight: normal;
+	  font-style: normal;
+	}
+	
+	@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+	}
+	
+	body {
+	  font-family: 'Pretendard', sans-serif !important;
+	  background-color: #ffffff;
+	  color: #333c47;
+	}
+	
+	.content {
+	  max-width: 900px;
+	  margin: 40px auto;
+	  padding: 40px;
+	  margin-top:0;
+	}
+	
+	.header {
+	  margin-bottom: 50px;
+	}
+	
+	.header .h2 {
+	  font-weight: 600;
+	  font-size: 24px;
+	  color: #333c47;
+	  text-align: center;
+	  margin-bottom: 50px;
+	}
+	
+	.card {
+	  border: 1px solid #ddd;
+	  border-radius: 8px;
+	  margin-bottom: 30px;
+	  overflow: hidden;
+	  min-height: 200px;
+	}
+	
+	.card-header { 
+	  background-color: #fff;
+	  color: #84a98c;
+	  font-weight: 600;
+	  padding: 15px 20px;
+	  border-bottom: 1px solid #ddd;
+	}
+	
+	.card-body {
+	  padding: 20px;
+	  background-color: #fff;
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: center;
+	}
+	
+	.list-group {
+	  margin-bottom: 0;
+	}
+	
+	.list-group-item {
+	  border: none;
+	  padding: 12px 0;
+	  border-bottom: 1px solid #f0f0f0;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  text-overflow: ellipsis;
+	}
+	
+	.list-group-item:last-child {
+	  border-bottom: none;
+	}
+	
+	.view-all {
+	  font-size: 14px;
+	  color: #84a98c;
+	  text-decoration: none;
+	  float: right;
+	  transition: color 0.3s ease;
+	}
+	
+	.view-all:hover {
+	  color: #6b8e76;
+	  text-decoration: none;
+	}
+	
+	.empty-message {
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  height: 100%;
+	  text-align: center;
+	  color: #6c757d;
+	  font-size: 14px;
+	  font-style: italic;
+	  padding: 20px;
+	}
+	
+	.weather-banner {
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  background-color: #fff;
+	  color: #333c47;
+	  padding: 20px;
+	  border-radius: 12px;
+	  margin-bottom: 30px;
+	}
+	
+	.weather-content {
+	  display: flex;
+	  align-items: center;
+	}
+	
+	.weather-icon-temp {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  margin-right: 20px;
+	}
+	
+	.weather-icon {
+	  width: 64px;
+	  height: 64px;
+	  margin-bottom: 0px;
+	  justify-content: center;
+	}
+	
+	.temperature {
+	  font-family: 'KOTRAHOPE';
+	  font-size: 19px;
+	  font-weight: bold;
+	  color: #84a98c;
+	}
+	
+	.weather-text {
+	  flex: 1;
+	}
+	
+	.weather-title {
+	  font-size: 18px;
+	  font-weight: 600;
+	  margin-bottom: 10px;
+	  color: #2d3e50;
+	}
+	
+	@font-face {
+    font-family: 'omyu_pretty';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+	}
+	.weather-advice {
+	  font-family: 'omyu_pretty';
+	  font-size: 18px;
+	  /* line-height: 1.6; */
+	  margin-bottom: 0;
+	  justify-content: center;
+	}
+	
+	.photo-preview {
+	  width: 100%;
+	  height: 130px;
+	  object-fit: cover;
+	  border-radius: 4px;
+	  transition: transform 0.3s ease;
+	}
+	
+	a {
+	  color: #333c47;
+	  transition: color 0.3s ease;
+	}
+	
+	a:hover {
+	  color: #84a98c;
+	  text-decoration: none;
+	}
+   .meeting-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .meeting-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+  }
+  .meeting-datetime {
+    font-size: 0.9em;
+    color: #666;
+  }
+  .meeting-datetime i {
+    margin-right: 5px;
+    margin-left: 10px;
+  }
+  .meeting-datetime i:first-child {
+    margin-left: 0;
+  }
+  
+  .housework-info, .notice-info, .vote-info {
+	  display: flex;
+	  flex-direction: column;
+	}
+	
+	.housework-title, .notice-title, .vote-title {
+	  font-weight: bold;
+	  font-size: 1.1em;
+	  margin-bottom: 5px;
+	}
+	
+	.housework-details, .notice-details, .vote-details {
+	  font-size: 0.9em;
+	  color: #666;
+	}
+	
+	.housework-details i, .notice-details i, .vote-details i {
+	  margin-right: 5px;
+	  margin-left: 10px;
+	}
+	
+	.housework-details i:first-child, .notice-details i:first-child, .vote-details i:first-child {
+	  margin-left: 0;
+	}
+	
+	.housework-info {
+	  display: flex;
+	  font-weight: bold;
+	}
+	
+	.member-name {
+	  color: #999;
+	  margin-right: 10px;
+	  font-size: 0.9em;
+	}
+	
+	.housework-title {
+	  font-weight: bold;
+	}
+	
+	.member-name i {
+	  margin-right: 5px;
+	}
+  
+  .schedule-info {
+	  display: flex;
+	  flex-direction: column;
+	}
+	
+	.schedule-title {
+	  font-weight: bold;
+	  font-size: 1.1em;
+	  margin-bottom: 5px;
+	}
+	
+	.schedule-details {
+	  font-size: 0.9em;
+	  color: #666;
+	}
+	
+	.schedule-details i {
+	  margin-right: 5px;
+	  margin-left: 10px;
+	}
+	
+	.schedule-details i:first-child {
+	  margin-left: 0;
+	}
+  .badge-shared {
+	  color: #84a98c;
+	 /*  padding: 3px 8px; */
+	  /* border-radius: 12px; */
+	  font-weight: bold;
+	  margin-left: 5px;
+	  display: inline-block;
+	}
+</style>
 </head>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+	  const truncateText = (element, maxLength) => {
+	    let text = element.innerText;
+	    if (text.length > maxLength) {
+	      element.innerText = text.substring(0, maxLength) + '...';
+	    }
+	  }; 
+
+	  document.querySelectorAll('.truncate').forEach(el => truncateText(el, 55));
+	});
+</script>
 <body>
 <%@ include file = "/WEB-INF/views/include/nav.jsp" %>
 <%@ include file = "/WEB-INF/views/include/side.jsp" %>
@@ -415,11 +362,30 @@
 	
 	<div class="card">
 	  <div class="card-header">
-	    <i class="fas fa-calendar"></i> 이번 주 일정
+	    <i class="fas fa-calendar"></i> 다가오는 일정
 	    <a href="${ctp}/calendar/calendarMain" class="view-all">모두 보기 <i class="fas fa-arrow-right"></i></a>
 	  </div>
 	  <div class="card-body">
-	    <div id='weeklyCalendar' style="height: 600px; width: 100%;"></div>
+	    <c:if test="${not empty schedules}">
+	      <ul class="list-group list-group-flush">
+	        <c:forEach items="${schedules}" var="schedule">
+	          <li class="list-group-item">
+	            <div class="schedule-info">
+	              <div class="schedule-title truncate">${schedule.title}</div>
+	              <div class="schedule-details">
+								  <i class="far fa-calendar-alt"></i> ${schedule.startTime.toString().substring(0, 10)}
+								  <c:if test="${schedule.sharing}">
+								    <span class="badge-shared">(공유됨)</span>
+								  </c:if>
+								</div>
+	            </div>
+	          </li>
+	        </c:forEach>
+	      </ul>
+	    </c:if>
+	    <c:if test="${empty schedules}">
+	      <div class="empty-message">예정된 일정이 없습니다. 새로운 일정을 추가해보세요!</div>
+	    </c:if>
 	  </div>
 	</div>
 	

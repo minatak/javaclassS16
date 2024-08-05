@@ -6,6 +6,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="${ctp}/images/favicon.png">
   <title>투표 목록 | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
   <style>

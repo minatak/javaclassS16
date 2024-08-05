@@ -8,6 +8,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="${ctp}/images/favicon.png">
   <title>${vo.title} | HomeLink</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
    <style>
