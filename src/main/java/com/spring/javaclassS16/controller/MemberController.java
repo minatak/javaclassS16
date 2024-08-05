@@ -85,7 +85,7 @@ public class MemberController {
 		            "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
 		            "<p style='color: #999; font-size: 12px; margin-top: 20px;'>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
 		            "<p style='text-align: center;'>" +
-		                "<a href='' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
+		                "<a href='http://49.142.157.251:9090/javaclassS16/' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
 		            "</p>" +
 		        "</div>";
 	
@@ -474,7 +474,7 @@ public class MemberController {
             "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
             "<p style='color: #999; font-size: 12px; margin-top: 20px;'>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
             "<p style='text-align: center;'>" +
-                "<a href='' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
+                "<a href='http://49.142.157.251:9090/javaclassS16/' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
             "</p>" +
         "</div>";
 
@@ -535,7 +535,7 @@ public class MemberController {
               "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
               "<p style='color: #999; font-size: 12px; margin-top: 20px;'>인증번호는 5분 후에 만료됩니다.<br>만약 인증번호를 분실하셨다면 다시 요청하실 수 있습니다.</p>" +
               "<p style='text-align: center;'>" +
-                  "<a href='' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
+                  "<a href='http://49.142.157.251:9090/javaclassS16/' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 홈페이지 바로가기</a>" +
               "</p>" +
           "</div>";
 
@@ -577,7 +577,7 @@ public class MemberController {
                   "<p style='color: #666; line-height: 1.6;'>감사합니다!</p>" +
                   "<p style='color: #666; line-height: 1.6;'>HomeLink 팀</p>" +
                   "<p style='text-align: center;'>" +
-                      "<a href='' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 로그인 페이지</a>" +
+                      "<a href='http://49.142.157.251:9090/javaclassS16/' style='display: inline-block; background-color: #84a98c; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;'>HomeLink 로그인 페이지</a>" +
                   "</p>" +
               "</div>";
           

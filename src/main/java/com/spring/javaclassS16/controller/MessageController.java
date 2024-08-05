@@ -30,7 +30,7 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("memberLoginOk")) {
 			model.addAttribute("msg", name+"님 로그인 되셨습니다");
-			model.addAttribute("url", "/h");
+			model.addAttribute("url", "/home");
 		}
 		else if(msgFlag.equals("memberLoginNo")) {
 			model.addAttribute("msg", "로그인에 실패했어요. 아이디와 비밀번호를 확인해주세요.");
@@ -46,7 +46,7 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("successFamCode")) {
 			model.addAttribute("msg", "가족 코드가 성공적으로 등록되었어요 :)");
-			model.addAttribute("url", "/h");
+			model.addAttribute("url", "/home");
 		}
 		else if(msgFlag.equals("memberNot")) {
 			model.addAttribute("msg", "회원가입이 되지 않은 사용자에요.\\n회원가입 후 진행해주세요!");
@@ -175,6 +175,14 @@ public class MessageController {
 		else if(msgFlag.equals("memberDeleteOk")) {
 			model.addAttribute("msg", "회원 탈퇴가 정상적으로 완료되었습니다");
 			model.addAttribute("url", "/");
+		}
+		else if(msgFlag.equals("LoginNo")) {
+			model.addAttribute("msg", "로그인 후 이용해주세요");
+			model.addAttribute("url", "/member/memberLogin");
+		}
+		else if(msgFlag.equals("LoginNo")) {
+			model.addAttribute("msg", "가족코드 생성 혹은 연결 후 이용해주세요");
+			model.addAttribute("url", "/member/memberFamCode");
 		}
 		
 		

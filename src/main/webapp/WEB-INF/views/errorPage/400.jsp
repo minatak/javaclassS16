@@ -17,7 +17,7 @@
     <div class="error-code">400</div>
     <h1>잘못된 요청입니다</h1>
     <p>죄송합니다. 서버가 요청을 이해할 수 없습니다.<br/>입력 정보를 확인하시고 다시 시도해 주세요.</p>
-    <a href="${ctp}/" class="btn">홈으로 돌아가기</a>
+    <a href="${ctp}/home" class="btn">홈으로 돌아가기</a>
   </div>
 </body>
 </html>

@@ -165,7 +165,7 @@
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-           <a href="${ctp}/beforeLogin" class="logo">
+           <a href="${ctp}/" class="logo">
               <img src="${ctp}/images/smalllogo.png" alt="HomeLink">
             </a> 
             <!-- ***** Logo End ***** -->

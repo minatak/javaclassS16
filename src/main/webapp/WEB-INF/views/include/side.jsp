@@ -97,7 +97,7 @@
     <p class="sidebar-profile-age">만 ${sAge}세</p>
   </div> 
    <div class="w3-bar-block">
-    <a href="${ctp}/" onclick="w3_close()" class="w3-bar-item w3-button w3-padding ${pageContext.request.servletPath == '/' ? 'active' : ''}"><i class="fa fa-home fa-fw"></i>홈</a>
+    <a href="${ctp}/home" onclick="w3_close()" class="w3-bar-item w3-button w3-padding ${pageContext.request.servletPath == '/' ? 'active' : ''}"><i class="fa fa-home fa-fw"></i>홈</a>
     <a href="${ctp}/notice/noticeList" onclick="w3_close()" class="w3-bar-item w3-button w3-padding ${fn:contains(pageContext.request.servletPath, '/notice/') ? 'active' : ''}"><i class="fa fa-bullhorn fa-fw"></i>가족소식</a>
     <a href="${ctp}/calendar/calendarMain" onclick="w3_close()" class="w3-bar-item w3-button w3-padding ${fn:contains(pageContext.request.servletPath, '/calendar/') ? 'active' : ''}"><i class="fa fa-calendar fa-fw"></i>일정관리</a>
     <a href="${ctp}/housework/workMain" onclick="w3_close()" class="w3-bar-item w3-button w3-padding ${fn:contains(pageContext.request.servletPath, '/housework/') ? 'active' : ''}"><i class="fa fa-tasks fa-fw"></i>가사분담</a>

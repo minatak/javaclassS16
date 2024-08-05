@@ -64,84 +64,88 @@ public class HomeController {
   private static final String WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=Seoul,kr&appid=" + WEATHER_API_KEY + "&units=metric";
 
   @RequestMapping(value = {"/","/h"}, method = RequestMethod.GET)
+  public String beforeLoginGet(Model model) {
+  	
+    return "beforeLogin";
+  }
+  
+  @RequestMapping(value = "/home", method = RequestMethod.GET)
   public String homeGet(Locale locale, Model model, HttpSession session) {
   	String familyCode = (String) session.getAttribute("sFamCode");
   	String memberId = (String) session.getAttribute("sMid");
   	
-    try {
-      URL url = new URL(WEATHER_API_URL);
-      HttpURLConnection con = (HttpURLConnection) url.openConnection();
-      con.setRequestMethod("GET");
-      
-      BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-      String inputLine;
-      StringBuilder response = new StringBuilder();
-      while ((inputLine = in.readLine()) != null) {
-          response.append(inputLine);
-      }
-      in.close();
-      
-      ObjectMapper mapper = new ObjectMapper();
-      JsonNode jsonNode = mapper.readTree(response.toString());
-      
-      double temp = jsonNode.path("main").path("temp").asDouble();
-//      String description = jsonNode.path("weather").get(0).path("description").asText();
-      String iconCode = jsonNode.path("weather").get(0).path("icon").asText();
-      
-//      model.addAttribute("weatherDescription", "서울의 현재 온도: " + temp + "°C, " + description);
-      model.addAttribute("weatherIconCode", iconCode);
-      
-      String advice;
-      if (temp < 0) {
-          advice = "오늘은 꽤 추운 날이에요. 따뜻한 옷차림으로 체온을 지키세요.<br/>가족과 함께 따뜻한 차 한잔 어떠세요? 실내 온도 관리에도 신경 써주세요.";
-      } else if (temp < 10) {
-          advice = "쌀쌀한 날씨네요. 외출 시 목도리나 장갑을 챙기면 좋겠어요.<br/>오늘 저녁엔 따뜻한 국물 요리는 어떨까요? 가족과 따뜻한 시간 보내세요.";
-      } else if (temp < 18) {
-          advice = "상쾌한 날씨예요. 가족과 함께 근처 공원으로 산책 나가보는 건 어떨까요?<br/>맑은 공기를 마시며 활력을 얻어보세요. 귀가 후엔 창문을 열어 환기도 해주세요.";
-      } else if (temp < 25) {
-          advice = "날씨가 정말 좋아요. 가벼운 외출이나 가족과의 피크닉을 계획해보는 건 어떨까요?<br/>창문을 열어 상쾌한 공기로 집안 분위기를 바꿔보세요.";
-      } else if (temp < 30) {
-          advice = "조금 더운 날씨네요. 시원한 옷차림과 자외선 차단제를 잊지 마세요.<br/>수분 섭취를 자주 하고, 시원한 과일이나 음료로 더위를 식혀보세요.<br/>실내에선 선풍기나 에어컨으로 온도 조절을 해주세요.";
-      } else {
-          advice = "많이 더운 날이에요. 가급적 시원한 실내에서 지내세요.<br/>외출 시엔 꼭 물을 챙기고 그늘에서 쉬어가세요.<br/>가족들과 시원한 수박이나 아이스크림 만들기는 어떨까요?";
-      }
-      model.addAttribute("weatherAdvice", advice);
-      model.addAttribute("temp", temp);
-      
-      // 집안일 목록
-      List<WorkVO> houseworks = houseworkService.getTodayHouseworks(familyCode);
-      model.addAttribute("houseworks", houseworks);
-      
-      // 최근 공지사항
-      List<NoticeVO> notices = noticeService.getRecentNotices(familyCode);
-      model.addAttribute("notices", notices);
-      
-      // 다가오는 일정
-      List<CalendarVO> schedules = calendarService.getUpcomingSchedules(familyCode, memberId);
-      model.addAttribute("schedules", schedules);
-      
-      // 예정된 회의
-      List<FamilyMeetingVO> meetings = meetingService.getUpcomingMeetings(familyCode);
-      model.addAttribute("meetings", meetings);
-      
-      // 진행 중인 투표
-      List<VoteVO> votes = voteService.getActiveVotes(familyCode);
-      model.addAttribute("votes", votes);
-      
-      // 최근 사진
-      List<PhotoVO> photos = photoService.getRecentPhotos(familyCode);
-      model.addAttribute("photos", photos);
-
-      String customIconUrl = getCustomWeatherIcon(iconCode);
-      model.addAttribute("weatherIconUrl", customIconUrl);
-      
-    } catch (Exception e) {
-      e.printStackTrace();
-      model.addAttribute("weatherDescription", "날씨 정보를 가져오는데 실패했습니다.");
-      model.addAttribute("weatherAdvice", "");
-    }
-    
-    return "home";
+  	try {
+  		URL url = new URL(WEATHER_API_URL);
+  		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+  		con.setRequestMethod("GET");
+  		
+  		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+  		String inputLine;
+  		StringBuilder response = new StringBuilder();
+  		while ((inputLine = in.readLine()) != null) {
+  			response.append(inputLine);
+  		}
+  		in.close();
+  		
+  		ObjectMapper mapper = new ObjectMapper();
+  		JsonNode jsonNode = mapper.readTree(response.toString());
+  		
+  		double temp = jsonNode.path("main").path("temp").asDouble();
+  		String iconCode = jsonNode.path("weather").get(0).path("icon").asText();
+  		
+  		model.addAttribute("weatherIconCode", iconCode);
+  		
+  		String advice;
+  		if (temp < 0) {
+  			advice = "오늘은 꽤 추운 날이에요. 따뜻한 옷차림으로 체온을 지키세요.<br/>가족과 함께 따뜻한 차 한잔 어떠세요? 실내 온도 관리에도 신경 써주세요.";
+  		} else if (temp < 10) {
+  			advice = "쌀쌀한 날씨네요. 외출 시 목도리나 장갑을 챙기면 좋겠어요.<br/>오늘 저녁엔 따뜻한 국물 요리는 어떨까요? 가족과 따뜻한 시간 보내세요.";
+  		} else if (temp < 18) {
+  			advice = "상쾌한 날씨예요. 가족과 함께 근처 공원으로 산책 나가보는 건 어떨까요?<br/>맑은 공기를 마시며 활력을 얻어보세요. 귀가 후엔 창문을 열어 환기도 해주세요.";
+  		} else if (temp < 25) {
+  			advice = "날씨가 정말 좋아요. 가벼운 외출이나 가족과의 피크닉을 계획해보는 건 어떨까요?<br/>창문을 열어 상쾌한 공기로 집안 분위기를 바꿔보세요.";
+  		} else if (temp < 30) {
+  			advice = "조금 더운 날씨네요. 시원한 옷차림과 자외선 차단제를 잊지 마세요.<br/>수분 섭취를 자주 하고, 시원한 과일이나 음료로 더위를 식혀보세요.<br/>실내에선 선풍기나 에어컨으로 온도 조절을 해주세요.";
+  		} else {
+  			advice = "많이 더운 날이에요. 가급적 시원한 실내에서 지내세요.<br/>외출 시엔 꼭 물을 챙기고 그늘에서 쉬어가세요.<br/>가족들과 시원한 수박이나 아이스크림 만들기는 어떨까요?";
+  		}
+  		model.addAttribute("weatherAdvice", advice);
+  		model.addAttribute("temp", temp);
+  		
+  		// 집안일 목록
+  		List<WorkVO> houseworks = houseworkService.getTodayHouseworks(familyCode);
+  		model.addAttribute("houseworks", houseworks);
+  		
+  		// 최근 공지사항
+  		List<NoticeVO> notices = noticeService.getRecentNotices(familyCode);
+  		model.addAttribute("notices", notices);
+  		
+  		// 다가오는 일정
+  		List<CalendarVO> schedules = calendarService.getUpcomingSchedules(familyCode, memberId);
+  		model.addAttribute("schedules", schedules);
+  		
+  		// 예정된 회의
+  		List<FamilyMeetingVO> meetings = meetingService.getUpcomingMeetings(familyCode);
+  		model.addAttribute("meetings", meetings);
+  		
+  		// 진행 중인 투표
+  		List<VoteVO> votes = voteService.getActiveVotes(familyCode);
+  		model.addAttribute("votes", votes);
+  		
+  		// 최근 사진
+  		List<PhotoVO> photos = photoService.getRecentPhotos(familyCode);
+  		model.addAttribute("photos", photos);
+  		
+  		String customIconUrl = getCustomWeatherIcon(iconCode);
+  		model.addAttribute("weatherIconUrl", customIconUrl);
+  		
+  	} catch (Exception e) {
+  		e.printStackTrace();
+  		model.addAttribute("weatherDescription", "날씨 정보를 가져오는데 실패했습니다.");
+  		model.addAttribute("weatherAdvice", "");
+  	}
+  	
+  	return "home";
   }
 
   @RequestMapping(value = "/imageUpload")

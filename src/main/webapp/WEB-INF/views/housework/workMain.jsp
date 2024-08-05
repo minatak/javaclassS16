@@ -549,7 +549,7 @@
 <div class="container">
   <div class="workContainer">
     <div class="header">
-	    <a href="${ctp}/" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
+	    <a href="${ctp}/home" class="home-icon"><i class="fa-solid fa-circle-arrow-left"></i></a>&nbsp; &nbsp;
 	    <font size="5" class="mb-4 h2">우리 집 가사 관리</font>
 	  </div>
 
