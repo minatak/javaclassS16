@@ -240,6 +240,7 @@
       height: 20px;
       border-radius: 50%;
       margin-right: 5px;
+      object-fit: cover;
     }
     
     .participants-section {
@@ -420,6 +421,7 @@
       height: 20px;
       border-radius: 50%;
       margin-right: 5px;
+      object-fit: cover;
     }
 
     /* 댓글 섹션 스타일 수정 */

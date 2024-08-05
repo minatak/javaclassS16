@@ -21,7 +21,7 @@ public interface CalendarService {
   // 일정 삭제 (idx 기반)
   public int calendarDelete(int idx);
 
-  public List<CalendarVO> getUpcomingSchedules(String familyCode);
+  public List<CalendarVO> getUpcomingSchedules(String familyCode, String memberId);
 
   public List<CalendarVO> getWeeklyEvents(String memberId, String familyCode, String startDate, String endDate);
     

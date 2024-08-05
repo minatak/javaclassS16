@@ -26,6 +26,7 @@
       font-size: 24px; 
       color: #cecece; 
     }
+    .home-icon:hover {color: #c6c6c6;}
 	  .h2 {
 	    font-family: 'pretendard' !important;
 	    font-weight: 600;

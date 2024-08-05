@@ -32,170 +32,116 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-		
-
-	<style>
-		body {font-family: 'Pretendard' !important;}
-		.modal {
-		  display: none;
-		  position: fixed;
-		  z-index: 1000;
-		  left: 0;
-		  top: 0;
-		  width: 100%;
-		  height: 100%;
-		  overflow: auto;
-		  background-color: rgba(0,0,0,0.4);
-		}
-		
-		.modal-content {
-		  background-color: #fefefe;
-		  margin: 5% auto;
-		  padding: 20px;
-		  border: 1px solid #888;
-		  width: 80%;
-		  max-width: 600px;
-		  border-radius: 10px;
-		  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-		}
-		
-		.close {
-		  color: #aaa;
-		  float: right;
-		  font-size: 28px;
-		  font-weight: bold;
-		  cursor: pointer;
-		}
-		
-		.close:hover,
-		.close:focus {
-		  color: #000;
-		  text-decoration: none;
-		  cursor: pointer;
-		}
-		
-		.modal-body {
-		  margin-top: 20px;
-		  display: flex;
-		  flex-direction: column;
-		  align-items: center;
-		}
-		
-		.modal-body img {
-		  max-width: 100%;
-		  height: auto;
-		  margin-bottom: 20px;
-		  border-radius: 5px;
-		}
-		
-		.modal-footer {
-		  margin-top: 20px;
-		  text-align: center;
-		}
-		
-		#modalTitle {
-		  color: #ff6b6b;
-		  margin-bottom: 10px;
-		}
-		
-		#modalDescription {
-		  line-height: 1.6;
-		  color: #333;
-		}
-	</style>
-	<script>
-	$(document).ready(function(){
-		  $(".owl-carousel").owlCarousel({
-		    loop: true,
-		    margin: 30,
-		    nav: true,
-		    responsive:{
-		      0:{ items: 1 },
-		      600:{ items: 2 },
-		      1000:{ items: 4 }
+		 <!-- Pretendard 폰트 추가 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    
+<style>
+    body {
+        font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    }
+    
+     .header-text h2 {
+		    font-size: 3.5vw; /* 뷰포트 너비에 따라 조정 */
+		    line-height: 1.2;
+		  }
+		  .header-text .sub-title {
+		    font-size: 2vw;
+		    line-height: 1.4;
+		  }
+		  @media (max-width: 768px) {
+		    .header-text h2 {
+		      font-size: 6vw;
 		    }
-		  });
-		});
-
-        // 모달 관련 요소 선택
-        var modal = document.getElementById("featureModal");
-				var modalTitle = document.getElementById("modalTitle");
-				var modalImage = document.getElementById("modalImage");
-				var modalDescription = document.getElementById("modalDescription");
-				var modalCTA = document.getElementById("modalCTA");
-				var span = document.getElementsByClassName("close")[0];
-				
-				// 서비스 정보 객체
-				var serviceInfo = {
-				  "일정 관리": {
-				    title: "일정 관리",
-				    description: "가족 구성원들의 일정을 한눈에 확인하고 관리할 수 있습니다. 개인 및 공유 일정을 구분하여 등록할 수 있으며, 중요한 가족 행사나 기념일도 놓치지 않도록 알림 기능을 제공합니다. 또한, 일정별로 색상 구분이 가능해 직관적인 일정 파악이 가능합니다.",
-				    image: "assets/images/calendar.jpg",
-				    ctaLink: "#"
-				  },
-				  "가족 투표": {
-				    title: "가족 투표",
-				    description: "중요한 가족 결정사항을 민주적으로 결정할 수 있는 투표 시스템을 제공합니다. 주말 여행지 선택, 저녁 메뉴 결정 등 다양한 주제로 투표를 생성할 수 있으며, 익명 투표 옵션도 제공합니다. 실시간으로 투표 결과를 그래프로 확인할 수 있어 가족 간 소통을 더욱 원활하게 합니다.",
-				    image: "assets/images/voting.jpg",
-				    ctaLink: "#"
-				  },
-				  "가사 분담": {
-				    title: "가사 분담",
-				    description: "가사 업무를 효율적으로 분담하고 관리할 수 있는 시스템을 제공합니다. 정기적인 집안일부터 특별한 tasks까지 등록하고 담당자를 지정할 수 있습니다. 완료된 일을 체크하면 포인트가 쌓이는 재미있는 요소도 있어, 가족 구성원 모두가 자발적으로 가사에 참여하도록 동기를 부여합니다.",
-				    image: "assets/images/chores.jpg",
-				    ctaLink: "#"
-				  },
-				  "가족 앨범": {
-				    title: "가족 앨범",
-				    description: "소중한 가족의 추억을 저장하고 공유할 수 있는 디지털 앨범 기능을 제공합니다. 각 가족 구성원이 사진을 업로드하고 앨범을 만들 수 있으며, 댓글 기능을 통해 추억을 나눌 수 있습니다. 연도별, 이벤트별로 앨범을 구분하여 정리할 수 있어 체계적인 추억 관리가 가능합니다.",
-				    image: "assets/images/album.jpg",
-				    ctaLink: "#"
-				  },
-				  "가족 회의": {
-				    title: "가족 회의",
-				    description: "정기적인 가족 회의를 효과적으로 진행할 수 있는 도구를 제공합니다. 회의 안건을 사전에 등록하고, 온라인으로 의견을 나눌 수 있습니다. 회의 결과와 결정사항을 기록하고 공유할 수 있어, 모든 가족 구성원이 중요한 가족 사안에 대해 알고 참여할 수 있습니다.",
-				    image: "assets/images/meeting.jpg",
-				    ctaLink: "#"
-				  },
-				  "가족 소식": {
-				    title: "가족 소식",
-				    description: "가족 내 중요한 소식과 정보를 공유할 수 있는 게시판 기능을 제공합니다. 공지사항, 긴급 연락사항, 축하 메시지 등을 올릴 수 있으며, 댓글 기능을 통해 실시간으로 소통할 수 있습니다. 또한, 중요한 소식에 대해서는 푸시 알림 기능을 제공하여 빠른 정보 전달이 가능합니다.",
-				    image: "assets/images/news.jpg",
-				    ctaLink: "#"
-				  }
-				};
-				
-				// 모달 열기 함수
-				function openModal(serviceName) {
-				  var service = serviceInfo[serviceName];
-				  modalTitle.textContent = service.title;
-				  modalImage.src = service.image;
-				  modalDescription.textContent = service.description;
-				  modalCTA.href = service.ctaLink;
-				  modal.style.display = "block";
-				}
-				
-				// 모달 닫기
-				span.onclick = function() {
-				  modal.style.display = "none";
-				}
-				
-				// 모달 외부 클릭 시 닫기
-				window.onclick = function(event) {
-				  if (event.target == modal) {
-				    modal.style.display = "none";
-				  }
-				} 
-				
-				// 서비스 아이템에 클릭 이벤트 리스너 추가
-				document.querySelectorAll('.service-item').forEach(item => {
-				  item.addEventListener('click', function() {
-				    var serviceName = this.querySelector('h4').textContent;
-				    openModal(serviceName);
-				  });
-				});
-  </script>
-  </head>
+		    .header-text .sub-title {
+		      font-size: 4vw;
+		    }
+		  }
+		 /*  .sub-title {
+			  font-family: 'Pretendard', sans-serif;
+			  font-size: 0.5vw;
+			  font-weight: 700;
+			  letter-spacing: 1px;
+			  text-transform: uppercase;
+			 /*  margin-top: 10px; */
+			  display: block;
+			} */
+			
+			@media (max-width: 768px) {
+			  .sub-title {
+			    font-size: 3vw;
+			  }
+			}
+			
+			.sub-title {
+				font-family: 'Pretendard', sans-serif;
+			  font-size: 1.2rem;
+			  font-weight: 700;
+			}
+			
+			.services-carousel .service-item {
+			  margin: 15px;
+			}
+			
+			.services-carousel .owl-nav {
+			  position: absolute;
+			  top: 50%;
+			  width: 100%;
+			}
+			
+			.services-carousel .owl-nav button {
+			  position: absolute;
+			  transform: translateY(-50%);
+			  background: rgba(255, 255, 255, 0.7) !important;
+			  color: #333 !important;
+			  width: 40px;
+			  height: 40px;
+			  border-radius: 50% !important;
+			  font-size: 20px !important;
+			}
+			
+			.services-carousel .owl-nav button.owl-prev {
+			  left: -20px;
+			}
+			
+			.services-carousel .owl-nav button.owl-next {
+			  right: -20px;
+			}
+			
+			.services-carousel .owl-nav button:hover {
+			  background: rgba(255, 255, 255, 0.9) !important;
+			}
+			
+  </style>
+  <script>
+  	
+  	$(document).ready(function(){
+  	  $(".services-carousel").owlCarousel({
+  	    loop: true,
+  	    margin: 30,
+  	    nav: true,
+  	    responsive:{
+  	      0:{
+  	        items: 1
+  	      },
+  	      768:{
+  	        items: 2
+  	      },
+  	      992:{
+  	        items: 3
+  	      },
+  	      1200:{
+  	        items: 4
+  	      }
+  	    },
+  	    autoplay: true,
+  	    autoplayTimeout: 5000,
+  	    autoplayHoverPause: true,
+  	    navText: ['<i class="fas fa-chevron-left"></i>','<i class="fas fa-chevron-right"></i>']
+  	  });
+  	});
+  
+	</script>
+	</head>
 
 <body>
 
@@ -219,19 +165,18 @@
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="index.html" class="logo">
-              <img src="assets/images/logo.png" alt="Chain App Dev">
-              <%-- <img src="${ctp}/images/logo.png" alt="Chain App Dev"> --%>
-            </a>
+           <a href="${ctp}/beforeLogin" class="logo">
+              <img src="${ctp}/images/smalllogo.png" alt="HomeLink">
+            </a> 
             <!-- ***** Logo End ***** -->
             <!-- ***** Menu Start ***** -->
             <ul class="nav">
-              <li class="scroll-to-section"><a href="#home" class="active">홈</a></li>
-              <li class="scroll-to-section"><a href="#features">기능</a></li>
-              <li class="scroll-to-section"><a href="#testimonials">후기</a></li>
-              <li class="scroll-to-section"><a href="#contact">문의</a></li>
-              <li><div class="gradient-button"><a href="${ctp}/member/memberJoin0"><i class="fa fa-sign-in-alt"></i> 시작하기</a></div></li> 
-            </ul>        
+						  <li class="scroll-to-section"><a href="#top" class="active">홈</a></li>
+						  <li class="scroll-to-section"><a href="#services">기능</a></li>
+						  <li class="scroll-to-section"><a href="#clients">후기</a></li>
+						  <li class="scroll-to-section"><a href="#newsletter">문의</a></li>
+						  <li><div class="gradient-button"><a href="${ctp}/member/memberJoin0"><i class="fa fa-sign-in-alt"></i> 시작하기</a></div></li> 
+						</ul>  
             <a class='menu-trigger'>
                 <span>메뉴</span>
             </a>
@@ -249,17 +194,18 @@
           <div class="row">
             <div class="col-lg-6 align-self-center">
               <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <h2>HomeLink: 가족과 함께하는 효율적인 일상</h2>
-                    <p>HomeLink는 가족 구성원들이 함께 사용할 수 있는 다양한 기능을 제공하여 가정 내 소통과 협업을 효율적으로 돕는 가족 관리 플랫폼입니다.</p>
-                  </div>
+							  <div class="row">
+							    <div class="col-lg-12">
+							      <h2 style="color:white;">HomeLink</h2>
+							      <span class="sub-title" style="font-size: 1.2rem;">가족과 함께하는 효율적인 일상</span>
+							      <p>HomeLink는 가족 구성원들이 함께 사용할 수 있는 다양한 기능을 제공하여 가정 내 소통과 협업을 효율적으로 돕는 가족 관리 플랫폼입니다.</p>
+							    </div>
                   <div class="col-lg-12">
                     <div class="white-button first-button scroll-to-section">
-                      <a href="#about">자세히 알아보기 <i class="fab fa-apple"></i></a>
+                      <a href="${ctp}/member/memberLogin">로그인하기</a>
                     </div>
                     <div class="white-button scroll-to-section">
-                      <a href="${ctp}/member/memberJoin0">지금 시작하기 <i class="fab fa-google-play"></i></a>
+                      <a href="${ctp}/member/memberJoin0">지금 시작하기</a>
                     </div>
                   </div>
                 </div>
@@ -267,7 +213,7 @@
             </div>
             <div class="col-lg-6">
               <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
-                <img src="assets/images/slider-dec.png" alt="가족 관리 앱 이미지">
+                <img src="${ctp}/images/slider-dec.png" alt="가족 관리 앱 이미지">
               </div>
             </div>
           </div>
@@ -282,71 +228,45 @@
 	      <div class="col-lg-8 offset-lg-2">
 	        <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
 	          <h4>가족을 위한 <em>놀라운 기능</em></h4>
-	          <img src="assets/images/heading-line-dec.png" alt="">
+	          <img src="${ctp}/images/heading-line-dec.png" alt="">
 	          <p>HomeLink는 가족 생활을 더욱 효율적이고 즐겁게 만들어주는 다양한 기능을 제공합니다.</p>
 	        </div>
 	      </div>
 	    </div>
 	  </div>
 	  <div class="container">
-	    <div class="owl-carousel owl-theme">
-	      <div class="item">
-	        <div class="service-item first-service">
-	          <div class="icon"></div>
-	          <h4>일정 관리</h4>
-	          <p>가족 구성원들의 일정을 한눈에 확인하고 관리할 수 있습니다.</p>
-	          <div class="text-button">
-						  <a href="#" class="modal-trigger" data-service="일정 관리">자세히 보기 <i class="fa fa-arrow-right"></i></a>
-						</div>
-	        </div>
-	      </div>
-	      <div class="item">
-	        <div class="service-item second-service">
-	          <div class="icon"></div>
-	          <h4>가족 투표</h4>
-	          <p>중요한 결정을 가족 구성원들과 함께 투표로 결정할 수 있습니다.</p>
-	          <div class="text-button">
-	            <a href="#" class="modal-trigger">자세히 보기 <i class="fa fa-arrow-right"></i></a>
+	    <div class="row">
+	      <div class="col-lg-12">
+	        <div class="owl-carousel services-carousel">
+	          <div class="service-item first-service">
+	            <div class="icon"></div>
+	            <h4>일정 관리</h4>
+	            <p>가족 구성원들의 일정을 한눈에 확인하고 관리할 수 있습니다.</p>
 	          </div>
-	        </div>
-	      </div>
-	      <div class="item">
-	        <div class="service-item third-service">
-	          <div class="icon"></div>
-	          <h4>가사 분담</h4>
-	          <p>가사 업무를 효율적으로 분담하고 관리할 수 있습니다.</p>
-	          <div class="text-button">
-	            <a href="#" class="modal-trigger">자세히 보기 <i class="fa fa-arrow-right"></i></a>
+	          <div class="service-item second-service">
+	            <div class="icon"></div>
+	            <h4>가족 투표</h4>
+	            <p>중요한 결정을 가족 구성원들과 함께 투표로 결정할 수 있습니다.</p>
 	          </div>
-	        </div>
-	      </div>
-	      <div class="item">
-	        <div class="service-item fourth-service">
-	          <div class="icon"></div>
-	          <h4>가족 앨범</h4>
-	          <p>소중한 가족의 추억을 함께 저장하고 공유할 수 있습니다.</p>
-	          <div class="text-button">
-	            <a href="#" class="modal-trigger">자세히 보기 <i class="fa fa-arrow-right"></i></a>
+	          <div class="service-item third-service">
+	            <div class="icon"></div>
+	            <h4>가사 분담</h4>
+	            <p>가사 업무를 효율적으로 분담하고 관리할 수 있습니다.</p>
 	          </div>
-	        </div>
-	      </div>
-	      <div class="item">
-	        <div class="service-item fifth-service">
-	          <div class="icon"></div>
-	          <h4>가족 회의</h4>
-	          <p>가족 회의를 진행하고 회의록을 작성할 수 있습니다.</p>
-	          <div class="text-button">
-	            <a href="#" class="modal-trigger">자세히 보기 <i class="fa fa-arrow-right"></i></a>
+	          <div class="service-item fourth-service">
+	            <div class="icon"></div>
+	            <h4>가족 앨범</h4>
+	            <p>소중한 가족의 추억을 함께 저장하고 공유할 수 있습니다.</p>
 	          </div>
-	        </div>
-	      </div>
-	      <div class="item">
-	        <div class="service-item sixth-service">
-	          <div class="icon"></div>
-	          <h4>가족 소식</h4>
-	          <p>가족 내 중요한 소식과 정보를 공유할 수 있는 게시판입니다.</p>
-	          <div class="text-button">
-	            <a href="#" class="modal-trigger">자세히 보기 <i class="fa fa-arrow-right"></i></a>
+	          <div class="service-item second-service">
+	            <div class="icon"></div>
+	            <h4>가족 회의</h4>
+	            <p>가족 회의를 진행하고 회의록을 작성할 수 있습니다.</p>
+	          </div>
+	          <div class="service-item third-service">
+	            <div class="icon"></div>
+	            <h4>가족 소식</h4>
+	            <p>가족 내 중요한 소식과 정보를 공유할 수 있는 게시판입니다.</p>
 	          </div>
 	        </div>
 	      </div>
@@ -360,7 +280,7 @@
         <div class="col-lg-6 align-self-center">
           <div class="section-heading">
             <h4>HomeLink <em>소개</em></h4>
-            <img src="assets/images/heading-line-dec.png" alt="">
+            <img src="assets/images/heading-line-dec.png">
             <p>HomeLink는 가족 구성원들이 함께 사용할 수 있는 다양한 기능을 제공하여 가정 내 소통과 협업을 효율적으로 돕는 가족 관리 플랫폼입니다.</p>
           </div>
           <div class="row">
@@ -405,11 +325,6 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6">
-          <div class="right-image">
-            <img src="assets/images/about-right-dec.png" alt="가족 관리 앱 사용 이미지">
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -420,7 +335,7 @@
       <div class="col-lg-8 offset-lg-2">
         <div class="section-heading">
           <h4>HomeLink 사용자들의 <em>생생한 후기</em></h4>
-          <img src="assets/images/heading-line-dec.png" alt="">
+          <img src="${ctp}/images/heading-line-dec.png" alt="">
           <p>실제 HomeLink를 사용하고 있는 가족들의 경험담을 들어보세요.</p>
         </div>
       </div>
@@ -525,16 +440,9 @@
                       <div class="row">
                         <div class="col-lg-12">
                           <div class="client-content">
-                            <img src="assets/images/quote.png" alt="">
+                            <img src="${ctp}/images/quote.png" alt="">
                             <p>"HomeLink의 일정 관리 기능 덕분에 우리 가족의 생활이 훨씬 체계적으로 변했어요. 각자의 일정을 한눈에 볼 수 있어서 약속 잡기도 쉽고, 중요한 가족 행사도 놓치지 않게 되었죠. 특히 아이들의 학교 행사나 병원 예약 관리가 정말 편해졌어요."</p>
                           </div>
-                          <div class="down-content">
-                            <img src="assets/images/client-image.jpg" alt="">
-                            <div class="right-content">
-                              <h4>김지영</h4>
-                              <span>4인 가족 주부</span>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -546,16 +454,9 @@
                       <div class="row">
                         <div class="col-lg-12">
                           <div class="client-content">
-                            <img src="assets/images/quote.png" alt="">
+                            <img src="${ctp}/images/quote.png" alt="">
                             <p>"가족 투표 기능이 정말 유용해요. 주말 여행지 선택부터 저녁 메뉴 결정까지, 모든 가족의 의견을 쉽게 모을 수 있어 좋아요. 익명 투표 옵션도 있어서 솔직한 의견을 낼 수 있고, 결과를 그래프로 볼 수 있어 재미있어요. 덕분에 가족 간 소통이 더 활발해졌습니다."</p>
                           </div>
-                          <div class="down-content">
-                            <img src="assets/images/client-image.jpg" alt="">
-                            <div class="right-content">
-                              <h4>박서준</h4>
-                              <span>3인 가족 아빠</span>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -567,16 +468,9 @@
                       <div class="row">
                         <div class="col-lg-12">
                           <div class="client-content">
-                            <img src="assets/images/quote.png" alt="">
+                            <img src="${ctp}/images/quote.png" alt="">
                             <p>"가사 분담 기능으로 우리 집 가사 일이 훨씬 공평해졌어요. 각자의 역할이 명확해지고, 완료된 일을 체크하는 재미도 있어요. 아이들도 자신의 할 일을 책임감 있게 하더라고요. 덕분에 집안일로 인한 스트레스가 줄고, 가족 모두가 협력하는 분위기가 생겼습니다."</p>
                           </div>
-                          <div class="down-content">
-                            <img src="assets/images/client-image.jpg" alt="">
-                            <div class="right-content">
-                              <h4>이미나</h4>
-                              <span>5인 가족 워킹맘</span>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -588,16 +482,16 @@
                       <div class="row">
                         <div class="col-lg-12">
                           <div class="client-content">
-                            <img src="assets/images/quote.png" alt="">
-                            <p>"가족 앨범 기능이 정말 마음에 들어요. 각자 찍은 사진을 한 곳에 모아볼 수 있어 좋고, 특히 멀리 있는 조부모님과 손쉽게 일상을 공유할 수 있어 좋아요. 추억을 정리하는 것도 쉬워져서, 이제는 연말에 가족 앨범을 만드는 것이 우리 가족의 새로운 전통이 되었답니다."</p>
+                            <img src="${ctp}/images/quote.png" alt="">
+                            <p>"가족 앨범 기능이 정말 마음에 들어요. 각자 찍은 사진을 한 곳에 모아볼 수 있어 좋고, 특히 멀리 있는 조부모님과 손쉽게 일상을 공유할 수 있어 좋아요. 추억을 정리하는 것도 쉬워졌어요!"</p>
                           </div>
-                          <div class="down-content">
-                            <img src="assets/images/client-image.jpg" alt="">
+                          <%-- <div class="down-content">
+                            <img src="${ctp}/images/client-image.jpg" alt="">
                             <div class="right-content">
                               <h4>최우진</h4>
                               <span>3대가족 손자</span>
                             </div>
-                          </div>
+                          </div> --%>
                         </div>
                       </div>
                     </div>
@@ -641,9 +535,9 @@
         <div class="col-lg-3">
           <div class="footer-widget">
             <h4>Contact Us</h4>
-            <p>Rio de Janeiro - RJ, 22795-008, Brazil</p>
-            <p><a href="#">010-020-0340</a></p>
-            <p><a href="#">info@company.co</a></p>
+            <p>충청북도 청주시 서원구 사창동 148-7</p>
+            <p><a href="#">043-225-2111</a></p>
+            <p><a href="#">green_cju@naver.com</a></p>
           </div>
         </div>
         <div class="col-lg-3">
@@ -664,14 +558,14 @@
           </div>
         </div>
         <div class="col-lg-3">
-          <div class="footer-widget">
-            <h4>About Our Company</h4>
-            <div class="logo">
-              <img src="assets/images/white-logo.png" alt="">
-            </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
-          </div>
-        </div>
+				  <div class="footer-widget">
+				    <h4>회사 소개</h4>
+				    <div class="logo">
+				      <img src="${ctp}/images/white_logo.png" alt="" style="width: 200%; height: auto;">
+				    </div>
+				    <p>HomeLink는 가족 간의 소통과 협력을 돕는 혁신적인 플랫폼입니다. 현대 가정의 니즈를 이해하고,<br/>기술을 통해 가족의 유대를 강화하는 솔루션을 제공합니다.</p>
+				  </div>
+				</div>
         <div class="col-lg-12">
           <div class="copyright-text">
             <p>Copyright © 2024 HomeLink. All Rights Reserved. 
@@ -680,30 +574,6 @@
       </div>
     </div>
   </footer>
-
-	<!-- 모달 구조 -->
-	<!-- <div id="serviceModal" class="modal">
-	  <div class="modal-content">
-	    <span class="close">&times;</span>
-	    <h2 id="modalTitle"></h2>
-	    <p id="modalDescription"></p>
-	  </div>
-	</div> -->
-	
-	<!-- 모달 창 -->
-	<div id="featureModal" class="modal">
-	  <div class="modal-content">
-	    <span class="close">&times;</span>
-	    <h2 id="modalTitle"></h2>
-	    <div class="modal-body">
-	      <img id="modalImage" src="" alt="Feature image">
-	      <p id="modalDescription"></p>
-	    </div>
-	    <div class="modal-footer">
-	      <a href="#" class="cta-button" id="modalCTA">자세히 알아보기</a>
-	    </div>
-	  </div>
-	</div>
 
   <!-- Scripts -->
   <script src="vendor/jquery/jquery.min.js"></script>

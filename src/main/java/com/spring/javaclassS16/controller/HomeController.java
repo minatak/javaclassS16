@@ -66,6 +66,7 @@ public class HomeController {
   @RequestMapping(value = {"/","/h"}, method = RequestMethod.GET)
   public String homeGet(Locale locale, Model model, HttpSession session) {
   	String familyCode = (String) session.getAttribute("sFamCode");
+  	String memberId = (String) session.getAttribute("sMid");
   	
     try {
       URL url = new URL(WEATHER_API_URL);
@@ -116,7 +117,7 @@ public class HomeController {
       model.addAttribute("notices", notices);
       
       // 다가오는 일정
-      List<CalendarVO> schedules = calendarService.getUpcomingSchedules(familyCode);
+      List<CalendarVO> schedules = calendarService.getUpcomingSchedules(familyCode, memberId);
       model.addAttribute("schedules", schedules);
       
       // 예정된 회의
@@ -173,6 +174,38 @@ public class HomeController {
   	return "beforeLogin";
   }
   
+  // 에러페이지 디자인 확인
+  @RequestMapping(value = "/404", method = RequestMethod.GET)
+  public String errorGet() {
+  	
+  	return "errorPage/404";
+  }
+  @RequestMapping(value = "/405", method = RequestMethod.GET)
+  public String error2Get() {
+  	
+  	return "errorPage/405";
+  }
+  @RequestMapping(value = "/500", method = RequestMethod.GET)
+  public String error3Get() {
+  	
+  	return "errorPage/500";
+  }
+  @RequestMapping(value = "/400", method = RequestMethod.GET)
+  public String error4Get() {
+  	
+  	return "errorPage/400";
+  }
+  @RequestMapping(value = "/errorNullPointer", method = RequestMethod.GET)
+  public String errorNullPointerGet() {
+  	
+  	return "errorPage/errorNullPointer";
+  }
+  @RequestMapping(value = "/errorNumberFormat", method = RequestMethod.GET)
+  public String errorNumberFormatGet() {
+  	
+  	return "errorPage/errorNumberFormat";
+  }
+  
   private String getCustomWeatherIcon(String apiIcon) {
     switch(apiIcon) {
         case "01d": case "01n": return "https://cdn-icons-png.flaticon.com/512/6974/6974833.png"; // 맑음
@@ -184,6 +217,7 @@ public class HomeController {
         case "50d": case "50n": return "https://cdn-icons-png.flaticon.com/512/4005/4005901.png"; // 안개
         default: return "https://cdn-icons-png.flaticon.com/512/1163/1163661.png"; // 기본
     }
-}
+  }
+  
   
 }

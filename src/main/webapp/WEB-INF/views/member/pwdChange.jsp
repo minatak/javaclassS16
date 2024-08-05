@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>비밀번호 찾기 | HomeLink</title>
+  <title>비밀번호 변경 | HomeLink</title>
   <%@ include file = "/WEB-INF/views/include/bs4.jsp" %>
   <style>
     body {
@@ -174,12 +174,12 @@
 		  }
 		
 		  // 새 비밀번호 유효성 검사
-		  if (!regPwd.test(newPwd)) {
+		/*   if (!regPwd.test(newPwd)) {
   		  showAlert("새 비밀번호는 8~16자리의 영문 대소문자와 특수문자, 숫자, 밑줄만 사용가능합니다", function() {
   		    document.myform.newPwd.focus();
   		  });
   		  return;
-  		}
+  		} */
 		
 		  // 새 비밀번호 확인
 		  if (newPwd !== confirmPwd) {

@@ -511,10 +511,12 @@
 		        <span class="edited-mark">| 수정됨</span>
 		      </c:if>
 		    </div>
-		    <div class="action-buttons">
-		      <a href="noticeUpdate?idx=${vo.idx}" class="btn btn-sm btn-edit">수정</a>
-		      <a href="javascript:noticeDelete()" class="btn btn-sm btn-edit">삭제</a>
-		    </div>
+		    <c:if test="${sIdx == vo.memberIdx}">
+			    <div class="action-buttons">
+			      <a href="noticeUpdate?idx=${vo.idx}" class="btn btn-sm btn-edit">수정</a>
+			      <a href="javascript:noticeDelete()" class="btn btn-sm btn-edit">삭제</a>
+			    </div>		    
+		    </c:if>
 		  </div>
 		</div>
 	  

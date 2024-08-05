@@ -121,6 +121,9 @@
 	}
 	
 	.weather-banner {
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
 	  background-color: #fff;
 	  color: #333c47;
 	  padding: 20px;
@@ -144,6 +147,7 @@
 	  width: 64px;
 	  height: 64px;
 	  margin-bottom: 0px;
+	  justify-content: center;
 	}
 	
 	.temperature {
@@ -163,22 +167,19 @@
 	  margin-bottom: 10px;
 	  color: #2d3e50;
 	}
+	
 	@font-face {
-    font-family: 'KOTRAHOPE';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-}@font-face {
     font-family: 'omyu_pretty';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
-}
+	}
 	.weather-advice {
 	  font-family: 'omyu_pretty';
 	  font-size: 18px;
 	  /* line-height: 1.6; */
 	  margin-bottom: 0;
+	  justify-content: center;
 	}
 	
 	.photo-preview {

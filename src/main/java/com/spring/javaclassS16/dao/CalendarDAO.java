@@ -21,7 +21,7 @@ public interface CalendarDAO {
   // 일정 삭제 (idx 기반)
   public int calendarDelete(@Param("idx") int idx);
 
-	public List<CalendarVO> getUpcomingSchedules(@Param("familyCode") String familyCode);
+	public List<CalendarVO> getUpcomingSchedules(@Param("familyCode") String familyCode, @Param("memberId") String memberId);
 
 	public List<CalendarVO> getWeeklyEvents(@Param("memberId") String memberId, @Param("familyCode") String familyCode, @Param("startDate") String startDate, @Param("endDate") String endDate);
   

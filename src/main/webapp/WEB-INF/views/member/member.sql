@@ -25,3 +25,11 @@ create table family (
 	primary key (idx),
   unique(code)												/* 가족 코드 중복 불허 */
 );
+
+
+INSERT INTO member (mid, pwd, name, email, relationship, birthday, familyCode)
+VALUES 
+('admin', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', '김관리', 'admin@example.com', '딸', '1990-05-15', 'R0ZFFYTP'),
+('hkd1234', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', '홍길동', 'hkd1234@example.com', '아빠', '1970-03-20', 'R0ZFFYTP'),
+('atom1234', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', '홍아들', 'atom1234@example.com', '아들', '2000-11-10', 'R0ZFFYTP'),
+('kms1234', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', '김엄마', 'kms1234@example.com', '엄마', '1975-09-05', 'R0ZFFYTP');

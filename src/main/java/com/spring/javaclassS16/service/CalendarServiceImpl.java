@@ -40,8 +40,8 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
 		@Override
-		public List<CalendarVO> getUpcomingSchedules(String familyCode) {
-			return calendarDAO.getUpcomingSchedules(familyCode);
+		public List<CalendarVO> getUpcomingSchedules(String familyCode, String memberId) {
+			return calendarDAO.getUpcomingSchedules(familyCode, memberId);
 		}
 
 		@Override

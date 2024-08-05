@@ -56,6 +56,7 @@
       height: 32px;
       border-radius: 50%;
       margin-right: 12px;
+      object-fit: cover;
     }
     .user-name {
       font-weight: 600;
@@ -405,6 +406,7 @@
 		  height: 32px;
 		  border-radius: 50%;
 		  margin-right: 12px;
+		  object-fit: cover;
 		}
 		
 		.user-name {
