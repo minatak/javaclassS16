@@ -668,15 +668,6 @@
         </c:forEach>
       ];
       
-      // 총 투표 수 계산
-      // var totalVotes = rawData.reduce((sum, option) => sum + option[1], 0);
-      
-      // 투표 수가 0인 경우 처리
-     /*  if (totalVotes === 0) {
-		    chartContainer.innerHTML = '<p class="text-center my-4">투표에 참여한 사람이 없습니다.</p>';
-		    return;
-		  } */
-      
       // 투표 수에 따라 데이터 정렬 (내림차순)
       rawData.sort((a, b) => b[1] - a[1]);
       
@@ -686,7 +677,6 @@
       }
       var data = google.visualization.arrayToDataTable(chartData);
 
-			/* var colors = ['#84a98c', '#a7c4ad', '#cad2c5', '#52796f', '#354f52']; */
 			var colors = ['#84a98c', '#a7c4ad', '#cad2c5', '#52796f', '#354f52', '#6b9080', '#8fb3a5', '#c2d3c9', '#446a5d', '#2f3e46'];
      
 			var options = {

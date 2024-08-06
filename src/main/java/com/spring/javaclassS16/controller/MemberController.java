@@ -199,11 +199,11 @@ public class MemberController {
   @ResponseBody
   @RequestMapping(value = "/createCode", method = RequestMethod.POST)
   public String createFamilyCode(HttpSession session) {
-      String mid = (String) session.getAttribute("sMid");
-      String familyCode = memberService.createFamilyCode();
-      memberService.updateMemberFamilyCode(mid, familyCode);
-      session.setAttribute("sFamCode", familyCode);
-      return familyCode;
+    String mid = (String) session.getAttribute("sMid");
+    String familyCode = memberService.createFamilyCode();
+    memberService.updateMemberFamilyCode(mid, familyCode);
+    session.setAttribute("sFamCode", familyCode);
+    return familyCode;
   }
 
   // 가족 코드 연결 
@@ -211,12 +211,12 @@ public class MemberController {
   @RequestMapping(value = "/connectCode", method = RequestMethod.POST)
   public String connectFamilyCode(@RequestParam String familyCode, HttpSession session) {
   	familyCode = familyCode.toUpperCase();
-      String mid = (String) session.getAttribute("sMid");
-      boolean isConnected = memberService.connectToFamily(mid, familyCode);
-      if(isConnected) {
-      	session.setAttribute("sFamCode", familyCode);        	
-      }
-      return isConnected ? "success" : "error";
+    String mid = (String) session.getAttribute("sMid");
+    boolean isConnected = memberService.connectToFamily(mid, familyCode);
+    if(isConnected) {
+    	session.setAttribute("sFamCode", familyCode);        	
+    }
+    return isConnected ? "success" : "error";
   }
 
   
@@ -504,7 +504,7 @@ public class MemberController {
   @ResponseBody
   @RequestMapping(value = "/sendVerificationForIdSearch", method = RequestMethod.POST)
   public String sendVerificationForIdSearch(@RequestParam String email, @RequestParam String name, HttpSession session) {
-      MemberVO member = memberService.getMemberNameEmailCheck(name, email);
+  		MemberVO member = memberService.getMemberNameEmailCheck(name, email);
       if (member == null) {
         return "not_found";
       }

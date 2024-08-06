@@ -126,27 +126,27 @@ public class VoteServiceImpl implements VoteService {
 	@Override
 	@Transactional
 	public boolean setDeleteVote(int voteIdx) {
-	    // 투표에 속한 모든 댓글 가져오기
-	    List<VoteReplyVO> replies = voteDAO.getVoteReply(voteIdx);
-	    
-	    // 부모 댓글 먼저 삭제 (이 과정에서 대댓글도 함께 삭제됨)
-	    for (VoteReplyVO reply : replies) {
-	        if (reply.getParentIdx() == null) {
-	            voteDAO.setReplyDeleteByParentIdx(reply.getIdx());
-	            voteDAO.setReplyDelete(reply.getIdx());
-	        }
-	    }
-	    
-	    // 투표 참여 기록 삭제
-	    int participationResult = voteDAO.deleteVoteParticipations(voteIdx);
-	    
-	    // 투표 옵션 삭제
-	    int optionResult = voteDAO.deleteVoteOptions(voteIdx);
-	    
-	    // 투표 삭제
-	    int voteResult = voteDAO.deleteVote(voteIdx);
-	    
-	    return voteResult > 0;
+    // 투표에 속한 모든 댓글 가져오기
+    List<VoteReplyVO> replies = voteDAO.getVoteReply(voteIdx);
+    
+    // 부모 댓글 먼저 삭제 (이 과정에서 대댓글도 함께 삭제됨)
+    for (VoteReplyVO reply : replies) {
+      if (reply.getParentIdx() == null) {
+        voteDAO.setReplyDeleteByParentIdx(reply.getIdx());
+        voteDAO.setReplyDelete(reply.getIdx());
+      }
+    }
+    
+    // 투표 참여 기록 삭제
+    voteDAO.deleteVoteParticipations(voteIdx);
+    
+    // 투표 옵션 삭제
+    voteDAO.deleteVoteOptions(voteIdx);
+    
+    // 투표 삭제
+    int voteResult = voteDAO.deleteVote(voteIdx);
+    
+    return voteResult > 0;
 	}
 
 	@Override
@@ -176,18 +176,18 @@ public class VoteServiceImpl implements VoteService {
 	@Override
 	@Transactional
 	public int setCancelAndResetVote(int voteIdx, int memberIdx) {
-	    // 1. 현재 사용자의 투표 옵션 조회
-	    List<VoteOptionVO> vos = voteDAO.getVotedOptions(voteIdx, memberIdx);
-	    
-	    // 2. voteParticipation 테이블에서 해당 투표 삭제
-	    int deleteResult = voteDAO.deleteVoteParticipation(voteIdx, memberIdx);
-	    
-	    // 3. voteOption 테이블의 voteCount 감소
-	    for (VoteOptionVO vo : vos) {
-	        voteDAO.setDecreaseVoteCount(vo.getIdx());
-	    }
-	    
-	    return deleteResult;
+    // 1. 현재 사용자의 투표 옵션 조회
+    List<VoteOptionVO> vos = voteDAO.getVotedOptions(voteIdx, memberIdx);
+    
+    // 2. voteParticipation 테이블에서 해당 투표 삭제
+    int deleteResult = voteDAO.deleteVoteParticipation(voteIdx, memberIdx);
+    
+    // 3. voteOption 테이블의 voteCount 감소
+    for (VoteOptionVO vo : vos) {
+      voteDAO.setDecreaseVoteCount(vo.getIdx());
+    }
+    
+    return deleteResult;
 	}
 
 	@Override

@@ -249,12 +249,12 @@ public class MeetingController {
 	  }
     
 	  model.addAttribute("meeting", meeting);
-	model.addAttribute("topics", topics);
-	model.addAttribute("shortDecision", shortDecision);
-	model.addAttribute("shortActionItem", shortActionItem);
-	model.addAttribute("shortNote", shortNote);
-	
-	return "familyMeeting/meetingContent";
+		model.addAttribute("topics", topics);
+		model.addAttribute("shortDecision", shortDecision);
+		model.addAttribute("shortActionItem", shortActionItem);
+		model.addAttribute("shortNote", shortNote);
+		
+		return "familyMeeting/meetingContent";
   }
   
   @ResponseBody

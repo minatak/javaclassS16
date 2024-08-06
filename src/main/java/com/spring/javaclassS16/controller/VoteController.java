@@ -184,16 +184,16 @@ public class VoteController {
   public String doVotePost(@RequestParam("voteIdx") int voteIdx, 
                            @RequestParam("optionIdx[]") List<Integer> optionIdx,
                            HttpSession session) {
-      int memberIdx = (int) session.getAttribute("sIdx");
-      
-      List<MemberVO> vos =voteService.getVoteParticipants(memberIdx); // 해당 투표의 참여자 정보 가져오기
-      for (MemberVO vo : vos) {
-      	if(vo.getIdx() == memberIdx) voteService.setCancelVote(voteIdx, memberIdx); // 참여했던 투표일 경우 투표 취소시키기 (다시 투표하기를 누른 경우임)
-      }
-      
-      int res = voteService.setDoVote(voteIdx, memberIdx, optionIdx);
-      
-      return res + "";
+    int memberIdx = (int) session.getAttribute("sIdx");
+    
+    List<MemberVO> vos =voteService.getVoteParticipants(memberIdx); // 해당 투표의 참여자 정보 가져오기
+    for (MemberVO vo : vos) {
+    	if(vo.getIdx() == memberIdx) voteService.setCancelVote(voteIdx, memberIdx); // 참여했던 투표일 경우 투표 취소시키기 (다시 투표하기를 누른 경우임)
+    }
+    
+    int res = voteService.setDoVote(voteIdx, memberIdx, optionIdx);
+    
+    return res + "";
   }
   
   @ResponseBody

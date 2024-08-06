@@ -257,6 +257,7 @@
     function fCheck() {
       let mid = myform.mid.value.trim();
       let pwd = myform.pwd.value.trim();
+      let birthday = myform.birthday.value.trim();
       
       let regMid = /^[a-zA-Z0-9_]{4,20}$/; // 아이디는 4~20의 영문 대/소문자와 숫자와 밑줄 가능
       let regPwd = /^[a-zA-Z0-9!@#$%^*+=-_]{8,16}$/;   // 비밀번호는 8~16의 영문 대/소문자와 특수문자 숫자와 밑줄 가능
@@ -293,6 +294,18 @@
   		  });
   		  return false;  // return false를 추가했습니다.
   		}
+  		else if(birthday == "") {
+		    showAlert("생일을 입력하세요.", function() {
+		      document.myform.birthday.focus();
+		    });
+		    return false;
+		  }
+		  else if(!isValidAge(birthday)) {
+		    showAlert("유효하지 않은 생년월일입니다.<br/>다시 확인해주세요.", function() {
+		      document.myform.birthday.focus();
+		    });
+		    return false;
+		  }
   		else {
   		  submitFlag = 1;
   		}
@@ -305,11 +318,11 @@
 				let fileSize = document.getElementById("file").files[0].size;
 				
 				if(ext != 'jpg' && ext != 'gif' && ext != 'png') {
-					alert("그림파일만 업로드 가능합니다.");
+					showAlert("그림파일만 업로드 가능합니다.");
 					return false;
 				}
 				else if(fileSize > maxSize) {
-					alert("업로드할 파일의 최대용량은 2MByte입니다.");
+					showAlert("업로드할 파일의 최대용량은 2MByte입니다.");
 					return false;
 				}
 				submitFlag == 1;
@@ -320,7 +333,7 @@
     		myform.submit();
     	}
 			else {
-    		alert("회원정보수정 실패~~ 폼의 내용을 확인하세요.");
+				showAlert("회원가입에 실패했어요.<br/>폼의 내용을 확인하세요.");
     	}
        
     }
@@ -399,6 +412,20 @@
       });
     });
 
+    function isValidAge(birthday) {
+  	  let today = new Date();
+  	  let birthDate = new Date(birthday);
+  	  let age = today.getFullYear() - birthDate.getFullYear();
+  	  let monthDiff = today.getMonth() - birthDate.getMonth();
+  	  
+  	  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+  	    age--;
+  	  }
+
+  	  // 나이가 1살 미만이거나 120살 초과인 경우 유효하지 않은 것으로 간주
+  	  return age >= 1 && age <= 120;
+  	}
+    
     
   </script>
 </head>

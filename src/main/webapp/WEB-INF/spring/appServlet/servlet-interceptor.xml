@@ -31,6 +31,7 @@
 	    <exclude-mapping path="/member/kakaoLogout"/>
 	    <exclude-mapping path="/member/memberEmailCheck"/>
 	    <exclude-mapping path="/member/verifyEmailForIdSearch"/>
+	    <exclude-mapping path="/member/sendVerificationForIdSearch"/>
 	    <exclude-mapping path="/member/memberNewPassword"/>
 	    <exclude-mapping path="/member/memberNewPassword"/>
 	    <beans:ref bean="loginCheckInterceptor" />

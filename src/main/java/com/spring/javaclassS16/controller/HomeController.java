@@ -181,14 +181,14 @@ public class HomeController {
   
   private String getCustomWeatherIcon(String apiIcon) {
     switch(apiIcon) {
-        case "01d": case "01n": return "https://cdn-icons-png.flaticon.com/512/6974/6974833.png"; // 맑음
-        case "02d": case "02n": return "https://cdn-icons-png.flaticon.com/512/1163/1163661.png"; // 구름 조금
-        case "03d": case "03n": case "04d": case "04n": return "https://cdn-icons-png.flaticon.com/512/414/414825.png"; // 구름 많음
-        case "09d": case "09n": case "10d": case "10n": return "https://cdn-icons-png.flaticon.com/512/3351/3351979.png"; // 비
-        case "11d": case "11n": return "https://cdn-icons-png.flaticon.com/512/1959/1959368.png"; // 천둥번개
-        case "13d": case "13n": return "https://cdn-icons-png.flaticon.com/512/642/642102.png"; // 눈
-        case "50d": case "50n": return "https://cdn-icons-png.flaticon.com/512/4005/4005901.png"; // 안개
-        default: return "https://cdn-icons-png.flaticon.com/512/1163/1163661.png"; // 기본
+      case "01d": case "01n": return "https://cdn-icons-png.flaticon.com/512/6974/6974833.png"; // 맑음
+      case "02d": case "02n": return "https://cdn-icons-png.flaticon.com/512/1163/1163661.png"; // 구름 조금
+      case "03d": case "03n": case "04d": case "04n": return "https://cdn-icons-png.flaticon.com/512/414/414825.png"; // 구름 많음
+      case "09d": case "09n": case "10d": case "10n": return "https://cdn-icons-png.flaticon.com/512/3351/3351979.png"; // 비
+      case "11d": case "11n": return "https://cdn-icons-png.flaticon.com/512/1959/1959368.png"; // 천둥번개
+      case "13d": case "13n": return "https://cdn-icons-png.flaticon.com/512/642/642102.png"; // 눈
+      case "50d": case "50n": return "https://cdn-icons-png.flaticon.com/512/4005/4005901.png"; // 안개
+      default: return "https://cdn-icons-png.flaticon.com/512/1163/1163661.png"; // 기본
     }
   }
   

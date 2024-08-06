@@ -218,7 +218,7 @@
   	  }
       
       if(noRepeat) {
-      	addTaskForm.rotationPeriod.value = "0"; // ""으로 해야할지 0으로 해야할지 고민됨.. null or 0
+      	addTaskForm.rotationPeriod.value = "0";  
       }
       
       addTaskForm.endDate.value = date + ' ' + time;
