@@ -61,15 +61,6 @@
 
 <hr/>
 
-## 🔧 사용 기술
-
-- **프론트엔드**: HTML, CSS, JavaScript
-- **백엔드**: Java Spring Boot
-- **데이터베이스**: MySQL
-- **차트**: Google Charts API
-
-<hr/>
-
 ## 📞 연락처
 
 - **프로젝트 관리자**: [takmin0926@naver.com](mailto:takmin0926@naver.com)
